@@ -2,7 +2,7 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://github.com/aman54kumar/arvebot-frontend/",
+  "homepage": "http://aman54kumar.github.io/arvebot-frontend",
   "dependencies": {
     "@fontsource/roboto": "^4.1.0",
     "@material-ui/core": "^4.11.3",
