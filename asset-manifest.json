@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/aman54kumar/arvebot-frontend/static/css/main.a174c18a.chunk.css",
+    "main.js": "/aman54kumar/arvebot-frontend/static/js/main.9b33fbd0.chunk.js",
+    "main.js.map": "/aman54kumar/arvebot-frontend/static/js/main.9b33fbd0.chunk.js.map",
+    "runtime-main.js": "/aman54kumar/arvebot-frontend/static/js/runtime-main.9780e710.js",
+    "runtime-main.js.map": "/aman54kumar/arvebot-frontend/static/js/runtime-main.9780e710.js.map",
+    "static/js/2.a376c943.chunk.js": "/aman54kumar/arvebot-frontend/static/js/2.a376c943.chunk.js",
+    "static/js/2.a376c943.chunk.js.map": "/aman54kumar/arvebot-frontend/static/js/2.a376c943.chunk.js.map",
+    "static/js/3.7463210b.chunk.js": "/aman54kumar/arvebot-frontend/static/js/3.7463210b.chunk.js",
+    "static/js/3.7463210b.chunk.js.map": "/aman54kumar/arvebot-frontend/static/js/3.7463210b.chunk.js.map",
+    "index.html": "/aman54kumar/arvebot-frontend/index.html",
+    "static/css/main.a174c18a.chunk.css.map": "/aman54kumar/arvebot-frontend/static/css/main.a174c18a.chunk.css.map",
+    "static/js/2.a376c943.chunk.js.LICENSE.txt": "/aman54kumar/arvebot-frontend/static/js/2.a376c943.chunk.js.LICENSE.txt",
+    "static/media/logo.425d1c05.svg": "/aman54kumar/arvebot-frontend/static/media/logo.425d1c05.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.9780e710.js",
+    "static/js/2.a376c943.chunk.js",
+    "static/css/main.a174c18a.chunk.css",
+    "static/js/main.9b33fbd0.chunk.js"
+  ]
+}
