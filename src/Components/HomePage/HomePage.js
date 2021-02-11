@@ -2,11 +2,7 @@ import React from "react";
 import Header from "../Generic/Header/Header";
 
 const HomePage = () => {
-  return (
-    <div>
-      <Header />
-    </div>
-  );
+  return <Header />;
 };
 
 export default HomePage;

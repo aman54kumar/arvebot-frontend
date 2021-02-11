@@ -15,27 +15,25 @@ import classes from "./Header.module.css";
 
 export default function Header() {
   return (
-    <div>
-      <AppBar className={classes.Appbar} position="static">
-        <Toolbar>
-          <Grid
-            container
-            direction="row"
-            justify="space-around"
-            alignItems="center"
-          >
-            <Grid item sm={1}>
-              <Logo />
-            </Grid>
-            <Grid item sm={8}>
-              <Title />
-            </Grid>
-            <Grid item sm={3}>
-              <HeaderMenu />
-            </Grid>
+    <AppBar className={classes.Appbar} position="static">
+      <Toolbar>
+        <Grid
+          container
+          direction="row"
+          justify="space-between"
+          alignItems="flex-end"
+        >
+          <Grid item sm={1}>
+            <Logo />
           </Grid>
-        </Toolbar>
-      </AppBar>
-    </div>
+          <Grid item sm={5}>
+            <Title />
+          </Grid>
+          <Grid item sm={4}>
+            <HeaderMenu />
+          </Grid>
+        </Grid>
+      </Toolbar>
+    </AppBar>
   );
 }

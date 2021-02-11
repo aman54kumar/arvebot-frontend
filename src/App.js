@@ -8,8 +8,6 @@ import AboutPage from "./Components/AboutPage/AboutPage";
 import InheritanceCalculatorPage from "./Components/InheritanceCalculatorPage/InheritanceCalculatorPage";
 
 function App() {
-  // const [darkMode, setDarkMode] = useState(false);
-
   return (
     <ThemeProvider theme={theme}>
       <Paper style={{ height: "100vh" }}>
