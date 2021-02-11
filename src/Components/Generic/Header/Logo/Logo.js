@@ -1,6 +1,6 @@
 import React from "react";
 // import EmojiFoodBeverageIcon from "@material-ui/icons/EmojiFoodBeverage";
-import mainLogo from "./logo.svg";
+import mainLogo from "../../../../images/logo.svg";
 import classes from "./Logo.module.css";
 
 const Logo = (props) => {
