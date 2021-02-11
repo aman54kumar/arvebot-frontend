@@ -18,6 +18,8 @@
 .env.test.local
 .env.production.local
 package1.json
+package2.json
+package3.json
 
 npm-debug.log*
 yarn-debug.log*
