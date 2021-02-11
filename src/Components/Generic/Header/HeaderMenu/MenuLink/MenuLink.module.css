@@ -7,6 +7,9 @@
   cursor: pointer;
 }
 
+.MenuLink div a {
+  color: white;
+}
 .MenuLink div a:hover {
   color: #014777;
 }
