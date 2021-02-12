@@ -1,8 +1,14 @@
 import React from "react";
 import Header from "../Generic/Header/Header";
+import HomeImage from "./HomeImage/HomeImage";
 
 const HomePage = () => {
-  return <Header />;
+  return (
+    <div>
+      <Header />
+      <HomeImage />
+    </div>
+  );
 };
 
 export default HomePage;
