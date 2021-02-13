@@ -1,6 +1,13 @@
 import React from "react";
 import MenuLink from "./MenuLink/MenuLink";
-import NavLinks from "./NavLinks";
+
+let NavLinks = "";
+if ("./NavLinks.js") {
+  NavLinks = require("./NavLinks");
+} else {
+  NavLinks = require("./NavLinksProd");
+}
+// import NavLinks from "./NavLinks";
 
 const HeaderMenu = () => {
   return (
