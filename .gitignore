@@ -20,7 +20,7 @@
 .package1.json
 .package2.json
 .package3.json
-.NavLinks.js
+/src/Components/Generic/Header/HeaderMenu/NavLinks.js
 
 npm-debug.log*
 yarn-debug.log*
