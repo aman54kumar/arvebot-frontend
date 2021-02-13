@@ -1,7 +1,12 @@
 import React from "react";
+import { Typography } from "@material-ui/core";
 
 const InheritanceCalculatorPage = () => {
-  return <div>{/* <h3>InheritanceCalculatorPage</h3> */}</div>;
+  return (
+    <Typography variant="h2" align="center">
+      Inheritance Calculator
+    </Typography>
+  );
 };
 
 export default InheritanceCalculatorPage;

@@ -1,15 +1,13 @@
-.MenuLink {
-  padding: 0;
-  margin-left: 30px;
+.active {
+  background-color: #9acd32 !important;
+  color: black !important;
 }
 
-.MenuLink :hover {
-  cursor: pointer;
-}
-
-.MenuLink div a {
-  color: white;
-}
-.MenuLink div a:hover {
+/* .MenuLink :hover {
+  cursor: grab;
   color: #014777;
-}
+} */
+/* 
+.MenuLink :active {
+  color: red i !important;
+} */

@@ -5,8 +5,11 @@ const theme = createMuiTheme({
     primary: {
       main: "#014777",
     },
-    // secondary: {
-    //   main: ,
+
+    // typography: {
+    //   root: {
+    //     fontFamily: "Croissant One",
+    //   },
     // },
   },
 });

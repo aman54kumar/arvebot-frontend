@@ -1,5 +1,12 @@
 .Appbar {
   height: 8rem;
-  background: linear-gradient(45deg, #014777 30%, #65b928 90%);
-  padding-top: 2rem;
+  padding-top: 1rem;
+  transition: all 0.7s ease-in;
+  box-shadow: none !important;
+}
+.scrolled {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: white !important;
 }

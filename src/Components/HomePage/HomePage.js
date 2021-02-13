@@ -1,13 +1,11 @@
+import { Typography } from "@material-ui/core";
 import React from "react";
-import Header from "../Generic/Header/Header";
-import HomeImage from "./HomeImage/HomeImage";
 
 const HomePage = () => {
   return (
-    <div>
-      <Header />
-      <HomeImage />
-    </div>
+    <Typography variant="h2" align="center">
+      HomePage
+    </Typography>
   );
 };
 
