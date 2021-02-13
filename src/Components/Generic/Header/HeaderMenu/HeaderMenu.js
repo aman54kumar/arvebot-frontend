@@ -8,7 +8,6 @@ if ("./NavLinks.js") {
   NavLinks = require("./NavLinksProd.js");
 }
 // import NavLinks from "./NavLinks";
-console.log(NavLinks);
 const HeaderMenu = () => {
   return (
     <div>
