@@ -64,12 +64,12 @@ function App(props) {
       >
         <Paper className={classes1.root} style={{ minHeight: "100vh" }}>
           <Header className={classes2.root} />
+          {document.location.href.split("//")[1] === "localhost:3000/" ? a : b}
         </Paper>
       </div>
       <Footer />
 
       {/* Route components are rendered if the path prop matches the current URL */}
-      {document.location.href.split("//")[1] === "localhost:3000/" ? a : b}
     </MuiThemeProvider>
   );
 }

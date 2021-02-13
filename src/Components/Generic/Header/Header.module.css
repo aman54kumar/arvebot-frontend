@@ -5,8 +5,8 @@
   box-shadow: none !important;
 }
 .scrolled {
-  position: fixed;
-  top: 0;
-  left: 0;
-  background-color: white !important;
+  /* position: fixed; */
+  /* top: 0;
+  left: 0; */
+  /* background-color: white !important; */
 }
