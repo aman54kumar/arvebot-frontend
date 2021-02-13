@@ -50,10 +50,7 @@ const useStyles1 = makeStyles({
 const useStyles2 = makeStyles({
   root: commonBackgroundClass,
 });
-const getCurrentLocation = () => {
-  const rootHref = document.location.href;
-  return rootHref.split("//")[1];
-};
+
 function App(props) {
   const classes = useStyles(props);
   const classes1 = useStyles1(props);
@@ -70,9 +67,9 @@ function App(props) {
         </Paper>
       </div>
       <Footer />
-      {console.log(getCurrentLocation())}
+
       {/* Route components are rendered if the path prop matches the current URL */}
-      {getCurrentLocation() === "localhost:3000/" ? a : b}
+      {document.location.href.split("//")[1] === "localhost:3000/" ? a : b}
     </MuiThemeProvider>
   );
 }
