@@ -20,7 +20,23 @@ const useStyles = makeStyles({
     height: "100vh",
   },
 });
-
+const a = (
+  <Switch>
+    <Route exact path="/" component={HomePage} />
+    <Route path="/about" component={AboutPage} />
+    <Route path="/calculator" component={InheritanceCalculatorPage} />
+  </Switch>
+);
+const b = (
+  <Switch>
+    <Route exact path="/arvebot-frontend/" component={HomePage} />
+    <Route path="/arvebot-frontend/about" component={AboutPage} />
+    <Route
+      path="/arvebot-frontend/calculator"
+      component={InheritanceCalculatorPage}
+    />
+  </Switch>
+);
 const commonBackgroundClass = {
   background:
     "radial-gradient( circle farthest-corner at 10% 20%,  #00B4DB 0%, #0083B0 45.5% )", //https://uigradients.com/#BlueRaspberry
@@ -48,15 +64,11 @@ function App(props) {
       >
         <Paper className={classes1.root} style={{ minHeight: "100vh" }}>
           <Header className={classes2.root} />
-          <Switch>
-            <Route exact path="/" component={HomePage} />
-            <Route path="/about" component={AboutPage} />
-            <Route path="/calculator" component={InheritanceCalculatorPage} />
-          </Switch>
         </Paper>
       </div>
       <Footer />
       {/* Route components are rendered if the path prop matches the current URL */}
+      {"./Components/Generic/Header/HeaderMenu/NavLinks.js" ? a : b}
     </MuiThemeProvider>
   );
 }
