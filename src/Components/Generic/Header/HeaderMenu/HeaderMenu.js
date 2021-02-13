@@ -3,16 +3,16 @@ import MenuLink from "./MenuLink/MenuLink";
 
 let NavLinks = "";
 if ("./NavLinks.js") {
-  NavLinks = require("./NavLinks");
+  NavLinks = require("./NavLinks.js");
 } else {
-  NavLinks = require("./NavLinksProd");
+  NavLinks = require("./NavLinksProd.js");
 }
 // import NavLinks from "./NavLinks";
-
+console.log(NavLinks);
 const HeaderMenu = () => {
   return (
     <div>
-      {NavLinks.map(({ id, title, path }) => {
+      {NavLinks["default"].map(({ id, title, path }) => {
         return <MenuLink name={title} href={path} key={id} />;
       })}
     </div>
