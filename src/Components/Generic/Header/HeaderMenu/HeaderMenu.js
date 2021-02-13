@@ -8,9 +8,9 @@ const getCurrentLocation = () => {
 
 let NavLinks;
 if (getCurrentLocation === "localhost:3000/") {
-  NavLinks = require("./NavLinks.js");
-} else {
   NavLinks = require("./NavLinksProd.js");
+} else {
+  NavLinks = require("./NavLinks.js");
 }
 
 const HeaderMenu = () => {
