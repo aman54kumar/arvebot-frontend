@@ -1,13 +1,18 @@
 import React from "react";
 import MenuLink from "./MenuLink/MenuLink";
 
-let NavLinks = "";
-if ("./NavLinks.js") {
+const getCurrentLocation = () => {
+  const rootHref = document.location.href;
+  return rootHref.split("//")[1];
+};
+
+let NavLinks;
+if (getCurrentLocation === "localhost:3000/") {
   NavLinks = require("./NavLinks.js");
 } else {
   NavLinks = require("./NavLinksProd.js");
 }
-// import NavLinks from "./NavLinks";
+
 const HeaderMenu = () => {
   return (
     <div>
