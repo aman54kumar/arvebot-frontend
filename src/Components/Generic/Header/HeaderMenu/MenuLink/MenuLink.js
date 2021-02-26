@@ -1,5 +1,5 @@
 import React from "react";
-import classes from "./MenuLink.module.css";
+// import classes from "./MenuLink.module.css";
 import { makeStyles } from "@material-ui/core/styles";
 import { NavLink } from "react-router-dom";
 
@@ -7,22 +7,26 @@ const useStyles = makeStyles({
   root: {
     fontFamily: "'Roboto Slab', serif",
     fontWeight: "bold",
-    fontSize: "1.2rem",
-    color: "white",
+    fontSize: "1.3rem",
+    color: "#016196",
     padding: "0 20px",
     textDecoration: "none",
     textAlign: "center",
   },
+  rootActive: {
+    backgroundColor: "#9acd32",
+    color: "black",
+  },
 });
 
 const MenuLink = (props) => {
-  const classes1 = useStyles(props);
+  const classes = useStyles(props);
   return (
     <NavLink
       to={props.href}
-      className={(classes.MenuLink, classes1.root)}
+      className={classes.root}
       exact
-      activeClassName={classes.active}
+      activeClassName={classes.rootActive}
     >
       {props.name}
     </NavLink>

@@ -1,15 +1,19 @@
+// React
 import React from "react";
+// material-ui
 import { Paper } from "@material-ui/core";
 import { makeStyles, MuiThemeProvider } from "@material-ui/core/styles";
-
-import theme from "./theme";
-import HomePage from "./Components/HomePage/HomePage";
-import AboutPage from "./Components/AboutPage/AboutPage";
-import InheritanceCalculatorPage from "./Components/InheritanceCalculatorPage/InheritanceCalculatorPage";
-import Footer from "./Components/Generic/Footer/Footer";
-import Header from "./Components/Generic/Header/Header";
-import HomePageImage from "./images/homepage-image.jpg";
+// react-router
 import { Route, Switch } from "react-router-dom";
+// local
+import theme from "./theme";
+import Header from "./Components/Generic/Header/Header";
+import HomePage from "./Pages/HomePage";
+import AboutPage from "./Pages/AboutPage";
+import InheritanceCalculatorPage from "./Pages/InheritanceCalculatorPage";
+import Footer from "./Components/Generic/Footer/Footer";
+import HomePageImage from "./assets/images/homepage-image.jpg";
+import ResourcesPage from "./Pages/ResourcesPage";
 
 const useStyles = makeStyles({
   root: {
@@ -19,12 +23,20 @@ const useStyles = makeStyles({
     backgroundRepeat: "no-repeat",
     height: "100vh",
   },
+  rootPaper: {
+    minHeight: "100vh",
+    background:
+      "radial-gradient( circle farthest-corner at 10% 20%,  #FCCABD 0%, #4151C9 45.5% )",
+    opacity: "80%",
+  },
 });
+
 const a = (
   <Switch>
     <Route exact path="/" component={HomePage} />
     <Route path="/about" component={AboutPage} />
     <Route path="/calculator" component={InheritanceCalculatorPage} />
+    <Route path="/resources" component={ResourcesPage} />
   </Switch>
 );
 const b = (
@@ -37,36 +49,22 @@ const b = (
     />
   </Switch>
 );
-const commonBackgroundClass = {
-  background:
-    "radial-gradient( circle farthest-corner at 10% 20%,  #00B4DB 0%, #0083B0 45.5% )", //https://uigradients.com/#BlueRaspberry
-  opacity: "80%",
-};
 
-const useStyles1 = makeStyles({
-  root: commonBackgroundClass,
-});
+function App() {
+  const classes = useStyles();
 
-const useStyles2 = makeStyles({
-  root: commonBackgroundClass,
-});
-
-function App(props) {
-  const classes = useStyles(props);
-  const classes1 = useStyles1(props);
-  const classes2 = useStyles2(props);
   return (
     <MuiThemeProvider theme={theme}>
-      <div
+      <Paper
         role="img"
         className={classes.root}
         aria-label="Image by Free-Photos from Pixabay"
       >
-        <Paper className={classes1.root} style={{ minHeight: "100vh" }}>
-          <Header className={classes2.root} />
+        <Header />
+        <Paper className={classes.rootPaper}>
           {document.location.href.split("//")[1] === "localhost:3000/" ? a : b}
         </Paper>
-      </div>
+      </Paper>
       <Footer />
 
       {/* Route components are rendered if the path prop matches the current URL */}

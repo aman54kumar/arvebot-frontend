@@ -14,6 +14,11 @@ const navLinks = [
     title: "Inheritance Calculator",
     path: "/arvebot-frontend/calculator",
   },
+  {
+    id: 3,
+    title: "Resources",
+    path: "/arvebot-frontend/resources",
+  },
 ];
 
 export default navLinks;

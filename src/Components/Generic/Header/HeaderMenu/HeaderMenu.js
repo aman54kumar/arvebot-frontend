@@ -1,4 +1,5 @@
 import React from "react";
+import { Grid } from "@material-ui/core";
 import MenuLink from "./MenuLink/MenuLink";
 
 let NavLinks;
@@ -11,11 +12,15 @@ if (document.location.href.split("//")[1] === "localhost:3000/") {
 
 const HeaderMenu = () => {
   return (
-    <div>
+    <Grid container direction="row" justify="space-evenly" alignItems="center">
       {NavLinks["default"].map(({ id, title, path }) => {
-        return <MenuLink name={title} href={path} key={id} />;
+        return (
+          <Grid item key={id}>
+            <MenuLink name={title} href={path} />
+          </Grid>
+        );
       })}
-    </div>
+    </Grid>
   );
 };
 
