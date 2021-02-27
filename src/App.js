@@ -24,6 +24,7 @@ const useStyles = makeStyles({
     height: "100vh",
   },
   rootPaper: {
+    marginTop: "5rem",
     minHeight: "100vh",
     background:
       "radial-gradient( circle farthest-corner at 10% 20%,  #FCCABD 0%, #4151C9 45.5% )",
@@ -47,6 +48,7 @@ const b = (
       path="/arvebot-frontend/calculator"
       component={InheritanceCalculatorPage}
     />
+    <Route path="/arvebot-frontend/resources" component={ResourcesPage} />
   </Switch>
 );
 

@@ -6,13 +6,13 @@ const navLinks = [
   },
   {
     id: 1,
-    title: "About",
-    path: "/arvebot-frontend/about",
+    title: "Inheritance Calculator",
+    path: "/arvebot-frontend/calculator",
   },
   {
     id: 2,
-    title: "Inheritance Calculator",
-    path: "/arvebot-frontend/calculator",
+    title: "About",
+    path: "/arvebot-frontend/about",
   },
   {
     id: 3,

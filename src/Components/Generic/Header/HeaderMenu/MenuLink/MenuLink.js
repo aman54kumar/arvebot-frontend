@@ -8,13 +8,13 @@ const useStyles = makeStyles({
     fontFamily: "'Roboto Slab', serif",
     fontWeight: "bold",
     fontSize: "1.3rem",
-    color: "#016196",
+    color: "#4151C9",
     padding: "0 20px",
     textDecoration: "none",
     textAlign: "center",
   },
   rootActive: {
-    backgroundColor: "#9acd32",
+    backgroundColor: "#FCCABD",
     color: "black",
   },
 });
