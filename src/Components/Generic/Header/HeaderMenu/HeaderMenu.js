@@ -1,14 +1,7 @@
 import React from "react";
 import { Grid } from "@material-ui/core";
 import MenuLink from "./MenuLink/MenuLink";
-
-let NavLinks;
-
-if (document.location.href.split("//")[1] === "localhost:3000/") {
-  NavLinks = require("./NavLinks.js");
-} else {
-  NavLinks = require("./NavLinksProd.js");
-}
+import NavLinks from "./NavLinksProd.js";
 
 const HeaderMenu = () => {
   return (

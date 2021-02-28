@@ -42,7 +42,7 @@ const a = (
 );
 const b = (
   <Switch>
-    <Route exact path="/arvebot-frontend/" component={HomePage} />
+    <Route exact path="/arvebot-frontend" component={HomePage} />
     <Route path="/arvebot-frontend/about" component={AboutPage} />
     <Route
       path="/arvebot-frontend/calculator"
@@ -64,8 +64,8 @@ function App() {
       >
         <Header />
         <Paper className={classes.rootPaper}>
-          {console.log(document.location.href.split("//"))}
-          {document.location.href.split("//")[1] === "localhost:3000/" ? a : b}
+          {b}
+          {/* {document.location.href.split("//")[1] === "localhost:3000/" ? a : b} */}
         </Paper>
       </Paper>
       <Footer />
