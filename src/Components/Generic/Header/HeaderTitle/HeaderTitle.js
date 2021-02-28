@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import React from "react";
 
 const root = {
-  fontFamily: '"Croissant One", cursive',
+  fontFamily: '"Abril Fatface", serif',
   color: "#016196",
 };
 

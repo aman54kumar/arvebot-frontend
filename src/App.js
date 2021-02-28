@@ -32,15 +32,7 @@ const useStyles = makeStyles({
   },
 });
 
-// const a = (
-//   <Switch>
-//     <Route exact path="/" component={HomePage} />
-//     <Route path="/about" component={AboutPage} />
-//     <Route path="/calculator" component={InheritanceCalculatorPage} />
-//     <Route path="/resources" component={ResourcesPage} />
-//   </Switch>
-// );
-const b = (
+const menuItems = (
   <Switch>
     <Route exact path="/arvebot-frontend" component={HomePage} />
     <Route path="/arvebot-frontend/about" component={AboutPage} />
@@ -63,10 +55,7 @@ function App() {
         aria-label="Image by Free-Photos from Pixabay"
       >
         <Header />
-        <Paper className={classes.rootPaper}>
-          {b}
-          {/* {document.location.href.split("//")[1] === "localhost:3000/" ? a : b} */}
-        </Paper>
+        <Paper className={classes.rootPaper}>{menuItems}</Paper>
       </Paper>
       <Footer />
 

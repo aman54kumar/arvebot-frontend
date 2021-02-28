@@ -13,18 +13,11 @@ import MenuIcon from "@material-ui/icons/Menu";
 import { Link as RouterLink } from "react-router-dom";
 import HeaderTitle from "./HeaderTitle/HeaderTitle";
 import HeaderMenu from "./HeaderMenu/HeaderMenu";
-
-let NavLinks;
-
-if (document.location.href.split("//")[1] === "localhost:3000/") {
-  NavLinks = require("../../Generic/Header/HeaderMenu/NavLinks.js");
-} else {
-  NavLinks = require("../../Generic/Header/HeaderMenu/NavLinksProd.js");
-}
+import NavLinks from "../../Generic/Header/HeaderMenu/NavLinks.js";
 
 const useStyles = makeStyles({
   header: {
-    backgroundColor: "#FEECEA",
+    backgroundColor: "white",
     height: "5rem",
   },
   "@media (max-width: 900px)": {
@@ -39,7 +32,7 @@ const useStyles = makeStyles({
 });
 
 const getDrawerChoices = () => {
-  return NavLinks["default"].map(({ id, title, path }) => {
+  return NavLinks.map(({ id, title, path }) => {
     return (
       <Link
         {...{
