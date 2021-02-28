@@ -6,7 +6,7 @@ import NavLinks from "./NavLinksProd.js";
 const HeaderMenu = () => {
   return (
     <Grid container direction="row" justify="space-evenly" alignItems="center">
-      {NavLinks["default"].map(({ id, title, path }) => {
+      {NavLinks.map(({ id, title, path }) => {
         return (
           <Grid item key={id}>
             <MenuLink name={title} href={path} />

@@ -32,14 +32,14 @@ const useStyles = makeStyles({
   },
 });
 
-const a = (
-  <Switch>
-    <Route exact path="/" component={HomePage} />
-    <Route path="/about" component={AboutPage} />
-    <Route path="/calculator" component={InheritanceCalculatorPage} />
-    <Route path="/resources" component={ResourcesPage} />
-  </Switch>
-);
+// const a = (
+//   <Switch>
+//     <Route exact path="/" component={HomePage} />
+//     <Route path="/about" component={AboutPage} />
+//     <Route path="/calculator" component={InheritanceCalculatorPage} />
+//     <Route path="/resources" component={ResourcesPage} />
+//   </Switch>
+// );
 const b = (
   <Switch>
     <Route exact path="/arvebot-frontend" component={HomePage} />
