@@ -4,7 +4,7 @@ import React from "react";
 import { Paper } from "@material-ui/core";
 import { makeStyles, MuiThemeProvider } from "@material-ui/core/styles";
 // react-router
-import { HashRouter, Route, Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 // local
 import theme from "./theme";
 import Header from "./Components/Generic/Header/Header";
@@ -56,25 +56,22 @@ function App() {
   const classes = useStyles();
 
   return (
-    <HashRouter basename="/">
-      <MuiThemeProvider theme={theme}>
-        <Paper
-          role="img"
-          className={classes.root}
-          aria-label="Image by Free-Photos from Pixabay"
-        >
-          <Header />
-          <Paper className={classes.rootPaper}>
-            {document.location.href.split("//")[1] === "localhost:3000/"
-              ? a
-              : b}
-          </Paper>
+    <MuiThemeProvider theme={theme}>
+      <Paper
+        role="img"
+        className={classes.root}
+        aria-label="Image by Free-Photos from Pixabay"
+      >
+        <Header />
+        <Paper className={classes.rootPaper}>
+          {console.log(document.location.href.split("//"))}
+          {document.location.href.split("//")[1] === "localhost:3000/" ? a : b}
         </Paper>
-        <Footer />
+      </Paper>
+      <Footer />
 
-        {/* Route components are rendered if the path prop matches the current URL */}
-      </MuiThemeProvider>
-    </HashRouter>
+      {/* Route components are rendered if the path prop matches the current URL */}
+    </MuiThemeProvider>
   );
 }
 
