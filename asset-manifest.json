@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/arvebot-frontend/static/css/main.5711e5f3.chunk.css",
-    "main.js": "/arvebot-frontend/static/js/main.149ad15a.chunk.js",
-    "main.js.map": "/arvebot-frontend/static/js/main.149ad15a.chunk.js.map",
+    "main.js": "/arvebot-frontend/static/js/main.2f12b32b.chunk.js",
+    "main.js.map": "/arvebot-frontend/static/js/main.2f12b32b.chunk.js.map",
     "runtime-main.js": "/arvebot-frontend/static/js/runtime-main.6dd90c01.js",
     "runtime-main.js.map": "/arvebot-frontend/static/js/runtime-main.6dd90c01.js.map",
     "static/js/2.28c43fa9.chunk.js": "/arvebot-frontend/static/js/2.28c43fa9.chunk.js",
@@ -18,6 +18,6 @@
     "static/js/runtime-main.6dd90c01.js",
     "static/js/2.28c43fa9.chunk.js",
     "static/css/main.5711e5f3.chunk.css",
-    "static/js/main.149ad15a.chunk.js"
+    "static/js/main.2f12b32b.chunk.js"
   ]
 }
