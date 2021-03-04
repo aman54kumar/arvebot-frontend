@@ -1,22 +1,22 @@
 const navLinks = [
   {
     id: 0,
-    title: "Home",
+    title: "Hjemmesiden",
     path: "/arvebot-frontend/",
   },
   {
     id: 1,
-    title: "Inheritance Calculator",
+    title: "BeregnArv",
     path: "/arvebot-frontend/calculator",
   },
   {
     id: 2,
-    title: "About",
+    title: "Om oss",
     path: "/arvebot-frontend/about",
   },
   {
     id: 3,
-    title: "Resources",
+    title: "Rettskilder",
     path: "/arvebot-frontend/resources",
   },
 ];
