@@ -1,8 +1,8 @@
 {
-  "Menu.0": "Hjemmesiden",
-  "Menu.1": "BeregnArv",
-  "Menu.2": "Om oss",
-  "Menu.3": "Rettskilder",
-  "nameText": "Mitt navn er Aman",
-  "placeText": "Jeg er fra India"
+  "Menu.Home": "Hjemmesiden",
+  "Menu.Calculator": "BeregnArv",
+  "Menu.About": "Om oss",
+  "Menu.Resources": "Rettskilder",
+
+  "Homepage": ""
 }

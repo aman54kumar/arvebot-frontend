@@ -4,7 +4,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
-import { FormattedMessage } from "react-intl";
 import LangButton from "./LangButton/LangButton";
 
 function Copyright() {
@@ -46,27 +45,14 @@ function Footer(props) {
         {description}
       </Typography>
       <Copyright />
-      <p>
-        <FormattedMessage
-          id="nameText"
-          defaultMessage="Hello"
-        ></FormattedMessage>
-      </p>
-      {/* <LangButton
-        onClickListener={props.onLanguageChange}
-        langButtonValue={props.langValue}
-      /> */}
+
       {Object.keys(props.langValue).map((lang) => (
-        // console.log(lang)
         <LangButton
           key={lang}
           langButtonValue={props.langValue[lang]}
           sendDataToParent={props.sendDataToParent}
         />
       ))}
-      ;{/* <p>{placeText}</p> */}
-      {/* <Button onClick={() => handleClick("nb")}>Norsk</Button>
-      <Button onClick={() => handleClick("en")}>English</Button> */}
     </Container>
   );
 }
