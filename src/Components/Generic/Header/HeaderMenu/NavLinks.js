@@ -2,22 +2,22 @@ const navLinks = [
   {
     id: 0,
     title: "Menu.Home",
-    path: "/arvebot-frontend/",
+    path: "/",
   },
   {
     id: 1,
     title: "Menu.Calculator",
-    path: "/arvebot-frontend/calculator",
+    path: "/calculator",
   },
   {
     id: 2,
     title: "Menu.About",
-    path: "/arvebot-frontend/about",
+    path: "/about",
   },
   {
     id: 3,
     title: "Menu.Resources",
-    path: "/arvebot-frontend/resources",
+    path: "/resources",
   },
 ];
 

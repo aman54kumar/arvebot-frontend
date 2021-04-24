@@ -37,13 +37,10 @@ const useStyles = makeStyles({
 
 const menuItems = (
   <Switch>
-    <Route exact path="/arvebot-frontend" component={HomePage} />
-    <Route path="/arvebot-frontend/about" component={AboutPage} />
-    <Route
-      path="/arvebot-frontend/calculator"
-      component={InheritanceCalculatorPage}
-    />
-    <Route path="/arvebot-frontend/resources" component={ResourcesPage} />
+    <Route exact path="/" component={HomePage} />
+    <Route path="/about" component={AboutPage} />
+    <Route path="/calculator" component={InheritanceCalculatorPage} />
+    <Route path="/resources" component={ResourcesPage} />
   </Switch>
 );
 

@@ -2,5 +2,16 @@
   "Menu.Home": "Home",
   "Menu.Calculator": "Inheritance Calculator",
   "Menu.About": "About Us",
-  "Menu.Resources": "Resources"
+  "Menu.Resources": "Resources",
+
+  "Chatbot.CASE_NAME_QUESTION": "Enter the name of the case. This will be used in generating reports and the like.",
+  "Chatbot.TESTATOR_QUESTION": "This program assumes that the testator (deceased) does not leave a will and does not remain in the unaltered estate. \n Enter the testator's ID.",
+  "Chatbot.NET_WEALTH_QUESTION": "What is the net worth left behind (NOK)?",
+  "Chatbot.NET_WEALTH_EXTRA_INFO": "Net assets are the value of all assets less all liabilities except student loans.",
+  "Chatbot.SPOUSE_QUESTION": "Write ID for the heir's spouse. You must not fill in a spouse if the spouses were separated by judgment or leave at the time the testator died. If the heir was unmarried, press Enter.",
+  "Chatbot.COHABITANT_QUESTION": "Enter the ID of the testator's cohabitant who has, has had or is expecting children with the deceased.  NIf the testator did not have a cohabitant who satisfies the requirements, press Enter.",
+  "Chatbot.COHABITANT_EXTRA_INFO": "Samboerne må begge være over 18 år og leve i et ekteskapslignende forhold.\nDet regnes ikke som et samboerskap dersom personene ikke lovlig kan inngå ekteskap (https://lovdata.no/NL/lov/1972-03-03-5/§28a).\nSamboerne må ha, ha hatt eller vente barn sammen.\nSom barn regnes biologiske barn eller andre barn i tråd med med reglene om morskap eller farskap etter barneloven.\nEt adoptivbarn og dets etterkommere får samme rettslige stilling som om adoptivbarnet var adoptivforeldrenes egenfødte barn etter adopsjonsloven § 24 (https://lovdata.no/NL/lov/2017-06-16-48/§24).",
+  "Chatbot.CHILD_EXTRA_INFO": "A biological child or other child is considered a child in accordance with the rules on motherhood or paternity according to the Children's Act. NL / lov / 2017-06-16-48 / §24).",
+  "Chatbot.PARENT_EXTRA_INFO": "Inheritance rights by family only apply to motherhood or paternity that follows from the rules in the Children's Act. 2017-06-16-48 / §24).  NIn this question, you should NOT fill in fathers if the child was bred with an act that is a violation of the provisions of the Criminal Code as described in the Inheritance Act § 4 (https: // lovdata .no / NL / lov / 1972-03-03-5 / §4).",
+  "Chatbot.REAR_CHILDREN_QUESTION": "Pursuant to section 36 of the Inheritance Act (https://lovdata.no/NL/lov/1972-03-03-5/§36) it may in certain cases be the case that children of heirs who did not have their upbringing are complete at the time the heir dies' is entitled to a part of the estate as foreclosure.  nThe same may apply to 'children returning home who, without reasonable remuneration, have done particularly much for the testator'.  nHave the testator had children who could fall under these designations?"
 }

@@ -19,7 +19,7 @@ const HomeDetail = () => {
   return (
     <Box>
       <Typography variant="h4" align="center" className={classes.root}>
-        Lurer du på hvem som arver Peder Ås når han dør? <br />
+        hahah Lurer du på hvem som arver Peder Ås når han dør? <br />
         Hvor mye får kona og barna? Hva med stesønnen? <br />
         Og hvor mye kan han testamentere til Lilleviks fuglekikkerforening?{" "}
         <br /> <br />
