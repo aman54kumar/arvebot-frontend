@@ -1,1 +1,0 @@
-{"version":3,"sources":["webpack://src/index.css"],"names":[],"mappings":"AAAA,KACE,QAAS,CACT,kCAAoC,CACpC,eACF,CAEA,kBAME,iCACF","file":"main.494321c5.chunk.css","sourcesContent":["body {\n  margin: 0;\n  font-family: \"Work Sans\", sans-serif;\n  font-weight: 300;\n}\n\nh1,\nh2,\nh3,\nh4,\nh5,\nh6 {\n  font-family: \"Abril Fatface\", serif;\n}\n"]}

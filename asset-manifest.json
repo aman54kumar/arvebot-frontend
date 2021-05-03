@@ -1,23 +1,23 @@
 {
   "files": {
-    "main.css": "/arvebot-frontend/static/css/main.494321c5.chunk.css",
-    "main.js": "/arvebot-frontend/static/js/main.9f1c8c95.chunk.js",
-    "main.js.map": "/arvebot-frontend/static/js/main.9f1c8c95.chunk.js.map",
-    "runtime-main.js": "/arvebot-frontend/static/js/runtime-main.53dc4130.js",
-    "runtime-main.js.map": "/arvebot-frontend/static/js/runtime-main.53dc4130.js.map",
-    "static/js/2.045343df.chunk.js": "/arvebot-frontend/static/js/2.045343df.chunk.js",
-    "static/js/2.045343df.chunk.js.map": "/arvebot-frontend/static/js/2.045343df.chunk.js.map",
-    "static/js/3.ee5135aa.chunk.js": "/arvebot-frontend/static/js/3.ee5135aa.chunk.js",
-    "static/js/3.ee5135aa.chunk.js.map": "/arvebot-frontend/static/js/3.ee5135aa.chunk.js.map",
+    "main.css": "/arvebot-frontend/static/css/main.8a9ffc13.chunk.css",
+    "main.js": "/arvebot-frontend/static/js/main.2892f152.chunk.js",
+    "main.js.map": "/arvebot-frontend/static/js/main.2892f152.chunk.js.map",
+    "runtime-main.js": "/arvebot-frontend/static/js/runtime-main.458bba43.js",
+    "runtime-main.js.map": "/arvebot-frontend/static/js/runtime-main.458bba43.js.map",
+    "static/js/2.9b0c3056.chunk.js": "/arvebot-frontend/static/js/2.9b0c3056.chunk.js",
+    "static/js/2.9b0c3056.chunk.js.map": "/arvebot-frontend/static/js/2.9b0c3056.chunk.js.map",
+    "static/js/3.85aae17a.chunk.js": "/arvebot-frontend/static/js/3.85aae17a.chunk.js",
+    "static/js/3.85aae17a.chunk.js.map": "/arvebot-frontend/static/js/3.85aae17a.chunk.js.map",
     "index.html": "/arvebot-frontend/index.html",
-    "static/css/main.494321c5.chunk.css.map": "/arvebot-frontend/static/css/main.494321c5.chunk.css.map",
-    "static/js/2.045343df.chunk.js.LICENSE.txt": "/arvebot-frontend/static/js/2.045343df.chunk.js.LICENSE.txt",
+    "static/css/main.8a9ffc13.chunk.css.map": "/arvebot-frontend/static/css/main.8a9ffc13.chunk.css.map",
+    "static/js/2.9b0c3056.chunk.js.LICENSE.txt": "/arvebot-frontend/static/js/2.9b0c3056.chunk.js.LICENSE.txt",
     "static/media/homepage-image.8ea4a75c.jpg": "/arvebot-frontend/static/media/homepage-image.8ea4a75c.jpg"
   },
   "entrypoints": [
-    "static/js/runtime-main.53dc4130.js",
-    "static/js/2.045343df.chunk.js",
-    "static/css/main.494321c5.chunk.css",
-    "static/js/main.9f1c8c95.chunk.js"
+    "static/js/runtime-main.458bba43.js",
+    "static/js/2.9b0c3056.chunk.js",
+    "static/css/main.8a9ffc13.chunk.css",
+    "static/js/main.2892f152.chunk.js"
   ]
 }
