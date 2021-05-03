@@ -70,8 +70,8 @@ function App() {
   };
 
   return (
-    // <IntlProvider locale={lang} messages={langMessages}>
-    <IntlProvider locale={"en-US"} messages={English}>
+    <IntlProvider locale={lang} messages={langMessages}>
+      {/* <IntlProvider locale={"en-US"} messages={English}> */}
       <MuiThemeProvider theme={theme}>
         <Paper
           role="img"

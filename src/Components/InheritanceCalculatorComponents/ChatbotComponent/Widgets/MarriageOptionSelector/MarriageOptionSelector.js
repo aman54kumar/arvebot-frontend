@@ -24,13 +24,13 @@ const MarriageOptionSelector = (props) => {
           className="marriage-option-selector-button"
           onClick={() => setOption(true)}
         >
-          Married
+          <FormattedMessage id="Chatbot.Married" />
         </button>
         <button
           className="marriage-option-selector-button"
           onClick={() => setOption(false)}
         >
-          Unmarried
+          <FormattedMessage id="Chatbot.Unmarried" />
         </button>
       </div>
     </div>
