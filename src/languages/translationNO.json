@@ -7,13 +7,25 @@
   "Homepage": "",
 
   "Chatbot.CASE_NAME_QUESTION": "Tast inn navn på case. Dette vil bli brukt i generering av rapport o.l.",
+  "Chatbot.CASE_NAME_WARNING": "Saksnavnet kan bare bestå av alfabet og tall. Vennligst skriv inn en gyldig inndata.",
   "Chatbot.TESTATOR_QUESTION": "Dette programmet forutsetter at arvelater (avdøde) ikke etterlater seg testament og ikke sitter i uskiftet bo.\nTast inn arvelaters ID.",
-  "Chatbot.NET_WEALTH_QUESTION": "Hva er nettoformuen som etterlates (NOK)?",
+  "Chatbot.TESTATOR_WARNING": "Feil ID oppgitt. Kontroller person-ID-en igjen.",
+  "Chatbot.NET_WEALTH_QUESTION": "Hva er nettoformuen som etterlates (NOK)? Eksample: 123/",
   "Chatbot.NET_WEALTH_EXTRA_INFO": "Nettoformuen er verdien av alle eiendeler fratrukket all gjeld unntatt studielån.",
-  "Chatbot.SPOUSE_QUESTION": "Skriv ID for arvelaters ektefelle. Du skal ikke fylle inn ektefelle dersom ektemakene var separert ved dom eller løyve på den tid arvelateren døde. Hvis arvelater var ugift trykk Enter.",
+  "Chatbot.NET_WEALTH_WARNING": "Vennligst skriv inn verdien i formatet '123.456'",
+  "Chatbot.SPOUSE_QUESTION": "Skriv ID for arvelaters ektefelle. Du skal ikke fylle inn ektefelle dersom ektemakene var separert ved dom eller løyve på den tid arvelateren døde.",
   "Chatbot.COHABITANT_QUESTION": "Skriv ID for arvelaters samboer som har, har hatt eller venter barn med den avdøde.\nHvis arvelater ikke hadde samboer som tilfredsstiller kravene, trykk Enter.",
   "Chatbot.COHABITANT_EXTRA_INFO": "Samboerne må begge være over 18 år og leve i et ekteskapslignende forhold.\nDet regnes ikke som et samboerskap dersom personene ikke lovlig kan inngå ekteskap (https://lovdata.no/NL/lov/1972-03-03-5/§28a).\nSamboerne må ha, ha hatt eller vente barn sammen.\nSom barn regnes biologiske barn eller andre barn i tråd med med reglene om morskap eller farskap etter barneloven.\nEt adoptivbarn og dets etterkommere får samme rettslige stilling som om adoptivbarnet var adoptivforeldrenes egenfødte barn etter adopsjonsloven § 24 (https://lovdata.no/NL/lov/2017-06-16-48/§24).",
   "Chatbot.CHILD_EXTRA_INFO": "Som barn regnes biologiske barn eller andre barn i tråd med med reglene om morskap eller farskap etter barneloven.\nEt adoptivbarn og dets etterkommere får samme rettslige stilling som om adoptivbarnet var adoptivforeldrenes egenfødte barn etter adopsjonsloven § 24 (https://lovdata.no/NL/lov/2017-06-16-48/§24).",
   "Chatbot.PARENT_EXTRA_INFO": "Arverett etter slekt gjelder bare for morskap eller farskap som følger av reglane i barneloven.\nEt adoptivbarn og dets etterkommere får samme rettslige stilling som om adoptivbarnet var adoptivforeldrenes egenfødte barn etter adopsjonsloven § 24 (https://lovdata.no/NL/lov/2017-06-16-48/§24).\nI dette spørsmålet skal du IKKE fylle inn fedre dersom barnet er avlet med en handling som er et brudd på straffelovens bestemmelser slik det er beskrevet i arveloven § 4 (https://lovdata.no/NL/lov/1972-03-03-5/§4).",
-  "Chatbot.REAR_CHILDREN_QUESTION": "Etter arvelovens § 36 (https://lovdata.no/NL/lov/1972-03-03-5/§36) kan det i visse tilfeller være slik at barn av arvelater som ikke hadde 'oppfostringa si fullenda på den tid arvelataren døyr' har krav på en del av boet som forlott.\nDet samme kan gjelde 'heimeverande barn som utan rimeleg vederlag har gjort særleg mykje for arvelataren'.\nHadde arvelater barn som kan falle inn under disse betegnelsene?"
+  "Chatbot.REAR_CHILDREN_QUESTION": "Etter arvelovens § 36 (https://lovdata.no/NL/lov/1972-03-03-5/§36) kan det i visse tilfeller være slik at barn av arvelater som ikke hadde 'oppfostringa si fullenda på den tid arvelataren døyr' har krav på en del av boet som forlott.\nDet samme kan gjelde 'heimeverande barn som utan rimeleg vederlag har gjort særleg mykje for arvelataren'.\nHadde arvelater barn som kan falle inn under disse betegnelsene?",
+  "Chatbot.UNDER_AGE_QUESTION": "Døde arvelater før fylte 18 år?",
+  "Chatbot.SPOUSE_EXIST_QUESTION": "Er du gift? Du må ikke velge Gift hvis ektefellene ble skilt ved dom eller permisjon på det tidspunkt testatoren døde.",
+  "Chatbot.Married": "gift",
+  "Chatbot.Unmarried": "ugift",
+  "Chatbot.Yes": "ja",
+  "Chatbot.No": "nei",
+  "Chatbot.UnderAge": "under alder",
+  "Chatbot.NotUnderAge": "ikke under alder",
+  "Chatbot.ChooseAppropriate": "Velg riktig alternativ"
 }
