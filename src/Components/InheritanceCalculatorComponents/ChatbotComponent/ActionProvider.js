@@ -77,11 +77,16 @@ class ActionProvider {
         terminateLoading: true,
       }
     );
-
+    console.log(HelperMethods.validateCurrency(currencyResponse));
     if (HelperMethods.validateCurrency(currencyResponse)) {
       this.updateStateProperty({
         stepID: 3,
         netWealth: currencyOutputResponse,
+      });
+
+      this.setState((state) => {
+        console.log(state);
+        return state;
       });
 
       this.addMessageToBotState(underAgeQuestion);

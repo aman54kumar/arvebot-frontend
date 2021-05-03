@@ -8,7 +8,8 @@ export const isAlphaNumeric = (data) => {
 };
 
 export const validateCurrency = (inputCurrency) => {
-  const currencyMatchExpression = /^((\d{1,3},)*\d{3}|\d{1,3})\.\d{2}$|^((\d{1,3}\.)*\d{3}|\d{1,3}),\d{2}$/;
+  // const currencyMatchExpression = /^((\d{1,3},)*\d{3}|\d{1,3})\.\d{2}$|^((\d{1,3}\.)*\d{3}|\d{1,3})$/;
+  const currencyMatchExpression = /^\d+$/;
   if (inputCurrency.match(currencyMatchExpression)) {
     return true;
   } else {
