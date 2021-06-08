@@ -6,10 +6,30 @@ const MarriageOptionSelector = (props) => {
   const { setState, actionProvider } = props;
 
   const setOption = async (option) => {
+    var boolMarried = true;
+    switch (option) {
+      case 1: {
+        boolMarried = true;
+        break;
+      }
+      case 2: {
+        boolMarried = true;
+        break;
+      }
+      case 3: {
+        boolMarried = false;
+        break;
+      }
+      default: {
+        console.log("error in MarriageOptionSelector");
+        break;
+      }
+    }
+
     setState((state) => ({
       ...state,
       stepID: 5,
-      marriage: option,
+      marriage: boolMarried,
     }));
 
     actionProvider.handleMarriageOptionWidget(option);
@@ -19,16 +39,22 @@ const MarriageOptionSelector = (props) => {
       <p className="marriage-option-selector-header">
         <FormattedMessage id="Chatbot.ChooseAppropriate" />{" "}
       </p>
-      <div className="marriage-ption-selector-button-container">
+      <div className="marriage-option-selector-button-container">
         <button
           className="marriage-option-selector-button"
-          onClick={() => setOption(true)}
+          onClick={() => setOption(1)}
         >
-          <FormattedMessage id="Chatbot.Married" />
+          <FormattedMessage id="Chatbot.MarriedAndAlive" />
         </button>
         <button
           className="marriage-option-selector-button"
-          onClick={() => setOption(false)}
+          onClick={() => setOption(2)}
+        >
+          <FormattedMessage id="Chatbot.MarriedAndDead" />
+        </button>
+        <button
+          className="marriage-option-selector-button"
+          onClick={() => setOption(3)}
         >
           <FormattedMessage id="Chatbot.Unmarried" />
         </button>

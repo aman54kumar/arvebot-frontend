@@ -1,6 +1,7 @@
 import { FormattedMessage } from "react-intl";
 import { NorwegianId } from "norwegian-national-id-validator";
 import * as HelperMethods from "./HelperMethods";
+import ShowInfoWidget from "./Widgets/ShowInfoWidget/ShowInfoWidget";
 
 class ActionProvider {
   constructor(createChatBotMessage, setStateFunc, createClientMessage) {
@@ -11,53 +12,30 @@ class ActionProvider {
 
   handleCaseName = (caseNameResponse) => {
     /**
-     *  * function for handling casename replies. both correct and incorrect replies are covered.
-     *  * the stepID is updated to 1 if the reply is correct. and then proceed to testator question.
+     *  * function for handling caseName replies. open reply currently.
+     *  * the stepID is updated to 1. and then proceed to testator question.
      */
-    const caseNameQuestion = this.createChatBotMessage(
-      <FormattedMessage id="Chatbot.CASE_NAME_QUESTION" />
-    );
 
-    const personIDQuestion = this.createChatBotMessage(
+    const testatorQuestion = this.createChatBotMessage(
       <FormattedMessage id="Chatbot.TESTATOR_QUESTION" />
     );
 
-    if (!HelperMethods.isAlphaNumeric(caseNameResponse)) {
-      const caseNameWarning = this.createChatBotMessage(
-        <FormattedMessage id="Chatbot.CASE_NAME_WARNING" />
-      );
-      this.addMessageToBotState(caseNameWarning);
-      this.addMessageToBotState(caseNameQuestion);
-    } else {
-      this.addMessageToBotState(personIDQuestion);
-      this.updateStateProperty({ stepID: 1, caseName: caseNameResponse });
-    }
+    this.addMessageToBotState(testatorQuestion);
   };
 
-  handlePersonID = (personIDresponse) => {
+  handlePersonID = (personIdResponse) => {
     /**
-     *  * function for handling personID replies for correct and incorrect values.
-     *  * stepID is updated to 2 if the reply is correct and then proceed to wealth question.
+     *  * function for handling personID replies.
+     *  * stepID is updated to 2 and then proceed to wealth question.
+     *  * open reply, no conditions for now.
      */
-
-    const personIDQuestion = this.createChatBotMessage(
-      <FormattedMessage id="Chatbot.TESTATOR_QUESTION" />
-    );
 
     const netWealthQuestion = this.createChatBotMessage(
       <FormattedMessage id="Chatbot.NET_WEALTH_QUESTION" />
     );
 
-    if (NorwegianId(personIDresponse).isValid()) {
-      this.updateStateProperty({ stepID: 2, id: personIDresponse });
-      this.addMessageToBotState(netWealthQuestion);
-    } else {
-      const personIDWarning = this.createChatBotMessage(
-        <FormattedMessage id="Chatbot.TESTATOR_WARNING" />
-      );
-      this.addMessageToBotState(personIDWarning);
-      this.addMessageToBotState(personIDQuestion);
-    }
+    this.updateStateProperty({ stepID: 2, id: personIdResponse });
+    this.addMessageToBotState(netWealthQuestion);
   };
 
   handleNetWealth(currencyResponse) {
@@ -77,7 +55,6 @@ class ActionProvider {
         terminateLoading: true,
       }
     );
-    console.log(HelperMethods.validateCurrency(currencyResponse));
     if (HelperMethods.validateCurrency(currencyResponse)) {
       this.updateStateProperty({
         stepID: 3,
@@ -101,51 +78,76 @@ class ActionProvider {
   }
 
   handleUnderAgeWidget = (selectedOption) => {
-    if (selectedOption) {
+    if (!selectedOption) {
+      // person not underage
       selectedOption = <FormattedMessage id="Chatbot.UnderAge" />;
+      const underAgeResponse = this.createClientMessage(selectedOption);
+      this.addMessageToBotState(underAgeResponse);
+
+      const spouseExistQuestion = this.createChatBotMessage(
+        <FormattedMessage id="Chatbot.SPOUSE_EXIST_QUESTION" />,
+        {
+          widget: "marriageOptionSelectorWidget",
+          withAvatar: true,
+          loading: true,
+          terminateLoading: true,
+        }
+      );
+
+      this.addMessageToBotState(spouseExistQuestion);
     } else {
       selectedOption = <FormattedMessage id="Chatbot.NotUnderAge" />;
+      // TODO
+      // person underage
+      //  skip spouse and cohabitant question and ask next.
     }
-    const underAgeResponse = this.createClientMessage(selectedOption);
-    this.addMessageToBotState(underAgeResponse);
-
-    const spouseExistQuestion = this.createChatBotMessage(
-      <FormattedMessage id="Chatbot.SPOUSE_EXIST_QUESTION" />,
-      {
-        widget: "marriageOptionSelectorWidget",
-        withAvatar: true,
-        loading: true,
-        terminateLoading: true,
-      }
-    );
-
-    this.addMessageToBotState(spouseExistQuestion);
   };
 
   handleMarriageOptionWidget = (selectedOption) => {
-    if (selectedOption) {
-      selectedOption = <FormattedMessage id="Chatbot.Married" />;
-      const spouseExistResponse = this.createClientMessage(selectedOption);
-      this.addMessageToBotState(spouseExistResponse);
-      const spouseIDQuestion = this.createChatBotMessage(
-        <FormattedMessage id="Chatbot.SPOUSE_QUESTION" />
-      );
-      this.addMessageToBotState(spouseIDQuestion);
-    } else {
-      selectedOption = <FormattedMessage id="Chatbot.unmarried" />;
-      const spouseExistResponse = this.createClientMessage(selectedOption);
-      this.addMessageToBotState(spouseExistResponse);
+    switch (selectedOption) {
+      case 1: {
+        // TODO
+        // Spouse children rearing
+        break;
+      }
+      case 2: {
+        // TODO
+        // ask cohabitant question
+        break;
+      }
+      case 3: {
+        // TODO
+        // ask cohabitant question
+        break;
+      }
+      default: {
+        console.log("error in handleMarriageOptionWidget");
+        break;
+      }
     }
+    // if (selectedOption) {
+    //   selectedOption = <FormattedMessage id="Chatbot.Married" />;
+    //   const spouseExistResponse = this.createClientMessage(selectedOption);
+    //   this.addMessageToBotState(spouseExistResponse);
+    //   const spouseIDQuestion = this.createChatBotMessage(
+    //     <FormattedMessage id="Chatbot.SPOUSE_QUESTION" />
+    //   );
+    //   this.addMessageToBotState(spouseIDQuestion);
+    // } else {
+    //   selectedOption = <FormattedMessage id="Chatbot.unmarried" />;
+    //   const spouseExistResponse = this.createClientMessage(selectedOption);
+    //   this.addMessageToBotState(spouseExistResponse);
+    // }
   };
 
   handleSpouseID = (data) => {
     if (NorwegianId(data).isValid) {
-      const updatedSpouseIDdata = { id: data, spouse: true };
+      const updatedSpouseIdData = { id: data, spouse: true };
       this.createChatBotMessage("correct id");
       this.setState((state) => ({
         ...state,
         stepID: state.stepID + 1,
-        partner: [...state.partner, updatedSpouseIDdata],
+        partner: [...state.partner, updatedSpouseIdData],
       }));
     } else {
       this.createChatBotMessage("incorrect id");
@@ -155,6 +157,8 @@ class ActionProvider {
       return state;
     });
   };
+
+  // Generic functions
   addMessageToBotState = (messages) => {
     if (Array.isArray(messages)) {
       this.setState((state) => ({

@@ -31,7 +31,7 @@ const useStyles = makeStyles({
     minHeight: "100vh",
     background:
       "radial-gradient( circle farthest-corner at 10% 20%,  #FCCABD 0%, #4151C9 45.5% )",
-    opacity: "80%",
+    opacity: "1",
   },
 });
 
@@ -68,7 +68,6 @@ function App() {
       name: "English",
     },
   };
-
   return (
     <IntlProvider locale={lang} messages={langMessages}>
       {/* <IntlProvider locale={"en-US"} messages={English}> */}

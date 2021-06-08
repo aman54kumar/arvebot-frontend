@@ -36,7 +36,7 @@ class MessageParser {
          * * not underage and not married
          * * handle cohabitant details
          */
-        return this.actionProvider.handleCohabitant(message);
+        return this.actionProvider.handleCohabitant(message); 
       } else if (this.state.underAge && !this.state.marriage) {
         /**
          * * is underage and not married
