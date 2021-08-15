@@ -1,11 +1,12 @@
-// import React from "react";
+import React from "react";
 import { createChatBotMessage } from "react-chatbot-kit";
-import "../chatbot.css";
+import "../chatbot.scss";
 import { FormattedMessage } from "react-intl";
 import OptionSelector from "./Widgets/OptionSelector/OptionSelector";
-import MarriageOptionSelector from "./Widgets/MarriageOptionSelector/MarriageOptionSelector";
-import DeceasedOptionSelector from "./Widgets/DeceasedOptionSelecor/DeceasedOptionSelecor";
-
+// import MarriageOptionSelector from "./Widgets/MarriageOptionSelector/MarriageOptionSelector";
+// import DeceasedOptionSelector from "./Widgets/DeceasedOptionSelecor/DeceasedOptionSelecor";
+import UndividedEstateOptionSelector from "./Widgets/UndividedEstateOptionSelector/UndividedEstateOptionSelector";
+import RearChildrenOptionSelector from "./Widgets/RearChildrenOptionSelector/RearChildrenOptionSelector";
 const botName = "Arvebot";
 const config = {
   botName: botName,
@@ -23,16 +24,17 @@ const config = {
   ],
   state: {
     stepID: 0,
+    undividedEstate: false,
     caseName: "",
-    id: 0,
+    testator: "",
     deceased: false,
-    netWealth: 0,
+    netWealth: { intValue: 0, strValue: "" },
     underAge: false,
-    marriage: false,
-    cohabitant: false,
-    spouse: [],
-    partner: [],
-    children: [],
+    married: false,
+    cohabitant: "",
+    spouse: "",
+    rearChildren: false,
+    children: [{ id: "dfg", parent: "testator_id" }],
     parents: [],
   },
   widgets: [
@@ -42,15 +44,25 @@ const config = {
       mapStateToProps: ["stepID", "underAge"],
     },
     {
-      widgetName: "marriageOptionSelectorWidget",
-      widgetFunc: (props) => <MarriageOptionSelector {...props} />,
-      mapStateToProps: ["stepID", "marriage"],
+      widgetName: "undividedEstateSelectorWidget",
+      widgetFunc: (props) => <UndividedEstateOptionSelector {...props} />,
+      mapStateToProps: ["stepID", "undividedEstate"],
     },
     {
-      widgetName: "deceasedOptionSelectorWidget",
-      widgetFunc: (props) => <DeceasedOptionSelector {...props} />,
-      mapStateToProps: ["stepID", "deceased"],
+      widgetName: "RearChildrenSelectorWidget",
+      widgetFunc: (props) => <RearChildrenOptionSelector {...props} />,
+      mapStateToProps: ["stepID", "rearChildren"],
     },
+    // {
+    //   widgetName: "marriageOptionSelectorWidget",
+    //   widgetFunc: (props) => <MarriageOptionSelector {...props} />,
+    //   mapStateToProps: ["stepID", "marriage"],
+    // },
+    // {
+    //   widgetName: "deceasedOptionSelectorWidget",
+    //   widgetFunc: (props) => <DeceasedOptionSelector {...props} />,
+    //   mapStateToProps: ["stepID", "deceased"],
+    // },
   ],
 };
 

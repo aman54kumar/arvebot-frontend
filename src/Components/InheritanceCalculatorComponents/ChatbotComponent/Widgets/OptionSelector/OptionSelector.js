@@ -1,5 +1,5 @@
 import React from "react";
-import "./OptionSelector.css";
+import "./OptionSelector.scss";
 import { FormattedMessage } from "react-intl";
 
 const OptionSelector = (props) => {
@@ -8,17 +8,14 @@ const OptionSelector = (props) => {
   const setOption = (option) => {
     setState((state) => ({
       ...state,
-      stepID: 4,
-      underAge: option,
+      stepID: 5,
+      undividedEstate: option,
     }));
 
-    actionProvider.handleUnderAgeWidget(option);
+    actionProvider.handleUnderAge(option);
   };
   return (
     <div>
-      <p className="option-selector-header">
-        <FormattedMessage id="Chatbot.ChooseAppropriate" />{" "}
-      </p>
       <div className="option-selector-button-container">
         <button
           className="option-selector-button"

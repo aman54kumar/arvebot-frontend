@@ -6,9 +6,9 @@
 
   "Homepage": "",
 
-  "Chatbot.CASE_NAME_QUESTION": "Tast inn navn på case. Dette vil bli brukt i generering av rapport o.l.",
-  "Chatbot.CASE_NAME_WARNING": "Saksnavnet kan bare bestå av alfabet og tall. Vennligst skriv inn en gyldig inndata.",
-  "Chatbot.TESTATOR_QUESTION": "Dette programmet forutsetter at arvelater (avdøde) ikke etterlater seg testament og ikke sitter i uskiftet bo.\nTast inn arvelaters ID.",
+  "Chatbot.UNDIVIDED_ESTATE_QUESTION": "Var arvelater i uskifte?",
+  "Chatbot.CASE_NAME_QUESTION": "Dette programmet forutsetter at arvelater (avdøde) ikke etterlater seg testament.\nTast inn navn på case.",
+  "Chatbot.TESTATOR_QUESTION": "Tast inn arvelaters ID.",
   "Chatbot.TESTATOR_WARNING": "Feil ID oppgitt. Kontroller person-ID-en igjen.",
   "Chatbot.NET_WEALTH_QUESTION": "Hva er nettoformuen som etterlates (NOK)? Eksample: 2123326",
   "Chatbot.NET_WEALTH_EXTRA_INFO": "Nettoformuen er verdien av alle eiendeler fratrukket all gjeld unntatt studielån.",
@@ -21,8 +21,7 @@
   "Chatbot.REAR_CHILDREN_QUESTION": "Etter arvelovens § 36 (https://lovdata.no/NL/lov/1972-03-03-5/§36) kan det i visse tilfeller være slik at barn av arvelater som ikke hadde 'oppfostringa si fullenda på den tid arvelataren døyr' har krav på en del av boet som forlott.\nDet samme kan gjelde 'heimeverande barn som utan rimeleg vederlag har gjort særleg mykje for arvelataren'.\nHadde arvelater barn som kan falle inn under disse betegnelsene?",
   "Chatbot.UNDER_AGE_QUESTION": "Døde arvelater før fylte 18 år?",
   "Chatbot.SPOUSE_EXIST_QUESTION": "Er du gift? Du må ikke velge Gift hvis ektefellene ble skilt ved dom eller permisjon på det tidspunkt testatoren døde.",
-  "Chatbot.MarriedAndAlive": "gift og i live",
-  "Chatbot.MarriedAndDead": "gift og død",
+  "Chatbot.Married": "gift",
   "Chatbot.Unmarried": "ugift",
   "Chatbot.Yes": "ja",
   "Chatbot.No": "nei",

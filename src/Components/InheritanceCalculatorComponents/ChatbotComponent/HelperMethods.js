@@ -18,9 +18,23 @@ export const validateCurrency = (inputCurrency) => {
 };
 
 export const currencyDisplayValue = (inputCurrencyValue) => {
-  return new Intl.NumberFormat("nb-NB", {
+  return new Intl.NumberFormat("nb-NO", {
     style: "currency",
     currency: "NOK",
     currencyDisplay: "narrowSymbol",
   }).format(inputCurrencyValue);
+};
+
+export const validateSpouseReply = (inputSpouseResponse) => {
+  console.log(inputSpouseResponse);
+  switch (inputSpouseResponse) {
+    case "":
+      console.log("blank");
+      break;
+    case 1:
+      console.log("1");
+      break;
+    default:
+      console.log("default");
+  }
 };

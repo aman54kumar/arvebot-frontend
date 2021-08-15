@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import Popover from "@material-ui/core/Popover";
-import "./ShowInfoWidget.css";
+import "./ShowInfoWidget.scss";
 import LiveHelpIcon from "@material-ui/icons/LiveHelp";
 import { makeStyles } from "@material-ui/core/styles";
+import { FormattedMessage } from "react-intl";
+// import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   popover: {
@@ -16,8 +18,12 @@ const useStyles = makeStyles((theme) => ({
 
 function ShowInfoWidget(props) {
   const classes = useStyles();
+  /*
+   used reference to parent element for correcting the scrollbar conflict issue on popover show. 
+   https://stackoverflow.com/questions/53985436/material-ui-unblock-scrolling-when-popover-is-opened
+  */
+  const containerRef = React.useRef();
   const [anchorEl, setAnchorEl] = React.useState(null);
-
   const handlePopoverOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -28,14 +34,15 @@ function ShowInfoWidget(props) {
 
   const open = Boolean(anchorEl);
   return (
-    <div className="infoDiv">
+    <div className="infoDiv" ref={containerRef}>
       <LiveHelpIcon
         className="InfoWidgetIcon"
-        aria-owns={open ? "mouse-over-popover" : undefined}
-        aria-haspopup="true"
         onMouseEnter={handlePopoverOpen}
         onMouseLeave={handlePopoverClose}
+        aria-owns={open ? "mouse-over-popover" : undefined}
+        aria-haspopup="true"
       />
+
       <Popover
         id="mouse-over-popover"
         className={classes.popover}
@@ -45,17 +52,18 @@ function ShowInfoWidget(props) {
         open={open}
         anchorEl={anchorEl}
         anchorOrigin={{
-          vertical: "top",
+          vertical: "bottom",
           horizontal: "right",
         }}
         transformOrigin={{
-          vertical: "top",
+          vertical: "bottom",
           horizontal: "left",
         }}
         onClose={handlePopoverClose}
         disableRestoreFocus
+        container={containerRef.current}
       >
-        <p>{props.text}</p>
+        <FormattedMessage id={props.text} />
       </Popover>
     </div>
   );

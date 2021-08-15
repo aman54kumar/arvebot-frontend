@@ -5,7 +5,15 @@ import { Paper } from "@material-ui/core";
 import { makeStyles, MuiThemeProvider } from "@material-ui/core/styles";
 // react-router
 import { Route, Switch } from "react-router-dom";
-// local
+
+// local - check in newer chrome version and remove. added polyfill because nb locale not supported in chromium>92
+// https://github.com/formatjs/formatjs/issues/3066
+import "@formatjs/intl-datetimeformat/polyfill-force";
+import "@formatjs/intl-datetimeformat/locale-data/nb";
+import "@formatjs/intl-numberformat/polyfill-force";
+import "@formatjs/intl-numberformat/locale-data/nb";
+
+//
 import theme from "./theme";
 import Header from "./Components/Generic/Header/Header";
 import HomePage from "./Pages/HomePage";
@@ -70,7 +78,6 @@ function App() {
   };
   return (
     <IntlProvider locale={lang} messages={langMessages}>
-      {/* <IntlProvider locale={"en-US"} messages={English}> */}
       <MuiThemeProvider theme={theme}>
         <Paper
           role="img"

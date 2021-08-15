@@ -4,8 +4,8 @@
   "Menu.About": "About Us",
   "Menu.Resources": "Resources",
 
-  "Chatbot.CASE_NAME_QUESTION": "Enter the name of the case. This will be used in generating reports and the like.",
-  "Chatbot.TESTATOR_QUESTION": "This program assumes that the testator (deceased) does not leave a will and does not remain in the unaltered estate. \n Enter the testator's ID.",
+  "Chatbot.CASE_NAME_QUESTION": "This program assumes that the testator (deceased) does not leave a will. \n Enter the name of the case.",
+  "Chatbot.TESTATOR_QUESTION": "Enter the testator's ID.",
   "Chatbot.NET_WEALTH_QUESTION": "What is the net worth left behind (NOK)? Example: 123456",
   "Chatbot.NET_WEALTH_EXTRA_INFO": "Net assets are the value of all assets less all liabilities except student loans.",
   "Chatbot.NET_WEALTH_WARNING": "Please enter value in the format '123456'. please do not enter anything characters other than numbers (0 to 9)",
