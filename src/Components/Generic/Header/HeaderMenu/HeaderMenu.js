@@ -6,7 +6,12 @@ import { FormattedMessage } from "react-intl";
 
 const HeaderMenu = () => {
   return (
-    <Grid container direction="row" justify="space-evenly" alignItems="center">
+    <Grid
+      container
+      direction="row"
+      justifyContent="space-evenly"
+      alignItems="center"
+    >
       {NavLinks.map(({ id, title, path }) => {
         return (
           <Grid item key={id}>

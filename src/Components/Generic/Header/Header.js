@@ -54,7 +54,7 @@ const displayDesktop = () => {
       <Grid
         container
         direction="row"
-        justify="flex-start"
+        justifyContent="flex-start"
         alignItems="flex-end"
       >
         <Grid item sm={6}>
