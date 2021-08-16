@@ -14,7 +14,7 @@ import "@formatjs/intl-numberformat/polyfill-force";
 import "@formatjs/intl-numberformat/locale-data/nb";
 
 //
-import theme from "./theme";
+import theme from "./theme.ts";
 import Header from "./Components/Generic/Header/Header";
 import HomePage from "./Pages/HomePage";
 import AboutPage from "./Pages/AboutPage";

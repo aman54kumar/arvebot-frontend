@@ -8,6 +8,11 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.tsx?$/,
+        use: "ts-loader",
+        exclude: /node_modules/,
+      },
+      {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: [
@@ -40,7 +45,7 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: ["*", ".js", ".jsx"],
+    extensions: ["*", ".tsx", ".ts", ".js", ".jsx"],
   },
   plugins: [new MiniCssExtractPlugin()],
   output: {
@@ -55,6 +60,11 @@ module.exports = {
   devtool: "eval-source-map",
   module: {
     rules: [
+      {
+        test: /\.tsx?$/,
+        use: "ts-loader",
+        exclude: /node_modules/,
+      },
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
@@ -88,7 +98,7 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: ["*", ".js", ".jsx"],
+    extensions: ["*", ".tsx", ".ts", ".js", ".jsx"],
   },
   output: {
     path: path.resolve(__dirname, "./public"),
