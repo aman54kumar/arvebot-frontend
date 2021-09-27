@@ -1,18 +1,18 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import { StrictMode } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import "./index.scss";
 
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { render } from "react-dom";
 
 // if (module.hot) module.hot.accept();
-ReactDOM.render(
-  <React.StrictMode>
+render(
+  <StrictMode>
     <Router>
       <App />
     </Router>
-  </React.StrictMode>,
+  </StrictMode>,
   document.getElementById("app")
 );
 

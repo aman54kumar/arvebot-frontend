@@ -1,8 +1,8 @@
-import React from "react";
+import { ReactElement } from "react";
 import "./UndividedEstateOptionSelector.scss";
 import { FormattedMessage } from "react-intl";
 
-const UndividedEstateOptionSelector = (props: any) => {
+const UndividedEstateOptionSelector = (props: any): ReactElement => {
   const { setState, actionProvider } = props;
 
   const setOption = (option: any) => {

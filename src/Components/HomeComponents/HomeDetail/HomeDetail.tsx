@@ -1,4 +1,4 @@
-import React from "react";
+import { ReactElement } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Box, Typography } from "@material-ui/core";
 const useStyles = makeStyles({
@@ -13,7 +13,7 @@ const useStyles = makeStyles({
     color: "yellow",
   },
 });
-const HomeDetail = (): React.ReactElement => {
+const HomeDetail = (): ReactElement => {
   const classes = useStyles();
 
   return (

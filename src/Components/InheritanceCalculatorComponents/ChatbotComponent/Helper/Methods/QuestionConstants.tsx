@@ -1,4 +1,3 @@
-// import React from "react";
 import { ReactElement } from "react";
 import { FormattedMessage } from "react-intl";
 import ShowInfoWidget from "../../Widgets/ShowInfoWidget/ShowInfoWidget";
