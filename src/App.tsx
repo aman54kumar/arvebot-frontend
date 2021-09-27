@@ -1,5 +1,5 @@
 // React
-import React, { useState } from "react";
+import { ReactElement, useState } from "react";
 // material-ui
 import { Paper } from "@material-ui/core";
 import { makeStyles, MuiThemeProvider } from "@material-ui/core/styles";
@@ -14,14 +14,14 @@ import "@formatjs/intl-numberformat/polyfill-force";
 import "@formatjs/intl-numberformat/locale-data/nb";
 import "@formatjs/intl-numberformat/locale-data/en";
 //
-import theme from "./theme.ts";
-import Header from "./Components/Generic/Header/Header.tsx";
-import HomePage from "./Pages/HomePage.tsx";
-import AboutPage from "./Pages/AboutPage.tsx";
-import InheritanceCalculatorPage from "./Pages/InheritanceCalculatorPage.tsx";
+import theme from "./theme";
+import Header from "./Components/Generic/Header/Header";
+import HomePage from "./Pages/HomePage";
+import AboutPage from "./Pages/AboutPage";
+import InheritanceCalculatorPage from "./Pages/InheritanceCalculatorPage";
 import Footer from "./Components/Generic/Footer/Footer";
 import HomePageImage from "./assets/images/homepage-image.jpg";
-import ResourcesPage from "./Pages/ResourcesPage.tsx";
+import ResourcesPage from "./Pages/ResourcesPage";
 
 import Norsk from "./languages/translationNO.json";
 import English from "./languages/translationEN.json";
@@ -52,29 +52,29 @@ const menuItems = (
   </Switch>
 );
 
-function App() {
+function App(): ReactElement {
   const classes = useStyles();
   const [lang, setLang] = useState("nb-NO");
   const [langMessages, setLangMessages] = useState(Norsk);
-  const sendDataToParent = (index) => {
-    setLang(index.code);
-    if (index.code === "nb-NO") {
-      setLangMessages(Norsk);
-    } else {
-      setLangMessages(English);
-    }
-  };
+  // const sendDataToParent = (index) => {
+  //   setLang(index.code);
+  //   if (index.code === "nb-NO") {
+  //     setLangMessages(Norsk);
+  //   } else {
+  //     setLangMessages(English);
+  //   }
+  // };
 
-  const LangValue = {
-    no: {
-      code: "nb-NO",
-      name: "Norsk",
-    },
-    en: {
-      code: "en-US",
-      name: "English",
-    },
-  };
+  // const LangValue = {
+  //   no: {
+  //     code: "nb-NO",
+  //     name: "Norsk",
+  //   },
+  //   en: {
+  //     code: "en-US",
+  //     name: "English",
+  //   },
+  // };
   return (
     <IntlProvider locale={lang} messages={langMessages}>
       <MuiThemeProvider theme={theme}>
@@ -87,7 +87,7 @@ function App() {
           <Paper className={classes.rootPaper}>{menuItems}</Paper>
         </Paper>
         {/* <Footer langValue={LangValue} sendDataToParent={sendDataToParent} /> */}
-        <Footer />
+        <Footer description="Arvebot" title="Arvebot" />
 
         {/* Route components are rendered if the path prop matches the current URL */}
       </MuiThemeProvider>

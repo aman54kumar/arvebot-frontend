@@ -104,8 +104,9 @@ class ActionProvider {
     const netWealthQuestion = this.createChatBotMessage(
       this.QuestionConsts.NetWealthQuestion
     );
-    const currencyOutputResponse =
-      HelperMethods.currencyDisplayValue(currencyResponse);
+    const currencyOutputResponse = HelperMethods.currencyDisplayValue(
+      parseInt(currencyResponse)
+    );
 
     const underAgeQuestion = this.createChatBotMessage(
       this.QuestionConsts.UnderAgeQuestion,

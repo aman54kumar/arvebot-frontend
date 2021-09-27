@@ -1,12 +1,12 @@
-import React from "react";
+import { ReactElement } from "react";
 import { FormattedMessage } from "react-intl";
 import "./RearChildrenOptionSelector.scss";
 
-const RearChildrenOptionSelector = (props) => {
+const RearChildrenOptionSelector = (props: any): ReactElement => {
   const { setState, actionProvider } = props;
 
-  const setOption = async (option) => {
-    setState((state) => ({
+  const setOption = async (option: any) => {
+    setState((state: any) => ({
       ...state,
       // stepID: 5,
       rearChildren: option,

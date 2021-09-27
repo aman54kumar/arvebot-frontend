@@ -1,4 +1,5 @@
 // import React from "react";
+import { ReactElement } from "react";
 import { FormattedMessage } from "react-intl";
 import ShowInfoWidget from "../../Widgets/ShowInfoWidget/ShowInfoWidget";
 
@@ -16,8 +17,8 @@ class QuestionConstants {
     terminateLoading: true,
   };
 
-  UndividedEstateResultText = (selectedOption) => {
-    let undividedEstateResultText = selectedOption
+  UndividedEstateResultText = (selectedOption: string): ReactElement => {
+    const undividedEstateResultText = selectedOption
       ? "Chatbot.Yes"
       : "Chatbot.No";
     return <FormattedMessage id={undividedEstateResultText} />;
@@ -34,8 +35,8 @@ class QuestionConstants {
 
   UnderAgeQuestion = (<FormattedMessage id="Chatbot.UNDER_AGE_QUESTION" />);
 
-  UnderAgeResultText = (selectedOption) => {
-    let underAgeResultText = selectedOption
+  UnderAgeResultText = (selectedOption: string): ReactElement => {
+    const underAgeResultText = selectedOption
       ? "Chatbot.UnderAge"
       : "Chatbot.NotUnderAge";
 
@@ -69,7 +70,7 @@ class QuestionConstants {
     terminateLoading: true,
   };
 
-  addSuccessorquestion1 = (person_id) => {
+  addSuccessorquestion1 = (person_id: string): ReactElement => {
     return (
       <div>
         <FormattedMessage
@@ -80,7 +81,10 @@ class QuestionConstants {
       </div>
     );
   };
-  addSuccessorquestion2 = (person_id, child_id_string) => {
+  addSuccessorquestion2 = (
+    person_id: string,
+    child_id_string: string
+  ): ReactElement => {
     return (
       <div>
         <FormattedMessage
@@ -92,8 +96,8 @@ class QuestionConstants {
     );
   };
 
-  AliveQuestionText = (selectedOption) => {
-    let aliveQuestionText = selectedOption ? "Chatbot.Yes" : "Chatbot.No";
+  AliveQuestionText = (selectedOption: string): ReactElement => {
+    const aliveQuestionText = selectedOption ? "Chatbot.Yes" : "Chatbot.No";
 
     return <FormattedMessage id={aliveQuestionText} />;
   };

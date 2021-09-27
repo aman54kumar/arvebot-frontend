@@ -1,11 +1,12 @@
 import "./OptionSelector.scss";
 import { FormattedMessage } from "react-intl";
+import { ReactElement } from "react";
 
-const OptionSelector = (props) => {
+const OptionSelector = (props: any): ReactElement => {
   const { setState, actionProvider } = props;
 
-  const setOption = (option) => {
-    setState((state) => ({
+  const setOption = (option: any) => {
+    setState((state: any) => ({
       ...state,
       stepID: 5,
       undividedEstate: option,

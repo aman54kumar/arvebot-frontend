@@ -1,4 +1,4 @@
-import React from "react";
+import { ReactElement, useRef, useState } from "react";
 import Popover from "@material-ui/core/Popover";
 import "./ShowInfoWidget.scss";
 import LiveHelpIcon from "@material-ui/icons/LiveHelp";
@@ -16,15 +16,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ShowInfoWidget(props) {
+function ShowInfoWidget(props: any): ReactElement {
   const classes = useStyles();
   /*
    used reference to parent element for correcting the scrollbar conflict issue on popover show. 
    https://stackoverflow.com/questions/53985436/material-ui-unblock-scrolling-when-popover-is-opened
   */
-  const containerRef = React.useRef();
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const handlePopoverOpen = (event) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const handlePopoverOpen = (event: any) => {
     setAnchorEl(event.currentTarget);
   };
 
