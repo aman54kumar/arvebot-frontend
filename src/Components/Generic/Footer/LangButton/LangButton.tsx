@@ -1,5 +1,7 @@
 // import { Button } from "@material-ui/core";
 
+import { ReactElement } from "react";
+
 // const LangButton = ({ langButtonValue, sendDataToParent }) => {
 //   return (
 //     <Button
@@ -13,4 +15,7 @@
 //   );
 // };
 
-// export default LangButton;
+const LangButton = (): ReactElement => {
+  return <div></div>;
+};
+export default LangButton;
