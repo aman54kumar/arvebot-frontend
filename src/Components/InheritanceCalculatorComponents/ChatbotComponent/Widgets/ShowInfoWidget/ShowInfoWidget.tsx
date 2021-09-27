@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ShowInfoWidget(props: any): ReactElement {
+const ShowInfoWidget = (props: any): ReactElement => {
   const classes = useStyles();
   /*
    used reference to parent element for correcting the scrollbar conflict issue on popover show. 
@@ -67,6 +67,6 @@ function ShowInfoWidget(props: any): ReactElement {
       </Popover>
     </div>
   );
-}
+};
 
 export default ShowInfoWidget;

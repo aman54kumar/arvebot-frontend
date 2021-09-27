@@ -77,18 +77,23 @@ class ActionProvider {
     // TODO: need to fix the values in object and correctly implement the whole algorithm
     // TODO: check for correct text for the questions. (last step, the format of questions already available)
 
-    const selectedOption = this.QuestionConsts.UndividedEstateResultText(
-      undividedEstateResponse
-    );
-    const undividedEstateClientMessage =
-      this.createClientMessage(selectedOption);
-    this.addMessageToBotState(selectedOption);
-
+    // const selectedOption = this.QuestionConsts.UndividedEstateResultText(
+    //   undividedEstateResponse
+    // );
     this.setState((state: ChatbotInterface<Person>) => ({
       ...state,
       stepID: 3,
       undividedEstate: undividedEstateResponse,
     }));
+
+    const undividedEstateResponseModifiedResult =
+      this.QuestionConsts.UndividedEstateResultText(undividedEstateResponse);
+
+    const undividedEstateClientMessage = this.createClientMessage(
+      undividedEstateResponseModifiedResult
+    );
+    this.addMessageToBotState(undividedEstateClientMessage);
+
     const netWealthQuestion = this.createChatBotMessage(
       this.QuestionConsts.NetWealthQuestion
     );
@@ -136,11 +141,6 @@ class ActionProvider {
   }
 
   handleUnderAge = (selectedOption: string): void => {
-    this.setState((state: any) => {
-      console.log(state);
-      return state;
-    });
-
     this.setState((state: ChatbotInterface<Person>) => ({
       ...state,
       stepID: 5,
@@ -149,10 +149,6 @@ class ActionProvider {
         _underAge: selectedOption,
       },
     }));
-    this.setState((state: ChatbotInterface<Person>) => {
-      console.log(state);
-      return state;
-    });
 
     const selectedOptionModified =
       this.QuestionConsts.UnderAgeResultText(selectedOption);
@@ -254,7 +250,6 @@ class ActionProvider {
           return;
         }
         const child = this.family.get_or_create_person(child_id);
-        console.log(state);
 
         state.person.add_child(child, true);
         let allChildrenID = "";
@@ -263,7 +258,6 @@ class ActionProvider {
         }
         allChildrenID =
           "{ " + allChildrenID.slice(0, allChildrenID.length - 2) + " }";
-        console.log(allChildrenID);
         // TODO
         // const aliveQuestion = this.createChatBotMessage(
         //   this.QuestionConsts.AliveQuestionText(),

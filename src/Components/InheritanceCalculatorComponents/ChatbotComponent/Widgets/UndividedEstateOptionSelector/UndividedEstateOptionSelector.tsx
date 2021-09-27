@@ -2,11 +2,11 @@ import React from "react";
 import "./UndividedEstateOptionSelector.scss";
 import { FormattedMessage } from "react-intl";
 
-const UndividedEstateOptionSelector = (props) => {
+const UndividedEstateOptionSelector = (props: any) => {
   const { setState, actionProvider } = props;
 
-  const setOption = (option) => {
-    setState((state) => ({
+  const setOption = (option: any) => {
+    setState((state: any) => ({
       ...state,
       stepID: 3,
       undividedEstate: option,

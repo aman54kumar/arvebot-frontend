@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Footer(props: propsTypes): ReactElement {
+const Footer = (props: propsTypes): ReactElement => {
   const classes = useStyles();
   const { description, title } = props;
 
@@ -60,7 +60,7 @@ function Footer(props: propsTypes): ReactElement {
       ))} */}
     </Container>
   );
-}
+};
 
 Footer.propTypes = {
   description: PropTypes.string,

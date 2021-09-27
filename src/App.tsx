@@ -52,7 +52,7 @@ const menuItems = (
   </Switch>
 );
 
-function App(): ReactElement {
+const App = (): ReactElement => {
   const classes = useStyles();
   const [lang, setLang] = useState("nb-NO");
   const [langMessages, setLangMessages] = useState(Norsk);
@@ -93,7 +93,7 @@ function App(): ReactElement {
       </MuiThemeProvider>
     </IntlProvider>
   );
-}
+};
 
 export default App;
 
