@@ -1,9 +1,9 @@
-import React, { ReactElement } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter as Router } from "react-router-dom";
 import "./index.scss";
 
-import App from "./App";
+import App from "./App.js";
 import reportWebVitals from "./reportWebVitals";
 
 // if (module.hot) module.hot.accept();

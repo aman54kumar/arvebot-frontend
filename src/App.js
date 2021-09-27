@@ -5,24 +5,24 @@ import { Paper } from "@material-ui/core";
 import { makeStyles, MuiThemeProvider } from "@material-ui/core/styles";
 // react-router
 import { Route, Switch } from "react-router-dom";
-
+import { IntlProvider } from "react-intl";
 // local - check in newer chrome version and remove. added polyfill because nb locale not supported in chromium>92
 // https://github.com/formatjs/formatjs/issues/3066
 import "@formatjs/intl-datetimeformat/polyfill-force";
 import "@formatjs/intl-datetimeformat/locale-data/nb";
 import "@formatjs/intl-numberformat/polyfill-force";
 import "@formatjs/intl-numberformat/locale-data/nb";
-
+import "@formatjs/intl-numberformat/locale-data/en";
 //
 import theme from "./theme.ts";
-import Header from "./Components/Generic/Header/Header";
-import HomePage from "./Pages/HomePage";
-import AboutPage from "./Pages/AboutPage";
-import InheritanceCalculatorPage from "./Pages/InheritanceCalculatorPage";
+import Header from "./Components/Generic/Header/Header.tsx";
+import HomePage from "./Pages/HomePage.tsx";
+import AboutPage from "./Pages/AboutPage.tsx";
+import InheritanceCalculatorPage from "./Pages/InheritanceCalculatorPage.tsx";
 import Footer from "./Components/Generic/Footer/Footer";
 import HomePageImage from "./assets/images/homepage-image.jpg";
-import ResourcesPage from "./Pages/ResourcesPage";
-import { IntlProvider } from "react-intl";
+import ResourcesPage from "./Pages/ResourcesPage.tsx";
+
 import Norsk from "./languages/translationNO.json";
 import English from "./languages/translationEN.json";
 
@@ -56,7 +56,6 @@ function App() {
   const classes = useStyles();
   const [lang, setLang] = useState("nb-NO");
   const [langMessages, setLangMessages] = useState(Norsk);
-
   const sendDataToParent = (index) => {
     setLang(index.code);
     if (index.code === "nb-NO") {
@@ -87,7 +86,8 @@ function App() {
           <Header />
           <Paper className={classes.rootPaper}>{menuItems}</Paper>
         </Paper>
-        <Footer langValue={LangValue} sendDataToParent={sendDataToParent} />
+        {/* <Footer langValue={LangValue} sendDataToParent={sendDataToParent} /> */}
+        <Footer />
 
         {/* Route components are rendered if the path prop matches the current URL */}
       </MuiThemeProvider>

@@ -4,8 +4,11 @@
   "Menu.About": "About Us",
   "Menu.Resources": "Resources",
 
+  "Chatbot.DEFAULT_TEXT": "Refresh chat",
+  "Chatbot.UNDIVIDED_ESTATE_QUESTION": "Var arvelater i uskifte?",
   "Chatbot.CASE_NAME_QUESTION": "This program assumes that the testator (deceased) does not leave a will. \n Enter the name of the case.",
   "Chatbot.TESTATOR_QUESTION": "Enter the testator's ID.",
+  "Chatbot.TESTATOR_WARNING": "Feil ID oppgitt. Kontroller person-ID-en igjen.",
   "Chatbot.NET_WEALTH_QUESTION": "What is the net worth left behind (NOK)? Example: 123456",
   "Chatbot.NET_WEALTH_EXTRA_INFO": "Net assets are the value of all assets less all liabilities except student loans.",
   "Chatbot.NET_WEALTH_WARNING": "Please enter value in the format '123456'. please do not enter anything characters other than numbers (0 to 9)",
@@ -17,12 +20,13 @@
   "Chatbot.REAR_CHILDREN_QUESTION": "Pursuant to section 36 of the Inheritance Act (https://lovdata.no/NL/lov/1972-03-03-5/§36) it may in certain cases be the case that children of heirs who did not have their upbringing are complete at the time the heir dies' is entitled to a part of the estate as foreclosure.  nThe same may apply to 'children returning home who, without reasonable remuneration, have done particularly much for the testator'.  nHave the testator had children who could fall under these designations?",
   "Chatbot.UNDER_AGE_QUESTION": "Dead heirs before the age of 18?",
   "Chatbot.SPOUSE_EXIST_QUESTION": "Are you Married? You must not choose Married if the spouses were separated by judgment or leave at the time the testator died.",
-  "Chatbot.MarriedAndAlive": "Married and Alive",
-  "Chatbot.MarriedAndDead": "Married and Dead",
-  "Chatbot.Unmarried": "Unmarried",
-  "Chatbot.Yes": "Yes",
-  "Chatbot.No": "No",
-  "Chatbot.UnderAge": "under age",
-  "Chatbot.NotUnderAge": "not under age",
-  "Chatbot.ChooseAppropriate": "Please select appropriate option"
+  "Chatbot.Married": "gift",
+  "Chatbot.Unmarried": "ugift",
+  "Chatbot.Yes": "ja",
+  "Chatbot.No": "nei",
+  "Chatbot.UnderAge": "under alder",
+  "Chatbot.NotUnderAge": "ikke under alder",
+  "Chatbot.ChooseAppropriate": "Velg riktig alternativ",
+  "Chatbot.addSuccessorQn1": "Person med ID {person_ID} har foreløpig ingen registrerte barn.\nHvis personen har barn skal du skrive inn ID for et av dem nå.\nDet er ikke nødvendig å føre opp avdøde barn uten noen levende etterkommere.\nHvis ikke personen har flere barn, trykk Enter.",
+  "Chatbot.addSuccessorQn2": "Person med ID {person_ID} er registrert med følgende barn: {child_ID}.\nHvis personen har flere barn skal du skrive inn ID for et av dem.\nDet er ikke nødvendig å føre opp avdøde barn uten noen levende etterkommere.\nHvis ikke personen har flere barn, trykk Enter."
 }

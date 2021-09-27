@@ -1,9 +1,8 @@
-import React from "react";
 // import mainImage from "../../../images/homepage-image.jpg";
 // import classes from "./HomeImage.module.css";
 
-const HomeImage = (props) => {
-  return "";
+const HomeImage = () => {
+  return <div></div>;
 };
 
 export default HomeImage;

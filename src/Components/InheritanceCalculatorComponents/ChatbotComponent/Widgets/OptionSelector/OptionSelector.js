@@ -1,4 +1,3 @@
-import React from "react";
 import "./OptionSelector.scss";
 import { FormattedMessage } from "react-intl";
 

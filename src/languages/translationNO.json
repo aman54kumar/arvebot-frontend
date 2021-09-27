@@ -4,8 +4,7 @@
   "Menu.About": "Om oss",
   "Menu.Resources": "Rettskilder",
 
-  "Homepage": "",
-
+  "Chatbot.DEFAULT_TEXT": "Refresh chat",
   "Chatbot.UNDIVIDED_ESTATE_QUESTION": "Var arvelater i uskifte?",
   "Chatbot.CASE_NAME_QUESTION": "Dette programmet forutsetter at arvelater (avdøde) ikke etterlater seg testament.\nTast inn navn på case.",
   "Chatbot.TESTATOR_QUESTION": "Tast inn arvelaters ID.",
@@ -27,5 +26,7 @@
   "Chatbot.No": "nei",
   "Chatbot.UnderAge": "under alder",
   "Chatbot.NotUnderAge": "ikke under alder",
-  "Chatbot.ChooseAppropriate": "Velg riktig alternativ"
+  "Chatbot.ChooseAppropriate": "Velg riktig alternativ",
+  "Chatbot.addSuccessorQn1": "Person med ID {person_ID} har foreløpig ingen registrerte barn.\nHvis personen har barn skal du skrive inn ID for et av dem nå.\nDet er ikke nødvendig å føre opp avdøde barn uten noen levende etterkommere.\nHvis ikke personen har flere barn, trykk Enter.",
+  "Chatbot.addSuccessorQn2": "Person med ID {person_ID} er registrert med følgende barn: {child_ID}.\nHvis personen har flere barn skal du skrive inn ID for et av dem.\nDet er ikke nødvendig å føre opp avdøde barn uten noen levende etterkommere.\nHvis ikke personen har flere barn, trykk Enter."
 }

@@ -1,6 +1,5 @@
-import React from "react";
 import { FormattedMessage } from "react-intl";
-import "./DeceasedOptionSelector.css";
+import "./DeceasedOptionSelector.scss";
 
 const deceasedOptionSelector = (props) => {
   const { setState, actionProvider } = props;
@@ -16,21 +15,22 @@ const deceasedOptionSelector = (props) => {
   };
   return (
     <div>
+      hahahah
       <p className="deceased-option-selector-header">
         <FormattedMessage id="Chatbot.ChooseAppropriate" />{" "}
       </p>
-      <div className="deceased-ption-selector-button-container">
+      <div className="deceased-option-selector-button-container">
         <button
           className="deceased-option-selector-button"
           onClick={() => setOption(true)}
         >
-          <FormattedMessage id="Chatbot.Married" />
+          <FormattedMessage id="Chatbot.Yes" />
         </button>
         <button
           className="deceased-option-selector-button"
           onClick={() => setOption(false)}
         >
-          <FormattedMessage id="Chatbot.Unmarried" />
+          <FormattedMessage id="Chatbot.No" />
         </button>
       </div>
     </div>
