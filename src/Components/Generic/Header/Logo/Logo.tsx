@@ -3,7 +3,7 @@ import { ReactElement } from "react";
 // import mainLogo from "../../../../images/arvebot-logo.png";
 // import classes from "./Logo.module.css";
 
-const Logo = () => {
+const Logo = (): ReactElement => {
   return <div>{/* <img src={mainLogo} alt="Arvebot Logo" /> */}</div>;
 };
 
