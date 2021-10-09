@@ -1,5 +1,5 @@
 // React
-import { ReactElement, useState } from "react";
+import { ReactElement } from "react";
 // material-ui
 import { Paper } from "@material-ui/core";
 import { makeStyles, MuiThemeProvider } from "@material-ui/core/styles";
@@ -18,13 +18,13 @@ import theme from "./theme";
 import Header from "./Components/Generic/Header/Header";
 import HomePage from "./Pages/HomePage";
 import AboutPage from "./Pages/AboutPage";
-import InheritanceCalculatorPage from "./Pages/InheritanceCalculatorPage";
+import InheritanceCalculatorPage from "./Pages/InheritanceCalculatorPage.js";
 import Footer from "./Components/Generic/Footer/Footer";
 import HomePageImage from "./assets/images/homepage-image.jpg";
 import ResourcesPage from "./Pages/ResourcesPage";
 
 import Norsk from "./languages/translationNO.json";
-import English from "./languages/translationEN.json";
+// import English from "./languages/translationEN.json";
 
 const useStyles = makeStyles({
   root: {
@@ -54,8 +54,10 @@ const menuItems = (
 
 const App = (): ReactElement => {
   const classes = useStyles();
-  const [lang, setLang] = useState("nb-NO");
-  const [langMessages, setLangMessages] = useState(Norsk);
+  const lang = "nb-NO";
+  const langMessages = Norsk;
+  // const [lang, setLang] = useState("nb-NO");
+  // const [langMessages, setLangMessages] = useState(Norsk);
   // const sendDataToParent = (index) => {
   //   setLang(index.code);
   //   if (index.code === "nb-NO") {

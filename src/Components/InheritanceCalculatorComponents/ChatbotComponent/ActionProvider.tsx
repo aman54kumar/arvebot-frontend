@@ -46,6 +46,7 @@ class ActionProvider {
       ...state,
       stepID: 1,
       caseName: caseNameResponse,
+      temp_family: this.family,
     }));
 
     // this.updateStateProperty({ stepID: 1, caseName: caseNameResponse });
@@ -71,7 +72,6 @@ class ActionProvider {
     }));
     this.addMessageToBotState(undividedEstateQuestion);
   };
-
   handleUndividedEstate = (undividedEstateResponse: string): void => {
     // TODO: implement Yes/No conditions for undivided states.
     // TODO: need to fix the values in object and correctly implement the whole algorithm
@@ -185,9 +185,10 @@ class ActionProvider {
           stepID: 7,
           person: { ...state.person, _spouse: new Person(spouseID) },
           max_depth: null,
+          successor_flag: "part1",
         };
         const newSuccessorQuestion = this.createChatBotMessage(
-          this.QuestionConsts.addSuccessorquestion1(state.person._personID)
+          this.QuestionConsts.addSuccessorQuestion1(state.person._personID)
         );
         this.addMessageToBotState(newSuccessorQuestion);
       } else {
@@ -240,66 +241,222 @@ class ActionProvider {
   handleSuccessorInput = (successorResponse: string): void => {
     const child_id = successorResponse;
     this.setState((state: any) => {
-      if (state.person != undefined) {
-        if (child_id === "") {
-          console.log(state.person);
-          state = {
-            ...state,
-            stepID: 8,
-          };
-          return;
-        }
-        const child = this.family.get_or_create_person(child_id);
-
-        state.person.add_child(child, true);
-        let allChildrenID = "";
-        for (const child of state.person._children) {
-          allChildrenID += child._personID + ", ";
-        }
-        allChildrenID =
-          "{ " + allChildrenID.slice(0, allChildrenID.length - 2) + " }";
-        // TODO
-        // const aliveQuestion = this.createChatBotMessage(
-        //   this.QuestionConsts.AliveQuestionText(),
-        //   this.QuestionConsts.AliveWidgetOptions
-        // );
-        // this.addMessageToBotState(aliveQuestion);
-        // state = {
-        //   ...state,
-        //   stepID: 9,
-        //   temp: allChildrenID,
-        // };
-        // const newSuccessorQuestion = this.createChatBotMessage(
-        //   this.QuestionConsts.addSuccessorquestion2(
-        //     state.person._personID,
-        //     allChildrenID
-        //   )
-        // );
-
-        // this.addMessageToBotState(newSuccessorQuestion);
-        return state;
-      }
-    });
-  };
-
-  handleDeceasedOption = (selectedOption: string): void => {
-    this.setState((state: any) => {
-      if (!selectedOption) {
+      if (child_id === "") {
         state = {
           ...state,
-          stepID: 10,
-          person: { ...state.person, _deceased: true },
+          stepID: 8,
         };
-        if (state.max_depth === null) {
-          // todo
-          //  fix this implementation
+        if (state.person._parents.length < 2) {
+          const newParentQuestion = this.createChatBotMessage(
+            this.QuestionConsts.addParentsQuestion1(state.person._personID)
+          );
+          this.addMessageToBotState(newParentQuestion);
         }
+
+      } else {
+        // const child = state.temp_family.get_or_create_person(child_id);
+        const child = new Person(child_id);
+
+        // child._parents.push(new Person(state.person._personID))
+        state = {
+          ...state,
+          successor_flag: "part2",
+          temp_child: child,
+        };
+
+        const aliveQuestion = this.createChatBotMessage(
+          this.QuestionConsts.AliveQuestion(child._personID),
+          this.QuestionConsts.AliveWidgetOptions
+        );
+        this.addMessageToBotState(aliveQuestion);
+
       }
+      return state;
     });
   };
 
+  handleAliveOption = (alive: boolean): void => {
+    this.setState((state: ChatbotInterface<Person>) => {
+      const child = state.temp_child;
+
+      if (!alive) {
+        const child = state.temp_child;
+        child._deceased = true;
+        if (state.max_depth === null) {
+          state = {
+            ...state,
+            temp_person: child,
+            temp_family: this.family,
+          };
+        } else if (state.max_depth > 0) {
+          state = {
+            ...state,
+            max_depth: state.max_depth - 1,
+            temp_person: child,
+            temp_family: this.family,
+          };
+        }
+      } else {
+        child._deceased = false;
+        state = {
+          ...state,
+          temp_person: child,
+          temp_family: this.family,
+        };
+      }
+      let allChildrenID = "";
+      for (const child of state.person._children) {
+        allChildrenID += child._personID + ", ";
+      }
+      allChildrenID =
+        "{ " + allChildrenID.slice(0, allChildrenID.length - 2) + " }";
+      const newSuccessorQuestion = this.createChatBotMessage(
+        this.QuestionConsts.addParentsQuestion2(
+          state.person._personID,
+          allChildrenID
+        )
+      );
+      state.person.add_child(child, true);
+      state = {
+        ...state,
+        successor_flag: "part1",
+        temp_person: state.person,
+        temp_family: this.family,
+      };
+      this.addMessageToBotState(newSuccessorQuestion);
+      this.setState((state: any) => {
+        console.log(state);
+        return state;
+      });
+      return state;
+    });
+  };
+
+  handleParentsInput = (parentResponse: string): void => {
+    const parent_id = parentResponse;
+    this.setState((state: any) => {
+      if (parent_id === "") {
+        state = {
+          ...state,
+          stepID: 9,
+        };
+        console.log("handle parent input empty case");
+
+      } else {
+        // const child = state.temp_family.get_or_create_person(child_id);
+        const parent = new Person(parent_id);
+
+        // child._parents.push(new Person(state.person._personID))
+        state = {
+          ...state,
+          successor_flag: "part2",
+          temp_parent: parent,
+        };
+
+        const aliveQuestion = this.createChatBotMessage(
+          this.QuestionConsts.AliveQuestion(parent._personID),
+          this.QuestionConsts.AliveWidgetOptions
+        );
+        this.addMessageToBotState(aliveQuestion);
+
+      }
+      return state;
+    });
+  }
+
+  handleAliveParentOption = (alive: string): void => {
+    const selectedOptionModified =
+      this.QuestionConsts.AliveResultText(alive);
+    const AliveResponse = this.createClientMessage(selectedOptionModified);
+    this.addMessageToBotState(AliveResponse);
+    this.setState((state: ChatbotInterface<Person>) => {
+      const parent = state.temp_parent;
+
+      if (!alive) {
+        const parent = state.temp_parent;
+        parent._deceased = true;
+        if (state.max_depth === null) {
+          state = {
+            ...state,
+            temp_person: parent,
+            temp_family: this.family,
+          };
+        } else if (state.max_depth > 0) {
+          state = {
+            ...state,
+            max_depth: state.max_depth - 1,
+            temp_person: parent,
+            temp_family: this.family,
+          };
+        }
+      } else {
+        parent._deceased = false;
+        state = {
+          ...state,
+          temp_person: parent,
+          temp_family: this.family,
+        };
+      }
+      let allParentsID = "";
+      for (const parent of state.person._parents) {
+        allParentsID += parent._personID + ", ";
+      }
+      allParentsID =
+        "{ " + allParentsID.slice(0, allParentsID.length - 2) + " }";
+      const newSuccessorQuestion = this.createChatBotMessage(
+        this.QuestionConsts.addSuccessorQuestion2(
+          state.person._personID,
+          allParentsID
+        )
+      );
+      state.person.add_parent(parent, true);
+      state = {
+        ...state,
+        parent_flag: "part1",
+        temp_person: state.person,
+        temp_family: this.family,
+      };
+      this.addMessageToBotState(newSuccessorQuestion);
+      this.setState((state: any) => {
+        console.log(state);
+        return state;
+      });
+      return state;
+    });
+  };
+
+
   handleRearChildrenOptionWidget = (rearChildrenResponse: string): void => {
-    console.log(rearChildrenResponse);
+    console.log("rearChildrenResponse", rearChildrenResponse);
+  };
+
+  closestSurvivingRelative = () => {
+    this.setState((state: any) => {
+      const [temp_class, temp_distance] = [
+        ...state.person.get_class_and_distance_closest_surviving_relative(),
+      ];
+      if (temp_class === 1) {
+        state = {
+          ...state,
+          stepID: 9,
+        }
+        const possiblyChildrenRearing = this.createChatBotMessage(this.QuestionConsts.RearChildrenQuestion, this.QuestionConsts.RearChildrenWidgetOptions)
+        this.addMessageToBotState(possiblyChildrenRearing)
+      }
+      if (
+        state.person.spouse !== undefined &&
+        parseInt(state.netWealth.strValue) <=
+        this.InheritanceConstants.MINIMUM_INHERITANCE_SPOUSE_VS_PARENTS
+      )
+        return;
+      if (
+        state.person.cohabitant !== undefined &&
+        parseInt(state.netWealth.strValue) <=
+        this.InheritanceConstants.MINIMUM_INHERITANCE_COHABITANT_VS_PARENTS
+      )
+        return;
+      return state;
+    });
   };
 
   // Generic functions
@@ -335,3 +492,46 @@ export default ActionProvider;
  * ? currency: "NOK",
  * ? currencyDisplay: "narrowSymbol",
  * ? }).format(outputCurrency);*/
+
+// handleAliveOption = (selectedOption: string): void => {
+//   this.setState((state: any) => {
+//     const child = state.temp_child;
+//     if (!selectedOption) {
+//       const child = state.temp_child;
+//       child._deceased = true;
+//       if (state.max_depth === null) {
+//         state = {
+//           ...state,
+//           stepID: 7,
+//         };
+//       } else if (state.max_depth > 0) {
+//         state = {
+//           ...state,
+//           stepID: 7,
+//           max_depth: state.max_depth - 1,
+//         };
+//       }
+//     } else {
+//       child._deceased = false;
+//       state = {
+//         ...state,
+//         stepID: 7,
+//       };
+//     }
+//     let allChildrenID = "";
+//     for (const child of state.person._children) {
+//       allChildrenID += child._personID + ", ";
+//     }
+//     allChildrenID =
+//       "{ " + allChildrenID.slice(0, allChildrenID.length - 2) + " }";
+//     const newSuccessorQuestion = this.createChatBotMessage(
+//       this.QuestionConsts.addSuccessorquestion2(
+//         state.person._personID,
+//         allChildrenID
+//       )
+//     );
+//     state.person.add_child(child, true);
+//     console.log(state);
+//     this.addMessageToBotState(newSuccessorQuestion);
+//   });
+// };

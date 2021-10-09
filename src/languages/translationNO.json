@@ -28,5 +28,8 @@
   "Chatbot.NotUnderAge": "ikke under alder",
   "Chatbot.ChooseAppropriate": "Velg riktig alternativ",
   "Chatbot.addSuccessorQn1": "Person med ID {person_ID} har foreløpig ingen registrerte barn.\nHvis personen har barn skal du skrive inn ID for et av dem nå.\nDet er ikke nødvendig å føre opp avdøde barn uten noen levende etterkommere.\nHvis ikke personen har flere barn, trykk Enter.",
-  "Chatbot.addSuccessorQn2": "Person med ID {person_ID} er registrert med følgende barn: {child_ID}.\nHvis personen har flere barn skal du skrive inn ID for et av dem.\nDet er ikke nødvendig å føre opp avdøde barn uten noen levende etterkommere.\nHvis ikke personen har flere barn, trykk Enter."
+  "Chatbot.addSuccessorQn2": "Person med ID {person_ID} er registrert med følgende barn: {children_IDs}.\nHvis personen har flere barn skal du skrive inn ID for et av dem.\nDet er ikke nødvendig å føre opp avdøde barn uten noen levende etterkommere.\nHvis ikke personen har flere barn, trykk Enter.",
+  "Chatbot.ALIVE_CHILD": "Lever person med ID {child_ID}? [Ja/Nei]",
+  "Chatbot.addParentsQn1": "Person med ID {person_ID} har foreløpig ingen registrerte foreldre.\nHvis personen har foreldre skal du skrive inn ID for en av dem nå.\nHvis ikke personen har flere foreldre, trykk Enter.",
+  "Chatbot.addParentsQn2": "Person med ID {person_ID} er registrert med følgende foreldre: {parents_IDs}.\nHvis personen har flere foreldre skal du skrive inn ID for en av dem.\nHvis ikke personen har flere foreldre, trykk Enter."
 }

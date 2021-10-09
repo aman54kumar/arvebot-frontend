@@ -10,7 +10,7 @@ class QuestionConstants {
   );
 
   UndividedEstateWidgetOptions = {
-    widget: "undividedEstateSelectorWidget",
+    widget: "optionSelectorWidget",
     withAvatar: true,
     loading: true,
     terminateLoading: true,
@@ -63,13 +63,13 @@ class QuestionConstants {
   );
 
   RearChildrenWidgetOptions = {
-    widget: "RearChildrenSelectorWidget",
+    widget: "OptionSelectorWidget",
     withAvatar: true,
     loading: true,
     terminateLoading: true,
   };
 
-  addSuccessorquestion1 = (person_id: string): ReactElement => {
+  addSuccessorQuestion1 = (person_id: string): ReactElement => {
     return (
       <div>
         <FormattedMessage
@@ -80,7 +80,7 @@ class QuestionConstants {
       </div>
     );
   };
-  addSuccessorquestion2 = (
+  addSuccessorQuestion2 = (
     person_id: string,
     child_id_string: string
   ): ReactElement => {
@@ -88,25 +88,61 @@ class QuestionConstants {
       <div>
         <FormattedMessage
           id="Chatbot.addSuccessorQn2"
-          values={{ person_ID: person_id, child_ID: child_id_string }}
+          values={{ person_ID: person_id, children_IDs: child_id_string }}
         />
         <ShowInfoWidget text="Chatbot.CHILD_EXTRA_INFO" />
       </div>
     );
   };
 
-  AliveQuestionText = (selectedOption: string): ReactElement => {
-    const aliveQuestionText = selectedOption ? "Chatbot.Yes" : "Chatbot.No";
-
-    return <FormattedMessage id={aliveQuestionText} />;
+  AliveQuestion = (child_id: string): ReactElement => {
+    return (
+      <FormattedMessage
+        id="Chatbot.ALIVE_CHILD"
+        values={{ child_ID: child_id }}
+      />
+    );
   };
 
   AliveWidgetOptions = {
-    widget: "deceasedOptionSelectorWidget",
+    widget: "optionSelectorWidget",
     withAvatar: true,
     loading: true,
     terminateLoading: true,
   };
+
+  AliveResultText = (selectedOption: string): ReactElement => {
+    const aliveResultText = selectedOption ? "Chatbot.Yes" : "Chatbot.No";
+
+    return <FormattedMessage id={aliveResultText} />;
+  };
+
+  addParentsQuestion1 = (person_id: string): ReactElement => {
+    return (
+      <div>
+        <FormattedMessage
+          id="Chatbot.addParentQn1"
+          values={{ person_ID: person_id }}
+        />
+        <ShowInfoWidget text="Chatbot.CHILD_EXTRA_INFO" />
+      </div>
+    );
+  };
+  addParentsQuestion2 = (
+    person_id: string,
+    parent_id_string: string
+  ): ReactElement => {
+    return (
+      <div>
+        <FormattedMessage
+          id="Chatbot.addParentsQn2"
+          values={{ person_ID: person_id, parents_IDs: parent_id_string }}
+        />
+        <ShowInfoWidget text="Chatbot.PARENT_EXTRA_INFO" />
+      </div>
+    );
+  };
+
 
   DefaultText = (<FormattedMessage id="Chatbot.DEFAULT_TEXT" />);
 }

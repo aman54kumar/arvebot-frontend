@@ -16,6 +16,7 @@ export default class Person {
   get person_id(): string {
     return this._personID;
   }
+
   set person_id(value: string) {
     this._personID = value;
   }
@@ -23,12 +24,15 @@ export default class Person {
   get deceased(): boolean {
     return this._deceased;
   }
+
   set deceased(value: boolean) {
     this._deceased = value;
   }
+
   get undividedEstateSpouse(): Person | undefined {
     return this._undividedEstateSpouse;
   }
+
   set undividedEstateSpouse(value: Person | undefined) {
     this._undividedEstateSpouse = value;
   }
@@ -36,6 +40,7 @@ export default class Person {
   get spouse(): Person | undefined {
     return this._spouse;
   }
+
   set_spouse = (spouse: Person, add_for_both = true): void => {
     if (!this._spouse) console.log(this._spouse == spouse);
     else this._spouse = spouse;
@@ -50,6 +55,7 @@ export default class Person {
   get cohabitant(): Person | undefined {
     return this._cohabitant;
   }
+
   set_cohabitant = (cohabitant: Person, add_for_both = true): void => {
     if (!this._cohabitant) console.log(this._cohabitant == cohabitant);
     else this._cohabitant = cohabitant;
@@ -82,8 +88,12 @@ export default class Person {
   get parents(): Person[] | undefined {
     return this._parents;
   }
+
   add_parent = (parent: Person, add_for_both = true): void => {
     if (!this._parents.includes(parent)) {
+      console.log(parent);
+      console.log(this._parents);
+
       this._parents.push(parent);
     }
     if (add_for_both) {
@@ -94,18 +104,18 @@ export default class Person {
   get children(): Array<Person> {
     return this._children;
   }
+
   add_child = (child: Person, add_for_both = true): void => {
-    console.log(this._children);
+    console.log(this);
+
     const children_array = this._children;
     const child_id = child._personID;
     if (!children_array.find((obj) => obj._personID === child_id)) {
       this._children.push(child);
     }
-    console.log(this._children);
     if (add_for_both) {
       child.add_parent(this, false);
     }
-    console.log(this._children);
   };
 
   surviving_successor_distance = (): number | undefined => {

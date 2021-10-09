@@ -26,17 +26,3 @@ export const currencyDisplayValue = (inputCurrencyValue: number): string => {
     currencyDisplay: "narrowSymbol",
   }).format(inputCurrencyValue);
 };
-
-// export const validateSpouseReply = (inputSpouseResponse) => {
-//   console.log(inputSpouseResponse);
-//   switch (inputSpouseResponse) {
-//     case "":
-//       console.log("blank");
-//       break;
-//     case 1:
-//       console.log("1");
-//       break;
-//     default:
-//       console.log("default");
-//   }
-// };
