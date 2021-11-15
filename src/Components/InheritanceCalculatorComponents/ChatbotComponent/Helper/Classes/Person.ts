@@ -91,9 +91,6 @@ export default class Person {
 
   add_parent = (parent: Person, add_for_both = true): void => {
     if (!this._parents.includes(parent)) {
-      console.log(parent);
-      console.log(this._parents);
-
       this._parents.push(parent);
     }
     if (add_for_both) {
@@ -106,8 +103,6 @@ export default class Person {
   }
 
   add_child = (child: Person, add_for_both = true): void => {
-    console.log(this);
-
     const children_array = this._children;
     const child_id = child._personID;
     if (!children_array.find((obj) => obj._personID === child_id)) {

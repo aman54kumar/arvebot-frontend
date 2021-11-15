@@ -31,5 +31,6 @@
   "Chatbot.addSuccessorQn2": "Person med ID {person_ID} er registrert med følgende barn: {children_IDs}.\nHvis personen har flere barn skal du skrive inn ID for et av dem.\nDet er ikke nødvendig å føre opp avdøde barn uten noen levende etterkommere.\nHvis ikke personen har flere barn, trykk Enter.",
   "Chatbot.ALIVE_CHILD": "Lever person med ID {child_ID}? [Ja/Nei]",
   "Chatbot.addParentsQn1": "Person med ID {person_ID} har foreløpig ingen registrerte foreldre.\nHvis personen har foreldre skal du skrive inn ID for en av dem nå.\nHvis ikke personen har flere foreldre, trykk Enter.",
-  "Chatbot.addParentsQn2": "Person med ID {person_ID} er registrert med følgende foreldre: {parents_IDs}.\nHvis personen har flere foreldre skal du skrive inn ID for en av dem.\nHvis ikke personen har flere foreldre, trykk Enter."
+  "Chatbot.addParentsQn2": "Person med ID {person_ID} er registrert med følgende foreldre: {parents_IDs}.\nHvis personen har flere foreldre skal du skrive inn ID for en av dem.\nHvis ikke personen har flere foreldre, trykk Enter.",
+  "Chatbot.FINAL_QUESTION": "Are you sure you want to submit the responses for report?"
 }

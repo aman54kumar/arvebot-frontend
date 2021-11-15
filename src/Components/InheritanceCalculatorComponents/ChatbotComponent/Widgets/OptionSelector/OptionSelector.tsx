@@ -2,6 +2,7 @@ import "./OptionSelector.scss";
 import { FormattedMessage } from "react-intl";
 import { ReactElement } from "react";
 
+
 const OptionSelector = (props: any): ReactElement => {
   const { actionProvider, setState } = props;
 
@@ -18,8 +19,22 @@ const OptionSelector = (props: any): ReactElement => {
           break;
         }
         case 7: {
-          state.successor_flag = "part2";
+          // state = { ...state, successor_flag: "part2" }
+          state.successor_flag = "part2"
           actionProvider.handleAliveOption(option);
+          break;
+        }
+        case 8: {
+          state.parent_flag = "part2";
+          actionProvider.handleAliveParentOption(option);
+          break;
+        }
+        case 10: {
+          actionProvider.handleRearChildrenResult(option);
+          break;
+        }
+        case 11: {
+          actionProvider.handleFinalQuestion(option)
           break;
         }
         default: {
@@ -34,13 +49,29 @@ const OptionSelector = (props: any): ReactElement => {
       <div className="option-selector-button-container">
         <button
           className="option-selector-button"
-          onClick={() => setOption(true)}
+          onClick={(e) => {
+            const thisButton = e.target as HTMLButtonElement
+            const nextButton = (thisButton).nextElementSibling as HTMLButtonElement
+            thisButton.style.pointerEvents = "none"
+            thisButton.disabled = true;
+            nextButton.style.pointerEvents = "none"
+            nextButton.disabled = true;
+            setOption(true)
+          }}
         >
           <FormattedMessage id="Chatbot.Yes" />
         </button>
         <button
           className="option-selector-button"
-          onClick={() => setOption(false)}
+          onClick={(e) => {
+            const thisButton = e.target as HTMLButtonElement
+            const prevButton = (thisButton).previousElementSibling as HTMLButtonElement
+            thisButton.style.pointerEvents = "none"
+            thisButton.disabled = true;
+            prevButton.style.pointerEvents = "none"
+            prevButton.disabled = true;
+            (setOption(false))
+          }}
         >
           <FormattedMessage id="Chatbot.No" />
         </button>
@@ -48,37 +79,5 @@ const OptionSelector = (props: any): ReactElement => {
     </div>
   );
 };
-
-// const OptionSelector = (props: any): ReactElement => {
-//   const { setState, actionProvider } = props;
-
-//   const setOption = (option: any) => {
-//     setState((state: any) => ({
-//       ...state,
-//       stepID: 5,
-//       undividedEstate: option,
-//     }));
-
-//     actionProvider.handleUnderAge(option);
-//   };
-//   return (
-//     <div>
-//       <div className="option-selector-button-container">
-//         <button
-//           className="option-selector-button"
-//           onClick={() => setOption(true)}
-//         >
-//           <FormattedMessage id="Chatbot.Yes" />
-//         </button>
-//         <button
-//           className="option-selector-button"
-//           onClick={() => setOption(false)}
-//         >
-//           <FormattedMessage id="Chatbot.No" />
-//         </button>
-//       </div>
-//     </div>
-//   );
-// };
 
 export default OptionSelector;

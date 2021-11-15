@@ -1,4 +1,5 @@
 import { createChatBotMessage } from "react-chatbot-kit";
+import CurrencyInput from "react-currency-input-field";
 import OptionSelector from "./Widgets/OptionSelector/OptionSelector";
 import DeceasedOptionSelector from "./Widgets/DeceasedOptionSelecor/DeceasedOptionSelecor";
 import UndividedEstateOptionSelector from "./Widgets/UndividedEstateOptionSelector/UndividedEstateOptionSelector";

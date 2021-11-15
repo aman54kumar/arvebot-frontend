@@ -3,8 +3,8 @@ import { ChatbotInterface } from "./Generics";
 import Person from "./Helper/Classes/Person";
 
 class MessageParser {
-  actionProvider: any;
-  state: any;
+  actionProvider: ActionProvider;
+  state: ChatbotInterface<Person>;
   constructor(actionProvider: ActionProvider, state: ChatbotInterface<Person>) {
     this.actionProvider = actionProvider;
     this.state = state;
@@ -22,6 +22,7 @@ class MessageParser {
     //   return this.actionProvider.handleUndividedEstate(message); //set stepID = 3
     // }
     if (curState.stepID === 3) {
+      console.log(message);
       return this.actionProvider.handleNetWealth(message); //set stepID = 4
     }
     // if (curState.stepID === 4) {
@@ -52,7 +53,7 @@ class MessageParser {
     // if (curState.stepID === 9) {
     //   return this.actionProvider.handleAliveOption(message);
     // }
-    if (curState.stepID === 8) {
+    if (curState.stepID === 10) {
       console.log("dead-end now");
     } else {
       return this.actionProvider.handleDefault();

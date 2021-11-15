@@ -63,11 +63,14 @@ class QuestionConstants {
   );
 
   RearChildrenWidgetOptions = {
-    widget: "OptionSelectorWidget",
+    widget: "optionSelectorWidget",
     withAvatar: true,
     loading: true,
     terminateLoading: true,
   };
+
+
+
 
   addSuccessorQuestion1 = (person_id: string): ReactElement => {
     return (
@@ -117,14 +120,15 @@ class QuestionConstants {
     return <FormattedMessage id={aliveResultText} />;
   };
 
+
   addParentsQuestion1 = (person_id: string): ReactElement => {
     return (
       <div>
         <FormattedMessage
-          id="Chatbot.addParentQn1"
+          id="Chatbot.addParentsQn1"
           values={{ person_ID: person_id }}
         />
-        <ShowInfoWidget text="Chatbot.CHILD_EXTRA_INFO" />
+        <ShowInfoWidget text="Chatbot.PARENT_EXTRA_INFO" />
       </div>
     );
   };
@@ -143,6 +147,24 @@ class QuestionConstants {
     );
   };
 
+
+  // finalQuestion = (): ReactElement => {
+  //   return (
+  //     <div>
+  //       <FormattedMessage
+  //         id="Chatbot.finalQuestion"
+  //       />
+  //     </div>
+  //   )
+  // }
+  FinalQuestion = (<FormattedMessage id="Chatbot.FINAL_QUESTION" />);
+
+  FinalQuestionWidgetOptions = {
+    widget: "optionSelectorWidget",
+    withAvatar: true,
+    loading: true,
+    terminateLoading: true,
+  };
 
   DefaultText = (<FormattedMessage id="Chatbot.DEFAULT_TEXT" />);
 }
