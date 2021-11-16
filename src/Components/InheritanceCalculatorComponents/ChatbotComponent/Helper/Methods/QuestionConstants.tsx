@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { FormattedMessage } from "react-intl";
-import ShowInfoWidget from "../../Widgets/ShowInfoWidget/ShowInfoWidget";
+import ShowInfoWidget from "../../Custom/Widgets/ShowInfoWidget/ShowInfoWidget";
 
 class QuestionConstants {
   TestatorQuestion = (<FormattedMessage id="Chatbot.TESTATOR_QUESTION" />);

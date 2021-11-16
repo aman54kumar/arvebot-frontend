@@ -119,9 +119,9 @@ class ActionProvider {
     const currencyStringResponse = ParseCurrencyStringForOutput(currencyIntResponse[1])
     console.log(currencyStringResponse);
 
-    const currencyJSX = <div>{currencyStringResponse}</div>
-    const currencyClientMessage = this.createClientMessage(currencyJSX)
-    this.addMessageToBotState(currencyClientMessage)
+    const currencyJSX = <div>Amount Entered: {currencyStringResponse}</div>
+    const currencyBotMessage = this.createChatBotMessage(currencyJSX)
+    this.addMessageToBotState(currencyBotMessage)
     if (currencyIntResponse[0] === 5) {
 
       const underAgeQuestion = this.createChatBotMessage(
@@ -130,15 +130,19 @@ class ActionProvider {
       );
 
 
-      this.setState((state: ChatbotInterface<Person>) => ({
-        ...state,
-        stepID: 4,
-        netWealth: {
-          ...state.netWealth,
-          intValue: currencyIntResponse,
-          strValue: currencyStringResponse,
-        },
-      }));
+      this.setState((state: ChatbotInterface<Person>) => {
+        state = {
+          ...state,
+          stepID: 4,
+          netWealth: {
+            ...state.netWealth,
+            intValue: parseInt(currencyIntResponse[1]),
+            strValue: currencyStringResponse,
+          },
+        }
+
+        return state
+      });
       this.addMessageToBotState(underAgeQuestion);
     } else {
       const netWealthWarning = this.createChatBotMessage(

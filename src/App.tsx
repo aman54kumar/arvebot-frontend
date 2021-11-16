@@ -2,7 +2,7 @@
 import { ReactElement } from "react";
 // material-ui
 import { Paper } from "@material-ui/core";
-import { makeStyles, MuiThemeProvider } from "@material-ui/core/styles";
+import { ThemeProvider, createTheme, makeStyles, MuiThemeProvider } from "@material-ui/core/styles";
 // react-router
 import { Route, Switch } from "react-router-dom";
 import { IntlProvider } from "react-intl";
@@ -14,7 +14,7 @@ import "@formatjs/intl-numberformat/polyfill-force";
 import "@formatjs/intl-numberformat/locale-data/nb";
 import "@formatjs/intl-numberformat/locale-data/en";
 //
-import theme from "./theme";
+// import theme from "./theme";
 import Header from "./Components/Generic/Header/Header";
 import HomePage from "./Pages/HomePage";
 import AboutPage from "./Pages/AboutPage";
@@ -26,6 +26,7 @@ import ResourcesPage from "./Pages/ResourcesPage";
 import Norsk from "./languages/translationNO.json";
 // import English from "./languages/translationEN.json";
 
+const theme = createTheme();
 const useStyles = makeStyles({
   root: {
     backgroundImage: `url(${HomePageImage})`,
@@ -78,8 +79,9 @@ const App = (): ReactElement => {
   //   },
   // };
   return (
-    <IntlProvider locale={lang} messages={langMessages}>
-      <MuiThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
+      <IntlProvider locale={lang} messages={langMessages}>
+
         <Paper
           role="img"
           className={classes.root}
@@ -92,8 +94,9 @@ const App = (): ReactElement => {
         <Footer description="Arvebot" title="Arvebot" />
 
         {/* Route components are rendered if the path prop matches the current URL */}
-      </MuiThemeProvider>
-    </IntlProvider>
+
+      </IntlProvider>
+    </ThemeProvider>
   );
 };
 

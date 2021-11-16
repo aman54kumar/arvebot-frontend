@@ -1,9 +1,6 @@
 import { createChatBotMessage } from "react-chatbot-kit";
-import CurrencyInput from "react-currency-input-field";
-import OptionSelector from "./Widgets/OptionSelector/OptionSelector";
-import DeceasedOptionSelector from "./Widgets/DeceasedOptionSelecor/DeceasedOptionSelecor";
-import UndividedEstateOptionSelector from "./Widgets/UndividedEstateOptionSelector/UndividedEstateOptionSelector";
-import RearChildrenOptionSelector from "./Widgets/RearChildrenOptionSelector/RearChildrenOptionSelector";
+import OptionSelector from "./Custom/Widgets/OptionSelector/OptionSelector";
+import RearChildrenOptionSelector from "./Custom/Widgets/RearChildrenOptionSelector/RearChildrenOptionSelector";
 import { ChatbotState } from "./Generics";
 import "react-chatbot-kit/build/main.css";
 import "../chatbot.scss";
@@ -21,30 +18,19 @@ const config = {
       backgroundColor: "#5ccc9d",
     },
   },
+  state: ChatbotState,
   initialMessages: [
     createChatBotMessage(<FormattedMessage id="Chatbot.CASE_NAME_QUESTION" />),
   ],
-  state: ChatbotState,
+
   widgets: [
     {
       widgetName: "optionSelectorWidget",
       widgetFunc: (props) => <OptionSelector {...props} />,
-      // mapStateToProps: ["stepID", "underAge"],
-    },
-    {
-      widgetName: "undividedEstateSelectorWidget",
-      widgetFunc: (props) => <UndividedEstateOptionSelector {...props} />,
-      // mapStateToProps: ["stepID", "undividedEstate"],
     },
     {
       widgetName: "RearChildrenSelectorWidget",
       widgetFunc: (props) => <RearChildrenOptionSelector {...props} />,
-      // mapStateToProps: ["stepID", "rearChildren"],
-    },
-    {
-      widgetName: "deceasedOptionSelectorWidget",
-      widgetFunc: (props) => <DeceasedOptionSelector {...props} />,
-      // mapStateToProps: ["stepID", "deceased"],
     },
   ],
 };
