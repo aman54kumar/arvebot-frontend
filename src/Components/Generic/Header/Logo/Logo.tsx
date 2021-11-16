@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-// import EmojiFoodBeverageIcon from "@material-ui/icons/EmojiFoodBeverage";
+// import EmojiFoodBeverageIcon from "@mui/icons-material/EmojiFoodBeverage";
 // import mainLogo from "../../../../images/arvebot-logo.png";
 // import classes from "./Logo.module.css";
 

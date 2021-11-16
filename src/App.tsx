@@ -1,8 +1,9 @@
 // React
 import { ReactElement } from "react";
 // material-ui
-import { Paper } from "@material-ui/core";
-import { ThemeProvider, createTheme, makeStyles, MuiThemeProvider } from "@material-ui/core/styles";
+import { Paper } from "@mui/material";
+import { createTheme, ThemeProvider, Theme, StyledEngineProvider } from "@mui/material/styles";
+import makeStyles from '@mui/styles/makeStyles';
 // react-router
 import { Route, Switch } from "react-router-dom";
 import { IntlProvider } from "react-intl";
@@ -79,24 +80,26 @@ const App = (): ReactElement => {
   //   },
   // };
   return (
-    <ThemeProvider theme={theme}>
-      <IntlProvider locale={lang} messages={langMessages}>
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={theme}>
+        <IntlProvider locale={lang} messages={langMessages}>
 
-        <Paper
-          role="img"
-          className={classes.root}
-          aria-label="Image by Free-Photos from Pixabay"
-        >
-          <Header />
-          <Paper className={classes.rootPaper}>{menuItems}</Paper>
-        </Paper>
-        {/* <Footer langValue={LangValue} sendDataToParent={sendDataToParent} /> */}
-        <Footer description="Arvebot" title="Arvebot" />
+          <Paper
+            role="img"
+            className={classes.root}
+            aria-label="Image by Free-Photos from Pixabay"
+          >
+            <Header />
+            <Paper className={classes.rootPaper}>{menuItems}</Paper>
+          </Paper>
+          {/* <Footer langValue={LangValue} sendDataToParent={sendDataToParent} /> */}
+          <Footer description="Arvebot" title="Arvebot" />
 
-        {/* Route components are rendered if the path prop matches the current URL */}
+          {/* Route components are rendered if the path prop matches the current URL */}
 
-      </IntlProvider>
-    </ThemeProvider>
+        </IntlProvider>
+      </ThemeProvider>
+    </StyledEngineProvider>
   );
 };
 

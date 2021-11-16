@@ -1,5 +1,5 @@
 import { useState, useEffect, ReactElement } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import makeStyles from '@mui/styles/makeStyles';
 import {
   AppBar,
   Toolbar,
@@ -8,8 +8,8 @@ import {
   Drawer,
   Link,
   MenuItem,
-} from "@material-ui/core";
-import MenuIcon from "@material-ui/icons/Menu";
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 import { Link as RouterLink } from "react-router-dom";
 import HeaderTitle from "./HeaderTitle/HeaderTitle";
 import HeaderMenu from "./HeaderMenu/HeaderMenu";
@@ -95,7 +95,7 @@ const Header = (): ReactElement => {
     return (
       <Toolbar>
         <MenuIcon className={classes.menuIconRoot} />
-        <IconButton edge="start" color="inherit" onClick={handleDrawerOpen} />
+        <IconButton edge="start" color="inherit" onClick={handleDrawerOpen} size="large" />
         <Drawer anchor="left" open={drawerOpen} onClose={handleDrawerClose}>
           <div className={classes.drawerContainer}>{getDrawerChoices()}</div>
         </Drawer>

@@ -1,4 +1,4 @@
-import { Typography } from "@material-ui/core";
+import { Typography } from "@mui/material";
 import { Chatbot } from "react-chatbot-kit";
 import Config from "../Components/InheritanceCalculatorComponents/ChatbotComponent/Config.js";
 import MessageParser from "../Components/InheritanceCalculatorComponents/ChatbotComponent/MessageParser";

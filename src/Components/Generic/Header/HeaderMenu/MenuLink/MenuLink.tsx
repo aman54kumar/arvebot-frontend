@@ -1,6 +1,6 @@
 // import classes from "./MenuLink.module.css";
 import { ReactElement } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import makeStyles from '@mui/styles/makeStyles';
 import { NavLink } from "react-router-dom";
 
 interface propsTypes {

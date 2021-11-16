@@ -1,4 +1,4 @@
-import { Grid } from "@material-ui/core";
+import { Grid } from "@mui/material";
 import MenuLink from "./MenuLink/MenuLink";
 import NavLinks from "./NavLinks";
 import { FormattedMessage } from "react-intl";

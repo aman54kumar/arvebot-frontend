@@ -88,7 +88,7 @@ export const validateCurrency = (inputCurrency: string): boolean => {
 
 export const CurrencyOutput = (inputCurrency: string): [number, string] => {
 
-    if ((/\d/).test(inputCurrency)) {
+    if ((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((/\d/))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))).test(inputCurrency)) {
         const initialCurrencyValue: string = removeTextFromCurrencyString(inputCurrency)
 
         let digitsBeforeSeparatorValue = "correct"

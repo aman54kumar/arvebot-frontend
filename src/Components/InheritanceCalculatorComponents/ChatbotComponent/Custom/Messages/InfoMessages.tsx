@@ -1,7 +1,7 @@
-import { Chip } from "@material-ui/core";
+import { Chip } from "@mui/material";
 
 const CustomMessage = () => {
-  // return <Chip color="success" />;
+  return <Chip color="success" />;
 };
 
 export default CustomMessage;
