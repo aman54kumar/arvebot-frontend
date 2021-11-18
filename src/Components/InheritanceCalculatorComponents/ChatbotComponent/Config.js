@@ -1,5 +1,6 @@
 import { createChatBotMessage } from "react-chatbot-kit";
 import OptionSelector from "./Custom/Widgets/OptionSelector/OptionSelector";
+import InfoMessageWidget from "./Custom/Widgets/InfoMessagesWidget/InfoMessagesWidget";
 import RearChildrenOptionSelector from "./Custom/Widgets/RearChildrenOptionSelector/RearChildrenOptionSelector";
 import { ChatbotState } from "./Generics";
 import "react-chatbot-kit/build/main.css";
@@ -22,7 +23,9 @@ const config = {
   initialMessages: [
     createChatBotMessage(<FormattedMessage id="Chatbot.CASE_NAME_QUESTION" />),
   ],
-
+  customMessages: {
+    // custom: (props) => <CustomMessage {...props} />,
+  },
   widgets: [
     {
       widgetName: "optionSelectorWidget",
@@ -31,6 +34,10 @@ const config = {
     {
       widgetName: "RearChildrenSelectorWidget",
       widgetFunc: (props) => <RearChildrenOptionSelector {...props} />,
+    },
+    {
+      widgetName: "InfoMessage",
+      widgetFunc: (props) => <InfoMessageWidget {...props} />,
     },
   ],
 };

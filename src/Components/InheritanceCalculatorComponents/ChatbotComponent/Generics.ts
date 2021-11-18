@@ -17,10 +17,12 @@ export interface ChatbotInterface<T> {
   max_depth: number | null;
   successor_flag: string;
   parent_flag: string;
-  temp_person: Person | undefined;
+  temp_person: any;
   temp_family: Family | undefined;
   temp_child: Person;
   temp_parent: Person;
+  current_path: Array<string>;
+  id: number;
 }
 
 export const ChatbotState: ChatbotInterface<Person> = {
@@ -33,8 +35,10 @@ export const ChatbotState: ChatbotInterface<Person> = {
   max_depth: null,
   successor_flag: successor_parent_flag.none,
   parent_flag: successor_parent_flag.none,
-  temp_person: undefined,
+  temp_person: new Person(""),
   temp_family: undefined,
   temp_child: new Person(""),
   temp_parent: new Person(""),
+  current_path: [],
+  id: 1,
 };

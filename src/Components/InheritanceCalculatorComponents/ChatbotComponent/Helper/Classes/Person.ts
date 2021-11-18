@@ -1,4 +1,5 @@
 export default class Person {
+  _id: number;
   _personID = "";
   _undividedEstateSpouse: Person | undefined;
   _deceased = false;
@@ -6,11 +7,14 @@ export default class Person {
   _cohabitant: Person | undefined;
   _parents: Array<Person> = [];
   _children: Array<Person> = [];
+  _parentsIDList: Array<number> = [];
+  _childrenIDList: Array<number> = [];
   _childrenRearing: boolean | undefined;
   _underAge: boolean | undefined;
 
-  constructor(id: string) {
-    this._personID = id;
+  constructor(personid: string, id = 1) {
+    this._personID = personid;
+    this._id = id;
   }
 
   get person_id(): string {
@@ -94,8 +98,25 @@ export default class Person {
       this._parents.push(parent);
     }
     if (add_for_both) {
-      parent.add_child(this, false);
+      // parents._childrenIDList(this._personID);
     }
+  };
+
+  get_parent = (rootPerson: Person, currentPosition: number): Person | null => {
+    if (currentPosition == this._parentsIDList.length) {
+      return rootPerson;
+    }
+    if (currentPosition > this._parentsIDList.length) {
+      return null;
+    }
+    const c = rootPerson._children.filter((child) => {
+      return child._id == this._parentsIDList[currentPosition];
+    });
+    if (c.length == 0) {
+      console.error("invalid parent");
+      return null;
+    }
+    return this.get_parent(c[0], currentPosition + 1);
   };
 
   get children(): Array<Person> {
@@ -109,7 +130,8 @@ export default class Person {
       this._children.push(child);
     }
     if (add_for_both) {
-      child.add_parent(this, false);
+      child._parentsIDList = [...this._parentsIDList];
+      child._parentsIDList.push(this._id);
     }
   };
 

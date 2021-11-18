@@ -166,6 +166,7 @@ class QuestionConstants {
     terminateLoading: true,
   };
 
+  EmptyQuestion = <p></p>
   DefaultText = (<FormattedMessage id="Chatbot.DEFAULT_TEXT" />);
 }
 

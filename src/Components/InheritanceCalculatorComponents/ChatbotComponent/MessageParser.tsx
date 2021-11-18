@@ -22,7 +22,6 @@ class MessageParser {
     //   return this.actionProvider.handleUndividedEstate(message); //set stepID = 3
     // }
     if (curState.stepID === 3) {
-      console.log(message);
       return this.actionProvider.handleNetWealth(message); //set stepID = 4
     }
     // if (curState.stepID === 4) {
@@ -45,7 +44,7 @@ class MessageParser {
         return this.actionProvider.handleParentsInput(message);
       }
       else if (curState.parent_flag == "part2")
-        return this.actionProvider.handleAliveParentOption(message)
+        return this.actionProvider.handleParentAliveOption(message)
     }
     // if (curState.stepID === 9) {
     //   return this.actionProvider.handleSuccessorInput(message);
