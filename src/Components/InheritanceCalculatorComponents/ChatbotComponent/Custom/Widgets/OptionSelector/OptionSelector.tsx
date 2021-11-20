@@ -19,14 +19,13 @@ const OptionSelector = (props: any): ReactElement => {
           break;
         }
         case 7: {
-          // state = { ...state, successor_flag: "part2" }
           state.successor_flag = "part2"
-          actionProvider.handleAliveOption(option);
+          actionProvider.handleChildAliveOption(option);
           break;
         }
         case 8: {
           state.parent_flag = "part2";
-          actionProvider.handleAliveParentOption(option);
+          actionProvider.handleParentAliveOption(option);
           break;
         }
         case 10: {

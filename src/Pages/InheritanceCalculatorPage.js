@@ -4,6 +4,7 @@ import Config from "../Components/InheritanceCalculatorComponents/ChatbotCompone
 import MessageParser from "../Components/InheritanceCalculatorComponents/ChatbotComponent/MessageParser";
 import ActionProvider from "../Components/InheritanceCalculatorComponents/ChatbotComponent/ActionProvider";
 // import validator from "../Components/InheritanceCalculatorComponents/ChatbotComponent/Validator";
+import OrgChartTree from "../Components/InheritanceCalculatorComponents/OtherComponent/ChartComponent";
 
 const InheritanceCalculatorPage = () => {
   return (
@@ -11,6 +12,7 @@ const InheritanceCalculatorPage = () => {
       <Typography variant="h2" align="center">
         Inheritance Calculator
       </Typography>
+      <OrgChartTree />
       <Chatbot
         config={Config}
         messageParser={MessageParser}

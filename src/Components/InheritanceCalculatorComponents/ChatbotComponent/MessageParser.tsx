@@ -37,7 +37,7 @@ class MessageParser {
       if (curState.successor_flag === "part1") {
         return this.actionProvider.handleSuccessorInput(message);
       } else if (curState.successor_flag === "part2")
-        return this.actionProvider.handleAliveOption(message);
+        return this.actionProvider.handleChildAliveOption(message);
     }
     if (curState.stepID === 8) {
       if (curState.parent_flag === "part1") {

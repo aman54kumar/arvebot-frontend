@@ -1,3 +1,8 @@
+export enum ParentChildSelector {
+  child = 0,
+  parent = 1,
+}
+
 export default class Person {
   _id: number;
   _personID = "";
@@ -7,8 +12,8 @@ export default class Person {
   _cohabitant: Person | undefined;
   _parents: Array<Person> = [];
   _children: Array<Person> = [];
-  _parentsIDList: Array<number> = [];
-  _childrenIDList: Array<number> = [];
+  _parentsIDList: Array<[any, number]> = [];
+  _childrenIDList: Array<[any, number]> = [];
   _childrenRearing: boolean | undefined;
   _underAge: boolean | undefined;
 
@@ -89,34 +94,55 @@ export default class Person {
     else return false;
   }
 
-  get parents(): Person[] | undefined {
-    return this._parents;
-  }
+  // get parents(): Person[] | undefined {
+  //   return this._parents;
+  // }
 
-  add_parent = (parent: Person, add_for_both = true): void => {
-    if (!this._parents.includes(parent)) {
+  add_parent = (
+    parent: Person,
+    childOrParent: number,
+
+    add_for_both = true
+  ): void => {
+    const parentsArray = this._parents;
+    const parent_id = parent._personID;
+    if (
+      !parentsArray.find((obj) => obj._personID === parent_id) &&
+      parentsArray.length < 3
+    ) {
       this._parents.push(parent);
     }
     if (add_for_both) {
-      // parents._childrenIDList(this._personID);
+      parent._childrenIDList = [...this._childrenIDList];
+      parent._childrenIDList.push([ParentChildSelector.child, this._id]);
     }
   };
 
-  get_parent = (rootPerson: Person, currentPosition: number): Person | null => {
+  get_parent_child = (
+    rootPerson: Person,
+    currentPosition: number
+  ): Person | null => {
+    let list: Array<Person> = [];
+
     if (currentPosition == this._parentsIDList.length) {
       return rootPerson;
     }
     if (currentPosition > this._parentsIDList.length) {
       return null;
     }
-    const c = rootPerson._children.filter((child) => {
-      return child._id == this._parentsIDList[currentPosition];
+    if (this._parentsIDList[currentPosition][0] == ParentChildSelector.child) {
+      list = rootPerson._children;
+    } else {
+      list = rootPerson._parents;
+    }
+    const c = list.filter((child) => {
+      return child._id == this._parentsIDList[currentPosition][1];
     });
     if (c.length == 0) {
       console.error("invalid parent");
       return null;
     }
-    return this.get_parent(c[0], currentPosition + 1);
+    return this.get_parent_child(c[0], currentPosition + 1);
   };
 
   get children(): Array<Person> {
@@ -131,7 +157,7 @@ export default class Person {
     }
     if (add_for_both) {
       child._parentsIDList = [...this._parentsIDList];
-      child._parentsIDList.push(this._id);
+      child._parentsIDList.push([ParentChildSelector.child, this._id]);
     }
   };
 

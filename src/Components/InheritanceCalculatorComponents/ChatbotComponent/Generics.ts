@@ -23,6 +23,8 @@ export interface ChatbotInterface<T> {
   temp_parent: Person;
   current_path: Array<string>;
   id: number;
+  isChild: boolean;
+  personsMap: Map<number, Person>;
 }
 
 export const ChatbotState: ChatbotInterface<Person> = {
@@ -41,4 +43,6 @@ export const ChatbotState: ChatbotInterface<Person> = {
   temp_parent: new Person(""),
   current_path: [],
   id: 1,
+  isChild: false,
+  personsMap: new Map(),
 };
