@@ -1,6 +1,7 @@
 export enum ParentChildSelector {
   child = 0,
   parent = 1,
+  testator = -1,
 }
 
 export default class Person {
@@ -10,10 +11,6 @@ export default class Person {
   _deceased = false;
   _spouse: Person | undefined;
   _cohabitant: Person | undefined;
-  _parents: Array<Person> = [];
-  _children: Array<Person> = [];
-  _parentsIDList: Array<[any, number]> = [];
-  _childrenIDList: Array<[any, number]> = [];
   _childrenRearing: boolean | undefined;
   _underAge: boolean | undefined;
 
@@ -71,23 +68,23 @@ export default class Person {
     if (add_for_both) cohabitant.set_cohabitant(this, false);
   };
 
-  has_surviving_cohabitant_with_common_child = (): boolean => {
-    if (this._cohabitant && !this._cohabitant._deceased) {
-      for (const child of this._children) {
-        if (this._cohabitant._children.includes(child)) return true;
-      }
-      return false;
-    } else return false;
-  };
+  // has_surviving_cohabitant_with_common_child = (): boolean => {
+  //   if (this._cohabitant && !this._cohabitant._deceased) {
+  //     for (const child of this._children) {
+  //       if (this._cohabitant._children.includes(child)) return true;
+  //     }
+  //     return false;
+  //   } else return false;
+  // };
 
-  has_surviving_cohabitant_without_common_child = (): boolean => {
-    if (this._cohabitant && !this._cohabitant._deceased) {
-      for (const child of this._children) {
-        if (this._cohabitant._children.includes(child)) return false;
-      }
-      return true;
-    } else return false;
-  };
+  // has_surviving_cohabitant_without_common_child = (): boolean => {
+  //   if (this._cohabitant && !this._cohabitant._deceased) {
+  //     for (const child of this._children) {
+  //       if (this._cohabitant._children.includes(child)) return false;
+  //     }
+  //     return true;
+  //   } else return false;
+  // };
 
   has_surviving_cohabitant(): boolean {
     if (this._cohabitant && !this._cohabitant._deceased) return true;
@@ -98,112 +95,66 @@ export default class Person {
   //   return this._parents;
   // }
 
-  add_parent = (
-    parent: Person,
-    childOrParent: number,
+  // add_parent = (
+  //   parent: Person,
+  //   childOrParent: number,
 
-    add_for_both = true
-  ): void => {
-    const parentsArray = this._parents;
-    const parent_id = parent._personID;
-    if (
-      !parentsArray.find((obj) => obj._personID === parent_id) &&
-      parentsArray.length < 3
-    ) {
-      this._parents.push(parent);
-    }
-    if (add_for_both) {
-      parent._childrenIDList = [...this._childrenIDList];
-      parent._childrenIDList.push([ParentChildSelector.child, this._id]);
-    }
-  };
+  //   add_for_both = true
+  // ): void => {
+  //   const parentsArray = this._parents;
+  //   const parent_id = parent._personID;
+  //   if (
+  //     !parentsArray.find((obj) => obj._personID === parent_id) &&
+  //     parentsArray.length < 3
+  //   ) {
+  //     this._parents.push(parent);
+  //   }
+  //   if (add_for_both) {
+  //     parent._childrenIDList = [...this._childrenIDList];
+  //     parent._childrenIDList.push([ParentChildSelector.child, this._id]);
+  //   }
+  // };
 
-  get_parent_child = (
-    rootPerson: Person,
-    currentPosition: number
-  ): Person | null => {
-    let list: Array<Person> = [];
+  // get_parent_child = (
+  //   rootPerson: Person,
+  //   currentPosition: number
+  // ): Person | null => {
+  //   let list: Array<Person> = [];
 
-    if (currentPosition == this._parentsIDList.length) {
-      return rootPerson;
-    }
-    if (currentPosition > this._parentsIDList.length) {
-      return null;
-    }
-    if (this._parentsIDList[currentPosition][0] == ParentChildSelector.child) {
-      list = rootPerson._children;
-    } else {
-      list = rootPerson._parents;
-    }
-    const c = list.filter((child) => {
-      return child._id == this._parentsIDList[currentPosition][1];
-    });
-    if (c.length == 0) {
-      console.error("invalid parent");
-      return null;
-    }
-    return this.get_parent_child(c[0], currentPosition + 1);
-  };
+  //   if (currentPosition == this._parentsIDList.length) {
+  //     return rootPerson;
+  //   }
+  //   if (currentPosition > this._parentsIDList.length) {
+  //     return null;
+  //   }
+  //   if (this._parentsIDList[currentPosition][0] == ParentChildSelector.child) {
+  //     list = rootPerson._children;
+  //   } else {
+  //     list = rootPerson._parents;
+  //   }
+  //   const c = list.filter((child) => {
+  //     return child._id == this._parentsIDList[currentPosition][1];
+  //   });
+  //   if (c.length == 0) {
+  //     console.error("invalid parent");
+  //     return null;
+  //   }
+  //   return this.get_parent_child(c[0], currentPosition + 1);
+  // };
 
-  get children(): Array<Person> {
-    return this._children;
-  }
+  // get children(): Array<Person> {
+  //   return this._children;
+  // }
 
-  add_child = (child: Person, add_for_both = true): void => {
-    const children_array = this._children;
-    const child_id = child._personID;
-    if (!children_array.find((obj) => obj._personID === child_id)) {
-      this._children.push(child);
-    }
-    if (add_for_both) {
-      child._parentsIDList = [...this._parentsIDList];
-      child._parentsIDList.push([ParentChildSelector.child, this._id]);
-    }
-  };
-
-  surviving_successor_distance = (): number | undefined => {
-    if (this._deceased === false) return 0;
-    else if (this._children.length === 0) return undefined;
-    else {
-      const possible_distances: Array<number> = [];
-      for (const child of this._children) {
-        const temp = child.surviving_successor_distance();
-        if (temp != undefined) {
-          possible_distances.push(1 + temp);
-        }
-      }
-      if (possible_distances.length === 0) return undefined;
-      else return Math.min(...possible_distances);
-    }
-  };
-
-  get_class_and_distance_closest_surviving_relative = (): [
-    number | undefined,
-    number | undefined
-  ] => {
-    const distance = this.surviving_successor_distance();
-    if (distance !== undefined) return [1, this.surviving_successor_distance()];
-    else if (this._parents.length == 0) return [undefined, undefined];
-    else {
-      const alternatives: Array<Array<number | undefined>> = [];
-      for (const parent of this._parents) {
-        alternatives.push(
-          parent.get_class_and_distance_closest_surviving_relative()
-        );
-      }
-
-      alternatives.sort((a, b) => {
-        if (a[0] != undefined && b[0] != undefined) return a[0] - b[0];
-        if (a[0] == undefined && b[0] != undefined) return 1;
-        return -1;
-      });
-      const [closest_alternative_class, closest_alternative_distance] =
-        alternatives[0];
-
-      if (closest_alternative_class == undefined) {
-        return [undefined, undefined];
-      }
-      return [closest_alternative_class + 1, closest_alternative_distance];
-    }
-  };
+  // add_child = (child: Person, add_for_both = true): void => {
+  //   const children_array = this._children;
+  //   const child_id = child._personID;
+  //   if (!children_array.find((obj) => obj._personID === child_id)) {
+  //     this._children.push(child);
+  //   }
+  //   if (add_for_both) {
+  //     child._parentsIDList = [...this._parentsIDList];
+  //     child._parentsIDList.push([ParentChildSelector.child, this._id]);
+  //   }
+  // };
 }

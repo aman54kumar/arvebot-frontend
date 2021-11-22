@@ -1,7 +1,8 @@
 import Person from "../ChatbotComponent/Helper/Classes/Person";
 import Family from "./Helper/Classes/Family";
+import { NodeEntity } from "./Helper/Classes/NodeEntity";
 
-enum successor_parent_flag {
+export enum successor_parent_flag {
   part1 = "part1",
   part2 = "part2",
   part3 = "part3",
@@ -10,39 +11,37 @@ enum successor_parent_flag {
 export interface ChatbotInterface<T> {
   stepID: number;
   person: T;
-  caseName: string | null;
+  caseName: string;
   netWealth: { intValue: number; strValue: string };
   undividedEstate: boolean;
-  temp_child_id: string;
   max_depth: number | null;
   successor_flag: string;
   parent_flag: string;
-  temp_person: any;
-  temp_family: Family | undefined;
-  temp_child: Person;
-  temp_parent: Person;
-  current_path: Array<string>;
-  id: number;
+  temp_person: NodeEntity;
+  temp_child: NodeEntity;
+  temp_parent: NodeEntity;
   isChild: boolean;
   personsMap: Map<number, Person>;
+  level: number;
+  nodeMap: Map<number, NodeEntity>;
+  id: number;
 }
 
 export const ChatbotState: ChatbotInterface<Person> = {
   stepID: 0,
   person: new Person(""),
-  caseName: null,
+  caseName: "",
   netWealth: { intValue: 0, strValue: "" },
   undividedEstate: false,
-  temp_child_id: "",
   max_depth: null,
   successor_flag: successor_parent_flag.none,
   parent_flag: successor_parent_flag.none,
-  temp_person: new Person(""),
-  temp_family: undefined,
-  temp_child: new Person(""),
-  temp_parent: new Person(""),
-  current_path: [],
-  id: 1,
+  temp_person: new NodeEntity(0, 0),
+  temp_child: new NodeEntity(0, 0),
+  temp_parent: new NodeEntity(0, 0),
   isChild: false,
   personsMap: new Map(),
+  level: 0,
+  nodeMap: new Map(),
+  id: 1,
 };

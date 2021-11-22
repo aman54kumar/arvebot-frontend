@@ -33,6 +33,10 @@ const OptionSelector = (props: any): ReactElement => {
           break;
         }
         case 11: {
+          actionProvider.handleMarriedParents(option);
+          break;
+        }
+        case 12: {
           actionProvider.handleFinalQuestion(option)
           break;
         }

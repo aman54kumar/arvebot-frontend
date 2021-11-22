@@ -6,6 +6,7 @@ import { ChatbotState } from "./Generics";
 import "react-chatbot-kit/build/main.css";
 import "../chatbot.scss";
 import { FormattedMessage } from "react-intl";
+import ChatHeader from "../OtherComponent/ChatHeader/ChatHeader";
 
 const botName = "Arvebot";
 const config = {
@@ -23,9 +24,10 @@ const config = {
   initialMessages: [
     createChatBotMessage(<FormattedMessage id="Chatbot.CASE_NAME_QUESTION" />),
   ],
-  customMessages: {
-    // custom: (props) => <CustomMessage {...props} />,
+  customComponents: {
+    header: (actionProvider) => <ChatHeader actionProvider={actionProvider} />,
   },
+
   widgets: [
     {
       widgetName: "optionSelectorWidget",

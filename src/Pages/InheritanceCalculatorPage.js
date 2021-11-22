@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Typography } from "@mui/material";
 import { Chatbot } from "react-chatbot-kit";
 import Config from "../Components/InheritanceCalculatorComponents/ChatbotComponent/Config.js";
@@ -7,17 +8,32 @@ import ActionProvider from "../Components/InheritanceCalculatorComponents/Chatbo
 import OrgChartTree from "../Components/InheritanceCalculatorComponents/OtherComponent/ChartComponent";
 
 const InheritanceCalculatorPage = () => {
+  const [showBot, toggleBot] = useState(true);
+  const saveMessages = (messages, HTMLString) => {
+    localStorage.setItem("chat_messages", JSON.stringify(messages));
+  };
+
+  const loadMessages = () => {
+    const messages = JSON.parse(localStorage.getItem("chat_messages"));
+    return messages;
+  };
+
   return (
     <div>
       <Typography variant="h2" align="center">
         Inheritance Calculator
       </Typography>
       <OrgChartTree />
-      <Chatbot
-        config={Config}
-        messageParser={MessageParser}
-        actionProvider={ActionProvider}
-      />
+      {showBot && (
+        <Chatbot
+          config={Config}
+          messageParser={MessageParser}
+          actionProvider={ActionProvider}
+          messageHistory={loadMessages()}
+          saveMessages={saveMessages}
+        />
+      )}
+      <button onClick={() => toggleBot((prev) => !prev)}>Bot</button>
     </div>
   );
 };

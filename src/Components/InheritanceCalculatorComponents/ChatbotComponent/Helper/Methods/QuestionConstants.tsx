@@ -3,6 +3,9 @@ import { FormattedMessage } from "react-intl";
 import ShowInfoWidget from "../../Custom/Widgets/ShowInfoWidget/ShowInfoWidget";
 
 class QuestionConstants {
+
+  CaseNameQuestion = (<FormattedMessage id="Chatbot.CASE_NAME_QUESTION" />);
+
   TestatorQuestion = (<FormattedMessage id="Chatbot.TESTATOR_QUESTION" />);
 
   UndividedEstateQuestion = (
@@ -143,6 +146,34 @@ class QuestionConstants {
           values={{ person_ID: person_id, parents_IDs: parent_id_string }}
         />
         <ShowInfoWidget text="Chatbot.PARENT_EXTRA_INFO" />
+      </div>
+    );
+  };
+
+  MarriedParents1 = (
+    first_parent_id: string,
+    second_parent_id: string
+  ): ReactElement => {
+    return (
+      <div>
+        <FormattedMessage
+          id="Chatbot.marriedParents1"
+          values={{ parent1_ID: first_parent_id, parent2_ID: second_parent_id }}
+        />
+      </div>
+    );
+  };
+
+  MarriedParents2 = (
+    first_parent_id: string,
+    second_parent_id: string
+  ): ReactElement => {
+    return (
+      <div>
+        <FormattedMessage
+          id="Chatbot.marriedParents2"
+          values={{ parent1_ID: first_parent_id, parent2_ID: second_parent_id }}
+        />
       </div>
     );
   };
