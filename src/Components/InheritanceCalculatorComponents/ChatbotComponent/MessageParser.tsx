@@ -1,17 +1,17 @@
 import ActionProvider from "./ActionProvider";
 import { ChatbotInterface } from "./Generics";
-import Person from "./Helper/Classes/Person";
 
 class MessageParser {
   actionProvider: ActionProvider;
-  state: ChatbotInterface<Person>;
-  constructor(actionProvider: ActionProvider, state: ChatbotInterface<Person>) {
+  state: ChatbotInterface;
+  constructor(actionProvider: ActionProvider, state: ChatbotInterface) {
     this.actionProvider = actionProvider;
     this.state = state;
   }
 
   parse(message: string): ReturnType<() => void> {
     const curState = this.state;
+
     if (curState.stepID === 0) {
       return this.actionProvider.handleCaseName(message); //set stepID = 1
     }
@@ -46,12 +46,19 @@ class MessageParser {
       else if (curState.parent_flag == "part2")
         return this.actionProvider.handleParentAliveOption(message)
     }
-    // if (curState.stepID === 9) {
-    //   return this.actionProvider.handleSuccessorInput(message);
-    // }
-    // if (curState.stepID === 9) {
-    //   return this.actionProvider.handleAliveOption(message);
-    // }
+    if (curState.stepID === 14) {
+      if (curState.grandParent_flag === "part1") {
+        return this.actionProvider.handleGrandParentResponse(message)
+      }
+      else if (curState.grandParent_flag === "part2") {
+        return this.actionProvider.handleGrandParentAliveOption(message)
+      }
+    }
+
+    if (curState.stepID === -1) {
+      console.log(curState)
+      return this.actionProvider.handleFinalQuestion(message)
+    }
     if (curState.stepID === 10) {
       console.log("dead-end now");
     } else {

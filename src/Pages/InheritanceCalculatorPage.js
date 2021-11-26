@@ -5,35 +5,37 @@ import Config from "../Components/InheritanceCalculatorComponents/ChatbotCompone
 import MessageParser from "../Components/InheritanceCalculatorComponents/ChatbotComponent/MessageParser";
 import ActionProvider from "../Components/InheritanceCalculatorComponents/ChatbotComponent/ActionProvider";
 // import validator from "../Components/InheritanceCalculatorComponents/ChatbotComponent/Validator";
-import OrgChartTree from "../Components/InheritanceCalculatorComponents/OtherComponent/ChartComponent";
+import OrgChartTree from "../Components/InheritanceCalculatorComponents/OtherComponent/FamilyChart/ChartComponent.js";
+import { ChatbotState } from "../Components/InheritanceCalculatorComponents/ChatbotComponent/Generics.ts";
+import { messageService } from "../Components/InheritanceCalculatorComponents/ChatbotComponent/MessageService.js";
+import ChatbotToggleButton from "../Components/InheritanceCalculatorComponents/OtherComponent/ChatbotToggleButton/ChatbotToggleButton";
+import "../Components/InheritanceCalculatorComponents/OtherComponent/ChatbotToggleButton/ChatbotToggleButton.scss";
+import botIcon from "../assets/images/chat_button_logo.svg";
 
 const InheritanceCalculatorPage = () => {
   const [showBot, toggleBot] = useState(true);
-  const saveMessages = (messages, HTMLString) => {
-    localStorage.setItem("chat_messages", JSON.stringify(messages));
-  };
-
-  const loadMessages = () => {
-    const messages = JSON.parse(localStorage.getItem("chat_messages"));
-    return messages;
-  };
-
   return (
     <div>
       <Typography variant="h2" align="center">
         Inheritance Calculator
       </Typography>
-      <OrgChartTree />
-      {showBot && (
-        <Chatbot
-          config={Config}
-          messageParser={MessageParser}
-          actionProvider={ActionProvider}
-          messageHistory={loadMessages()}
-          saveMessages={saveMessages}
-        />
-      )}
-      <button onClick={() => toggleBot((prev) => !prev)}>Bot</button>
+      {/* <OrgChartTree /> */}
+      <div className="ChatbotContainer">
+        {showBot && (
+          <Chatbot
+            config={Config}
+            messageParser={MessageParser}
+            actionProvider={ActionProvider}
+          />
+        )}
+        {/* <ChatbotToggleButton show={prev} clickHandler={toggleBot} /> */}
+        <button
+          className="ChatbotToggleButton"
+          onClick={() => toggleBot((prev) => !prev)}
+        >
+          <img src={botIcon} />
+        </button>
+      </div>
     </div>
   );
 };

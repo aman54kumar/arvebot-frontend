@@ -44,14 +44,24 @@ export class NodeEntity {
     }
   };
 
-  add_parent = (parent: NodeEntity, add_for_both = true): void => {
+  add_parent = (
+    parent: NodeEntity,
+    add_for_both = true,
+    grandParent = false
+  ): void => {
     const parents_array = this._parents;
     const parent_id = parent._id;
     if (!parents_array.find((obj) => obj === parent_id)) {
       this._parents.push(parent_id);
     }
     parent._path = [...this._path];
-    parent._path.push([ParentChildSelector.parent, parent_id]);
+
+    parent._path.push([
+      grandParent
+        ? ParentChildSelector.grandParent
+        : ParentChildSelector.parent,
+      parent_id,
+    ]);
     if (add_for_both) {
       if (!parent._children.find((obj) => obj === this._id)) {
         parent._children.push(this._id);
@@ -59,5 +69,10 @@ export class NodeEntity {
     }
   };
 
-  
+  getLatestPathKey = () => {
+    if (this._path.length == 0) {
+      throw new Error("Invalid Case");
+    }
+    return this._path[this._path.length - 1][0];
+  };
 }

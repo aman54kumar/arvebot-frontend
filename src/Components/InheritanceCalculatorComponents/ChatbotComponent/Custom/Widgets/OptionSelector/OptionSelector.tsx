@@ -36,7 +36,12 @@ const OptionSelector = (props: any): ReactElement => {
           actionProvider.handleMarriedParents(option);
           break;
         }
-        case 12: {
+        case 14: {
+          state.grandParent_flag = "part2"
+          actionProvider.handleGrandParentAliveOption(option)
+          break;
+        }
+        case -1: {
           actionProvider.handleFinalQuestion(option)
           break;
         }
@@ -47,18 +52,23 @@ const OptionSelector = (props: any): ReactElement => {
       return state;
     });
   };
+  const onClickHandler = (e: any): void => {
+    const thisButton = e.target as HTMLButtonElement
+    const nextButton = (thisButton).nextElementSibling as HTMLButtonElement
+    const prevButton = (thisButton).previousElementSibling as HTMLButtonElement
+    const otherButton = nextButton ? nextButton : prevButton
+    thisButton.style.pointerEvents = "none"
+    thisButton.disabled = true;
+    otherButton.style.pointerEvents = "none"
+    otherButton.disabled = true;
+  }
   return (
     <div>
       <div className="option-selector-button-container">
         <button
           className="option-selector-button"
           onClick={(e) => {
-            const thisButton = e.target as HTMLButtonElement
-            const nextButton = (thisButton).nextElementSibling as HTMLButtonElement
-            thisButton.style.pointerEvents = "none"
-            thisButton.disabled = true;
-            nextButton.style.pointerEvents = "none"
-            nextButton.disabled = true;
+            onClickHandler(e);
             setOption(true)
           }}
         >
@@ -67,13 +77,8 @@ const OptionSelector = (props: any): ReactElement => {
         <button
           className="option-selector-button"
           onClick={(e) => {
-            const thisButton = e.target as HTMLButtonElement
-            const prevButton = (thisButton).previousElementSibling as HTMLButtonElement
-            thisButton.style.pointerEvents = "none"
-            thisButton.disabled = true;
-            prevButton.style.pointerEvents = "none"
-            prevButton.disabled = true;
-            (setOption(false))
+            onClickHandler(e);
+            setOption(false)
           }}
         >
           <FormattedMessage id="Chatbot.No" />

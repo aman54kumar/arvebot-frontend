@@ -1,5 +1,4 @@
 import Person from "../ChatbotComponent/Helper/Classes/Person";
-import Family from "./Helper/Classes/Family";
 import { NodeEntity } from "./Helper/Classes/NodeEntity";
 
 export enum successor_parent_flag {
@@ -8,9 +7,9 @@ export enum successor_parent_flag {
   part3 = "part3",
   none = "none",
 }
-export interface ChatbotInterface<T> {
+export interface ChatbotInterface {
   stepID: number;
-  person: T;
+  person: NodeEntity;
   caseName: string;
   netWealth: { intValue: number; strValue: string };
   undividedEstate: boolean;
@@ -25,11 +24,14 @@ export interface ChatbotInterface<T> {
   level: number;
   nodeMap: Map<number, NodeEntity>;
   id: number;
+  deceasedParentsArray: Array<number>;
+  grandParent_flag: string;
+  rearChildrenResponse: boolean;
 }
 
-export const ChatbotState: ChatbotInterface<Person> = {
+export const ChatbotState: ChatbotInterface = {
   stepID: 0,
-  person: new Person(""),
+  person: new NodeEntity(0, 0),
   caseName: "",
   netWealth: { intValue: 0, strValue: "" },
   undividedEstate: false,
@@ -44,4 +46,7 @@ export const ChatbotState: ChatbotInterface<Person> = {
   level: 0,
   nodeMap: new Map(),
   id: 1,
+  deceasedParentsArray: [],
+  grandParent_flag: successor_parent_flag.none,
+  rearChildrenResponse: false,
 };

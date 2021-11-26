@@ -179,6 +179,24 @@ class QuestionConstants {
   };
 
 
+  addGrandParentsQuestion1 = (parent_id: string): ReactElement => {
+    return (<div>
+      <FormattedMessage
+        id="Chatbot.addGrandParentQn1"
+        values={{ parent_id: parent_id }}
+      />
+    </div>)
+  }
+
+
+  addGrandParentsQuestion2 = (parent_id: string, grandparent_id_string: string): ReactElement => {
+    return (<div>
+      <FormattedMessage
+        id="Chatbot.addGrandParentQn2"
+        values={{ parent_id: parent_id, grandParents_IDs: grandparent_id_string }}
+      />
+    </div>)
+  }
   // finalQuestion = (): ReactElement => {
   //   return (
   //     <div>

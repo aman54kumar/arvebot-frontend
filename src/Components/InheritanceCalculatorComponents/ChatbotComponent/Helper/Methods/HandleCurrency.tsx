@@ -66,13 +66,15 @@ const removeTextFromCurrencyString = (inputCurrency: string): string => {
 }
 
 export const ParseCurrencyStringForOutput = (unformattedCurrency: string): string => {
-    return new Intl.NumberFormat("nb-NO", {
+    console.log(unformattedCurrency);
+
+    return new Intl.NumberFormat("no-NO", {
         style: "currency",
         currency: "NOK",
         currencyDisplay: "narrowSymbol",
         minimumFractionDigits: 0,
         maximumFractionDigits: 0,
-    }).format(Number(unformattedCurrency.replace(/[^0-9.-]+/g, "")));
+    }).format(Number(unformattedCurrency.replace(/[^0-9.-]+/g, ""))).replace("kr", "kr.").concat(",-");
 
 }
 
@@ -88,7 +90,7 @@ export const validateCurrency = (inputCurrency: string): boolean => {
 
 export const CurrencyOutput = (inputCurrency: string): [number, string] => {
 
-    if ((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((/\d/))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))).test(inputCurrency)) {
+    if ((/\d/).test(inputCurrency)) {
         const initialCurrencyValue: string = removeTextFromCurrencyString(inputCurrency)
 
         let digitsBeforeSeparatorValue = "correct"

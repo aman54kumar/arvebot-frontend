@@ -2,6 +2,7 @@ export enum ParentChildSelector {
   child = 0,
   parent = 1,
   testator = -1,
+  grandParent = 2,
 }
 
 export default class Person {

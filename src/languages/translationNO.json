@@ -34,7 +34,7 @@
   "Chatbot.addParentsQn2": "Person med ID {person_ID} er registrert med følgende foreldre: {parents_IDs}.\nHvis personen har flere foreldre skal du skrive inn ID for en av dem.\nHvis ikke personen har flere foreldre, trykk Enter.",
   "Chatbot.marriedParents1": "Var {self.testator.parents[0].person_id} gift med {self.testator.parents[1].person_id} ved førstnevntes dødsfall? [Ja/Nei])",
   "Chatbot.marriedParents2": "Var {self.testator.parents[0].person_id} gift med {self.testator.parents[1].person_id} ved sistnevntes dødsfall? [Ja/Nei])",
-  "Chatbot.addGrandParentQn1": "Person med ID {parent.person_id} har foreløpig ingen registrerte foreldre.\nHvis personen har foreldre skal du skrive inn ID for en av dem nå.\nHvis ikke personen har flere foreldre, trykk Enter.",
-  "Chatbot.addGrandParentQn2": "Person med ID {parent.person_id} er registrert med følgende foreldre: {[grandparent.person_id for grandparent in parent.parents]}.\nHvis personen har flere foreldre skal du skrive inn ID for en av dem.\nHvis ikke personen har flere foreldre, trykk Enter.",
+  "Chatbot.addGrandParentQn1": "Person med ID {parent_id} har foreløpig ingen registrerte foreldre.\nHvis personen har foreldre skal du skrive inn ID for en av dem nå.\nHvis ikke personen har flere foreldre, trykk Enter.",
+  "Chatbot.addGrandParentQn2": "Person med ID {parent_id} er registrert med følgende foreldre: {grandParents_IDs}.\nHvis personen har flere foreldre skal du skrive inn ID for en av dem.\nHvis ikke personen har flere foreldre, trykk Enter.",
   "Chatbot.FINAL_QUESTION": "Are you sure you want to submit the responses for report?"
 }

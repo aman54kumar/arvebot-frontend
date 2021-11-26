@@ -14,10 +14,11 @@ const InfoMessagesWidget = ({ label }: InfoMessageTypes) => {
     alignItems="center"
     component="span"
     className="InfoMessage"
+    sx={{ backgroundColor: "#FFCBA4" }}
   >
-    {label}
+    Amount Entered: {label}
   </Box>
 };
-
+// color: #FFCBA4
 
 export default InfoMessagesWidget;
