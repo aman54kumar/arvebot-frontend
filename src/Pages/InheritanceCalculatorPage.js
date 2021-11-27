@@ -7,19 +7,29 @@ import ActionProvider from "../Components/InheritanceCalculatorComponents/Chatbo
 // import validator from "../Components/InheritanceCalculatorComponents/ChatbotComponent/Validator";
 import OrgChartTree from "../Components/InheritanceCalculatorComponents/OtherComponent/FamilyChart/ChartComponent.js";
 import { ChatbotState } from "../Components/InheritanceCalculatorComponents/ChatbotComponent/Generics.ts";
-import { messageService } from "../Components/InheritanceCalculatorComponents/ChatbotComponent/MessageService.js";
 import ChatbotToggleButton from "../Components/InheritanceCalculatorComponents/OtherComponent/ChatbotToggleButton/ChatbotToggleButton";
 import "../Components/InheritanceCalculatorComponents/OtherComponent/ChatbotToggleButton/ChatbotToggleButton.scss";
 import botIcon from "../assets/images/chat_button_logo.svg";
+import { useDispatch } from "react-redux";
+// import updateGeneric from "../store/genericActions.js";
 
 const InheritanceCalculatorPage = () => {
   const [showBot, toggleBot] = useState(true);
+  const dispatch = useDispatch();
+
+  document.addEventListener("build", ({ detail }) => {
+    dispatch({
+      type: "UPDATE_GENERIC",
+      payload: detail,
+    });
+  });
+
   return (
     <div>
       <Typography variant="h2" align="center">
         Inheritance Calculator
       </Typography>
-      {/* <OrgChartTree /> */}
+      <OrgChartTree />
       <div className="ChatbotContainer">
         {showBot && (
           <Chatbot

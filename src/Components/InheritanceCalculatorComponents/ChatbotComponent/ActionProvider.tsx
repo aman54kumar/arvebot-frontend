@@ -7,7 +7,6 @@ import { ReactElement } from "react";
 import { CurrencyOutput, ParseCurrencyStringForOutput } from "./Helper/Methods/HandleCurrency";
 import InfoMessagesWidget from "./Custom/Widgets/InfoMessagesWidget/InfoMessagesWidget"
 import { NodeEntity } from "./Helper/Classes/NodeEntity";
-
 class ActionProvider {
   createChatBotMessage: (
     questionElement: ReactElement,
@@ -18,6 +17,10 @@ class ActionProvider {
   QuestionConsts: QuestionConsts;
   InheritanceConstants: InheritanceConstants;
   family: Family;
+  stateRef: any;
+  checkstate: any = null
+  isStarted = true;
+  glb_state: any = null;
   GRANDCHILDREN_PATH_LIMIT = 4
   constructor(
     createChatBotMessage: (
@@ -26,6 +29,7 @@ class ActionProvider {
     ) => ReactElement,
     setStateFunc: (state: any) => any,
     createClientMessage: (messageElement: ReactElement) => any,
+    stateRef: any,
   ) {
     this.createChatBotMessage = createChatBotMessage;
     this.setState = setStateFunc;
@@ -33,13 +37,45 @@ class ActionProvider {
     this.QuestionConsts = new QuestionConsts();
     this.InheritanceConstants = new InheritanceConstants();
     this.family = new Family();
+    this.stateRef = stateRef;
   }
 
+  // function check(fn, context) {
+  //   var result;
+
+  //   return function() {
+  //     if(fn) {
+  //       result = fn.apply(context || this, arguments);
+  //       fn = null;
+  //     }
+
+  //     return result;
+  //   };
+  // }
+
+
+  check = () => {
+    const self = this
+    if (this.isStarted) {
+      this.checkstate = setInterval(() => {
+        if (self.glb_state !== null) {
+          self.isStarted = false;
+          // console.log(self.glb_state);
+          const customEvent = new CustomEvent("build", { detail: self.glb_state })
+          document.dispatchEvent(customEvent)
+          // close the interval
+          self.glb_state = null;
+          clearInterval(this.checkstate)
+        }
+      }, 1000)
+    }
+  }
   handleCaseName = (caseNameResponse: string): void => {
     /**
      *  * function for handling caseName replies. open reply currently.
      *  * the stepID is updated to 1. and then proceed to testator question.
      */
+
     const testatorQuestion = this.createChatBotMessage(
       this.QuestionConsts.TestatorQuestion
     );
@@ -49,6 +85,9 @@ class ActionProvider {
       caseName: caseNameResponse,
       temp_family: this.family,
     }));
+    this.setState((state: ChatbotInterface) => {
+      return this.returnState(state);
+    });
 
     // this.updateStateProperty({ stepID: 1, caseName: caseNameResponse });
     this.addMessageToBotState(testatorQuestion);
@@ -78,7 +117,16 @@ class ActionProvider {
       temp_person: state.person,
 
       // state.person._path = [[ParentChildSelector.testator, state.person._id]]
+
     }));
+    this.setState((state: ChatbotInterface) => {
+      return this.returnState(state);
+    });
+    // this.setState((state: ChatbotInterface) => {
+    //   const customEvent = new CustomEvent("build", { detail: state })
+    //   document.dispatchEvent(customEvent)
+    //   return this.returnState(state)
+    // })
 
 
     this.addMessageToBotState(undividedEstateQuestion);
@@ -109,6 +157,10 @@ class ActionProvider {
     const netWealthQuestion = this.createChatBotMessage(
       this.QuestionConsts.NetWealthQuestion
     );
+    this.setState((state: ChatbotInterface) => {
+
+      return this.returnState(state);
+    });
     this.addMessageToBotState(netWealthQuestion);
   };
 
@@ -145,7 +197,7 @@ class ActionProvider {
             strValue: currencyStringResponse,
           },
         }
-        return state
+        return this.returnState(state)
       });
       this.addMessageToBotState(underAgeQuestion);
     } else {
@@ -175,6 +227,10 @@ class ActionProvider {
     const spouseQuestion = this.createChatBotMessage(
       this.QuestionConsts.SpouseQuestion
     );
+    this.setState((state: ChatbotInterface) => {
+
+      return this.returnState(state);
+    });
     this.addMessageToBotState(spouseQuestion);
   };
 
@@ -195,6 +251,10 @@ class ActionProvider {
           successor_flag: "part1",
         };
         state.person._spouse = this.createNewPerson(spouseID, state)._id
+
+
+        // const customEvent = new CustomEvent("build", { detail: state })
+        // document.dispatchEvent(customEvent)
 
         const newSuccessorQuestion = this.createChatBotMessage(
           this.QuestionConsts.addSuccessorQuestion1(testator._personID)
@@ -222,7 +282,7 @@ class ActionProvider {
         );
         this.addMessageToBotState(rearChildrenQuestion);
       }
-      return state;
+      return this.returnState(state);
     });
 
   }
@@ -252,11 +312,11 @@ class ActionProvider {
         //   person: { ...state.person, _cohabitant: this.createNewPerson(cohabitantID, state), },
         // };
       }
-      return state;
+      return this.returnState(state);
     });
     // this.setState((state) => {
     //   console.log(state);
-    //   return state;
+    //   return this.returnState(state);
     // });
   };
 
@@ -300,7 +360,7 @@ class ActionProvider {
         );
         this.addMessageToBotState(aliveQuestion);
       }
-      return state;
+      return this.returnState(state);
     });
   };
 
@@ -341,7 +401,7 @@ class ActionProvider {
         );
         this.addMessageToBotState(newSuccessorQuestion);
       }
-      return state;
+      return this.returnState(state);
     });
   };
 
@@ -435,7 +495,7 @@ class ActionProvider {
         );
         this.addMessageToBotState(aliveQuestion);
       }
-      return state;
+      return this.returnState(state);
     })
   }
 
@@ -535,7 +595,7 @@ class ActionProvider {
 
         }
       }
-      return state
+      return this.returnState(state)
     })
   }
 
@@ -633,7 +693,7 @@ class ActionProvider {
         );
         this.addMessageToBotState(aliveQuestion);
       }
-      return state
+      return this.returnState(state)
     });
 
   }
@@ -747,7 +807,7 @@ class ActionProvider {
           }
         }
       }
-      return state
+      return this.returnState(state)
     })
   }
 
@@ -769,7 +829,7 @@ class ActionProvider {
       else {
         this.askFinalQuestion()
       }
-      return state
+      return this.returnState(state)
     })
   }
 
@@ -785,7 +845,7 @@ class ActionProvider {
         this.askFinalQuestion()
 
       }
-      return state
+      return this.returnState(state)
     })
   }
 
@@ -796,7 +856,7 @@ class ActionProvider {
       console.log(state);
 
 
-      return state
+      return this.returnState(state)
     })
   }
 
@@ -824,17 +884,17 @@ class ActionProvider {
         }
         const possiblyChildrenRearing = this.createChatBotMessage(this.QuestionConsts.RearChildrenQuestion, this.QuestionConsts.RearChildrenWidgetOptions)
         this.addMessageToBotState(possiblyChildrenRearing)
-        return state
+        return this.returnState(state)
       }
 
       // if (testator._spouse !== null && state.netWealth.intValue <= this.InheritanceConstants.MINIMUM_INHERITANCE_SPOUSE_VS_CHILDREN) {
       //   this.askFinalQuestion();
-      //   return state
+      //   return this.returnState(state)
       // }
 
       // if (testator._cohabitant !== null && state.netWealth.intValue <= this.InheritanceConstants.MINIMUM_INHERITANCE_COHABITANT_VS_CHILDREN) {
       //   this.askFinalQuestion();
-      //   return state
+      //   return this.returnState(state)
       // }
       state = {
         ...state,
@@ -845,7 +905,7 @@ class ActionProvider {
         this.QuestionConsts.addParentsQuestion1(testatorDetail._personID)
       );
       this.addMessageToBotState(newParentQuestion);
-      return state
+      return this.returnState(state)
     });
   };
 
@@ -865,7 +925,7 @@ class ActionProvider {
       }
       const finalQuestion = this.createChatBotMessage(this.QuestionConsts.FinalQuestion, this.QuestionConsts.FinalQuestionWidgetOptions)
       this.addMessageToBotState(finalQuestion);
-      return state
+      return this.returnState(state)
     })
 
   }
@@ -875,7 +935,7 @@ class ActionProvider {
       // TODO uncomment this
       // if (state.person._spouse !== null) {
       //   this.askFinalQuestion()
-      //   return state
+      //   return this.returnState(state)
       // }
       const temp_class = this.get_class_and_distance_closest_surviving_relative(state.person, state)[0]
       const eitherParentsDeceased = state.person._parents.filter(p_id => { return this.getPerson(p_id, state.personsMap)._deceased }).length !== 0;
@@ -886,11 +946,11 @@ class ActionProvider {
         const parent2Detail = this.getPerson(state.person._parents[1], state.personsMap)
         if (!personDetail._underAge) {
           this.askFinalQuestion()
-          return state
+          return this.returnState(state)
         }
         if (state.person._parents.length !== 2) {
           this.askFinalQuestion()
-          return state
+          return this.returnState(state)
         }
 
         if (parent1Detail._deceased) {
@@ -900,7 +960,7 @@ class ActionProvider {
           }
           const marriedParentsQn = this.createChatBotMessage(this.QuestionConsts.MarriedParents1(parent1Detail._personID, parent2Detail._personID))
           this.addMessageToBotState(marriedParentsQn)
-          return state
+          return this.returnState(state)
         }
         if (parent2Detail._deceased) {
           state = {
@@ -909,15 +969,15 @@ class ActionProvider {
           }
           const marriedParentsQn = this.createChatBotMessage(this.QuestionConsts.MarriedParents2(parent1Detail._personID, parent2Detail._personID))
           this.addMessageToBotState(marriedParentsQn)
-          return state
+          return this.returnState(state)
         }
       }
       else {
         this.grandParentFirst()
-        return state
+        return this.returnState(state)
       }
 
-      return state;
+      return this.returnState(state);
     });
   };
 
@@ -952,7 +1012,7 @@ class ActionProvider {
         console.log("check situation if it arrives here");
         this.askFinalQuestion()
       }
-      return state
+      return this.returnState(state)
     })
   }
 
@@ -983,7 +1043,7 @@ class ActionProvider {
   createNewPerson = (personID: string, state: any) => {
     const newPerson = new Person(personID, this.generateNextID(state.id))
     state.personsMap.set(newPerson._id, newPerson)
-    const newNode = new NodeEntity(newPerson._id, state.level);
+    const newNode = new NodeEntity(newPerson._id, 0);
     state.nodeMap.set(newNode._id, newNode);
     return newNode;
   }
@@ -991,7 +1051,7 @@ class ActionProvider {
     const newPerson = new Person(personID, this.generateNextID(state.id))
     newPerson._deceased = true;
     state.personsMap.set(newPerson._id, newPerson)
-    const newNode = new NodeEntity(newPerson._id, state.level);
+    const newNode = new NodeEntity(newPerson._id, 0);
     newNode._path.push([ParentChildSelector.testator, newPerson._id]);
     state.nodeMap.set(newNode._id, newNode);
     return newNode;
@@ -1000,7 +1060,7 @@ class ActionProvider {
   generateNextID = (id: number) => {
     this.setState((state: any) => {
       state.id = state.id + 1
-      return state
+      return this.returnState(state)
     })
     return id;
   }
@@ -1025,7 +1085,7 @@ class ActionProvider {
       if (add_for_both) {
         this.getNode(secondSpouse_id, state.nodeMap)._spouse = firstSpouse_id
       }
-      return state
+      return this.returnState(state)
     })
 
 
@@ -1078,7 +1138,11 @@ class ActionProvider {
       return [closest_alternative_class + 1, closest_alternative_distance];
     }
   };
-
+  returnState = (state: ChatbotInterface) => {
+    this.check();
+    this.glb_state = state;
+    return state;
+  }
   resetChatbot = () => {
     this.setState((state: any) => {
       state = {
@@ -1100,7 +1164,7 @@ class ActionProvider {
         id: 1,
         messages: []
       }
-      return state
+      return this.returnState(state)
     });
 
     const initialQuestion = this.createChatBotMessage(this.QuestionConsts.CaseNameQuestion);

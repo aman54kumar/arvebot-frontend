@@ -10,10 +10,15 @@ class MessageParser {
   }
 
   parse(message: string): ReturnType<() => void> {
+
+
     const curState = this.state;
 
+    // const customEvent = new CustomEvent("build", { detail: this.state })
+    // document.dispatchEvent(customEvent)
     if (curState.stepID === 0) {
-      return this.actionProvider.handleCaseName(message); //set stepID = 1
+      this.actionProvider.handleCaseName(message); //set stepID = 1
+      return
     }
     if (curState.stepID === 1) {
       return this.actionProvider.handleTestator(message); //set stepID = 2

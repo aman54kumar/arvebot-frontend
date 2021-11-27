@@ -1,69 +1,55 @@
-import { useEffect, useState } from "react";
-import Tree from "react-d3-tree";
-import { ChatbotState } from "../../ChatbotComponent/Generics";
-import { messageService } from "../../ChatbotComponent/MessageService";
+import { useSelector } from "react-redux";
+import ReactFlow, { Background, Controls } from "react-flow-renderer";
 
-// This is a simplified example of an org chart with a depth of 2.
-// Note how deeper levels are defined recursively via the `children` property.
+const elements = [
+  {
+    id: "1",
+    type: "input",
+    data: { label: "Node 1" },
+    position: { x: 0, y: 0 },
+  },
+];
 
-const orgChart = {
-  name: "Eve",
-  children: [
-    {
-      name: "Cain",
-    },
-    {
-      name: "Seth",
-      children: [
-        {
-          name: "Enos",
-        },
-        {
-          name: "Noam",
-        },
-      ],
-    },
-    {
-      name: "Abel",
-    },
-    {
-      name: "Awan",
-      children: [
-        {
-          name: "Enoch",
-        },
-      ],
-    },
-    {
-      name: "Azura",
-    },
-  ],
-};
+const flowStyles = { height: 500 };
+const OrgChartTree = () => {
+  const final = useSelector((state) => {
+    if (state) return state;
+  });
 
-export default function OrgChartTree() {
-  const [message, setMessages] = useState([]);
-  useEffect(() => {
-    // your post layout code (or 'effect') here.
-    const subscription = messageService.getMessage().subscribe((message) => {
-      console.log("111");
-      console.log(message);
-      if (message) {
-        setMessages((messages) => [...messages, message]);
-      } else {
-        setMessages([]);
-      }
-    });
-    return subscription.unsubscribe;
-  }, []);
-
+  let finalString = "";
+  console.log(final);
+  for (const value of final.nodeMap.values()) {
+    finalString += JSON.stringify(value);
+  }
   return (
-    // `<Tree />` will fill width/height of its container; in this case `#treeWrapper`.
-    <div
-      id="treeWrapper"
-      style={{ width: "50em", height: "50em", backgroundColor: "gray" }}
-    >
-      <div>{JSON.stringify(message)}</div>
-      {/* {<Tree data={orgChart} />} */}
+    <div>
+      <ReactFlow elements={elements} style={flowStyles}>
+        <Background variant="lines" gap={2} size={4} />
+        <Controls />
+      </ReactFlow>
     </div>
   );
-}
+};
+
+export default OrgChartTree;
+// export default function OrgChartTree() {
+//   // let [message, setMessage] = useState({});
+//   const final = useSelector((state) => {
+//     if (state) return state;
+//   });
+
+//   let finalString = "";
+//   for (const value of final.nodeMap.values()) {
+//     finalString += JSON.stringify(value);
+//   }
+//   return (
+//     // `<Tree />` will fill width/height of its container; in this case `#treeWrapper`.
+//     <div
+//       id="treeWrapper"
+//       style={{ width: "50em", height: "50em", backgroundColor: "gray" }}
+//     >
+//       {/* <div>{finalString}</div> */}
+//       {/* {<Tree data={orgChart} />} */}
+//     </div>
+//   );
+// }

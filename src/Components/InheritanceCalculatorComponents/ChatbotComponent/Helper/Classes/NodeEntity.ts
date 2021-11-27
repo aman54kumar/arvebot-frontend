@@ -37,6 +37,7 @@ export class NodeEntity {
     }
     child._path = [...this._path];
     child._path.push([ParentChildSelector.child, child_id]);
+    child._level = this.getLevel(child._path);
     if (add_for_both) {
       if (!child._parents.find((obj) => obj === this._id)) {
         child._parents.push(this._id);
@@ -62,6 +63,7 @@ export class NodeEntity {
         : ParentChildSelector.parent,
       parent_id,
     ]);
+    parent._level = this.getLevel(parent._path);
     if (add_for_both) {
       if (!parent._children.find((obj) => obj === this._id)) {
         parent._children.push(this._id);
@@ -74,5 +76,22 @@ export class NodeEntity {
       throw new Error("Invalid Case");
     }
     return this._path[this._path.length - 1][0];
+  };
+
+  getLevel = (path: Array<[number, number]>) => {
+    let level = 0;
+    path.map((x) => {
+      if (x[0] === ParentChildSelector.child) {
+        level = level - 1;
+      } else if (
+        x[0] === ParentChildSelector.parent ||
+        x[0] === ParentChildSelector.grandParent
+      ) {
+        level = level + 1;
+      } else {
+        level = level + 0;
+      }
+    });
+    return level;
   };
 }

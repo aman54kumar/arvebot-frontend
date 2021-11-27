@@ -26,6 +26,8 @@ import ResourcesPage from "./Pages/ResourcesPage";
 
 import Norsk from "./languages/translationNO.json";
 // import English from "./languages/translationEN.json";
+import store from './store/store'
+import { Provider } from "react-redux";
 
 const theme = createTheme();
 const useStyles = makeStyles({
@@ -90,7 +92,9 @@ const App = (): ReactElement => {
             aria-label="Image by Free-Photos from Pixabay"
           >
             <Header />
-            <Paper className={classes.rootPaper}>{menuItems}</Paper>
+            <Provider store={store}>
+              <Paper className={classes.rootPaper}>{menuItems}</Paper>
+            </Provider>
           </Paper>
           {/* <Footer langValue={LangValue} sendDataToParent={sendDataToParent} /> */}
           <Footer description="Arvebot" title="Arvebot" />

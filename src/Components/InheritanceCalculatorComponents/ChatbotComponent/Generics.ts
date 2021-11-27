@@ -21,7 +21,6 @@ export interface ChatbotInterface {
   temp_parent: NodeEntity;
   isChild: boolean;
   personsMap: Map<number, Person>;
-  level: number;
   nodeMap: Map<number, NodeEntity>;
   id: number;
   deceasedParentsArray: Array<number>;
@@ -43,7 +42,6 @@ export const ChatbotState: ChatbotInterface = {
   temp_parent: new NodeEntity(0, 0),
   isChild: false,
   personsMap: new Map(),
-  level: 0,
   nodeMap: new Map(),
   id: 1,
   deceasedParentsArray: [],
