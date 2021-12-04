@@ -2,7 +2,7 @@
 import { ReactElement } from "react";
 // material-ui
 import { Paper } from "@mui/material";
-import { createTheme, ThemeProvider, Theme, StyledEngineProvider } from "@mui/material/styles";
+import { createTheme, ThemeProvider, StyledEngineProvider } from "@mui/material/styles";
 import makeStyles from '@mui/styles/makeStyles';
 // react-router
 import { Route, Switch } from "react-router-dom";
@@ -32,10 +32,10 @@ import { Provider } from "react-redux";
 const theme = createTheme();
 const useStyles = makeStyles({
   root: {
-    backgroundImage: `url(${HomePageImage})`,
-    backgroundPosition: "center",
-    backgroundSize: "cover",
-    backgroundRepeat: "no-repeat",
+    // backgroundImage: `url(${HomePageImage})`,
+    // backgroundPosition: "center",
+    // backgroundSize: "cover",
+    // backgroundRepeat: "no-repeat",
     height: "100vh",
   },
   rootPaper: {
@@ -88,7 +88,7 @@ const App = (): ReactElement => {
 
           <Paper
             role="img"
-            className={classes.root}
+            // className={classes.root}
             aria-label="Image by Free-Photos from Pixabay"
           >
             <Header />

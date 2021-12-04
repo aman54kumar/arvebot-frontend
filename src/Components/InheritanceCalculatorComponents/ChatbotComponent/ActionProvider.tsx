@@ -61,8 +61,11 @@ class ActionProvider {
         if (self.glb_state !== null) {
           self.isStarted = false;
           // console.log(self.glb_state);
+          // localStorage.setItem("chat_messages", JSON.stringify(self.glb_state.messages))
           const customEvent = new CustomEvent("build", { detail: self.glb_state })
+          const messagesEvent = new CustomEvent("getMessages", { detail: self.glb_state.messages })
           document.dispatchEvent(customEvent)
+          document.dispatchEvent(messagesEvent)
           // close the interval
           self.glb_state = null;
           clearInterval(this.checkstate)
@@ -242,28 +245,36 @@ class ActionProvider {
      */
     const spouseID = spouseResponse;
     this.setState((state: ChatbotInterface) => {
-      const testator = this.getPerson(state.person._id, state.personsMap)
+      const testator = Person.getPerson(state.person._id, state.personsMap)
       if (spouseID !== "") {
+        const newSpouse = this.createNewPerson(spouseID, state)
+        state.person._spouse = newSpouse._id
+        state.person.setPathforPartner(ParentChildSelector.spouse, newSpouse)
+
+        if (state.netWealth.intValue <=
+          this.InheritanceConstants.MINIMUM_INHERITANCE_SPOUSE_VS_CHILDREN) {
+          state = {
+            ...state,
+            stepID: 10
+          }
+          const rearChildrenQuestion = this.createChatBotMessage(
+            this.QuestionConsts.RearChildrenQuestion,
+            this.QuestionConsts.RearChildrenWidgetOptions
+          );
+          this.addMessageToBotState(rearChildrenQuestion);
+        }
+
         state = {
           ...state,
           stepID: 7,
-          max_depth: null,
           successor_flag: "part1",
         };
-        state.person._spouse = this.createNewPerson(spouseID, state)._id
-
-
-        // const customEvent = new CustomEvent("build", { detail: state })
-        // document.dispatchEvent(customEvent)
-
         const newSuccessorQuestion = this.createChatBotMessage(
           this.QuestionConsts.addSuccessorQuestion1(testator._personID)
         );
         this.addMessageToBotState(newSuccessorQuestion);
       }
-
-
-      else if (!testator._underAge && testator.spouse === null) {
+      if (!testator._underAge && testator.spouse === null) {
         state = {
           ...state,
           stepID: 6,
@@ -274,14 +285,18 @@ class ActionProvider {
         this.addMessageToBotState(cohabitantQuestion);
       }
 
-      if (state.netWealth.intValue <=
-        this.InheritanceConstants.MINIMUM_INHERITANCE_SPOUSE_VS_CHILDREN) {
-        const rearChildrenQuestion = this.createChatBotMessage(
-          this.QuestionConsts.RearChildrenQuestion,
-          this.QuestionConsts.RearChildrenWidgetOptions
-        );
-        this.addMessageToBotState(rearChildrenQuestion);
-      }
+      // if (state.netWealth.intValue <=
+      //   this.InheritanceConstants.MINIMUM_INHERITANCE_SPOUSE_VS_CHILDREN) {
+      //   state = {
+      //     ...state,
+      //     stepID: 10
+      //   }
+      //   const rearChildrenQuestion = this.createChatBotMessage(
+      //     this.QuestionConsts.RearChildrenQuestion,
+      //     this.QuestionConsts.RearChildrenWidgetOptions
+      //   );
+      //   this.addMessageToBotState(rearChildrenQuestion);
+      // }
       return this.returnState(state);
     });
 
@@ -293,31 +308,45 @@ class ActionProvider {
      *  * stepID is updated to 7 and then further conditions are evaluated next.
      *  * open reply, no conditions for now.
      */
+    // NodeEntity.setPathforPartner(ParentChildSelector.cohabitant, state.person._cohabitant)
     const cohabitantID = cohabitantResponse;
     this.setState((state: ChatbotInterface) => {
+      const testator = Person.getPerson(state.person._id, state.personsMap)
       if (cohabitantID !== "") {
-        if (
-          state.netWealth.intValue <=
-          this.InheritanceConstants.MINIMUM_INHERITANCE_COHABITANT_VS_CHILDREN
-        ) {
-          const rearChildrenQuestion = this.createChatBotMessage(
-            this.QuestionConsts.RearChildrenQuestion,
-            this.QuestionConsts.RearChildrenWidgetOptions
+
+        if (cohabitantID !== "") {
+          state = {
+            ...state,
+            stepID: 7,
+            successor_flag: "part1",
+          };
+          const newCohabitant = this.createNewPerson(cohabitantID, state)
+          state.person._cohabitant = newCohabitant._id
+          state.person.setPathforPartner(ParentChildSelector.cohabitant, newCohabitant)
+
+          const newSuccessorQuestion = this.createChatBotMessage(
+            this.QuestionConsts.addSuccessorQuestion1(testator._personID)
           );
-          this.addMessageToBotState(rearChildrenQuestion);
+          this.addMessageToBotState(newSuccessorQuestion);
         }
-        // state = {
-        //   ...state,
-        //   stepID: 7,
-        //   person: { ...state.person, _cohabitant: this.createNewPerson(cohabitantID, state), },
-        // };
+        // if (
+        //   state.netWealth.intValue <=
+        //   this.InheritanceConstants.MINIMUM_INHERITANCE_COHABITANT_VS_CHILDREN
+        // ) {
+
+        //   state = {
+        //     ...state,
+        //     stepID: 10
+        //   }
+        //   const rearChildrenQuestion = this.createChatBotMessage(
+        //     this.QuestionConsts.RearChildrenQuestion,
+        //     this.QuestionConsts.RearChildrenWidgetOptions
+        //   );
+        //   this.addMessageToBotState(rearChildrenQuestion);
+        // }
       }
       return this.returnState(state);
     });
-    // this.setState((state) => {
-    //   console.log(state);
-    //   return this.returnState(state);
-    // });
   };
 
   handleSuccessorInput = (successorResponse: string): void => {
@@ -326,7 +355,7 @@ class ActionProvider {
       if (child_id === "") {
         const currentParentID = state.temp_person.getParentId();
         if (currentParentID) {
-          const currentParent = this.getNode(currentParentID, state.nodeMap)
+          const currentParent = NodeEntity.getNode(currentParentID, state.nodeMap)
           state = {
             ...state,
             temp_person: currentParent,
@@ -336,7 +365,7 @@ class ActionProvider {
 
           const newSuccessorQuestion = this.createChatBotMessage(
             this.QuestionConsts.addSuccessorQuestion2(
-              this.getPerson(currentParent._id, state.personsMap)._personID,
+              Person.getPerson(currentParent._id, state.personsMap)._personID,
               allChildrenID
             )
           );
@@ -353,7 +382,7 @@ class ActionProvider {
           successor_flag: "part2",
           temp_child: child,
         };
-        const personId: any = this.getPerson(child._id, state.personsMap)?._personID
+        const personId: any = Person.getPerson(child._id, state.personsMap)?._personID
         const aliveQuestion = this.createChatBotMessage(
           this.QuestionConsts.AliveQuestion(personId),
           this.QuestionConsts.AliveWidgetOptions
@@ -370,7 +399,7 @@ class ActionProvider {
       const temp_person: NodeEntity = state.temp_person
 
       temp_person.add_child(child, true);
-      const childDetail = this.getPerson(child._id, state.personsMap)
+      const childDetail = Person.getPerson(child._id, state.personsMap)
       if (!alive) {
 
         childDetail.deceased = true;
@@ -395,7 +424,7 @@ class ActionProvider {
         const allChildrenID = this.getParentChildrenIDStrings(temp_person._children, state)
         const newSuccessorQuestion = this.createChatBotMessage(
           this.QuestionConsts.addSuccessorQuestion2(
-            this.getPerson(temp_person._id, state.personsMap)._personID,
+            Person.getPerson(temp_person._id, state.personsMap)._personID,
             allChildrenID
           )
         );
@@ -411,7 +440,7 @@ class ActionProvider {
       if (predecessor_id === "") {
         const currentParentID = state.temp_person.getParentId();
         if (currentParentID) {
-          const currentParent = this.getNode(currentParentID, state.nodeMap)
+          const currentParent = NodeEntity.getNode(currentParentID, state.nodeMap)
           if (currentParentID !== state.person._id) {
             // ask child question
             state = {
@@ -423,7 +452,7 @@ class ActionProvider {
 
             const newSuccessorQuestion = this.createChatBotMessage(
               this.QuestionConsts.addSuccessorQuestion2(
-                this.getPerson(currentParent._id, state.personsMap)._personID,
+                Person.getPerson(currentParent._id, state.personsMap)._personID,
                 allChildrenID
               )
             );
@@ -436,13 +465,12 @@ class ActionProvider {
                 ...state,
                 parent_flag: "part1",
                 temp_person: currentParent,
-                isChild: false
 
               }
               const allParentsID = this.getParentChildrenIDStrings(currentParent._parents, state)
               const newParentQuestion = this.createChatBotMessage(
                 this.QuestionConsts.addParentsQuestion2(
-                  this.getPerson(currentParentID, state.personsMap)._personID,
+                  Person.getPerson(currentParentID, state.personsMap)._personID,
                   allParentsID
                 )
               );
@@ -453,14 +481,14 @@ class ActionProvider {
           }
         } else {
           // TODO: validation part
-          if (this.getNode(state.person._id, state.nodeMap)._parents.length === 0) {
+          if (NodeEntity.getNode(state.person._id, state.nodeMap)._parents.length === 0) {
             state = {
               ...state,
               stepID: 8,
               parent_flag: "part1"
             };
             const newParentQuestion = this.createChatBotMessage(
-              this.QuestionConsts.addParentsQuestion1(this.getPerson(state.person._id, state.personsMap)._personID)
+              this.QuestionConsts.addParentsQuestion1(Person.getPerson(state.person._id, state.personsMap)._personID)
             );
             const newParentWarning = this.createChatBotMessage(<p>Empty value not allowed</p>)
             this.addMessageToBotState(newParentWarning)
@@ -490,7 +518,7 @@ class ActionProvider {
           };
         }
         const aliveQuestion = this.createChatBotMessage(
-          this.QuestionConsts.AliveQuestion(this.getPerson(predecessor._id, state.personsMap)._personID),
+          this.QuestionConsts.AliveQuestion(Person.getPerson(predecessor._id, state.personsMap)._personID),
           this.QuestionConsts.AliveWidgetOptions
         );
         this.addMessageToBotState(aliveQuestion);
@@ -507,14 +535,13 @@ class ActionProvider {
         // if temp_person is not testator, ask child question
         const temp_child = state.temp_child
         temp_person.add_child(temp_child, true);
-        const temp_child_detail = this.getPerson(temp_child._id, state.personsMap)
-        const temp_person_detail = this.getPerson(temp_person._id, state.personsMap)
+        const temp_child_detail = Person.getPerson(temp_child._id, state.personsMap)
+        const temp_person_detail = Person.getPerson(temp_person._id, state.personsMap)
         if (!alive) {
           state = {
             ...state,
             temp_person: temp_child,
             parent_flag: "part1",
-            isChild: true
           }
           temp_child_detail._deceased = true;
 
@@ -546,13 +573,12 @@ class ActionProvider {
         // if temp_person is testator, ask parent question
         const temp_parent = state.temp_parent;
         temp_person.add_parent(temp_parent, true);
-        const temp_parent_detail = this.getPerson(temp_parent._id, state.personsMap)
+        const temp_parent_detail = Person.getPerson(temp_parent._id, state.personsMap)
         if (!alive) {
           state = {
             ...state,
             temp_person: temp_parent,
             parent_flag: "part1",
-            isChild: true
           }
 
           temp_parent_detail._deceased = true;
@@ -575,7 +601,6 @@ class ActionProvider {
             state = {
               ...state,
               parent_flag: "part1",
-              isChild: false
 
             }
             const allParentsID = this.getParentChildrenIDStrings(temp_person._parents, state)
@@ -604,7 +629,7 @@ class ActionProvider {
       if (grandParentResponse === "") {
         const currentParentID = state.temp_person.getParentId();
         if (currentParentID) {
-          const currentGrandParent = this.getNode(currentParentID, state.nodeMap)
+          const currentGrandParent = NodeEntity.getNode(currentParentID, state.nodeMap)
           if (currentGrandParent.getLatestPathKey() !== ParentChildSelector.parent) {
             if (currentGrandParent.getLatestPathKey() === ParentChildSelector.testator) {
               // ask grandparent question for next parent
@@ -620,7 +645,7 @@ class ActionProvider {
               const allChildrenID = this.getParentChildrenIDStrings(currentGrandParent._children, state)
               const newSuccessorQuestion = this.createChatBotMessage(
                 this.QuestionConsts.addSuccessorQuestion2(
-                  this.getPerson(currentGrandParent._id, state.personsMap)._personID,
+                  Person.getPerson(currentGrandParent._id, state.personsMap)._personID,
                   allChildrenID
                 )
               );
@@ -640,7 +665,7 @@ class ActionProvider {
 
               const newParentQuestion = this.createChatBotMessage(
                 this.QuestionConsts.addGrandParentsQuestion2(
-                  this.getPerson(currentParentID, state.personsMap)._personID,
+                  Person.getPerson(currentParentID, state.personsMap)._personID,
                   allParentsID
                 )
               );
@@ -652,14 +677,14 @@ class ActionProvider {
           }
         } else {
           // TODO: validation part
-          if (this.getNode(state.person._id, state.nodeMap)._parents.length === 0) {
+          if (NodeEntity.getNode(state.person._id, state.nodeMap)._parents.length === 0) {
             state = {
               ...state,
               stepID: 14,
               grandParent_flag: "part1"
             };
             const newParentQuestion = this.createChatBotMessage(
-              this.QuestionConsts.addParentsQuestion1(this.getPerson(state.person._id, state.personsMap)._personID)
+              this.QuestionConsts.addParentsQuestion1(Person.getPerson(state.person._id, state.personsMap)._personID)
             );
             const newParentWarning = this.createChatBotMessage(<p>Empty value not allowed</p>)
             this.addMessageToBotState(newParentWarning)
@@ -688,7 +713,7 @@ class ActionProvider {
           };
         }
         const aliveQuestion = this.createChatBotMessage(
-          this.QuestionConsts.AliveQuestion(this.getPerson(predecessor._id, state.personsMap)._personID),
+          this.QuestionConsts.AliveQuestion(Person.getPerson(predecessor._id, state.personsMap)._personID),
           this.QuestionConsts.AliveWidgetOptions
         );
         this.addMessageToBotState(aliveQuestion);
@@ -707,8 +732,8 @@ class ActionProvider {
         // if temp_person is not testator, ask child question
         const temp_child = state.temp_child
         temp_person.add_child(temp_child, true);
-        const temp_child_detail = this.getPerson(temp_child._id, state.personsMap)
-        const temp_person_detail = this.getPerson(temp_person._id, state.personsMap)
+        const temp_child_detail = Person.getPerson(temp_child._id, state.personsMap)
+        const temp_person_detail = Person.getPerson(temp_person._id, state.personsMap)
         console.log(alive, typeof alive);
 
         if (!alive) {
@@ -764,7 +789,7 @@ class ActionProvider {
         // if temp_person is parent, ask next grandparent question
         const temp_parent = state.temp_parent;
         temp_person.add_parent(temp_parent, true, true);
-        const temp_parent_detail = this.getPerson(temp_parent._id, state.personsMap)
+        const temp_parent_detail = Person.getPerson(temp_parent._id, state.personsMap)
         if (!alive) {
           state = {
             ...state,
@@ -816,12 +841,12 @@ class ActionProvider {
       console.log(state);
 
       if (state.deceasedParentsArray.length !== 0) {
-        const grandParentQuestion1 = this.createChatBotMessage(this.QuestionConsts.addGrandParentsQuestion1(this.getPerson(state.deceasedParentsArray[0], state.personsMap)._personID))
+        const grandParentQuestion1 = this.createChatBotMessage(this.QuestionConsts.addGrandParentsQuestion1(Person.getPerson(state.deceasedParentsArray[0], state.personsMap)._personID))
         state = {
           ...state,
           stepID: 14,
           grandParent_flag: "part1",
-          temp_person: this.getNode(state.deceasedParentsArray[0], state.nodeMap),
+          temp_person: NodeEntity.getNode(state.deceasedParentsArray[0], state.nodeMap),
           deceasedParentsArray: state.deceasedParentsArray.filter(item => item !== state.deceasedParentsArray[0])
         }
         this.addMessageToBotState(grandParentQuestion1)
@@ -875,7 +900,7 @@ class ActionProvider {
   closestSurvivingRelativeChildren = () => {
     this.setState((state: ChatbotInterface) => {
       const testator = state.person
-      const testatorDetail = this.getPerson(testator._id, state.personsMap);
+      const testatorDetail = Person.getPerson(testator._id, state.personsMap);
       const temp_class = this.get_class_and_distance_closest_surviving_relative(state.person, state)[0]
       if (temp_class === 1) {
         state = {
@@ -912,7 +937,7 @@ class ActionProvider {
   getParentChildrenIDStrings = (collection: Array<number>, state: ChatbotInterface): string => {
     let allChildrenID = "";
     for (const child_id of collection) {
-      allChildrenID += this.getPerson(child_id, state.personsMap)._personID + ", ";
+      allChildrenID += Person.getPerson(child_id, state.personsMap)._personID + ", ";
     }
     return "{ " + allChildrenID.slice(0, allChildrenID.length - 2) + " }";
   }
@@ -938,12 +963,12 @@ class ActionProvider {
       //   return this.returnState(state)
       // }
       const temp_class = this.get_class_and_distance_closest_surviving_relative(state.person, state)[0]
-      const eitherParentsDeceased = state.person._parents.filter(p_id => { return this.getPerson(p_id, state.personsMap)._deceased }).length !== 0;
-      const personDetail = this.getPerson(state.person._id, state.personsMap)
+      const eitherParentsDeceased = state.person._parents.filter(p_id => { return Person.getPerson(p_id, state.personsMap)._deceased }).length !== 0;
+      const personDetail = Person.getPerson(state.person._id, state.personsMap)
 
       if (state.person._parents.length === 2 && eitherParentsDeceased && temp_class === 2) {
-        const parent1Detail = this.getPerson(state.person._parents[0], state.personsMap)
-        const parent2Detail = this.getPerson(state.person._parents[1], state.personsMap)
+        const parent1Detail = Person.getPerson(state.person._parents[0], state.personsMap)
+        const parent2Detail = Person.getPerson(state.person._parents[1], state.personsMap)
         if (!personDetail._underAge) {
           this.askFinalQuestion()
           return this.returnState(state)
@@ -984,12 +1009,12 @@ class ActionProvider {
   grandParentFirst = () => {
     this.setState((state: ChatbotInterface) => {
 
-      const testatorNode = this.getNode(state.person._id, state.nodeMap);
+      const testatorNode = NodeEntity.getNode(state.person._id, state.nodeMap);
       if (!state.deceasedParentsArray) state.deceasedParentsArray = []
 
       for (const parent_id of testatorNode._parents) {
-        if (this.getPerson(parent_id, state.personsMap)._deceased) {
-          const temp_class = this.get_class_and_distance_closest_surviving_relative(this.getNode(parent_id, state.nodeMap), state)[0]
+        if (Person.getPerson(parent_id, state.personsMap)._deceased) {
+          const temp_class = this.get_class_and_distance_closest_surviving_relative(NodeEntity.getNode(parent_id, state.nodeMap), state)[0]
           if (temp_class !== 1) {
             if (!state.deceasedParentsArray.includes(parent_id))
               state.deceasedParentsArray.push(parent_id)
@@ -998,12 +1023,12 @@ class ActionProvider {
       }
       if (state.deceasedParentsArray.length !== 0) {
 
-        const grandParentQuestion1 = this.createChatBotMessage(this.QuestionConsts.addGrandParentsQuestion1(this.getPerson(state.deceasedParentsArray[0], state.personsMap)._personID))
+        const grandParentQuestion1 = this.createChatBotMessage(this.QuestionConsts.addGrandParentsQuestion1(Person.getPerson(state.deceasedParentsArray[0], state.personsMap)._personID))
         state = {
           ...state,
           stepID: 14,
           grandParent_flag: "part1",
-          temp_person: this.getNode(state.deceasedParentsArray[0], state.nodeMap),
+          temp_person: NodeEntity.getNode(state.deceasedParentsArray[0], state.nodeMap),
           deceasedParentsArray: state.deceasedParentsArray.filter(item => item !== state.deceasedParentsArray[0])
         }
         this.addMessageToBotState(grandParentQuestion1)
@@ -1064,26 +1089,14 @@ class ActionProvider {
     })
     return id;
   }
-  getPerson = (id: number, personMap: Map<number, Person>) => {
-    const person: Person | undefined = personMap.get(id);
-    if (person == undefined) {
-      throw new Error('Person not found with given id:' + id);
-    }
-    return person;
-  }
-  getNode = (id: number, nodeMap: Map<number, NodeEntity>) => {
-    const node: NodeEntity | undefined = nodeMap.get(id);
-    if (node == undefined) {
-      throw new Error('Node not found with given id:' + id);
-    }
-    return node;
-  }
+
+
 
   set_spouse = (firstSpouse_id: number, secondSpouse_id: number, add_for_both: boolean): void => {
     this.setState((state: any) => {
-      this.getNode(firstSpouse_id, state.nodeMap)._spouse = secondSpouse_id
+      NodeEntity.getNode(firstSpouse_id, state.nodeMap)._spouse = secondSpouse_id
       if (add_for_both) {
-        this.getNode(secondSpouse_id, state.nodeMap)._spouse = firstSpouse_id
+        NodeEntity.getNode(secondSpouse_id, state.nodeMap)._spouse = firstSpouse_id
       }
       return this.returnState(state)
     })
@@ -1091,7 +1104,7 @@ class ActionProvider {
 
   }
   surviving_successor_distance = (node: NodeEntity, state: any): number | undefined => {
-    const nodeDetail: Person = this.getPerson(node._id, state.personsMap)
+    const nodeDetail: Person = Person.getPerson(node._id, state.personsMap)
 
 
     if (nodeDetail._deceased === false) return 0;
@@ -1099,7 +1112,7 @@ class ActionProvider {
     else {
       const possible_distances: Array<number> = [];
       for (const child_id of node._children) {
-        const temp = this.surviving_successor_distance(this.getNode(child_id, state.nodeMap), state);
+        const temp = this.surviving_successor_distance(NodeEntity.getNode(child_id, state.nodeMap), state);
         if (temp != undefined) {
           possible_distances.push(1 + temp);
         }
@@ -1120,7 +1133,7 @@ class ActionProvider {
       const alternatives: Array<Array<number | undefined>> = [];
       for (const parent_id of testatorNode._parents) {
         alternatives.push(
-          this.get_class_and_distance_closest_surviving_relative(this.getNode(parent_id, state.nodeMap), state)
+          this.get_class_and_distance_closest_surviving_relative(NodeEntity.getNode(parent_id, state.nodeMap), state)
         );
       }
 
@@ -1141,6 +1154,7 @@ class ActionProvider {
   returnState = (state: ChatbotInterface) => {
     this.check();
     this.glb_state = state;
+
     return state;
   }
   resetChatbot = () => {
@@ -1157,7 +1171,6 @@ class ActionProvider {
         temp_person: new NodeEntity(0, 0),
         temp_child: new NodeEntity(0, 0),
         temp_parent: new NodeEntity(0, 0),
-        isChild: false,
         personsMap: new Map(),
         level: 0,
         nodeMap: new Map(),

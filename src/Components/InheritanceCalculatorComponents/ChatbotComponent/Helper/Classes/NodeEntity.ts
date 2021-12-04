@@ -94,4 +94,17 @@ export class NodeEntity {
     });
     return level;
   };
+
+  static getNode = (id: number, nodeMap: Map<number, NodeEntity>) => {
+    const node: NodeEntity | undefined = nodeMap.get(id);
+    if (node == undefined) {
+      throw new Error("Node not found with given id:" + id);
+    }
+    return node;
+  };
+
+  setPathforPartner = (partnerSelector: number, partner: NodeEntity) => {
+    partner._path = [...this._path];
+    partner._path.push([partnerSelector, partner._id]);
+  };
 }

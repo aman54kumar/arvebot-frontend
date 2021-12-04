@@ -13,13 +13,11 @@ export interface ChatbotInterface {
   caseName: string;
   netWealth: { intValue: number; strValue: string };
   undividedEstate: boolean;
-  max_depth: number | null;
   successor_flag: string;
   parent_flag: string;
   temp_person: NodeEntity;
   temp_child: NodeEntity;
   temp_parent: NodeEntity;
-  isChild: boolean;
   personsMap: Map<number, Person>;
   nodeMap: Map<number, NodeEntity>;
   id: number;
@@ -34,13 +32,11 @@ export const ChatbotState: ChatbotInterface = {
   caseName: "",
   netWealth: { intValue: 0, strValue: "" },
   undividedEstate: false,
-  max_depth: null,
   successor_flag: successor_parent_flag.none,
   parent_flag: successor_parent_flag.none,
   temp_person: new NodeEntity(0, 0),
   temp_child: new NodeEntity(0, 0),
   temp_parent: new NodeEntity(0, 0),
-  isChild: false,
   personsMap: new Map(),
   nodeMap: new Map(),
   id: 1,

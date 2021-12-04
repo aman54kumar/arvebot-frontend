@@ -6,46 +6,55 @@ import MessageParser from "../Components/InheritanceCalculatorComponents/Chatbot
 import ActionProvider from "../Components/InheritanceCalculatorComponents/ChatbotComponent/ActionProvider";
 // import validator from "../Components/InheritanceCalculatorComponents/ChatbotComponent/Validator";
 import OrgChartTree from "../Components/InheritanceCalculatorComponents/OtherComponent/FamilyChart/ChartComponent.js";
-import { ChatbotState } from "../Components/InheritanceCalculatorComponents/ChatbotComponent/Generics.ts";
 import ChatbotToggleButton from "../Components/InheritanceCalculatorComponents/OtherComponent/ChatbotToggleButton/ChatbotToggleButton";
 import "../Components/InheritanceCalculatorComponents/OtherComponent/ChatbotToggleButton/ChatbotToggleButton.scss";
 import botIcon from "../assets/images/chat_button_logo.svg";
 import { useDispatch } from "react-redux";
-// import updateGeneric from "../store/genericActions.js";
-
+import { messageSelector } from "../store/chartSelector.js";
+import { useSelector } from "react-redux";
+import { ReactFlowProvider } from "react-flow-renderer";
 const InheritanceCalculatorPage = () => {
-  const [showBot, toggleBot] = useState(true);
+  let prev = "block";
   const dispatch = useDispatch();
-
   document.addEventListener("build", ({ detail }) => {
     dispatch({
       type: "UPDATE_GENERIC",
       payload: detail,
     });
   });
-
+  const toggleBot = () => {
+    const divChatBot = document.getElementsByClassName(
+      "react-chatbot-kit-chat-container"
+    )[0];
+    if (prev === "block") {
+      divChatBot.style.display = "none";
+      prev = "none";
+    } else {
+      divChatBot.style.display = "block";
+      prev = "block";
+    }
+  };
   return (
-    <div>
+    <div id="InheritanceCalculatorMain" style={{ height: "100%" }}>
       <Typography variant="h2" align="center">
         Inheritance Calculator
       </Typography>
-      <OrgChartTree />
-      <div className="ChatbotContainer">
-        {showBot && (
-          <Chatbot
-            config={Config}
-            messageParser={MessageParser}
-            actionProvider={ActionProvider}
-          />
-        )}
-        {/* <ChatbotToggleButton show={prev} clickHandler={toggleBot} /> */}
-        <button
-          className="ChatbotToggleButton"
-          onClick={() => toggleBot((prev) => !prev)}
-        >
-          <img src={botIcon} />
-        </button>
-      </div>
+      <ReactFlowProvider>
+        <OrgChartTree />
+      </ReactFlowProvider>
+      {/* <div className="ChatbotContainer"> */}
+      {
+        <Chatbot
+          config={Config}
+          actionProvider={ActionProvider}
+          messageParser={MessageParser}
+        />
+      }
+      {/* <ChatbotToggleButton show={prev} clickHandler={toggleBot} /> */}
+      <button className="ChatbotToggleButton" onClick={toggleBot}>
+        <img src={botIcon} />
+      </button>
+      {/* </div> */}
     </div>
   );
 };

@@ -1,30 +1,41 @@
 import { useSelector } from "react-redux";
-import ReactFlow, { Background, Controls } from "react-flow-renderer";
+import ReactFlow, {
+  Background,
+  Controls,
+  ReactFlowProvider,
+} from "react-flow-renderer";
+import chartSelector from "../../../../store/chartSelector";
+import { processData } from "./ProcessDataForChart";
+
+import { useEffect, useRef } from "react";
+import { useZoomPanHelper } from "react-flow-renderer";
 
 const elements = [
   {
     id: "1",
     type: "input",
-    data: { label: "Node 1" },
-    position: { x: 0, y: 0 },
+    data: { label: "firstNode" },
+    position: { x: 20, y: 20 },
+    draggable: false,
+    connectable: false,
   },
 ];
 
-const flowStyles = { height: 500 };
+const flowStyles = { height: "80vh" };
+
 const OrgChartTree = () => {
-  const final = useSelector((state) => {
-    if (state) return state;
+  const result = useSelector(chartSelector);
+  const chartContent = processData(result);
+  const { fitView } = useZoomPanHelper();
+
+  useEffect(() => {
+    fitView({ padding: 0.1 });
   });
 
-  let finalString = "";
-  console.log(final);
-  for (const value of final.nodeMap.values()) {
-    finalString += JSON.stringify(value);
-  }
   return (
-    <div>
-      <ReactFlow elements={elements} style={flowStyles}>
-        <Background variant="lines" gap={2} size={4} />
+    <div id="ChartContainer" style={{ height: "100%", paddingTop: "3rem" }}>
+      <ReactFlow elements={chartContent} style={flowStyles}>
+        <Background variant="dots" gap={1} size={2} />
         <Controls />
       </ReactFlow>
     </div>
@@ -32,24 +43,3 @@ const OrgChartTree = () => {
 };
 
 export default OrgChartTree;
-// export default function OrgChartTree() {
-//   // let [message, setMessage] = useState({});
-//   const final = useSelector((state) => {
-//     if (state) return state;
-//   });
-
-//   let finalString = "";
-//   for (const value of final.nodeMap.values()) {
-//     finalString += JSON.stringify(value);
-//   }
-//   return (
-//     // `<Tree />` will fill width/height of its container; in this case `#treeWrapper`.
-//     <div
-//       id="treeWrapper"
-//       style={{ width: "50em", height: "50em", backgroundColor: "gray" }}
-//     >
-//       {/* <div>{finalString}</div> */}
-//       {/* {<Tree data={orgChart} />} */}
-//     </div>
-//   );
-// }

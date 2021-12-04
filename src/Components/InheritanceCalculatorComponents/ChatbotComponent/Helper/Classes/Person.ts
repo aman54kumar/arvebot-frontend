@@ -3,6 +3,8 @@ export enum ParentChildSelector {
   parent = 1,
   testator = -1,
   grandParent = 2,
+  spouse = 3,
+  cohabitant = 4,
 }
 
 export default class Person {
@@ -67,6 +69,14 @@ export default class Person {
     if (!this._cohabitant) console.log(this._cohabitant == cohabitant);
     else this._cohabitant = cohabitant;
     if (add_for_both) cohabitant.set_cohabitant(this, false);
+  };
+
+  static getPerson = (id: number, personMap: Map<number, Person>) => {
+    const person: Person | undefined = personMap.get(id);
+    if (person == undefined) {
+      throw new Error("Person not found with given id:" + id);
+    }
+    return person;
   };
 
   // has_surviving_cohabitant_with_common_child = (): boolean => {
