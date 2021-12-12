@@ -1,13 +1,16 @@
 import "./OptionSelector.scss";
 import { FormattedMessage } from "react-intl";
 import { ReactElement } from "react";
+import { ChatbotInterface } from "../../../Generics";
 
 
 const OptionSelector = (props: any): ReactElement => {
   const { actionProvider, setState } = props;
 
-  const setOption = (option: any) => {
-    setState((state: any) => {
+  const setOption = (option: boolean) => {
+    setState((state: ChatbotInterface) => {
+      console.log(option, typeof option);
+
       const curStep = state.stepID;
       switch (curStep) {
         case 2: {

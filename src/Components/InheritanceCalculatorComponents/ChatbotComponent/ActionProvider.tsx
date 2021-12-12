@@ -40,20 +40,6 @@ class ActionProvider {
     this.stateRef = stateRef;
   }
 
-  // function check(fn, context) {
-  //   var result;
-
-  //   return function() {
-  //     if(fn) {
-  //       result = fn.apply(context || this, arguments);
-  //       fn = null;
-  //     }
-
-  //     return result;
-  //   };
-  // }
-
-
   check = () => {
     const self = this
     if (this.isStarted) {
@@ -250,7 +236,6 @@ class ActionProvider {
         const newSpouse = this.createNewPerson(spouseID, state)
         state.person._spouse = newSpouse._id
         state.person.setPathforPartner(ParentChildSelector.spouse, newSpouse)
-
         if (state.netWealth.intValue <=
           this.InheritanceConstants.MINIMUM_INHERITANCE_SPOUSE_VS_CHILDREN) {
           state = {
@@ -262,6 +247,7 @@ class ActionProvider {
             this.QuestionConsts.RearChildrenWidgetOptions
           );
           this.addMessageToBotState(rearChildrenQuestion);
+          return this.returnState(state);
         }
 
         state = {
@@ -272,9 +258,13 @@ class ActionProvider {
         const newSuccessorQuestion = this.createChatBotMessage(
           this.QuestionConsts.addSuccessorQuestion1(testator._personID)
         );
+        console.log(state);
+
         this.addMessageToBotState(newSuccessorQuestion);
+        return this.returnState(state);
       }
-      if (!testator._underAge && testator.spouse === null) {
+
+      else if (!testator._underAge && testator.spouse === undefined) {
         state = {
           ...state,
           stepID: 6,
@@ -283,21 +273,24 @@ class ActionProvider {
           this.QuestionConsts.CohabitantQuestion
         );
         this.addMessageToBotState(cohabitantQuestion);
+        return this.returnState(state);
       }
 
-      // if (state.netWealth.intValue <=
-      //   this.InheritanceConstants.MINIMUM_INHERITANCE_SPOUSE_VS_CHILDREN) {
-      //   state = {
-      //     ...state,
-      //     stepID: 10
-      //   }
-      //   const rearChildrenQuestion = this.createChatBotMessage(
-      //     this.QuestionConsts.RearChildrenQuestion,
-      //     this.QuestionConsts.RearChildrenWidgetOptions
-      //   );
-      //   this.addMessageToBotState(rearChildrenQuestion);
-      // }
-      return this.returnState(state);
+      else {
+        state = {
+          ...state,
+          stepID: 7,
+          successor_flag: "part1",
+        };
+        const newSuccessorQuestion = this.createChatBotMessage(
+          this.QuestionConsts.addSuccessorQuestion1(testator._personID)
+        );
+        this.addMessageToBotState(newSuccessorQuestion);
+        return this.returnState(state);
+      }
+
+
+      // return this.returnState(state);
     });
 
   }
@@ -312,40 +305,54 @@ class ActionProvider {
     const cohabitantID = cohabitantResponse;
     this.setState((state: ChatbotInterface) => {
       const testator = Person.getPerson(state.person._id, state.personsMap)
+
       if (cohabitantID !== "") {
 
-        if (cohabitantID !== "") {
+        const newCohabitant = this.createNewPerson(cohabitantID, state)
+        state.person._cohabitant = newCohabitant._id
+        state.person.setPathforPartner(ParentChildSelector.cohabitant, newCohabitant)
+
+        if (state.netWealth.intValue <=
+          this.InheritanceConstants.MINIMUM_INHERITANCE_SPOUSE_VS_CHILDREN) {
           state = {
             ...state,
-            stepID: 7,
-            successor_flag: "part1",
-          };
-          const newCohabitant = this.createNewPerson(cohabitantID, state)
-          state.person._cohabitant = newCohabitant._id
-          state.person.setPathforPartner(ParentChildSelector.cohabitant, newCohabitant)
-
-          const newSuccessorQuestion = this.createChatBotMessage(
-            this.QuestionConsts.addSuccessorQuestion1(testator._personID)
+            stepID: 10
+          }
+          const rearChildrenQuestion = this.createChatBotMessage(
+            this.QuestionConsts.RearChildrenQuestion,
+            this.QuestionConsts.RearChildrenWidgetOptions
           );
-          this.addMessageToBotState(newSuccessorQuestion);
+          this.addMessageToBotState(rearChildrenQuestion);
+          return this.returnState(state);
         }
-        // if (
-        //   state.netWealth.intValue <=
-        //   this.InheritanceConstants.MINIMUM_INHERITANCE_COHABITANT_VS_CHILDREN
-        // ) {
 
-        //   state = {
-        //     ...state,
-        //     stepID: 10
-        //   }
-        //   const rearChildrenQuestion = this.createChatBotMessage(
-        //     this.QuestionConsts.RearChildrenQuestion,
-        //     this.QuestionConsts.RearChildrenWidgetOptions
-        //   );
-        //   this.addMessageToBotState(rearChildrenQuestion);
-        // }
+        state = {
+          ...state,
+          stepID: 7,
+          successor_flag: "part1",
+        };
+
+
+        const newSuccessorQuestion = this.createChatBotMessage(
+          this.QuestionConsts.addSuccessorQuestion1(testator._personID)
+        );
+        this.addMessageToBotState(newSuccessorQuestion);
+        return this.returnState(state);
       }
-      return this.returnState(state);
+
+      else {
+        state = {
+          ...state,
+          stepID: 7,
+          successor_flag: "part1",
+        };
+        const newSuccessorQuestion = this.createChatBotMessage(
+          this.QuestionConsts.addSuccessorQuestion1(testator._personID)
+        );
+        this.addMessageToBotState(newSuccessorQuestion);
+        return this.returnState(state);
+      }
+
     });
   };
 
@@ -414,6 +421,7 @@ class ActionProvider {
           )
         );
         this.addMessageToBotState(newSuccessorQuestion);
+        return this.returnState(state);
       }
       else {
         childDetail._deceased = false;
@@ -429,8 +437,9 @@ class ActionProvider {
           )
         );
         this.addMessageToBotState(newSuccessorQuestion);
+        return this.returnState(state);
       }
-      return this.returnState(state);
+      // return this.returnState(state);
     });
   };
 
@@ -574,6 +583,7 @@ class ActionProvider {
         const temp_parent = state.temp_parent;
         temp_person.add_parent(temp_parent, true);
         const temp_parent_detail = Person.getPerson(temp_parent._id, state.personsMap)
+        console.log(typeof alive, alive);
         if (!alive) {
           state = {
             ...state,
@@ -591,7 +601,7 @@ class ActionProvider {
             )
           );
           this.addMessageToBotState(newSuccessorQuestion);
-
+          return this.returnState(state)
         }
         else {
 
@@ -866,9 +876,7 @@ class ActionProvider {
         this.askFinalQuestion()
       }
       else {
-        // grandparentqn
-        this.askFinalQuestion()
-
+        this.grandParentFirst()
       }
       return this.returnState(state)
     })
@@ -892,7 +900,7 @@ class ActionProvider {
         rearChildrenResponse: rearChildrenResponse
       }
       this.askFinalQuestion()
-
+      return this.returnState(state)
     })
 
   };
@@ -912,15 +920,15 @@ class ActionProvider {
         return this.returnState(state)
       }
 
-      // if (testator._spouse !== null && state.netWealth.intValue <= this.InheritanceConstants.MINIMUM_INHERITANCE_SPOUSE_VS_CHILDREN) {
-      //   this.askFinalQuestion();
-      //   return this.returnState(state)
-      // }
+      if (testator._spouse !== null && state.netWealth.intValue <= this.InheritanceConstants.MINIMUM_INHERITANCE_SPOUSE_VS_CHILDREN) {
+        this.askFinalQuestion();
+        return this.returnState(state)
+      }
 
-      // if (testator._cohabitant !== null && state.netWealth.intValue <= this.InheritanceConstants.MINIMUM_INHERITANCE_COHABITANT_VS_CHILDREN) {
-      //   this.askFinalQuestion();
-      //   return this.returnState(state)
-      // }
+      if (testator._cohabitant !== null && state.netWealth.intValue <= this.InheritanceConstants.MINIMUM_INHERITANCE_COHABITANT_VS_CHILDREN) {
+        this.askFinalQuestion();
+        return this.returnState(state)
+      }
       state = {
         ...state,
         stepID: 8,
@@ -958,10 +966,10 @@ class ActionProvider {
     console.log('Parents completed')
     this.setState((state: ChatbotInterface) => {
       // TODO uncomment this
-      // if (state.person._spouse !== null) {
-      //   this.askFinalQuestion()
-      //   return this.returnState(state)
-      // }
+      if (state.person._spouse !== null) {
+        this.askFinalQuestion()
+        return this.returnState(state)
+      }
       const temp_class = this.get_class_and_distance_closest_surviving_relative(state.person, state)[0]
       const eitherParentsDeceased = state.person._parents.filter(p_id => { return Person.getPerson(p_id, state.personsMap)._deceased }).length !== 0;
       const personDetail = Person.getPerson(state.person._id, state.personsMap)
@@ -987,7 +995,7 @@ class ActionProvider {
           this.addMessageToBotState(marriedParentsQn)
           return this.returnState(state)
         }
-        if (parent2Detail._deceased) {
+        else {
           state = {
             ...state,
             stepID: 12
@@ -1151,12 +1159,14 @@ class ActionProvider {
       return [closest_alternative_class + 1, closest_alternative_distance];
     }
   };
+
   returnState = (state: ChatbotInterface) => {
     this.check();
     this.glb_state = state;
 
     return state;
   }
+
   resetChatbot = () => {
     this.setState((state: any) => {
       state = {
@@ -1188,11 +1198,3 @@ class ActionProvider {
 }
 
 export default ActionProvider;
-
-/**
- * * this code is for processing currency numbers to format: kr 123.456
-//  * ? const finalCurrency = new Intl.NumberFormat("nb-NB", {
- * ? style: "currency",
- * ? currency: "NOK",
- * ? currencyDisplay: "narrowSymbol",
- * ? }).format(outputCurrency);*/
