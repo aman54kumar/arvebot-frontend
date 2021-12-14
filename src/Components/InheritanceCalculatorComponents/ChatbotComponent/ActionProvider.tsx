@@ -46,8 +46,6 @@ class ActionProvider {
       this.checkstate = setInterval(() => {
         if (self.glb_state !== null) {
           self.isStarted = false;
-          // console.log(self.glb_state);
-          // localStorage.setItem("chat_messages", JSON.stringify(self.glb_state.messages))
           const customEvent = new CustomEvent("build", { detail: self.glb_state })
           const messagesEvent = new CustomEvent("getMessages", { detail: self.glb_state.messages })
           document.dispatchEvent(customEvent)
@@ -56,9 +54,10 @@ class ActionProvider {
           self.glb_state = null;
           clearInterval(this.checkstate)
         }
-      }, 1000)
+      }, 0)
     }
   }
+
   handleCaseName = (caseNameResponse: string): void => {
     /**
      *  * function for handling caseName replies. open reply currently.
@@ -93,65 +92,178 @@ class ActionProvider {
       this.QuestionConsts.UndividedEstateQuestion,
       this.QuestionConsts.UndividedEstateWidgetOptions
     );
-
     this.setState((state: ChatbotInterface) => ({
       ...state,
       stepID: 2,
       person: this.createTestator(testatorResponse, state),
     }));
-
     this.setState((state: ChatbotInterface) => ({
-
       ...state,
       temp_person: state.person,
-
-      // state.person._path = [[ParentChildSelector.testator, state.person._id]]
-
     }));
-    this.setState((state: ChatbotInterface) => {
-      return this.returnState(state);
-    });
-    // this.setState((state: ChatbotInterface) => {
-    //   const customEvent = new CustomEvent("build", { detail: state })
-    //   document.dispatchEvent(customEvent)
-    //   return this.returnState(state)
-    // })
-
-
     this.addMessageToBotState(undividedEstateQuestion);
   };
 
-  handleUndividedEstate = (undividedEstateResponse: string): void => {
+  handleUndividedEstateChoice = (undividedEstateChoiceResponse: boolean): void => {
     // TODO: implement Yes/No conditions for undivided states.
     // TODO: need to fix the values in object and correctly implement the whole algorithm
     // TODO: check for correct text for the questions. (last step, the format of questions already available)
+    this.setState((state: ChatbotInterface) => {
+      const undividedEstateResponseModifiedResult =
+        this.QuestionConsts.UndividedEstateResultText(`${undividedEstateChoiceResponse}`);
 
-    // const selectedOption = this.QuestionConsts.UndividedEstateResultText(
-    //   undividedEstateResponse
-    // );
-    this.setState((state: ChatbotInterface) => ({
-      ...state,
-      stepID: 3,
-      undividedEstate: undividedEstateResponse,
-    }));
+      const undividedEstateClientMessage = this.createClientMessage(
+        undividedEstateResponseModifiedResult
+      );
+      this.addMessageToBotState(undividedEstateClientMessage);
 
-    const undividedEstateResponseModifiedResult =
-      this.QuestionConsts.UndividedEstateResultText(undividedEstateResponse);
+      if (undividedEstateChoiceResponse) {
+        state = {
+          ...state,
+          stepID: 3,
+          undividedEstate: { ...state.undividedEstate, undivided_flag: "part1", undividedEstateChoice: undividedEstateChoiceResponse }
 
-    const undividedEstateClientMessage = this.createClientMessage(
-      undividedEstateResponseModifiedResult
-    );
-    this.addMessageToBotState(undividedEstateClientMessage);
+        }
 
-    const netWealthQuestion = this.createChatBotMessage(
-      this.QuestionConsts.NetWealthQuestion
-    );
+        const totalEstateNetValueQuestion = this.createChatBotMessage(
+          this.QuestionConsts.TotalEstateNetValueQuestion
+        )
+        this.addMessageToBotState(totalEstateNetValueQuestion)
+        return this.returnState(state)
+      }
+
+      else {
+        state = {
+          ...state,
+          stepID: 3,
+          undividedEstate: { ...state.undividedEstate, undivided_flag: "part6", undividedEstateChoice: undividedEstateChoiceResponse }
+        }
+        const netWealthQuestion = this.createChatBotMessage(
+          this.QuestionConsts.NetWealthQuestion
+        );
+        this.addMessageToBotState(netWealthQuestion);
+        return this.returnState(state)
+      }
+    })
+  };
+
+  handleTotalEstateValueResponse = (totalEstateValueResponse: string): void => {
+    this.setState((state: ChatbotInterface) => {
+      const totalEstateValueQuestion = this.createChatBotMessage(this.QuestionConsts.TotalEstateNetValueQuestion)
+      const currencyIntResponse = CurrencyOutput(totalEstateValueResponse)
+      const currencyStringResponse = ParseCurrencyStringForOutput(currencyIntResponse[1])
+      const currencyJSX = <InfoMessagesWidget label={currencyStringResponse} />
+      if (currencyIntResponse[0] === 5) {
+        const ownershipTypeQuestion = this.createChatBotMessage(this.QuestionConsts.OwnershipTypeQuestion, this.QuestionConsts.OwnershipQuestionWidgetOptions)
+        state = {
+          ...state,
+          undividedEstate: { ...state.undividedEstate, undivided_flag: "part2", totalEstateValue: parseInt(currencyIntResponse[1]) }
+
+        }
+        const currencyCustom = this.createClientMessage(currencyJSX)
+        this.addMessageToBotState(currencyCustom)
+        this.addMessageToBotState(ownershipTypeQuestion)
+      }
+
+      else {
+        const totalEstateWarning = this.createChatBotMessage(
+          this.QuestionConsts.TotalEstateNetValueWarning
+        );
+
+        this.addMessageToBotState(totalEstateWarning);
+        this.addMessageToBotState(totalEstateValueQuestion);
+      }
+
+      return this.returnState(state)
+    })
+  }
+
+  handleOwnershipResponse = (ownershipResponse: string): void => {
+    this.setState((state: ChatbotInterface) => {
+      if (ownershipResponse === "FELLESEIE") {
+        state = {
+          ...state,
+          undividedEstate: {
+            ...state.undividedEstate,
+            undivided_flag: "part6",
+            undividedEstateSeparateWealth: state.undividedEstate.totalEstateValue / 2,
+          },
+
+          netWealth: state.undividedEstate.totalEstateValue / 2
+        }
+
+
+      }
+      if (ownershipResponse === "DELVIS SÆREIE") {
+        state = {
+          ...state,
+          undividedEstate: { ...state.undividedEstate, undivided_flag: "part3" }
+        }
+        const delvisFirstQuestion = this.createChatBotMessage(this.QuestionConsts.DelvisFirstQuestion);
+        this.addMessageToBotState(delvisFirstQuestion)
+
+        // ask first question
+      }
+      if (ownershipResponse === "FULLT SÆREIE") {
+        state = {
+          ...state,
+          undividedEstate: { ...state.undividedEstate, undivided_flag: "part5" }
+        }
+
+      }
+      console.log(state);
+      return this.returnState(state)
+    });
+  }
+
+  handleDelvisFirstResponse = (delvisFirstResponse: string): void => {
     this.setState((state: ChatbotInterface) => {
 
-      return this.returnState(state);
-    });
-    this.addMessageToBotState(netWealthQuestion);
-  };
+      state = {
+        ...state,
+        undividedEstate: { ...state.undividedEstate, undivided_flag: "part4" }
+      }
+
+      return this.returnState(state)
+    })
+  }
+
+  handleDelvisSecondResponse = (delvisSecondResponse: string): void => {
+    this.setState((state: ChatbotInterface) => {
+      state = {
+        ...state,
+        undividedEstate: { ...state.undividedEstate, undivided_flag: "part6", undividedEstateSeparateWealth: (state.undividedEstate.totalEstateValue - state.undividedEstate.temp_last - state.undividedEstate.temp_first) / 2 + state.undividedEstate.temp_first },
+        netWealth: (state.undividedEstate.totalEstateValue - state.undividedEstate.temp_last - state.undividedEstate.temp_first) / 2 + state.undividedEstate.temp_last,
+      }
+
+      return this.returnState(state)
+    })
+  }
+
+  handleFulltSaereieResponse = (fulltSaereieResponse: string): void => {
+    this.setState((state: ChatbotInterface) => {
+      state = {
+        ...state,
+        undividedEstate: { ...state.undividedEstate, undivided_flag: "part6", undividedEstateSeparateWealth: state.undividedEstate.totalEstateValue - parseInt(fulltSaereieResponse) },
+        netWealth: parseInt(fulltSaereieResponse),
+
+
+      }
+
+      return this.returnState(state)
+    })
+  }
+
+  handleUndividedEstateSpouse = (undividedEstateSpouseResponse: string): void => {
+    this.setState((state: ChatbotInterface) => {
+
+      state = {
+        ...state,
+        stepID: 4
+      }
+      return this.returnState(state)
+    })
+  }
 
   handleNetWealth(currencyResponse: string): void {
     /**
@@ -165,8 +277,6 @@ class ActionProvider {
     const currencyIntResponse = CurrencyOutput(currencyResponse)
     const currencyStringResponse = ParseCurrencyStringForOutput(currencyIntResponse[1])
     const currencyJSX = <InfoMessagesWidget label={currencyStringResponse} />
-    console.log(currencyStringResponse);
-
     if (currencyIntResponse[0] === 5) {
 
       const underAgeQuestion = this.createChatBotMessage(
@@ -175,16 +285,11 @@ class ActionProvider {
       );
       const currencyCustom = this.createClientMessage(currencyJSX)
       this.addMessageToBotState(currencyCustom)
-
       this.setState((state: ChatbotInterface) => {
         state = {
           ...state,
           stepID: 4,
-          netWealth: {
-            ...state.netWealth,
-            intValue: parseInt(currencyIntResponse[1]),
-            strValue: currencyStringResponse,
-          },
+          netWealth: parseInt(currencyIntResponse[1]),
         }
         return this.returnState(state)
       });
@@ -236,7 +341,7 @@ class ActionProvider {
         const newSpouse = this.createNewPerson(spouseID, state)
         state.person._spouse = newSpouse._id
         state.person.setPathforPartner(ParentChildSelector.spouse, newSpouse)
-        if (state.netWealth.intValue <=
+        if (state.netWealth <=
           this.InheritanceConstants.MINIMUM_INHERITANCE_SPOUSE_VS_CHILDREN) {
           state = {
             ...state,
@@ -312,7 +417,7 @@ class ActionProvider {
         state.person._cohabitant = newCohabitant._id
         state.person.setPathforPartner(ParentChildSelector.cohabitant, newCohabitant)
 
-        if (state.netWealth.intValue <=
+        if (state.netWealth <=
           this.InheritanceConstants.MINIMUM_INHERITANCE_SPOUSE_VS_CHILDREN) {
           state = {
             ...state,
@@ -491,17 +596,19 @@ class ActionProvider {
         } else {
           // TODO: validation part
           if (NodeEntity.getNode(state.person._id, state.nodeMap)._parents.length === 0) {
-            state = {
-              ...state,
-              stepID: 8,
-              parent_flag: "part1"
-            };
-            const newParentQuestion = this.createChatBotMessage(
-              this.QuestionConsts.addParentsQuestion1(Person.getPerson(state.person._id, state.personsMap)._personID)
-            );
-            const newParentWarning = this.createChatBotMessage(<p>Empty value not allowed</p>)
-            this.addMessageToBotState(newParentWarning)
-            this.addMessageToBotState(newParentQuestion);
+            // state = {
+            //   ...state,
+            //   stepID: 8,
+            //   parent_flag: "part1"
+            // };
+            // const newParentQuestion = this.createChatBotMessage(
+            //   this.QuestionConsts.addParentsQuestion1(Person.getPerson(state.person._id, state.personsMap)._personID)
+            // );
+            // const newParentWarning = this.createChatBotMessage(<p>Empty value not allowed</p>)
+            // this.addMessageToBotState(newParentWarning)
+            // this.addMessageToBotState(newParentQuestion);
+            this.askFinalQuestion()
+
           }
           else {
             console.log(state);
@@ -583,7 +690,6 @@ class ActionProvider {
         const temp_parent = state.temp_parent;
         temp_person.add_parent(temp_parent, true);
         const temp_parent_detail = Person.getPerson(temp_parent._id, state.personsMap)
-        console.log(typeof alive, alive);
         if (!alive) {
           state = {
             ...state,
@@ -744,8 +850,6 @@ class ActionProvider {
         temp_person.add_child(temp_child, true);
         const temp_child_detail = Person.getPerson(temp_child._id, state.personsMap)
         const temp_person_detail = Person.getPerson(temp_person._id, state.personsMap)
-        console.log(alive, typeof alive);
-
         if (!alive) {
           if (temp_child._path.length <= this.GRANDCHILDREN_PATH_LIMIT) {
             // if depth of grandparent's kids is less than 2 (PATH_LEVEL<=5)
@@ -920,12 +1024,12 @@ class ActionProvider {
         return this.returnState(state)
       }
 
-      if (testator._spouse !== null && state.netWealth.intValue <= this.InheritanceConstants.MINIMUM_INHERITANCE_SPOUSE_VS_CHILDREN) {
+      if (testator._spouse !== null && state.netWealth <= this.InheritanceConstants.MINIMUM_INHERITANCE_SPOUSE_VS_PARENTS) {
         this.askFinalQuestion();
         return this.returnState(state)
       }
 
-      if (testator._cohabitant !== null && state.netWealth.intValue <= this.InheritanceConstants.MINIMUM_INHERITANCE_COHABITANT_VS_CHILDREN) {
+      if (testator._cohabitant !== null && state.netWealth <= this.InheritanceConstants.MINIMUM_INHERITANCE_COHABITANT_VS_PARENTS) {
         this.askFinalQuestion();
         return this.returnState(state)
       }
@@ -962,8 +1066,8 @@ class ActionProvider {
     })
 
   }
+
   closestSurvivingRelativeParents = () => {
-    console.log('Parents completed')
     this.setState((state: ChatbotInterface) => {
       // TODO uncomment this
       if (state.person._spouse !== null) {
@@ -1080,6 +1184,7 @@ class ActionProvider {
     state.nodeMap.set(newNode._id, newNode);
     return newNode;
   }
+
   createTestator = (personID: string, state: any) => {
     const newPerson = new Person(personID, this.generateNextID(state.id))
     newPerson._deceased = true;
@@ -1090,6 +1195,22 @@ class ActionProvider {
     return newNode;
   }
 
+  getPerson = (id: number, personMap: Map<number, Person>) => {
+    const person: Person | undefined = personMap.get(id);
+    if (person == undefined) {
+      throw new Error("Person not found with given id:" + id);
+    }
+    return person;
+  };
+
+  getNode = (id: number, nodeMap: Map<number, NodeEntity>) => {
+    const node: NodeEntity | undefined = nodeMap.get(id);
+    if (node == undefined) {
+      throw new Error("Node not found with given id:" + id);
+    }
+    return node;
+  };
+
   generateNextID = (id: number) => {
     this.setState((state: any) => {
       state.id = state.id + 1
@@ -1097,8 +1218,6 @@ class ActionProvider {
     })
     return id;
   }
-
-
 
   set_spouse = (firstSpouse_id: number, secondSpouse_id: number, add_for_both: boolean): void => {
     this.setState((state: any) => {
@@ -1111,6 +1230,7 @@ class ActionProvider {
 
 
   }
+
   surviving_successor_distance = (node: NodeEntity, state: any): number | undefined => {
     const nodeDetail: Person = Person.getPerson(node._id, state.personsMap)
 
@@ -1160,7 +1280,7 @@ class ActionProvider {
     }
   };
 
-  returnState = (state: ChatbotInterface) => {
+  returnState = (state: any) => {
     this.check();
     this.glb_state = state;
 

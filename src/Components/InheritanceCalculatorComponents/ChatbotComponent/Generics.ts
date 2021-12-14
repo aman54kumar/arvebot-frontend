@@ -11,8 +11,7 @@ export interface ChatbotInterface {
   stepID: number;
   person: NodeEntity;
   caseName: string;
-  netWealth: { intValue: number; strValue: string };
-  undividedEstate: boolean;
+  netWealth: number;
   successor_flag: string;
   parent_flag: string;
   temp_person: NodeEntity;
@@ -24,14 +23,21 @@ export interface ChatbotInterface {
   deceasedParentsArray: Array<number>;
   grandParent_flag: string;
   rearChildrenResponse: boolean;
+  undividedEstate: {
+    undividedEstateChoice: boolean;
+    undivided_flag: string;
+    totalEstateValue: number;
+    undividedEstateSeparateWealth: number;
+    temp_first: number;
+    temp_last: number;
+  };
 }
 
 export const ChatbotState: ChatbotInterface = {
   stepID: 0,
   person: new NodeEntity(0, 0),
   caseName: "",
-  netWealth: { intValue: 0, strValue: "" },
-  undividedEstate: false,
+  netWealth: 0,
   successor_flag: successor_parent_flag.none,
   parent_flag: successor_parent_flag.none,
   temp_person: new NodeEntity(0, 0),
@@ -43,4 +49,12 @@ export const ChatbotState: ChatbotInterface = {
   deceasedParentsArray: [],
   grandParent_flag: successor_parent_flag.none,
   rearChildrenResponse: false,
+  undividedEstate: {
+    undividedEstateChoice: false,
+    undivided_flag: successor_parent_flag.none,
+    totalEstateValue: 0,
+    undividedEstateSeparateWealth: 0,
+    temp_first: 0,
+    temp_last: 0,
+  },
 };

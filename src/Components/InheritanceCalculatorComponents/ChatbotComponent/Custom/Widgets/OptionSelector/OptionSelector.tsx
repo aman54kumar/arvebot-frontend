@@ -9,12 +9,10 @@ const OptionSelector = (props: any): ReactElement => {
 
   const setOption = (option: boolean) => {
     setState((state: ChatbotInterface) => {
-      console.log(option, typeof option);
-
       const curStep = state.stepID;
       switch (curStep) {
         case 2: {
-          actionProvider.handleUndividedEstate(option);
+          actionProvider.handleUndividedEstateChoice(option);
           break;
         }
         case 4: {

@@ -27,7 +27,25 @@ class MessageParser {
     //   return this.actionProvider.handleUndividedEstate(message); //set stepID = 3
     // }
     if (curState.stepID === 3) {
-      return this.actionProvider.handleNetWealth(message); //set stepID = 4
+      if (curState.undividedEstate.undivided_flag === "part1") {
+        return this.actionProvider.handleTotalEstateValueResponse(message)
+      }
+      if (curState.undividedEstate.undivided_flag === "part2") {
+        return this.actionProvider.handleOwnershipResponse(message)
+      }
+      if (curState.undividedEstate.undivided_flag === "part3") {
+        return this.actionProvider.handleDelvisFirstResponse(message)
+      }
+      if (curState.undividedEstate.undivided_flag === "part4") {
+        return this.actionProvider.handleDelvisSecondResponse(message)
+      }
+      if (curState.undividedEstate.undivided_flag === "part5") {
+        return this.actionProvider.handleNetWealth(message); //set stepID = 4
+      }
+      else {
+        return this.actionProvider.handleNetWealth(message); //set stepID = 4
+      }
+
     }
     // if (curState.stepID === 4) {
     //   return this.actionProvider.handleUnderAge(message); //set stepID = 5

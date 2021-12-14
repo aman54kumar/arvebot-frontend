@@ -2,6 +2,7 @@ import { createChatBotMessage } from "react-chatbot-kit";
 import OptionSelector from "./Custom/Widgets/OptionSelector/OptionSelector";
 import InfoMessageWidget from "./Custom/Widgets/InfoMessagesWidget/InfoMessagesWidget";
 import RearChildrenOptionSelector from "./Custom/Widgets/RearChildrenOptionSelector/RearChildrenOptionSelector";
+import UndividedEstateWidget from "./Custom/Widgets/UndividedEstateWidget/UndividedEstateWidget";
 import "react-chatbot-kit/build/main.css";
 import "../chatbot.scss";
 import { FormattedMessage } from "react-intl";
@@ -41,7 +42,12 @@ const config = {
       widgetName: "InfoMessage",
       widgetFunc: (props) => <InfoMessageWidget {...props} />,
     },
+    {
+      widgetName: "undividedEstateWidget",
+      widgetFunc: (props) => <UndividedEstateWidget {...props} />,
+    },
   ],
 };
 
 export default config;
+ 

@@ -66,8 +66,6 @@ const removeTextFromCurrencyString = (inputCurrency: string): string => {
 }
 
 export const ParseCurrencyStringForOutput = (unformattedCurrency: string): string => {
-    console.log(unformattedCurrency);
-
     return new Intl.NumberFormat("no-NO", {
         style: "currency",
         currency: "NOK",

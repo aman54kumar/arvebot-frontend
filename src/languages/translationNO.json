@@ -36,5 +36,18 @@
   "Chatbot.marriedParents2": "Var {self.testator.parents[0].person_id} gift med {self.testator.parents[1].person_id} ved sistnevntes dødsfall? [Ja/Nei])",
   "Chatbot.addGrandParentQn1": "Person med ID {parent_id} har foreløpig ingen registrerte foreldre.\nHvis personen har foreldre skal du skrive inn ID for en av dem nå.\nHvis ikke personen har flere foreldre, trykk Enter.",
   "Chatbot.addGrandParentQn2": "Person med ID {parent_id} er registrert med følgende foreldre: {grandParents_IDs}.\nHvis personen har flere foreldre skal du skrive inn ID for en av dem.\nHvis ikke personen har flere foreldre, trykk Enter.",
-  "Chatbot.FINAL_QUESTION": "Are you sure you want to submit the responses for report?"
+  "Chatbot.FINAL_QUESTION": "Are you sure you want to submit the responses for report?",
+  "Chatbot.FELLESEIE_QUESTION": "(Midlertidig) Felleseie? Delvis særeie? Fullt særeie?",
+  "Chatbot.OWNERSHIP_TYPE1": "FELLESEIE",
+  "Chatbot.OWNERSHIP_TYPE2": "DELVIS SÆREIE",
+  "Chatbot.OWNERSHIP_TYPE3": "FULLT SÆREIE",
+  "Chatbot.TOTAL_ESTATE_NET_VALUE_QUESTION": "(Midlertidig) Hva er boets nettoverdi?",
+  "Chatbot.TOTAL_ESTATE_NET_VALUE_EXTRA_INFO": "[Her kan det komme ekstra info]",
+  "Chatbot.DELVIS_SAEREIE_FIRST_QUESTION": "Tast inn særeiet for førstavdøde.",
+  "Chatbot.DELVIS_SAEREIE_FIRST_EXTRA_INFO": "[Her kan det komme ekstra info]",
+  "Chatbot.DELVIS_SAEREIE_LAST_QUESTION": "Tast inn særeiet for sistavdøde.",
+  "Chatbot.DELVIS_SAEREIE_LAST_EXTRA_INFO": "[Her kan det komme ekstra info]",
+  "Chatbot.FULLT_SAEREIE_QUESTION": "(Midlertidig) Fullt særeie. Hvor mye tilhørte sistavdøde?",
+  "Chatbot.FULLT_SAEREIE_EXTRA_INFO": "[Her kan det komme ekstra info]",
+  "Chatbot.UNDIVIDED_SPOUSE_QUESTION": "Skriv ID for tidligsavdøde for uskifteboet."
 }

@@ -20,7 +20,7 @@ class QuestionConstants {
   };
 
   UndividedEstateResultText = (selectedOption: string): ReactElement => {
-    const undividedEstateResultText = selectedOption
+    const undividedEstateResultText = (selectedOption === "true")
       ? "Chatbot.Yes"
       : "Chatbot.No";
     return <FormattedMessage id={undividedEstateResultText} />;
@@ -197,15 +197,7 @@ class QuestionConstants {
       />
     </div>)
   }
-  // finalQuestion = (): ReactElement => {
-  //   return (
-  //     <div>
-  //       <FormattedMessage
-  //         id="Chatbot.finalQuestion"
-  //       />
-  //     </div>
-  //   )
-  // }
+
   FinalQuestion = (<FormattedMessage id="Chatbot.FINAL_QUESTION" />);
 
   FinalQuestionWidgetOptions = {
@@ -217,6 +209,55 @@ class QuestionConstants {
 
   EmptyQuestion = <p></p>
   DefaultText = (<FormattedMessage id="Chatbot.DEFAULT_TEXT" />);
+
+
+
+  // UndividedEstateStart
+
+  TotalEstateNetValueQuestion = (
+    <div>
+      <FormattedMessage id="Chatbot.TOTAL_ESTATE_NET_VALUE_QUESTION" />
+      <ShowInfoWidget text="Chatbot.TOTAL_ESTATE_NET_VALUE_EXTRA_INFO" />
+    </div>
+  );
+
+  TotalEstateNetValueWarning = (<FormattedMessage id="Chatbot.NET_WEALTH_WARNING" />);
+
+
+  OwnershipTypeQuestion = (<FormattedMessage id="Chatbot.FELLESEIE_QUESTION" />)
+
+  OwnershipQuestionWidgetOptions = {
+    widget: "undividedEstateWidget",
+    withAvatar: true,
+    loading: true,
+    terminateLoading: true,
+  }
+
+  DelvisFirstQuestion = (
+    <div>
+      <FormattedMessage id="Chatbot.DELVIS_SAEREIE_FIRST_QUESTION" />
+      <ShowInfoWidget text="Chatbot.DELVIS_SAEREIE_FIRST_EXTRA_INFO" />
+    </div>
+  );
+
+  DelvisSecondQuestion = (
+    <div>
+      <FormattedMessage id="Chatbot.DELVIS_SAEREIE_SECOND_QUESTION" />
+      <ShowInfoWidget text="Chatbot.DELVIS_SAEREIE_SECOND_EXTRA_INFO" />
+    </div>
+  );
+
+  FulltSaereieQuestion = (
+    <div>
+      <FormattedMessage id="Chatbot.FULLT_SAEREIE_QUESTION" />
+      <ShowInfoWidget text="Chatbot.FULLT_SAEREIE_EXTRA_INFO" />
+    </div>
+  );
+
+  UndividedEstateSpouseQuestion = (<div>
+    <FormattedMessage id="Chatbot.UNDIVIDED_SPOUSE_QUESTION" />
+  </div>)
+  // UndividedEstateEnd
 }
 
 export default QuestionConstants;
