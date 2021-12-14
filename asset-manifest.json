@@ -1,21 +1,19 @@
 {
   "files": {
-    "main.css": "/arvebot-frontend/static/css/main.6dbf5c6b.chunk.css",
-    "main.js": "/arvebot-frontend/static/js/main.0996e8a8.chunk.js",
-    "main.js.map": "/arvebot-frontend/static/js/main.0996e8a8.chunk.js.map",
+    "main.css": "/arvebot-frontend/static/css/main.ccc330e7.chunk.css",
+    "main.js": "/arvebot-frontend/static/js/main.4ae0f94a.chunk.js",
     "runtime-main.js": "/arvebot-frontend/static/js/runtime-main.8e1d13bc.js",
-    "runtime-main.js.map": "/arvebot-frontend/static/js/runtime-main.8e1d13bc.js.map",
-    "static/js/2.0899971c.chunk.js": "/arvebot-frontend/static/js/2.0899971c.chunk.js",
-    "static/js/2.0899971c.chunk.js.map": "/arvebot-frontend/static/js/2.0899971c.chunk.js.map",
+    "static/css/2.0cd23b4b.chunk.css": "/arvebot-frontend/static/css/2.0cd23b4b.chunk.css",
+    "static/js/2.55dd23e8.chunk.js": "/arvebot-frontend/static/js/2.55dd23e8.chunk.js",
     "index.html": "/arvebot-frontend/index.html",
-    "static/css/main.6dbf5c6b.chunk.css.map": "/arvebot-frontend/static/css/main.6dbf5c6b.chunk.css.map",
-    "static/js/2.0899971c.chunk.js.LICENSE.txt": "/arvebot-frontend/static/js/2.0899971c.chunk.js.LICENSE.txt",
-    "static/media/homepage-image.8ea4a75c.jpg": "/arvebot-frontend/static/media/homepage-image.8ea4a75c.jpg"
+    "static/js/2.55dd23e8.chunk.js.LICENSE.txt": "/arvebot-frontend/static/js/2.55dd23e8.chunk.js.LICENSE.txt",
+    "static/media/chat_button_logo.6fc97b77.svg": "/arvebot-frontend/static/media/chat_button_logo.6fc97b77.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.8e1d13bc.js",
-    "static/js/2.0899971c.chunk.js",
-    "static/css/main.6dbf5c6b.chunk.css",
-    "static/js/main.0996e8a8.chunk.js"
+    "static/css/2.0cd23b4b.chunk.css",
+    "static/js/2.55dd23e8.chunk.js",
+    "static/css/main.ccc330e7.chunk.css",
+    "static/js/main.4ae0f94a.chunk.js"
   ]
 }
