@@ -80,7 +80,7 @@ class QuestionConstants {
       <div>
         <FormattedMessage
           id="Chatbot.addSuccessorQn1"
-          values={{ person_ID: person_id }}
+          values={{ person_ID: <strong>{person_id}</strong> }}
         />
         <ShowInfoWidget text="Chatbot.CHILD_EXTRA_INFO" />
       </div>
@@ -88,13 +88,13 @@ class QuestionConstants {
   };
   addSuccessorQuestion2 = (
     person_id: string,
-    child_id_string: string
+    child_id_string: ReactElement
   ): ReactElement => {
     return (
       <div>
         <FormattedMessage
           id="Chatbot.addSuccessorQn2"
-          values={{ person_ID: person_id, children_IDs: child_id_string }}
+          values={{ person_ID: <strong>{person_id}</strong>, children_IDs: child_id_string }}
         />
         <ShowInfoWidget text="Chatbot.CHILD_EXTRA_INFO" />
       </div>
@@ -129,7 +129,7 @@ class QuestionConstants {
       <div>
         <FormattedMessage
           id="Chatbot.addParentsQn1"
-          values={{ person_ID: person_id }}
+          values={{ person_ID: <strong>{person_id}</strong> }}
         />
         <ShowInfoWidget text="Chatbot.PARENT_EXTRA_INFO" />
       </div>
@@ -137,13 +137,13 @@ class QuestionConstants {
   };
   addParentsQuestion2 = (
     person_id: string,
-    parent_id_string: string
+    parent_id_string: ReactElement
   ): ReactElement => {
     return (
       <div>
         <FormattedMessage
           id="Chatbot.addParentsQn2"
-          values={{ person_ID: person_id, parents_IDs: parent_id_string }}
+          values={{ person_ID: <strong>{person_id}</strong>, parents_IDs: parent_id_string }}
         />
         <ShowInfoWidget text="Chatbot.PARENT_EXTRA_INFO" />
       </div>
@@ -158,7 +158,7 @@ class QuestionConstants {
       <div>
         <FormattedMessage
           id="Chatbot.marriedParents1"
-          values={{ parent1_ID: first_parent_id, parent2_ID: second_parent_id }}
+          values={{ parent1_ID: <strong>{first_parent_id}</strong>, parent2_ID: <strong>{second_parent_id}</strong> }}
         />
       </div>
     );
@@ -172,7 +172,7 @@ class QuestionConstants {
       <div>
         <FormattedMessage
           id="Chatbot.marriedParents2"
-          values={{ parent1_ID: first_parent_id, parent2_ID: second_parent_id }}
+          values={{ parent1_ID: <strong>{first_parent_id}</strong>, parent2_ID: <strong>{second_parent_id}</strong> }}
         />
       </div>
     );
@@ -183,17 +183,17 @@ class QuestionConstants {
     return (<div>
       <FormattedMessage
         id="Chatbot.addGrandParentQn1"
-        values={{ parent_id: parent_id }}
+        values={{ parent_id: <strong>{parent_id}</strong> }}
       />
     </div>)
   }
 
 
-  addGrandParentsQuestion2 = (parent_id: string, grandparent_id_string: string): ReactElement => {
+  addGrandParentsQuestion2 = (parent_id: string, grandparent_id_string: ReactElement): ReactElement => {
     return (<div>
       <FormattedMessage
         id="Chatbot.addGrandParentQn2"
-        values={{ parent_id: parent_id, grandParents_IDs: grandparent_id_string }}
+        values={{ parent_id: <strong>{parent_id}</strong>, grandParents_IDs: grandparent_id_string }}
       />
     </div>)
   }

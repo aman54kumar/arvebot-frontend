@@ -136,7 +136,7 @@ class ActionProvider {
         state = {
           ...state,
           stepID: 3,
-          undividedEstate: { ...state.undividedEstate, undivided_flag: "part6", undividedEstateChoice: undividedEstateChoiceResponse }
+          undividedEstate: { ...state.undividedEstate, undivided_flag: "none", undividedEstateChoice: undividedEstateChoiceResponse }
         }
         const netWealthQuestion = this.createChatBotMessage(
           this.QuestionConsts.NetWealthQuestion
@@ -1128,12 +1128,8 @@ class ActionProvider {
     });
   };
 
-  getParentChildrenIDStrings = (collection: Array<number>, state: ChatbotInterface): string => {
-    let allChildrenID = "";
-    for (const child_id of collection) {
-      allChildrenID += Person.getPerson(child_id, state.personsMap)._personID + ", ";
-    }
-    return "{ " + allChildrenID.slice(0, allChildrenID.length - 2) + " }";
+  getParentChildrenIDStrings = (collection: Array<number>, state: ChatbotInterface): ReactElement => {
+    return <strong>{`{{ ${collection.map((child_id) => Person.getPerson(child_id, state.personsMap)._personID).join(', ')} }}`}</strong>
   }
 
   askFinalQuestion = (): void => {
