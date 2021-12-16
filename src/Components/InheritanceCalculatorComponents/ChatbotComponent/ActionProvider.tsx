@@ -164,7 +164,6 @@ class ActionProvider {
         this.addMessageToBotState(currencyCustom)
         this.addMessageToBotState(ownershipTypeQuestion)
       }
-
       else {
         const totalEstateWarning = this.createChatBotMessage(
           this.QuestionConsts.TotalEstateNetValueWarning
@@ -191,38 +190,59 @@ class ActionProvider {
 
           netWealth: state.undividedEstate.totalEstateValue / 2
         }
-
-
       }
-      if (ownershipResponse === "DELVIS SÆREIE") {
+      else if (ownershipResponse === "DELVIS SÆREIE") {
         state = {
           ...state,
           undividedEstate: { ...state.undividedEstate, undivided_flag: "part3" }
         }
         const delvisFirstQuestion = this.createChatBotMessage(this.QuestionConsts.DelvisFirstQuestion);
         this.addMessageToBotState(delvisFirstQuestion)
-
-        // ask first question
       }
-      if (ownershipResponse === "FULLT SÆREIE") {
+      else if (ownershipResponse === "FULLT SÆREIE") {
         state = {
           ...state,
           undividedEstate: { ...state.undividedEstate, undivided_flag: "part5" }
         }
-
+        const fulltSaereieQuestion = this.createChatBotMessage(this.QuestionConsts.FulltSaereieQuestion);
+        this.addMessageToBotState(fulltSaereieQuestion)
+      }
+      else {
+        const ownershipTypeWarning = this.createChatBotMessage(this.QuestionConsts.OwnershipTypeWarning);
+        const ownershipTypeQuestion = this.createChatBotMessage(this.QuestionConsts.OwnershipTypeQuestion, this.QuestionConsts.OwnershipQuestionWidgetOptions)
+        this.addMessageToBotState(ownershipTypeWarning)
+        this.addMessageToBotState(ownershipTypeQuestion)
       }
       console.log(state);
+
       return this.returnState(state)
     });
   }
 
   handleDelvisFirstResponse = (delvisFirstResponse: string): void => {
     this.setState((state: ChatbotInterface) => {
-
-      state = {
-        ...state,
-        undividedEstate: { ...state.undividedEstate, undivided_flag: "part4" }
+      const currencyIntResponse = CurrencyOutput(delvisFirstResponse)
+      const currencyStringResponse = ParseCurrencyStringForOutput(currencyIntResponse[1])
+      const currencyJSX = <InfoMessagesWidget label={currencyStringResponse} />
+      if (currencyIntResponse[0] === 5) {
+        const currencyCustom = this.createClientMessage(currencyJSX)
+        this.addMessageToBotState(currencyCustom)
+        state = {
+          ...state,
+          undividedEstate: { ...state.undividedEstate, undivided_flag: "part4", temp_first: parseInt(currencyIntResponse[1]) }
+        }
+        const delvisSecondQuestion = this.createChatBotMessage(this.QuestionConsts.DelvisSecondQuestion)
+        this.addMessageToBotState(delvisSecondQuestion)
       }
+      else {
+        const netWealthWarning = this.createChatBotMessage(
+          this.QuestionConsts.NetWealthWarning
+        );
+        const delvisFirstQuestion = this.createChatBotMessage(this.QuestionConsts.DelvisFirstQuestion);
+        this.addMessageToBotState(netWealthWarning);
+        this.addMessageToBotState(delvisFirstQuestion);
+      }
+      console.log(state);
 
       return this.returnState(state)
     })
@@ -230,11 +250,34 @@ class ActionProvider {
 
   handleDelvisSecondResponse = (delvisSecondResponse: string): void => {
     this.setState((state: ChatbotInterface) => {
-      state = {
-        ...state,
-        undividedEstate: { ...state.undividedEstate, undivided_flag: "part6", undividedEstateSeparateWealth: (state.undividedEstate.totalEstateValue - state.undividedEstate.temp_last - state.undividedEstate.temp_first) / 2 + state.undividedEstate.temp_first },
-        netWealth: (state.undividedEstate.totalEstateValue - state.undividedEstate.temp_last - state.undividedEstate.temp_first) / 2 + state.undividedEstate.temp_last,
+      const currencyIntResponse = CurrencyOutput(delvisSecondResponse)
+      const currencyStringResponse = ParseCurrencyStringForOutput(currencyIntResponse[1])
+      const currencyJSX = <InfoMessagesWidget label={currencyStringResponse} />
+      if (currencyIntResponse[0] === 5) {
+        const currencyCustom = this.createClientMessage(currencyJSX)
+        this.addMessageToBotState(currencyCustom)
+        state.undividedEstate.temp_last = parseInt(currencyIntResponse[1])
+        state = {
+          ...state,
+          undividedEstate: {
+            ...state.undividedEstate,
+            undivided_flag: "part6",
+            undividedEstateSeparateWealth: (state.undividedEstate.totalEstateValue - state.undividedEstate.temp_last - state.undividedEstate.temp_first) / 2 + state.undividedEstate.temp_first
+          },
+          netWealth: (state.undividedEstate.totalEstateValue - state.undividedEstate.temp_last - state.undividedEstate.temp_first) / 2 + state.undividedEstate.temp_last,
+        }
+        const undividedEstateSpouseQuestion = this.createChatBotMessage(this.QuestionConsts.UndividedEstateSpouseQuestion)
+        this.addMessageToBotState(undividedEstateSpouseQuestion)
       }
+      else {
+        const netWealthWarning = this.createChatBotMessage(
+          this.QuestionConsts.NetWealthWarning
+        );
+        const delvisSecondQuestion = this.createChatBotMessage(this.QuestionConsts.DelvisSecondQuestion);
+        this.addMessageToBotState(netWealthWarning);
+        this.addMessageToBotState(delvisSecondQuestion);
+      }
+      console.log(state);
 
       return this.returnState(state)
     })
@@ -242,28 +285,68 @@ class ActionProvider {
 
   handleFulltSaereieResponse = (fulltSaereieResponse: string): void => {
     this.setState((state: ChatbotInterface) => {
-      state = {
-        ...state,
-        undividedEstate: { ...state.undividedEstate, undivided_flag: "part6", undividedEstateSeparateWealth: state.undividedEstate.totalEstateValue - parseInt(fulltSaereieResponse) },
-        netWealth: parseInt(fulltSaereieResponse),
-
-
+      const currencyIntResponse = CurrencyOutput(fulltSaereieResponse)
+      const currencyStringResponse = ParseCurrencyStringForOutput(currencyIntResponse[1])
+      const currencyJSX = <InfoMessagesWidget label={currencyStringResponse} />
+      if (currencyIntResponse[0] === 5) {
+        const currencyCustom = this.createClientMessage(currencyJSX)
+        this.addMessageToBotState(currencyCustom)
+        state = {
+          ...state,
+          undividedEstate: {
+            ...state.undividedEstate,
+            undivided_flag: "part6",
+            undividedEstateSeparateWealth: state.undividedEstate.totalEstateValue - parseInt(fulltSaereieResponse)
+          },
+          netWealth: parseInt(fulltSaereieResponse),
+        }
+        const undividedEstateSpouseQuestion = this.createChatBotMessage(this.QuestionConsts.UndividedEstateSpouseQuestion)
+        this.addMessageToBotState(undividedEstateSpouseQuestion)
       }
-
+      else {
+        const netWealthWarning = this.createChatBotMessage(
+          this.QuestionConsts.NetWealthWarning
+        );
+        const fulltSaereieQuestion = this.createChatBotMessage(this.QuestionConsts.FulltSaereieQuestion);
+        this.addMessageToBotState(netWealthWarning);
+        this.addMessageToBotState(fulltSaereieQuestion)
+      }
       return this.returnState(state)
     })
   }
 
   handleUndividedEstateSpouse = (undividedEstateSpouseResponse: string): void => {
     this.setState((state: ChatbotInterface) => {
-
-      state = {
-        ...state,
-        stepID: 4
+      const undividedSpouseID = undividedEstateSpouseResponse
+      if (undividedEstateSpouseResponse !== "") {
+        const newUndividedSpouse = this.createNewPerson(undividedSpouseID, state)
+        const newUndividedSpouseDetail = Person.getPerson(newUndividedSpouse._id, state.personsMap)
+        newUndividedSpouseDetail._deceased = true;
+        const textBeforeSucsrUndvdSpouse = this.createChatBotMessage(this.QuestionConsts.TextBeforeSucsrUndvdSpouse)
+        this.addMessageToBotState(textBeforeSucsrUndvdSpouse)
+        state = {
+          ...state,
+          stepID: 3,
+          successor_flag: "part1",
+          temp_person: newUndividedSpouse,
+        };
+        const newSuccessorQuestion = this.createChatBotMessage(
+          this.QuestionConsts.addSuccessorQuestion1(newUndividedSpouseDetail._personID)
+        );
+        this.addMessageToBotState(newSuccessorQuestion);
       }
+      else {
+        state = {
+          ...state,
+          stepID: 4
+        }
+      }
+      console.log(state);
+
       return this.returnState(state)
     })
   }
+
 
   handleNetWealth(currencyResponse: string): void {
     /**
@@ -312,6 +395,7 @@ class ActionProvider {
         ...state.person,
         _underAge: selectedOption,
       },
+      temp_person: state.person,
     }));
 
     const selectedOptionModified =
@@ -363,8 +447,6 @@ class ActionProvider {
         const newSuccessorQuestion = this.createChatBotMessage(
           this.QuestionConsts.addSuccessorQuestion1(testator._personID)
         );
-        console.log(state);
-
         this.addMessageToBotState(newSuccessorQuestion);
         return this.returnState(state);
       }
@@ -1291,20 +1373,28 @@ class ActionProvider {
     this.setState((state: any) => {
       state = {
         stepID: 0,
-        person: new Person(""),
+        person: new NodeEntity(0, 0),
         caseName: "",
-        netWealth: { intValue: 0, strValue: "" },
-        undividedEstate: false,
-        max_depth: null,
+        netWealth: 0,
         successor_flag: successor_parent_flag.none,
         parent_flag: successor_parent_flag.none,
         temp_person: new NodeEntity(0, 0),
         temp_child: new NodeEntity(0, 0),
         temp_parent: new NodeEntity(0, 0),
         personsMap: new Map(),
-        level: 0,
         nodeMap: new Map(),
         id: 1,
+        deceasedParentsArray: [],
+        grandParent_flag: successor_parent_flag.none,
+        rearChildrenResponse: false,
+        undividedEstate: {
+          undividedEstateChoice: false,
+          undivided_flag: successor_parent_flag.none,
+          totalEstateValue: 0,
+          undividedEstateSeparateWealth: 0,
+          temp_first: 0,
+          temp_last: 0,
+        },
         messages: []
       }
       return this.returnState(state)

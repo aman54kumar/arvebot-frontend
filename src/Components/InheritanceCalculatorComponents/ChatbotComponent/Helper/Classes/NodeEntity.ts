@@ -8,6 +8,7 @@ export class NodeEntity {
   _children: Array<number>;
   _spouse: number | null;
   _cohabitant: number | null;
+  _undividedEstateSpouse: number | null;
 
   constructor(id: number, level: number) {
     this._id = id;
@@ -17,6 +18,7 @@ export class NodeEntity {
     this._children = [];
     this._spouse = null;
     this._cohabitant = null;
+    this._undividedEstateSpouse = null;
   }
 
   setPath(prevPath: Array<[number, number]>) {

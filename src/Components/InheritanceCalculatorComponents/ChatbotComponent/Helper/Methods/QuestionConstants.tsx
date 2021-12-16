@@ -233,6 +233,8 @@ class QuestionConstants {
     terminateLoading: true,
   }
 
+  OwnershipTypeWarning = <FormattedMessage id="Chatbot.OptionChoiceWrongWarning" />
+
   DelvisFirstQuestion = (
     <div>
       <FormattedMessage id="Chatbot.DELVIS_SAEREIE_FIRST_QUESTION" />
@@ -242,8 +244,8 @@ class QuestionConstants {
 
   DelvisSecondQuestion = (
     <div>
-      <FormattedMessage id="Chatbot.DELVIS_SAEREIE_SECOND_QUESTION" />
-      <ShowInfoWidget text="Chatbot.DELVIS_SAEREIE_SECOND_EXTRA_INFO" />
+      <FormattedMessage id="Chatbot.DELVIS_SAEREIE_LAST_QUESTION" />
+      <ShowInfoWidget text="Chatbot.DELVIS_SAEREIE_LAST_EXTRA_INFO" />
     </div>
   );
 
@@ -257,6 +259,9 @@ class QuestionConstants {
   UndividedEstateSpouseQuestion = (<div>
     <FormattedMessage id="Chatbot.UNDIVIDED_SPOUSE_QUESTION" />
   </div>)
+
+  TextBeforeSucsrUndvdSpouse = (<div><FormattedMessage id="Chatbot.TextBeforeSucsrUndvdSpouse" /></div>)
+
   // UndividedEstateEnd
 }
 

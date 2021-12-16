@@ -15,6 +15,10 @@ const OptionSelector = (props: any): ReactElement => {
           actionProvider.handleUndividedEstateChoice(option);
           break;
         }
+        case 3: {
+          actionProvider.handleChildAliveOption(option);
+          break;
+        }
         case 4: {
           actionProvider.handleUnderAge(option);
           break;

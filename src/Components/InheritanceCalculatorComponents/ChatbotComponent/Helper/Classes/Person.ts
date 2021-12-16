@@ -5,6 +5,7 @@ export enum ParentChildSelector {
   grandParent = 2,
   spouse = 3,
   cohabitant = 4,
+  undividedSpouse = 5,
 }
 
 export default class Person {
@@ -79,93 +80,8 @@ export default class Person {
     return person;
   };
 
-  // has_surviving_cohabitant_with_common_child = (): boolean => {
-  //   if (this._cohabitant && !this._cohabitant._deceased) {
-  //     for (const child of this._children) {
-  //       if (this._cohabitant._children.includes(child)) return true;
-  //     }
-  //     return false;
-  //   } else return false;
-  // };
-
-  // has_surviving_cohabitant_without_common_child = (): boolean => {
-  //   if (this._cohabitant && !this._cohabitant._deceased) {
-  //     for (const child of this._children) {
-  //       if (this._cohabitant._children.includes(child)) return false;
-  //     }
-  //     return true;
-  //   } else return false;
-  // };
-
   has_surviving_cohabitant(): boolean {
     if (this._cohabitant && !this._cohabitant._deceased) return true;
     else return false;
   }
-
-  // get parents(): Person[] | undefined {
-  //   return this._parents;
-  // }
-
-  // add_parent = (
-  //   parent: Person,
-  //   childOrParent: number,
-
-  //   add_for_both = true
-  // ): void => {
-  //   const parentsArray = this._parents;
-  //   const parent_id = parent._personID;
-  //   if (
-  //     !parentsArray.find((obj) => obj._personID === parent_id) &&
-  //     parentsArray.length < 3
-  //   ) {
-  //     this._parents.push(parent);
-  //   }
-  //   if (add_for_both) {
-  //     parent._childrenIDList = [...this._childrenIDList];
-  //     parent._childrenIDList.push([ParentChildSelector.child, this._id]);
-  //   }
-  // };
-
-  // get_parent_child = (
-  //   rootPerson: Person,
-  //   currentPosition: number
-  // ): Person | null => {
-  //   let list: Array<Person> = [];
-
-  //   if (currentPosition == this._parentsIDList.length) {
-  //     return rootPerson;
-  //   }
-  //   if (currentPosition > this._parentsIDList.length) {
-  //     return null;
-  //   }
-  //   if (this._parentsIDList[currentPosition][0] == ParentChildSelector.child) {
-  //     list = rootPerson._children;
-  //   } else {
-  //     list = rootPerson._parents;
-  //   }
-  //   const c = list.filter((child) => {
-  //     return child._id == this._parentsIDList[currentPosition][1];
-  //   });
-  //   if (c.length == 0) {
-  //     console.error("invalid parent");
-  //     return null;
-  //   }
-  //   return this.get_parent_child(c[0], currentPosition + 1);
-  // };
-
-  // get children(): Array<Person> {
-  //   return this._children;
-  // }
-
-  // add_child = (child: Person, add_for_both = true): void => {
-  //   const children_array = this._children;
-  //   const child_id = child._personID;
-  //   if (!children_array.find((obj) => obj._personID === child_id)) {
-  //     this._children.push(child);
-  //   }
-  //   if (add_for_both) {
-  //     child._parentsIDList = [...this._parentsIDList];
-  //     child._parentsIDList.push([ParentChildSelector.child, this._id]);
-  //   }
-  // };
 }

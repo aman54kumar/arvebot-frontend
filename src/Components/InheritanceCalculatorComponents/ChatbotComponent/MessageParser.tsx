@@ -40,7 +40,16 @@ class MessageParser {
         return this.actionProvider.handleDelvisSecondResponse(message)
       }
       if (curState.undividedEstate.undivided_flag === "part5") {
-        return this.actionProvider.handleNetWealth(message); //set stepID = 4
+        return this.actionProvider.handleFulltSaereieResponse(message); //set stepID = 4
+      }
+      if (curState.undividedEstate.undivided_flag === "part6") {
+        if (curState.successor_flag === "part1") {
+          return this.actionProvider.handleSuccessorInput(message)
+        }
+        if (curState.successor_flag === "part2") {
+          return this.actionProvider.handleChildAliveOption(message)
+        }
+        return this.actionProvider.handleUndividedEstateSpouse(message)
       }
       else {
         return this.actionProvider.handleNetWealth(message); //set stepID = 4
@@ -82,9 +91,7 @@ class MessageParser {
       console.log(curState)
       return this.actionProvider.handleFinalQuestion(message)
     }
-    if (curState.stepID === 10) {
-      console.log("dead-end now");
-    } else {
+    else {
       return this.actionProvider.handleDefault();
     }
   }
