@@ -6,11 +6,16 @@ import ChartConnector from "./Classes/ChartConnector";
 
 let maxLevel = -999999, minLevel = 999999;
 const xLevelArray = [[0], [-1, 1], [-1, 0, 1], [-2, -1, 1, 2]];
-const chartNodeMap = new Map<number, ChartNode>()
-const connectorArray = new Array<ChartConnector>()
-const xDiff = 200;
-const yDiff = 100;
+let chartNodeMap = new Map<number, ChartNode>()
+let connectorArray = new Array<ChartConnector>()
+let xDiff = 200;
+let yDiff = 100;
 export const processData = (data: any): any => {
+    maxLevel = -999999, minLevel = 999999;
+    chartNodeMap = new Map<number, ChartNode>()
+    connectorArray = new Array<ChartConnector>()
+    xDiff = 200;
+    yDiff = 100;
     // divide nodeMap into levels
     const levelMap = getLevelMap(data);
     const maxLevelData = levelMap.get(maxLevel);

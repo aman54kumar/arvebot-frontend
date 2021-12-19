@@ -10,6 +10,7 @@ export enum successor_parent_flag {
 export interface ChatbotInterface {
   stepID: number;
   person: NodeEntity;
+  testator: NodeEntity;
   caseName: string;
   netWealth: number;
   successor_flag: string;
@@ -36,6 +37,7 @@ export interface ChatbotInterface {
 export const ChatbotState: ChatbotInterface = {
   stepID: 0,
   person: new NodeEntity(0, 0),
+  testator: new NodeEntity(0, 0),
   caseName: "",
   netWealth: 0,
   successor_flag: successor_parent_flag.none,
