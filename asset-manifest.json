@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/arvebot-frontend/static/css/main.ccc330e7.chunk.css",
-    "main.js": "/arvebot-frontend/static/js/main.4ae0f94a.chunk.js",
+    "main.css": "/arvebot-frontend/static/css/main.8920754f.chunk.css",
+    "main.js": "/arvebot-frontend/static/js/main.c29d4dcd.chunk.js",
     "runtime-main.js": "/arvebot-frontend/static/js/runtime-main.8e1d13bc.js",
     "static/css/2.0cd23b4b.chunk.css": "/arvebot-frontend/static/css/2.0cd23b4b.chunk.css",
-    "static/js/2.55dd23e8.chunk.js": "/arvebot-frontend/static/js/2.55dd23e8.chunk.js",
+    "static/js/2.4e97de69.chunk.js": "/arvebot-frontend/static/js/2.4e97de69.chunk.js",
     "index.html": "/arvebot-frontend/index.html",
-    "static/js/2.55dd23e8.chunk.js.LICENSE.txt": "/arvebot-frontend/static/js/2.55dd23e8.chunk.js.LICENSE.txt",
+    "static/js/2.4e97de69.chunk.js.LICENSE.txt": "/arvebot-frontend/static/js/2.4e97de69.chunk.js.LICENSE.txt",
     "static/media/chat_button_logo.6fc97b77.svg": "/arvebot-frontend/static/media/chat_button_logo.6fc97b77.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.8e1d13bc.js",
     "static/css/2.0cd23b4b.chunk.css",
-    "static/js/2.55dd23e8.chunk.js",
-    "static/css/main.ccc330e7.chunk.css",
-    "static/js/main.4ae0f94a.chunk.js"
+    "static/js/2.4e97de69.chunk.js",
+    "static/css/main.8920754f.chunk.css",
+    "static/js/main.c29d4dcd.chunk.js"
   ]
 }
