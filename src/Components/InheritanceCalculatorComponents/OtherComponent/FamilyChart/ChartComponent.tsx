@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import ReactFlow, { Background, BackgroundVariant, Controls } from "react-flow-renderer";
 import chartSelector from "../../../../store/chartSelector";
 import { processData } from "./ProcessDataForChart";
-import { useEffect, useState, useMemo, memo, useCallback } from "react";
+import { useEffect } from "react";
 import { useZoomPanHelper, useUpdateNodeInternals } from "react-flow-renderer";
 import PartnerNodeComponent from "./PartnerNode";
 import CustomEdge from "./Classes/CustomEdge";
@@ -12,13 +12,9 @@ import ChartConnector from "./Classes/ChartConnector";
 const flowStyles = { height: "80vh" };
 
 const OrgChartTree = () => {
-  // const [chartContent, setChartContent] = useState([])
   const result = useSelector(chartSelector);
   const updateNodeInternals = useUpdateNodeInternals();
 
-  // const chartContent = useMemo(() => {
-  //   return processData(result)
-  // }, [result])
   const chartContent = processData(result)
 
   const getNodeData = () => chartContent.forEach((chartData: ChartNode | ChartConnector) => {
@@ -33,14 +29,6 @@ const OrgChartTree = () => {
     }, 100);
 
   }, [chartContent]);
-  // useEffect(() => {
-  //   getNodeData();
-
-
-  // });
-
-  // const updateNode = useCallback(() => updateNodeInternals('1'), [updateNodeInternals]);
-
 
   const { fitView } = useZoomPanHelper();
 

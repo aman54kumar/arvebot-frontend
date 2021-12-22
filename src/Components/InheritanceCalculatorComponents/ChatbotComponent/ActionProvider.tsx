@@ -741,13 +741,13 @@ class ActionProvider {
   handleParentAliveOption = (alive: string): void => {
     this.setState((state: ChatbotInterface) => {
       const temp_person = state.temp_person;
-
+      const temp_person_detail = Person.getPerson(temp_person._id, state.personsMap)
       if (temp_person.getLatestPathKey() !== ParentChildSelector.testator) {
         // if temp_person is not testator, ask child question
         const temp_child = state.temp_child
         temp_person.add_child(temp_child, true);
         const temp_child_detail = Person.getPerson(temp_child._id, state.personsMap)
-        const temp_person_detail = Person.getPerson(temp_person._id, state.personsMap)
+
         if (!alive) {
           state = {
             ...state,
@@ -815,10 +815,10 @@ class ActionProvider {
 
             }
             const allParentsID = this.getParentChildrenIDStrings(temp_person._parents, state)
-
+            // const temp_person_detail
             const newParentQuestion = this.createChatBotMessage(
               this.QuestionConsts.addParentsQuestion2(
-                temp_parent_detail._personID,
+                temp_person_detail._personID,
                 allParentsID
               )
             );

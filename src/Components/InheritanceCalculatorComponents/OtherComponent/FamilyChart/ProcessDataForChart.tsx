@@ -115,8 +115,8 @@ const getLevelMap = (data: any) => {
         if (!levelMap.has(node._level)) {
             levelMap.set(node._level, new Array<ChartNode>());
         }
-
-        const newNode = new ChartNode(node._id.toString(), 'specialNode', new NodeData(nodeDetails._personID), { x: 0, y: 0 }, 0)
+        const nodeLabel = nodeDetails._deceased ? `${nodeDetails._personID} †` : nodeDetails._personID
+        const newNode = new ChartNode(node._id.toString(), 'specialNode', new NodeData(nodeLabel), { x: 0, y: 0 }, 0)
         levelMap.get(node._level)?.push(newNode)
         chartNodeMap.set(node._id, newNode)
     })

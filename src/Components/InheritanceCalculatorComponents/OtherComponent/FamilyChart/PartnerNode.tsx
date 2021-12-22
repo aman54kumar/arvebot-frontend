@@ -1,5 +1,4 @@
 import { Typography } from "@mui/material";
-import { memo, useMemo } from "react";
 import { Handle, Position } from "react-flow-renderer";
 
 enum HandleType {
@@ -50,9 +49,10 @@ const partnerNodeStyles = {
 
 const PartnerNodeComponent = ({ data }: { data: any }) => {
   const isConnectable = data.isConnectable;
-  // data = data;
   // eslint-disable-next-line
   const handles = customHandleData.map((v, k) => {
+
+
     if (check(data.pos, v.position)) {
       return (
         <Handle
@@ -66,10 +66,10 @@ const PartnerNodeComponent = ({ data }: { data: any }) => {
       )
     }
   });
-
+  const labelString = deceasedFormatter(data.label)
   return (
     <div style={partnerNodeStyles}>
-      <Typography align="center" variant="subtitle1" style={{ textTransform: "uppercase", fontFamily: "Helvetica" }}>{data.label}</Typography>
+      <Typography className="nodeLabel" align="center" style={{ textTransform: "uppercase", fontFamily: "Helvetica" }}>{labelString}</Typography>
       {handles}
     </div>
   );
@@ -85,6 +85,19 @@ const check = (data: any, pos: string): boolean => {
 
   return false;
 };
+
+const deceasedFormatter = (personString: string) => {
+  // const tempArray = personString.split("†");
+
+  // if (tempArray.length === 2) {
+  //   const spanElement = document.createElement("span");
+  //   spanElement.innerHTML = `tempArray[0] <p style="color: red">tempArray[1]</p>`
+  //   return spanElement
+  // }
+  return personString
+}
+
+
 export default PartnerNodeComponent
   // return (
 
