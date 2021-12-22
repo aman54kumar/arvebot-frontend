@@ -1,5 +1,6 @@
 import ChartNode, { NodeData } from "./Classes/ChartNode";
-import Person, { ParentChildSelector } from "../../ChatbotComponent/Helper/Classes/Person";
+import Person from "../../ChatbotComponent/Helper/Classes/Person";
+import { ParentChildSelector } from "../../ChatbotComponent/Helper/Enums/ParentChildSelector";
 import { NodeEntity } from "../../ChatbotComponent/Helper/Classes/NodeEntity";
 import ChartConnector from "./Classes/ChartConnector";
 
@@ -115,8 +116,8 @@ const getLevelMap = (data: any) => {
         if (!levelMap.has(node._level)) {
             levelMap.set(node._level, new Array<ChartNode>());
         }
-        const nodeLabel = nodeDetails._deceased ? `${nodeDetails._personID} †` : nodeDetails._personID
-        const newNode = new ChartNode(node._id.toString(), 'specialNode', new NodeData(nodeLabel), { x: 0, y: 0 }, 0)
+        const nodeLabel = nodeDetails._deceased ? `† ${nodeDetails._personID}` : nodeDetails._personID
+        const newNode = new ChartNode(node._id.toString(), 'specialNode', new NodeData(nodeLabel,), { x: 0, y: 0 }, 0)
         levelMap.get(node._level)?.push(newNode)
         chartNodeMap.set(node._id, newNode)
     })

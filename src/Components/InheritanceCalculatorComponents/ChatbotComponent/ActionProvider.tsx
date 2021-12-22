@@ -1,12 +1,15 @@
 import QuestionConsts from "./Helper/Methods/QuestionConstants";
 import InheritanceConstants from "./Helper/Methods/InheritanceConstants";
-import Person, { ParentChildSelector } from "./Helper/Classes/Person";
+import Person from "./Helper/Classes/Person";
 import Family from "./Helper/Classes/Family";
-import { ChatbotInterface, successor_parent_flag } from "./Generics";
+import { ParentChildSelector } from "./Helper/Enums/ParentChildSelector";
+import { ChatbotInterface } from "./Generics";
+import { QuestionType } from "./Helper/Enums/SuccessorParentType";
 import { ReactElement } from "react";
 import { CurrencyOutput, ParseCurrencyStringForOutput } from "./Helper/Methods/HandleCurrency";
 import InfoMessagesWidget from "./Custom/Widgets/InfoMessagesWidget/InfoMessagesWidget"
 import { NodeEntity } from "./Helper/Classes/NodeEntity";
+
 class ActionProvider {
   createChatBotMessage: (
     questionElement: ReactElement,
@@ -76,6 +79,7 @@ class ActionProvider {
     this.setState((state: ChatbotInterface) => {
       return this.returnState(state);
     });
+
 
     // this.updateStateProperty({ stepID: 1, caseName: caseNameResponse });
     this.addMessageToBotState(testatorQuestion);
@@ -1296,6 +1300,7 @@ class ActionProvider {
       this.setState((state: any) => ({
         ...state,
         messages: [...state.messages, ...messages],
+
       }));
     } else {
       this.setState((state: any) => ({
@@ -1303,6 +1308,10 @@ class ActionProvider {
         messages: [...state.messages, messages],
       }));
     }
+    this.setState((state: any) => ({
+      ...state,
+      tempMessages: state.messages
+    }))
   };
 
   handleDefault = (): void => {
@@ -1422,7 +1431,12 @@ class ActionProvider {
 
     return state;
   }
-
+  handleValidation = () => {
+    this.setState((state: any) => {
+      state.messages = state.tempMessages;
+      return state;
+    })
+  }
   resetChatbot = () => {
     this.setState((state: any) => {
       state = {
@@ -1430,8 +1444,8 @@ class ActionProvider {
         person: new NodeEntity(0, 0),
         caseName: "",
         netWealth: 0,
-        successor_flag: successor_parent_flag.none,
-        parent_flag: successor_parent_flag.none,
+        successor_flag: QuestionType.initialQuestion,
+        parent_flag: QuestionType.initialQuestion,
         temp_person: new NodeEntity(0, 0),
         temp_child: new NodeEntity(0, 0),
         temp_parent: new NodeEntity(0, 0),
@@ -1439,11 +1453,11 @@ class ActionProvider {
         nodeMap: new Map(),
         id: 1,
         deceasedParentsArray: [],
-        grandParent_flag: successor_parent_flag.none,
+        grandParent_flag: QuestionType.initialQuestion,
         rearChildrenResponse: false,
         undividedEstate: {
           undividedEstateChoice: false,
-          undivided_flag: successor_parent_flag.none,
+          undivided_flag: QuestionType.initialQuestion,
           totalEstateValue: 0,
           undividedEstateSeparateWealth: 0,
           temp_first: 0,

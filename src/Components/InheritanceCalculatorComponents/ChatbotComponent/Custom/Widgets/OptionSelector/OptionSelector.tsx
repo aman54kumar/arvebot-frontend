@@ -6,10 +6,11 @@ import { ChatbotInterface } from "../../../Generics";
 
 const OptionSelector = (props: any): ReactElement => {
   const { actionProvider, setState } = props;
-
+  // toggleInputField();
   const setOption = (option: boolean) => {
     setState((state: ChatbotInterface) => {
       const curStep = state.stepID;
+      // toggleInputField();
       switch (curStep) {
         case 2: {
           actionProvider.handleUndividedEstateChoice(option);
@@ -94,3 +95,11 @@ const OptionSelector = (props: any): ReactElement => {
 };
 
 export default OptionSelector;
+// function toggleInputField() {
+//   const chatInputField = document.querySelectorAll(
+//     ".react-chatbot-kit-chat-input"
+//   ) as NodeListOf<HTMLElement>;
+//   if (chatInputField)
+//     chatInputField[0]. = !chatInputField.disabled;
+// }
+

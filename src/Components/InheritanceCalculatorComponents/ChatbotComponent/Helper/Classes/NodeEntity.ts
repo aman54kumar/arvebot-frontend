@@ -1,4 +1,4 @@
-import { ParentChildSelector } from "./Person";
+import { ParentChildSelector } from "../Enums/ParentChildSelector";
 
 export class NodeEntity {
   _id: number;

@@ -20,6 +20,8 @@ const InheritanceCalculatorPage = () => {
         payload: detail,
       });
     });
+    setWarningDiv();
+    addListenerToChatInputField();
   }, []);
 
   const toggleBot = () => {
@@ -55,5 +57,32 @@ const InheritanceCalculatorPage = () => {
     </div>
   );
 };
+const setWarningDiv = () => {
+  const chatParentElement = document.getElementsByClassName(
+    "react-chatbot-kit-chat-container"
+  )[0];
+  const newDiv = document.createElement("div");
+  newDiv.id = "chatbot-warning-div";
+  newDiv.innerHTML = "warning";
+  newDiv.style.backgroundColor = "red";
+  newDiv.style.position = "absolute";
+  newDiv.style.bottom = "2.5rem";
+  newDiv.style.width = "100%";
+  newDiv.style.display = "none";
+  chatParentElement.append(newDiv);
+};
 
+const addListenerToChatInputField = () => {
+  const chatInputField = document.getElementsByClassName(
+    "react-chatbot-kit-chat-input"
+  )[0];
+  chatInputField.addEventListener("input", () => {
+    const warningDiv = document.getElementById("chatbot-warning-div");
+    if (warningDiv) {
+      if (warningDiv.style.display === "block") {
+        warningDiv.style.display = "none";
+      }
+    }
+  });
+};
 export default InheritanceCalculatorPage;

@@ -1,12 +1,6 @@
 import Person from "../ChatbotComponent/Helper/Classes/Person";
 import { NodeEntity } from "./Helper/Classes/NodeEntity";
-
-export enum successor_parent_flag {
-  part1 = "part1",
-  part2 = "part2",
-  part3 = "part3",
-  none = "none",
-}
+import { QuestionType } from "../ChatbotComponent/Helper/Enums/SuccessorParentType";
 export interface ChatbotInterface {
   stepID: number;
   person: NodeEntity;
@@ -32,6 +26,7 @@ export interface ChatbotInterface {
     temp_first: number;
     temp_last: number;
   };
+  tempMessages: any;
 }
 
 export const ChatbotState: ChatbotInterface = {
@@ -40,8 +35,8 @@ export const ChatbotState: ChatbotInterface = {
   testator: new NodeEntity(0, 0),
   caseName: "",
   netWealth: 0,
-  successor_flag: successor_parent_flag.none,
-  parent_flag: successor_parent_flag.none,
+  successor_flag: QuestionType.initialQuestion,
+  parent_flag: QuestionType.initialQuestion,
   temp_person: new NodeEntity(0, 0),
   temp_child: new NodeEntity(0, 0),
   temp_parent: new NodeEntity(0, 0),
@@ -49,14 +44,15 @@ export const ChatbotState: ChatbotInterface = {
   nodeMap: new Map(),
   id: 1,
   deceasedParentsArray: [],
-  grandParent_flag: successor_parent_flag.none,
+  grandParent_flag: QuestionType.initialQuestion,
   rearChildrenResponse: false,
   undividedEstate: {
     undividedEstateChoice: false,
-    undivided_flag: successor_parent_flag.none,
+    undivided_flag: QuestionType.initialQuestion,
     totalEstateValue: 0,
     undividedEstateSeparateWealth: 0,
     temp_first: 0,
     temp_last: 0,
   },
+  tempMessages: [],
 };

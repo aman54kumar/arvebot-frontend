@@ -69,7 +69,7 @@ const PartnerNodeComponent = ({ data }: { data: any }) => {
   const labelString = deceasedFormatter(data.label)
   return (
     <div style={partnerNodeStyles}>
-      <Typography className="nodeLabel" align="center" style={{ textTransform: "uppercase", fontFamily: "Helvetica" }}>{labelString}</Typography>
+      <Typography align="center" variant="subtitle2" style={{ textTransform: "uppercase", fontFamily: "Helvetica", padding: "0 5px" }}>{labelString}</Typography>
       {handles}
     </div>
   );

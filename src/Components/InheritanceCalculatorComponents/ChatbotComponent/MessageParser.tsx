@@ -1,12 +1,17 @@
 import ActionProvider from "./ActionProvider";
 import { ChatbotInterface } from "./Generics";
+import { ValidationType } from "./Helper/Enums/ValidationType";
+import { ChatbotValidation } from "./Helper/Methods/ChatbotValidation";
 
 class MessageParser {
   actionProvider: ActionProvider;
   state: ChatbotInterface;
+  chatbotValidator: ChatbotValidation;
   constructor(actionProvider: ActionProvider, state: ChatbotInterface) {
     this.actionProvider = actionProvider;
     this.state = state;
+    this.chatbotValidator = new ChatbotValidation();
+
   }
 
   parse(message: string): ReturnType<() => void> {
@@ -19,7 +24,13 @@ class MessageParser {
       return
     }
     if (curState.stepID === 1) {
-      return this.actionProvider.handleTestator(message); //set stepID = 2
+      if (this.chatbotValidator.validate(message, ValidationType.emptyValue)) {
+        return this.actionProvider.handleTestator(message);
+      } else {
+        // remove last message and update stepid
+        return this.actionProvider.handleValidation();
+      }
+      //set stepID = 2
     }
     // if (curState.stepID === 2) {
     //   return this.actionProvider.handleUndividedEstate(message); //set stepID = 3
