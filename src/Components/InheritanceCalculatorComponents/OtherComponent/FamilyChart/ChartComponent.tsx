@@ -5,7 +5,6 @@ import { processData } from "./ProcessDataForChart";
 import { useEffect } from "react";
 import { useZoomPanHelper, useUpdateNodeInternals } from "react-flow-renderer";
 import PartnerNodeComponent from "./PartnerNode";
-import CustomEdge from "./Classes/CustomEdge";
 import ChartNode from "./Classes/ChartNode";
 import ChartConnector from "./Classes/ChartConnector";
 
@@ -35,9 +34,6 @@ const OrgChartTree = () => {
   const nodeTypes = {
     specialNode: PartnerNodeComponent,
   };
-  const edgeTypes = {
-    custom: CustomEdge,
-  };
 
 
   useEffect(() => {
@@ -49,7 +45,6 @@ const OrgChartTree = () => {
       <ReactFlow
         elements={chartContent}
         style={flowStyles}
-        edgeTypes={edgeTypes}
         nodeTypes={nodeTypes}
       >
         <Background variant={BackgroundVariant.Dots} gap={1} size={2} />

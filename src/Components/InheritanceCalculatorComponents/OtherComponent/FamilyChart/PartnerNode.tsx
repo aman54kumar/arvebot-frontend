@@ -23,7 +23,7 @@ const customHandleData = [
     type: "target",
     position: Position.Left,
     id: "t_left",
-    style: { left: "50%", background: '#555' },
+    style: { top: "50%", background: '#555' },
   },
   {
     type: "target",

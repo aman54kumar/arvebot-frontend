@@ -348,8 +348,8 @@ class ActionProvider {
       if (undividedEstateSpouseResponse !== "") {
         const newUndividedSpouse = this.createNewPerson(undividedSpouseID, state)
         state.person = newUndividedSpouse;
-        state.person._undividedEstateSpouse = newUndividedSpouse._id
-        state.person.setPathforPartner(ParentChildSelector.undividedSpouse, newUndividedSpouse)
+        state.testator._undividedEstateSpouse = newUndividedSpouse._id
+        state.testator.setPathforPartner(ParentChildSelector.undividedSpouse, newUndividedSpouse)
         const newUndividedSpouseDetail = Person.getPerson(newUndividedSpouse._id, state.personsMap)
         newUndividedSpouseDetail._deceased = true;
         const textBeforeSucsrUndvdSpouse = this.createChatBotMessage(this.QuestionConsts.TextBeforeSucsrUndvdSpouse)
@@ -580,7 +580,7 @@ class ActionProvider {
     this.setState((state: ChatbotInterface) => {
       if (child_id === "") {
         const currentParentID = state.temp_person.getParentId();
-        if (currentParentID) {
+        if (currentParentID && state.temp_person.getLatestPathKey() !== ParentChildSelector.undividedSpouse) {
           const currentParent = NodeEntity.getNode(currentParentID, state.nodeMap)
           state = {
             ...state,
@@ -1106,8 +1106,8 @@ class ActionProvider {
       const testatorDetail = Person.getPerson(testator._id, state.personsMap);
       const temp_class_testator = this.get_class_and_distance_closest_surviving_relative(state.testator, state)[0]
 
-      if (state.person !== state.testator && state.person._undividedEstateSpouse) {
-        const temp_class_undivided_spouse = this.get_class_and_distance_closest_surviving_relative(this.getNode(state.person._undividedEstateSpouse, state.nodeMap), state)[0]
+      if (state.person !== state.testator && state.testator._undividedEstateSpouse) {
+        const temp_class_undivided_spouse = this.get_class_and_distance_closest_surviving_relative(this.getNode(state.testator._undividedEstateSpouse, state.nodeMap), state)[0]
         if (temp_class_testator && temp_class_testator !== 1) {
           state = {
             ...state,

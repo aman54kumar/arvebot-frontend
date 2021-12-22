@@ -43,12 +43,9 @@ const setxLevel = (levelMap: Map<number, Array<ChartNode>>, nodeMap: Map<number,
             for (const node of currentLevelChartNodes) {
                 if (!processedNodes.includes(node.id)) {
                     processedNodes.push(node.id);
-                    // TODO continue if processed already
                 }
                 const currentNode = NodeEntity.getNode(parseInt(node.id), nodeMap)
-                // if (currentNode._id === 2) {
-                //     continue;
-                // }
+
                 if (i !== maxLevel) {
                     let avgXlevel = 0;
                     const parentsCurrentNode = currentNode._parents;
@@ -61,11 +58,64 @@ const setxLevel = (levelMap: Map<number, Array<ChartNode>>, nodeMap: Map<number,
                     if (parentsCurrentNode.length !== 0)
                         node.xLevel = avgXlevel / parentsCurrentNode.length;
                 }
+                const partnerNodeId = currentNode._spouse ? currentNode._spouse : currentNode._cohabitant ? currentNode._cohabitant : null;
+                if (partnerNodeId !== null) {
+                    if (!processedNodes.includes(`${partnerNodeId}`)) {
+                        processedNodes.push(`${partnerNodeId}`);
+                    }
+
+                    const partnerChartNode = getChartNode(`${partnerNodeId}`);
+                    if (!partnerChartNode.data.pos) {
+                        partnerChartNode.data.pos = {};
+                    }
+                    if (!node.data.pos) {
+                        node.data.pos = {};
+                    }
+                    partnerChartNode.xLevel = node.xLevel - 0.01;
+                    partnerChartNode.data.pos.right = "right"
+                    node.data.pos.left = "left"
+                    if (connectorArray.filter(connector => {
+                        return connector.id === `e${partnerNodeId}-${currentNode._id}`
+                    }).length === 0) {
+                        const newConnector = new ChartConnector(`e${partnerNodeId}-${currentNode._id}`, 'straight', `${partnerNodeId}`, `${currentNode._id}`, '', "s_right", "t_left")
+                        connectorArray.push(newConnector);
+                    }
+
+                }
+
+                if (currentNode._undividedEstateSpouse !== null) {
+                    if (!processedNodes.includes(`${currentNode._undividedEstateSpouse}`)) {
+                        processedNodes.push(`${currentNode._undividedEstateSpouse}`);
+                    }
+                    const partnerChartNode = getChartNode(`${currentNode._undividedEstateSpouse}`);
+                    if (!partnerChartNode.data.pos) {
+                        partnerChartNode.data.pos = {};
+                    }
+                    if (!node.data.pos) {
+                        node.data.pos = {};
+                    }
+                    partnerChartNode.xLevel = node.xLevel + 0.01;
+                    partnerChartNode.data.pos.left = "left"
+                    node.data.pos.right = "right"
+                    if (connectorArray.filter(connector => {
+                        return connector.id === `e${currentNode._id}-${currentNode._undividedEstateSpouse}`
+                    }).length === 0) {
+                        const newConnector = new ChartConnector(`e${currentNode._id}-${currentNode._undividedEstateSpouse}`, 'straight', `${currentNode._id}`, `${currentNode._undividedEstateSpouse}`, '', "s_right", "t_left")
+                        connectorArray.push(newConnector);
+                    }
+                }
+
+
+
                 const currentNodePath = currentNode._path;
                 for (let j = currentNodePath.length - 2; j >= 0; j--) {
-                    if (!processedNodes.includes(currentNodePath[j][1].toString())) {
-                        processedNodes.push(currentNodePath[j][1].toString())
+                    if (currentNodePath[j][0] === ParentChildSelector.testator &&
+                        (currentNodePath[j + 1][0] === ParentChildSelector.spouse ||
+                            currentNodePath[j + 1][0] === ParentChildSelector.cohabitant ||
+                            currentNodePath[j + 1][0] === ParentChildSelector.undividedSpouse)) {
+                        break;
                     }
+                    processedNodes.push(currentNodePath[j][1].toString())
                     let source = '', target = '';
                     if (currentNodePath[j + 1][0] <= currentNodePath[j][0] || (currentNodePath[j + 1][0] === ParentChildSelector.child && currentNodePath[j][0] === ParentChildSelector.testator)) {
                         source = currentNodePath[j][1].toString();
@@ -116,7 +166,7 @@ const getLevelMap = (data: any) => {
         if (!levelMap.has(node._level)) {
             levelMap.set(node._level, new Array<ChartNode>());
         }
-        const nodeLabel = nodeDetails._deceased ? `† ${nodeDetails._personID}` : nodeDetails._personID
+        const nodeLabel = nodeDetails._deceased ? `\u2020 ${nodeDetails._personID}` : nodeDetails._personID
         const newNode = new ChartNode(node._id.toString(), 'specialNode', new NodeData(nodeLabel,), { x: 0, y: 0 }, 0)
         levelMap.get(node._level)?.push(newNode)
         chartNodeMap.set(node._id, newNode)
