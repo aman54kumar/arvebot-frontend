@@ -14,8 +14,6 @@ class MessageParser {
 
     const curState = this.state;
 
-    // const customEvent = new CustomEvent("build", { detail: this.state })
-    // document.dispatchEvent(customEvent)
     if (curState.stepID === 0) {
       this.actionProvider.handleCaseName(message); //set stepID = 1
       return

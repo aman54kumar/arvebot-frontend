@@ -1,11 +1,10 @@
 import "./UndividedEstateWidget.scss";
 import { FormattedMessage } from "react-intl";
 import { ReactElement } from "react";
-import { ChatbotInterface } from "../../../Generics";
 
 
 const UndividedEstateWidget = (props: any): ReactElement => {
-  const { actionProvider, setState } = props;
+  const { actionProvider } = props;
 
   const setOption = (option: string) => {
     actionProvider.handleOwnershipResponse(option);
@@ -26,7 +25,7 @@ const UndividedEstateWidget = (props: any): ReactElement => {
       <div className="option-selector-button-container">
         <button
           className="option-selector-button"
-          onClick={(e) => {
+          onClick={() => {
 
             setOption("FELLESEIE")
           }}
@@ -35,7 +34,7 @@ const UndividedEstateWidget = (props: any): ReactElement => {
         </button>
         <button
           className="option-selector-button"
-          onClick={(e) => {
+          onClick={() => {
 
             setOption("DELVIS SÆREIE")
           }}
@@ -44,7 +43,7 @@ const UndividedEstateWidget = (props: any): ReactElement => {
         </button>
         <button
           className="option-selector-button"
-          onClick={(e) => {
+          onClick={() => {
 
             setOption("FULLT SÆREIE")
           }}

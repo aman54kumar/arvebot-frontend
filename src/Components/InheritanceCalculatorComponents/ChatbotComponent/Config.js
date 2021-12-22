@@ -5,11 +5,16 @@ import RearChildrenOptionSelector from "./Custom/Widgets/RearChildrenOptionSelec
 import UndividedEstateWidget from "./Custom/Widgets/UndividedEstateWidget/UndividedEstateWidget";
 import "react-chatbot-kit/build/main.css";
 import "../chatbot.scss";
-import { FormattedMessage } from "react-intl";
+// import { FormattedMessage } from "react-intl";
 import ChatHeader from "../OtherComponent/ChatHeader/ChatHeader";
 import { ChatbotState } from "./Generics";
+import Norsk from "../../../languages/translationNO.json";
+import { createIntl, createIntlCache } from "react-intl";
+const cache = createIntlCache();
+const intl = createIntl({ locale: "nb-NO", messages: Norsk }, cache);
 
 const botName = "Arvebot";
+const value = intl.formatMessage({ id: "Chatbot.CASE_NAME_QUESTION" });
 const config = {
   botName: botName,
   lang: "no",
@@ -22,9 +27,7 @@ const config = {
     },
   },
   state: ChatbotState,
-  initialMessages: [
-    createChatBotMessage(<FormattedMessage id="Chatbot.CASE_NAME_QUESTION" />),
-  ],
+  initialMessages: [createChatBotMessage(value, {})],
   customComponents: {
     header: (actionProvider) => <ChatHeader actionProvider={actionProvider} />,
   },
@@ -48,6 +51,4 @@ const config = {
     },
   ],
 };
-
 export default config;
- 

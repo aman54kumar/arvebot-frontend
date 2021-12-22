@@ -1,16 +1,15 @@
 class ChartNode {
   id: string;
   type: string;
-  data: { label: string };
+  data: NodeData;
   position: { x: number; y: number };
   xLevel: number;
   draggable = false;
   connectable = false;
-
   constructor(
     id: string,
     type: string,
-    data: { label: string },
+    data: NodeData,
     position: { x: number; y: number },
     xLevel: number
   ) {
@@ -21,5 +20,18 @@ class ChartNode {
     this.xLevel = xLevel;
   }
 }
+export class NodeData {
+  label = "";
+  pos: {
+    left?: null | string;
+    right?: null | string;
+    top?: null | string;
+    bottom?: null | string;
+  };
 
+  constructor(label: string, data?: any) {
+    this.label = label;
+    this.pos = data;
+  }
+}
 export default ChartNode;

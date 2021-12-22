@@ -1,4 +1,4 @@
-import { ReactElement, useRef, useEffect } from "react";
+import { ReactElement } from "react";
 import makeStyles from '@mui/styles/makeStyles';
 import { Box, Typography } from "@mui/material";
 import Typed from 'react-typed';

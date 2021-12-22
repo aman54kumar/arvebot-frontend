@@ -21,7 +21,7 @@ import HomePage from "./Pages/HomePage";
 import AboutPage from "./Pages/AboutPage";
 import InheritanceCalculatorPage from "./Pages/InheritanceCalculatorPage.js";
 import Footer from "./Components/Generic/Footer/Footer";
-import HomePageImage from "./assets/images/homepage-image.jpg";
+// import HomePageImage from "./assets/images/homepage-image.jpg";
 import ResourcesPage from "./Pages/ResourcesPage";
 
 import Norsk from "./languages/translationNO.json";
@@ -82,6 +82,7 @@ const App = (): ReactElement => {
   //   },
   // };
   return (
+
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
         <IntlProvider locale={lang} messages={langMessages}>

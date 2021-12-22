@@ -47,9 +47,9 @@ class ActionProvider {
         if (self.glb_state !== null) {
           self.isStarted = false;
           const customEvent = new CustomEvent("build", { detail: self.glb_state })
-          const messagesEvent = new CustomEvent("getMessages", { detail: self.glb_state.messages })
+          // const messagesEvent = new CustomEvent("getMessages", { detail: self.glb_state.messages })
           document.dispatchEvent(customEvent)
-          document.dispatchEvent(messagesEvent)
+          // document.dispatchEvent(messagesEvent)
           // close the interval
           self.glb_state = null;
           clearInterval(this.checkstate)
@@ -1076,7 +1076,7 @@ class ActionProvider {
       return this.returnState(state)
     })
   }
-
+  // eslint-disable-next-line
   handleFinalQuestion = (finalOption: string): void => {
     this.setState((state: ChatbotInterface) => {
       console.log(state);
