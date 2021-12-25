@@ -263,6 +263,16 @@ class QuestionConstants {
   TextBeforeSucsrUndvdSpouse = (<div><FormattedMessage id="Chatbot.TextBeforeSucsrUndvdSpouse" /></div>)
 
   // UndividedEstateEnd
+  addSuccessorCount = (person_id: string): ReactElement => {
+    return (
+      <div>
+        <FormattedMessage
+          id="Chatbot.addSuccessorCount"
+          values={{ person_ID: <strong>{person_id}</strong> }}
+        />
+      </div>
+    );
+  };
 }
 
 export default QuestionConstants;

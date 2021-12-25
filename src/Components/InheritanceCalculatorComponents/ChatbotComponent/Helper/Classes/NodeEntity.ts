@@ -1,3 +1,4 @@
+import { string } from "prop-types";
 import { ParentChildSelector } from "../Enums/ParentChildSelector";
 
 export class NodeEntity {
@@ -9,7 +10,7 @@ export class NodeEntity {
   _spouse: number | null;
   _cohabitant: number | null;
   _undividedEstateSpouse: number | null;
-
+  _relationshipMap: Map<string, string>;
   constructor(id: number, level: number) {
     this._id = id;
     this._level = level;
@@ -19,8 +20,15 @@ export class NodeEntity {
     this._spouse = null;
     this._cohabitant = null;
     this._undividedEstateSpouse = null;
+    this._relationshipMap = this._getRelationshipMap();
   }
-
+  _getRelationshipMap = (): Map<string, string> => {
+    return new Map<string, string>([
+      ["", ""],
+      ["", ""],
+    ]);
+    return new Map<string, string>();
+  };
   setPath(prevPath: Array<[number, number]>) {
     this._path = prevPath;
   }

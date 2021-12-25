@@ -22,6 +22,7 @@ class ChartNode {
 }
 export class NodeData {
   label = "";
+  showDialog: boolean;
   pos: {
     left?: null | string;
     right?: null | string;
@@ -32,6 +33,7 @@ export class NodeData {
   constructor(label: string, data?: any) {
     this.label = label;
     this.pos = data;
+    this.showDialog = false;
   }
 }
 export default ChartNode;

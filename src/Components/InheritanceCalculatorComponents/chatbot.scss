@@ -18,3 +18,11 @@
 .react-chatbot-kit-chat-message-container {
   background-color: azure;
 }
+
+#chatbot-warning-div {
+  background-color: "red";
+  position: "absolute";
+  bottom: "2.5rem";
+  width: "100%";
+  display: "none";
+}

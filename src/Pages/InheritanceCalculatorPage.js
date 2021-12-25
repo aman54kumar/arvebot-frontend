@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Typography } from "@mui/material";
+import { Paper, Typography } from "@mui/material";
 import { Chatbot } from "react-chatbot-kit";
 import Config from "../Components/InheritanceCalculatorComponents/ChatbotComponent/Config.js";
 import MessageParser from "../Components/InheritanceCalculatorComponents/ChatbotComponent/MessageParser";
@@ -61,6 +61,7 @@ const setWarningDiv = () => {
   const chatParentElement = document.getElementsByClassName(
     "react-chatbot-kit-chat-container"
   )[0];
+
   const newDiv = document.createElement("div");
   newDiv.id = "chatbot-warning-div";
   newDiv.innerHTML = "warning";
