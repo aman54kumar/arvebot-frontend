@@ -10,10 +10,10 @@ import App from "./App";
 import { render } from "react-dom";
 
 render(
-  <StrictMode>
-    <Router>
-      <App />
-    </Router>
-  </StrictMode>,
+  // <StrictMode>
+  <Router>
+    <App />
+  </Router>,
+  // </StrictMode>,
   document.getElementById("app")
 );

@@ -11,6 +11,7 @@ export class NodeEntity {
   _cohabitant: number | null;
   _undividedEstateSpouse: number | null;
   _relationshipMap: Map<string, string>;
+  _childCount: number;
   constructor(id: number, level: number) {
     this._id = id;
     this._level = level;
@@ -21,10 +22,19 @@ export class NodeEntity {
     this._cohabitant = null;
     this._undividedEstateSpouse = null;
     this._relationshipMap = this._getRelationshipMap();
+    this._childCount = 0;
   }
   _getRelationshipMap = (): Map<string, string> => {
     return new Map<string, string>([
-      ["", ""],
+      ["0", "child"],
+      ["00", "grandchild"],
+      ["1", "parent"],
+      ["10", "brother/sister"],
+      ["100", "nephew/niece"],
+      ["1000", "grandniece"],
+      ["12", "grandparent"],
+      ["120", "uncle/aunt"],
+      ["1200", "cousin"],
       ["", ""],
     ]);
     return new Map<string, string>();

@@ -1,5 +1,6 @@
 import ActionProvider from "./ActionProvider";
 import { ChatbotInterface } from "./Generics";
+import { QuestionType } from "./Helper/Enums/SuccessorParentType";
 import { ValidationType } from "./Helper/Enums/ValidationType";
 import { ChatbotValidation } from "./Helper/Methods/ChatbotValidation";
 
@@ -10,7 +11,7 @@ class MessageParser {
   constructor(actionProvider: ActionProvider, state: ChatbotInterface) {
     this.actionProvider = actionProvider;
     this.state = state;
-    this.chatbotValidator = new ChatbotValidation();
+    this.chatbotValidator = new ChatbotValidation(actionProvider);
 
   }
 
@@ -24,11 +25,8 @@ class MessageParser {
       return
     }
     if (curState.stepID === 1) {
-      if (this.chatbotValidator.validate(message, ValidationType.emptyValue)) {
+      if (this.chatbotValidator.validate(message, [ValidationType.emptyValue])) {
         return this.actionProvider.handleTestator(message);
-      } else {
-        // remove last message and update stepid
-        return this.actionProvider.handleValidation();
       }
       //set stepID = 2
     }
@@ -69,16 +67,26 @@ class MessageParser {
     //   return this.actionProvider.handleUnderAge(message); //set stepID = 5
     // }
     if (curState.stepID === 5) {
-      return this.actionProvider.handleSpouseInput(message); //set stepID = 6
+      if (this.chatbotValidator.validate(message, [ValidationType.emptyValue])) {
+        return this.actionProvider.handleSpouseInput(message); //set stepID = 6
+      }
     }
     if (curState.stepID === 6) {
       return this.actionProvider.handleCohabitantInput(message); //set stepID = 7
     }
     if (curState.stepID === 7) {
-      if (curState.successor_flag === "part1") {
+      if (curState.successor_flag === QuestionType.part1) {
         return this.actionProvider.handleSuccessorInput(message);
-      } else if (curState.successor_flag === "part2")
+      } else if (curState.successor_flag === QuestionType.part2)
         return this.actionProvider.handleChildAliveOption(message);
+      else if (curState.successor_flag === QuestionType.part3) {
+        if (this.chatbotValidator.validate(message, [ValidationType.emptyValue, ValidationType.onlyDigit])) {
+          return this.actionProvider.handleSuccessorCount(message);
+        } else {
+          // remove last message and update stepid
+          return this.actionProvider.handleValidation();
+        }
+      }
     }
     if (curState.stepID === 8) {
       if (curState.parent_flag === "part1") {
@@ -101,7 +109,8 @@ class MessageParser {
       return this.actionProvider.handleFinalQuestion(message)
     }
     else {
-      return this.actionProvider.handleDefault();
+      // return this.actionProvider.handleDefault();
+      return;
     }
   }
 }

@@ -52,5 +52,5 @@
   "Chatbot.UNDIVIDED_SPOUSE_QUESTION": "Skriv ID for tidligsavdøde for uskifteboet.",
   "Chatbot.OptionChoiceWrongWarning": "Please choose one of the options provided.",
   "Chatbot.TextBeforeSucsrUndvdSpouse": "Må disse ha vært født ved førstavdødes dødsfall?",
-  "Chatbot.addSuccessorCount": "How many children {person_id} has?"
+  "Chatbot.addSuccessorCount": "How many children {person_ID} has?"
 }

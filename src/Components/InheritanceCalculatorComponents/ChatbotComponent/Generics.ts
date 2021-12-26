@@ -27,6 +27,7 @@ export interface ChatbotInterface {
     temp_last: number;
   };
   tempMessages: any;
+  successorProcessArray: Array<[number, number]>;
 }
 
 export const ChatbotState: ChatbotInterface = {
@@ -55,4 +56,5 @@ export const ChatbotState: ChatbotInterface = {
     temp_last: 0,
   },
   tempMessages: [],
+  successorProcessArray: [],
 };
