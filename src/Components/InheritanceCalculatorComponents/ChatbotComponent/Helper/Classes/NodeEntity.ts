@@ -12,6 +12,7 @@ export class NodeEntity {
   _undividedEstateSpouse: number | null;
   _relationshipMap: Map<string, string>;
   _childCount: number;
+  _processChildNodePos: number;
   constructor(id: number, level: number) {
     this._id = id;
     this._level = level;
@@ -23,6 +24,7 @@ export class NodeEntity {
     this._undividedEstateSpouse = null;
     this._relationshipMap = this._getRelationshipMap();
     this._childCount = 0;
+    this._processChildNodePos = 0;
   }
   _getRelationshipMap = (): Map<string, string> => {
     return new Map<string, string>([
@@ -127,4 +129,9 @@ export class NodeEntity {
     partner._path = [...this._path];
     partner._path.push([partnerSelector, partner._id]);
   };
+  getChildUnprocessedNode() {
+    if (this._processChildNodePos < this._children.length) {
+      return this._children[this._processChildNodePos++];
+    }
+  }
 }

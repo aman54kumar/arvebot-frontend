@@ -363,7 +363,7 @@ class ActionProvider {
           temp_person: newUndividedSpouse,
         };
         const newSuccessorQuestion = this.createChatBotMessage(
-          this.QuestionConsts.addSuccessorQuestion1(newUndividedSpouseDetail._personID)
+          this.QuestionConsts.addSuccessorQuestion1(newUndividedSpouseDetail._personName)
         );
         this.addMessageToBotState(newSuccessorQuestion);
       }
@@ -479,7 +479,7 @@ class ActionProvider {
           successor_flag: "part3",
         };
         const newSuccessorQuestion = this.createChatBotMessage(
-          this.QuestionConsts.addSuccessorCount(testator._personID)
+          this.QuestionConsts.addSuccessorCount(testator._personName)
         );
         this.addMessageToBotState(newSuccessorQuestion);
         return this.returnState(state);
@@ -504,7 +504,7 @@ class ActionProvider {
           successor_flag: "part1",
         };
         const newSuccessorQuestion = this.createChatBotMessage(
-          this.QuestionConsts.addSuccessorQuestion1(testator._personID)
+          this.QuestionConsts.addSuccessorQuestion1(testator._personName)
         );
         this.addMessageToBotState(newSuccessorQuestion);
         return this.returnState(state);
@@ -555,7 +555,7 @@ class ActionProvider {
 
 
         const newSuccessorQuestion = this.createChatBotMessage(
-          this.QuestionConsts.addSuccessorQuestion1(testator._personID)
+          this.QuestionConsts.addSuccessorQuestion1(testator._personName)
         );
         this.addMessageToBotState(newSuccessorQuestion);
         return this.returnState(state);
@@ -568,7 +568,7 @@ class ActionProvider {
           successor_flag: "part1",
         };
         const newSuccessorQuestion = this.createChatBotMessage(
-          this.QuestionConsts.addSuccessorQuestion1(testator._personID)
+          this.QuestionConsts.addSuccessorQuestion1(testator._personName)
         );
         this.addMessageToBotState(newSuccessorQuestion);
         return this.returnState(state);
@@ -581,7 +581,6 @@ class ActionProvider {
     this.setState((state: ChatbotInterface) => {
       state.temp_person._childCount = successorCount;
       if (successorCount === 0) {
-        // TODO
         console.log("TODO successor count = 0 ");
         const parentID = state.temp_person.getParentId()
         if (parentID) {
@@ -594,20 +593,26 @@ class ActionProvider {
         }
         return this.returnState(state);
       }
+      let itr_id = state.id;
+      for (let i = 0; i < state.temp_person._childCount; i++) {
+        const child = this.createEmptyNode(state, itr_id++);
+        state.temp_person.add_child(child, true);
+      }
+      state.id = itr_id;
       if (state.successorProcessArray.filter(t => t[0] === state.temp_person._level).length === 0) {
         state.successorProcessArray.push([state.temp_person._level, 1]);
       }
 
       state.successor_flag = QuestionType.part1;
       const newSuccessorQuestion = this.createChatBotMessage(
-        this.QuestionConsts.addSuccessorQuestion1(this.getPerson(state.temp_person._id, state.personsMap)._personID)
+        this.QuestionConsts.addSuccessorQuestion1(this.getPerson(state.temp_person._id, state.personsMap)._personName)
       );
       this.addMessageToBotState(newSuccessorQuestion);
       return this.returnState(state);
     });
   }
   handleSuccessorInput = (successorResponse: string): void => {
-    const child_id = successorResponse;
+    const child_name = successorResponse;
     this.setState((state: ChatbotInterface) => {
       // if (child_id === "") {
       //   const currentParentID = state.temp_person.getParentId();
@@ -632,22 +637,31 @@ class ActionProvider {
       //   }
 
       // } else {
-      const child = this.createNewPerson(child_id, state);
 
-      state = {
-        ...state,
-        successor_flag: QuestionType.part2,
-        temp_child: child,
-      };
-      state.temp_person.add_child(child, true);
-      const personId: any = Person.getPerson(child._id, state.personsMap)?._personID
-      const aliveQuestion = this.createChatBotMessage(
-        this.QuestionConsts.AliveQuestion(personId),
-        this.QuestionConsts.AliveWidgetOptions
-      );
-      this.addMessageToBotState(aliveQuestion);
-      // }
-      return this.returnState(state);
+      const childID = state.temp_person.getChildUnprocessedNode();
+      if (childID) {
+        const child = this.getNode(childID, state.nodeMap)
+        const childDetail = this.getPerson(childID, state.personsMap);
+        childDetail._personName = child_name;
+        state = {
+          ...state,
+          successor_flag: QuestionType.part2,
+          temp_child: child,
+        };
+
+        const personId: any = Person.getPerson(child._id, state.personsMap)?._personName
+        const aliveQuestion = this.createChatBotMessage(
+          this.QuestionConsts.AliveQuestion(personId),
+          this.QuestionConsts.AliveWidgetOptions
+        );
+        this.addMessageToBotState(aliveQuestion);
+        // }
+        return this.returnState(state);
+      } else {
+        // error case
+        console.log("Count of children exceeded");
+      }
+
     });
   };
 
@@ -668,7 +682,7 @@ class ActionProvider {
           temp_person: child
         };
         const newSuccessorQuestion = this.createChatBotMessage(
-          this.QuestionConsts.addSuccessorCount(childDetail._personID)
+          this.QuestionConsts.addSuccessorCount(childDetail._personName)
         );
         this.addMessageToBotState(newSuccessorQuestion);
         return this.returnState(state);
@@ -719,7 +733,7 @@ class ActionProvider {
         state.successor_flag = QuestionType.part1;
         const allChildrenID = this.getParentChildrenIDStrings(state.temp_person._children, state)
         const newSuccessorQuestion = this.createChatBotMessage(
-          this.QuestionConsts.addSuccessorQuestion2(this.getPerson(state.temp_person._id, state.personsMap)._personID, allChildrenID)
+          this.QuestionConsts.addSuccessorQuestion2(this.getPerson(state.temp_person._id, state.personsMap)._personName, allChildrenID)
         );
         this.addMessageToBotState(newSuccessorQuestion);
         return this.returnState(state);
@@ -751,14 +765,14 @@ class ActionProvider {
             this.closestSurvivingRelativeChildren()
 
           } else {
-            successorProcessArray[successorProcessArray.length - 1][1] = childItrPos + 1;
+            successorProcessArray[successorProcessArray.length - 1][1] = successorProcessArray[successorProcessArray.length - 1][1] + 1;
             // ask childid question
             state.temp_person = currentParent
             const currentParentDetail = this.getPerson(currentParentID, state.personsMap)
             state.successor_flag = QuestionType.part1;
             const allChildrenID = this.getParentChildrenIDStrings(currentParent._children, state)
             const newSuccessorQuestion = this.createChatBotMessage(
-              this.QuestionConsts.addSuccessorQuestion2(currentParentDetail._personID, allChildrenID)
+              this.QuestionConsts.addSuccessorQuestion2(currentParentDetail._personName, allChildrenID)
             );
             this.addMessageToBotState(newSuccessorQuestion);
             return this.returnState(state);
@@ -789,7 +803,7 @@ class ActionProvider {
 
             const newSuccessorQuestion = this.createChatBotMessage(
               this.QuestionConsts.addSuccessorQuestion2(
-                Person.getPerson(currentParent._id, state.personsMap)._personID,
+                Person.getPerson(currentParent._id, state.personsMap)._personName,
                 allChildrenID
               )
             );
@@ -807,7 +821,7 @@ class ActionProvider {
               const allParentsID = this.getParentChildrenIDStrings(currentParent._parents, state)
               const newParentQuestion = this.createChatBotMessage(
                 this.QuestionConsts.addParentsQuestion2(
-                  Person.getPerson(currentParentID, state.personsMap)._personID,
+                  Person.getPerson(currentParentID, state.personsMap)._personName,
                   allParentsID
                 )
               );
@@ -842,7 +856,7 @@ class ActionProvider {
           };
         }
         const aliveQuestion = this.createChatBotMessage(
-          this.QuestionConsts.AliveQuestion(Person.getPerson(predecessor._id, state.personsMap)._personID),
+          this.QuestionConsts.AliveQuestion(Person.getPerson(predecessor._id, state.personsMap)._personName),
           this.QuestionConsts.AliveWidgetOptions
         );
         this.addMessageToBotState(aliveQuestion);
@@ -871,7 +885,7 @@ class ActionProvider {
 
           const newSuccessorQuestion = this.createChatBotMessage(
             this.QuestionConsts.addSuccessorQuestion1(
-              temp_child_detail._personID
+              temp_child_detail._personName
             )
           );
           this.addMessageToBotState(newSuccessorQuestion);
@@ -887,7 +901,7 @@ class ActionProvider {
 
           const newSuccessorQuestion = this.createChatBotMessage(
             this.QuestionConsts.addSuccessorQuestion2(
-              temp_person_detail._personID,
+              temp_person_detail._personName,
               allChildrenID
             )
           );
@@ -910,7 +924,7 @@ class ActionProvider {
 
           const newSuccessorQuestion = this.createChatBotMessage(
             this.QuestionConsts.addSuccessorQuestion2(
-              temp_parent_detail._personID,
+              temp_parent_detail._personName,
               allChildrenID
             )
           );
@@ -931,7 +945,7 @@ class ActionProvider {
             // const temp_person_detail
             const newParentQuestion = this.createChatBotMessage(
               this.QuestionConsts.addParentsQuestion2(
-                temp_person_detail._personID,
+                temp_person_detail._personName,
                 allParentsID
               )
             );
@@ -969,7 +983,7 @@ class ActionProvider {
               const allChildrenID = this.getParentChildrenIDStrings(currentGrandParent._children, state)
               const newSuccessorQuestion = this.createChatBotMessage(
                 this.QuestionConsts.addSuccessorQuestion2(
-                  Person.getPerson(currentGrandParent._id, state.personsMap)._personID,
+                  Person.getPerson(currentGrandParent._id, state.personsMap)._personName,
                   allChildrenID
                 )
               );
@@ -989,7 +1003,7 @@ class ActionProvider {
 
               const newParentQuestion = this.createChatBotMessage(
                 this.QuestionConsts.addGrandParentsQuestion2(
-                  Person.getPerson(currentParentID, state.personsMap)._personID,
+                  Person.getPerson(currentParentID, state.personsMap)._personName,
                   allParentsID
                 )
               );
@@ -1008,7 +1022,7 @@ class ActionProvider {
               grandParent_flag: "part1"
             };
             const newParentQuestion = this.createChatBotMessage(
-              this.QuestionConsts.addParentsQuestion1(Person.getPerson(state.person._id, state.personsMap)._personID)
+              this.QuestionConsts.addParentsQuestion1(Person.getPerson(state.person._id, state.personsMap)._personName)
             );
             const newParentWarning = this.createChatBotMessage(<p>Empty value not allowed</p>)
             this.addMessageToBotState(newParentWarning)
@@ -1035,7 +1049,7 @@ class ActionProvider {
           };
         }
         const aliveQuestion = this.createChatBotMessage(
-          this.QuestionConsts.AliveQuestion(Person.getPerson(predecessor._id, state.personsMap)._personID),
+          this.QuestionConsts.AliveQuestion(Person.getPerson(predecessor._id, state.personsMap)._personName),
           this.QuestionConsts.AliveWidgetOptions
         );
         this.addMessageToBotState(aliveQuestion);
@@ -1068,7 +1082,7 @@ class ActionProvider {
 
             const newSuccessorQuestion = this.createChatBotMessage(
               this.QuestionConsts.addSuccessorQuestion1(
-                temp_child_detail._personID
+                temp_child_detail._personName
               )
             );
             this.addMessageToBotState(newSuccessorQuestion);
@@ -1083,7 +1097,7 @@ class ActionProvider {
             const allChildrenID = this.getParentChildrenIDStrings(temp_person._children, state)
             const newSuccessorQuestion = this.createChatBotMessage(
               this.QuestionConsts.addSuccessorQuestion2(
-                temp_person_detail._personID,
+                temp_person_detail._personName,
                 allChildrenID
               )
             );
@@ -1099,7 +1113,7 @@ class ActionProvider {
           const allChildrenID = this.getParentChildrenIDStrings(temp_person._children, state)
           const newSuccessorQuestion = this.createChatBotMessage(
             this.QuestionConsts.addSuccessorQuestion2(
-              temp_person_detail._personID,
+              temp_person_detail._personName,
               allChildrenID
             )
           );
@@ -1121,7 +1135,7 @@ class ActionProvider {
           const allChildrenID = this.getParentChildrenIDStrings(temp_parent._children, state)
           const newSuccessorQuestion = this.createChatBotMessage(
             this.QuestionConsts.addSuccessorQuestion2(
-              temp_parent_detail._personID,
+              temp_parent_detail._personName,
               allChildrenID
             )
           );
@@ -1140,7 +1154,7 @@ class ActionProvider {
             const allGrandParentsID = this.getParentChildrenIDStrings(temp_person._parents, state)
             const newGrandParentQuestion = this.createChatBotMessage(
               this.QuestionConsts.addGrandParentsQuestion2(
-                temp_parent_detail._personID,
+                temp_parent_detail._personName,
                 allGrandParentsID
               )
             );
@@ -1159,7 +1173,7 @@ class ActionProvider {
   askForNextGrandParent = () => {
     this.setState((state: ChatbotInterface) => {
       if (state.deceasedParentsArray.length !== 0) {
-        const grandParentQuestion1 = this.createChatBotMessage(this.QuestionConsts.addGrandParentsQuestion1(Person.getPerson(state.deceasedParentsArray[0], state.personsMap)._personID))
+        const grandParentQuestion1 = this.createChatBotMessage(this.QuestionConsts.addGrandParentsQuestion1(Person.getPerson(state.deceasedParentsArray[0], state.personsMap)._personName))
         state = {
           ...state,
           stepID: 14,
@@ -1224,7 +1238,7 @@ class ActionProvider {
             parent_flag: "part1"
           };
           const newParentQuestion = this.createChatBotMessage(
-            this.QuestionConsts.addParentsQuestion1(testatorDetail._personID)
+            this.QuestionConsts.addParentsQuestion1(testatorDetail._personName)
           );
           this.addMessageToBotState(newParentQuestion);
           return this.returnState(state)
@@ -1273,7 +1287,7 @@ class ActionProvider {
         parent_flag: "part1"
       };
       const newParentQuestion = this.createChatBotMessage(
-        this.QuestionConsts.addParentsQuestion1(testatorDetail._personID)
+        this.QuestionConsts.addParentsQuestion1(testatorDetail._personName)
       );
       this.addMessageToBotState(newParentQuestion);
       return this.returnState(state)
@@ -1281,7 +1295,7 @@ class ActionProvider {
   };
 
   getParentChildrenIDStrings = (collection: Array<number>, state: ChatbotInterface): ReactElement => {
-    return <strong>{`{{ ${collection.map((child_id) => Person.getPerson(child_id, state.personsMap)._personID).join(', ')}}}`}</strong>
+    return <strong>{`{{ ${collection.map((child_id) => Person.getPerson(child_id, state.personsMap)._personName).filter(name => name !== '').join(', ')} }}`}</strong>
   }
 
   askFinalQuestion = (): void => {
@@ -1346,7 +1360,7 @@ class ActionProvider {
             ...state,
             stepID: 12
           }
-          const marriedParentsQn = this.createChatBotMessage(this.QuestionConsts.MarriedParents1(parent1Detail._personID, parent2Detail._personID))
+          const marriedParentsQn = this.createChatBotMessage(this.QuestionConsts.MarriedParents1(parent1Detail._personName, parent2Detail._personName))
           this.addMessageToBotState(marriedParentsQn)
           return this.returnState(state)
         }
@@ -1355,7 +1369,7 @@ class ActionProvider {
             ...state,
             stepID: 12
           }
-          const marriedParentsQn = this.createChatBotMessage(this.QuestionConsts.MarriedParents2(parent1Detail._personID, parent2Detail._personID))
+          const marriedParentsQn = this.createChatBotMessage(this.QuestionConsts.MarriedParents2(parent1Detail._personName, parent2Detail._personName))
           this.addMessageToBotState(marriedParentsQn)
           return this.returnState(state)
         }
@@ -1384,7 +1398,7 @@ class ActionProvider {
       }
       if (state.deceasedParentsArray.length !== 0) {
 
-        const grandParentQuestion1 = this.createChatBotMessage(this.QuestionConsts.addGrandParentsQuestion1(Person.getPerson(state.deceasedParentsArray[0], state.personsMap)._personID))
+        const grandParentQuestion1 = this.createChatBotMessage(this.QuestionConsts.addGrandParentsQuestion1(Person.getPerson(state.deceasedParentsArray[0], state.personsMap)._personName))
         state = {
           ...state,
           stepID: 14,
@@ -1438,7 +1452,13 @@ class ActionProvider {
     state.nodeMap.set(newNode._id, newNode);
     return newNode;
   }
-
+  createEmptyNode = (state: any, id: number) => {
+    const newPerson = new Person("", id)
+    state.personsMap.set(newPerson._id, newPerson)
+    const newNode = new NodeEntity(newPerson._id, 0);
+    state.nodeMap.set(newNode._id, newNode);
+    return newNode;
+  }
   createTestator = (personID: string, state: any) => {
     const newPerson = new Person(personID, this.generateNextID(state.id))
     newPerson._deceased = true;

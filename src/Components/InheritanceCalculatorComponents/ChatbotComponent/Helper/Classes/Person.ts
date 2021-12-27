@@ -1,6 +1,6 @@
 export default class Person {
   _id: number;
-  _personID = "";
+  _personName = "";
   _undividedEstateSpouse: Person | undefined;
   _deceased = false;
   _spouse: Person | undefined;
@@ -9,16 +9,16 @@ export default class Person {
   _underAge: boolean | undefined;
 
   constructor(personid: string, id = 1) {
-    this._personID = personid;
+    this._personName = personid;
     this._id = id;
   }
 
   get person_id(): string {
-    return this._personID;
+    return this._personName;
   }
 
   set person_id(value: string) {
-    this._personID = value;
+    this._personName = value;
   }
 
   get deceased(): boolean {

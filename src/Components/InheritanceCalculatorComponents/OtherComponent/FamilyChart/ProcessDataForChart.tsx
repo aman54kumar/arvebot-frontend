@@ -11,12 +11,14 @@ let chartNodeMap = new Map<number, ChartNode>()
 let connectorArray = new Array<ChartConnector>()
 let xDiff = 200;
 let yDiff = 100;
+let rndID: number;
 export const processData = (data: any): any => {
     maxLevel = -999999, minLevel = 999999;
     chartNodeMap = new Map<number, ChartNode>()
     connectorArray = new Array<ChartConnector>()
     xDiff = 200;
     yDiff = 100;
+    rndID = 1;
     // // divide nodeMap into levels
     const levelMap = getLevelMap(data);
     const maxLevelData = levelMap.get(maxLevel);
@@ -157,6 +159,7 @@ const getLevelMap = (data: any) => {
     // eslint-disable-next-line
     data.nodeMap.forEach(function (node: NodeEntity, key: number) {
         const nodeDetails = Person.getPerson(node._id, data.personsMap)
+
         if (node._level > maxLevel) {
             maxLevel = node._level;
         }
@@ -166,7 +169,7 @@ const getLevelMap = (data: any) => {
         if (!levelMap.has(node._level)) {
             levelMap.set(node._level, new Array<ChartNode>());
         }
-        const nodeLabel = nodeDetails._deceased ? `\u2020 ${nodeDetails._personID}` : nodeDetails._personID
+        const nodeLabel = nodeDetails._deceased ? `\u2020 ${nodeDetails._personName}` : nodeDetails._personName
         const newNode = new ChartNode(node._id.toString(), 'specialNode', new NodeData(nodeLabel,), { x: 0, y: 0 }, 0)
         levelMap.get(node._level)?.push(newNode)
         chartNodeMap.set(node._id, newNode)
@@ -216,4 +219,8 @@ const getChartNode = (id: string) => {
         throw new Error("Person not found with given id:" + id);
     }
     return chartNode;
+}
+
+const randomIDGenerator = () => {
+    return `rndID_${(rndID++).toString()}`
 }
