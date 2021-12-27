@@ -583,7 +583,16 @@ class ActionProvider {
       if (successorCount === 0) {
         // TODO
         console.log("TODO successor count = 0 ");
-
+        const parentID = state.temp_person.getParentId()
+        if (parentID) {
+          const parent = this.getNode(parentID, state.nodeMap);
+          state.temp_person = parent;
+          const successorProcessArray = state.successorProcessArray
+          this.handleNoSuccessorCase(state, successorProcessArray);
+        } else {
+          this.closestSurvivingRelativeChildren()
+        }
+        return this.returnState(state);
       }
       if (state.successorProcessArray.filter(t => t[0] === state.temp_person._level).length === 0) {
         state.successorProcessArray.push([state.temp_person._level, 1]);
@@ -647,69 +656,12 @@ class ActionProvider {
       const child = state.temp_child;
       const childDetail = this.getPerson(child._id, state.personsMap);
       // const temp_person: NodeEntity = state.temp_person
-      let successorProcessArray = state.successorProcessArray
+      const successorProcessArray = state.successorProcessArray
       if (alive) {
-        const childItrPos = successorProcessArray[successorProcessArray.length - 1][1]
-        if (childItrPos) {
-          if (state.temp_person._childCount > childItrPos) {
-            successorProcessArray[successorProcessArray.length - 1][1] = childItrPos + 1;
-            // ask childid question
-            state.successor_flag = QuestionType.part1;
-            const allChildrenID = this.getParentChildrenIDStrings(state.temp_person._children, state)
-            const newSuccessorQuestion = this.createChatBotMessage(
-              this.QuestionConsts.addSuccessorQuestion2(this.getPerson(state.temp_person._id, state.personsMap)._personID, allChildrenID)
-            );
-            this.addMessageToBotState(newSuccessorQuestion);
-            return this.returnState(state);
-          } else if (state.temp_person._childCount === childItrPos) {
-            if (state.temp_person._id === state.person._id) {
-              // exit case
-              console.log("Exit Case");
-            } else {
-              let currentParentID = state.temp_person._id;
-              let currentParent = NodeEntity.getNode(currentParentID, state.nodeMap)
-
-              let isCurrentParentID = true;
-              while (successorProcessArray[successorProcessArray.length - 1][1] === currentParent._childCount) {
-                successorProcessArray = successorProcessArray.slice(0, -1)
-                // current parent update
-                const currentId = currentParent.getParentId();
-                if (currentId) {
-                  currentParentID = currentId;
-                  currentParent = NodeEntity.getNode(currentParentID, state.nodeMap);
-                } else {
-                  isCurrentParentID = false
-                  break;
-                }
-              }
-              if (!isCurrentParentID) {
-                // exit case
-                console.log("Exit Case");
-
-              } else {
-                successorProcessArray[successorProcessArray.length - 1][1] = childItrPos + 1;
-                // ask childid question
-                state.temp_person = currentParent
-                const currentParentDetail = this.getPerson(currentParentID, state.personsMap)
-                state.successor_flag = QuestionType.part1;
-                const allChildrenID = this.getParentChildrenIDStrings(currentParent._children, state)
-                const newSuccessorQuestion = this.createChatBotMessage(
-                  this.QuestionConsts.addSuccessorQuestion2(currentParentDetail._personID, allChildrenID)
-                );
-                this.addMessageToBotState(newSuccessorQuestion);
-                return this.returnState(state);
-              }
-              console.log("Here");
-
-            }
-          } else {
-            throw new Error("state.temp_person._childCount < childItrPos case")
-          }
-        } else {
-          throw new Error("childItrPos is null")
-        }
+        this.handleNoSuccessorCase(state, successorProcessArray);
       } else {
         // not alive
+        childDetail.deceased = true;
         state = {
           ...state,
           successor_flag: QuestionType.part3,
@@ -758,7 +710,67 @@ class ActionProvider {
   //   return this.returnState(state);
   // }
 
+  handleNoSuccessorCase = (state: ChatbotInterface, successorProcessArray: Array<[number, number]>) => {
+    const childItrPos = successorProcessArray[successorProcessArray.length - 1][1]
+    if (childItrPos) {
+      if (state.temp_person._childCount > childItrPos) {
+        successorProcessArray[successorProcessArray.length - 1][1] = childItrPos + 1;
+        // ask childid question
+        state.successor_flag = QuestionType.part1;
+        const allChildrenID = this.getParentChildrenIDStrings(state.temp_person._children, state)
+        const newSuccessorQuestion = this.createChatBotMessage(
+          this.QuestionConsts.addSuccessorQuestion2(this.getPerson(state.temp_person._id, state.personsMap)._personID, allChildrenID)
+        );
+        this.addMessageToBotState(newSuccessorQuestion);
+        return this.returnState(state);
+      } else if (state.temp_person._childCount === childItrPos) {
+        if (state.temp_person._id === state.person._id) {
+          // exit case
+          console.log("Exit Case");
+          this.closestSurvivingRelativeChildren()
+        } else {
+          let currentParentID = state.temp_person._id;
+          let currentParent = NodeEntity.getNode(currentParentID, state.nodeMap)
 
+          let isCurrentParentID = true;
+          while (successorProcessArray[successorProcessArray.length - 1][1] === currentParent._childCount) {
+            successorProcessArray.pop()
+            // current parent update
+            const currentId = currentParent.getParentId();
+            if (currentId) {
+              currentParentID = currentId;
+              currentParent = NodeEntity.getNode(currentParentID, state.nodeMap);
+            } else {
+              isCurrentParentID = false
+              break;
+            }
+          }
+          if (!isCurrentParentID) {
+            // exit case
+            console.log("Exit Case");
+            this.closestSurvivingRelativeChildren()
+
+          } else {
+            successorProcessArray[successorProcessArray.length - 1][1] = childItrPos + 1;
+            // ask childid question
+            state.temp_person = currentParent
+            const currentParentDetail = this.getPerson(currentParentID, state.personsMap)
+            state.successor_flag = QuestionType.part1;
+            const allChildrenID = this.getParentChildrenIDStrings(currentParent._children, state)
+            const newSuccessorQuestion = this.createChatBotMessage(
+              this.QuestionConsts.addSuccessorQuestion2(currentParentDetail._personID, allChildrenID)
+            );
+            this.addMessageToBotState(newSuccessorQuestion);
+            return this.returnState(state);
+          }
+        }
+      } else {
+        throw new Error("state.temp_person._childCount < childItrPos case")
+      }
+    } else {
+      throw new Error("childItrPos is null")
+    }
+  }
   handleParentsInput = (parentResponse: string): void => {
     const predecessor_id = parentResponse;
     this.setState((state: ChatbotInterface) => {
