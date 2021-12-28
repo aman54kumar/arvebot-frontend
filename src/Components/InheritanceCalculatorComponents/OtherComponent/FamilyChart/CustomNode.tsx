@@ -1,6 +1,4 @@
-import { Popover, Popper, Typography } from "@mui/material";
-import { useEffect } from "react";
-import { useRef, useState } from "react";
+import { Popper, Typography } from "@mui/material";
 import { Handle, Position } from "react-flow-renderer";
 
 enum HandleType {
@@ -51,7 +49,6 @@ const partnerNodeStyles = {
 
 const CustomNode = (totalData: any) => {
   const data = totalData.data;
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   // const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
   //   console.log(event);
 

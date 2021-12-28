@@ -14,7 +14,7 @@ const cache = createIntlCache();
 const intl = createIntl({ locale: "nb-NO", messages: Norsk }, cache);
 
 const botName = "Arvebot";
-const value = intl.formatMessage({ id: "Chatbot.CASE_NAME_QUESTION" });
+const value = intl.formatMessage({ id: "Chatbot.TESTATOR_QUESTION" });
 const config = {
   botName: botName,
   lang: "no",

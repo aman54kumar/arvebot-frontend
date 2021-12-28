@@ -1,6 +1,6 @@
 import ActionProvider from "./ActionProvider";
 import { ChatbotInterface } from "./Generics";
-import { QuestionType } from "./Helper/Enums/SuccessorParentType";
+import { ChatStepTypes, QuestionType } from "./Helper/Enums/ChatStepTypes";
 import { ValidationType } from "./Helper/Enums/ValidationType";
 import { ChatbotValidation } from "./Helper/Methods/ChatbotValidation";
 
@@ -20,20 +20,19 @@ class MessageParser {
 
     const curState = this.state;
 
-    if (curState.stepID === 0) {
-      this.actionProvider.handleCaseName(message); //set stepID = 1
-      return
-    }
-    if (curState.stepID === 1) {
+    // if (curState.stepID === ChatStepTypes.) {
+    //   this.actionProvider.handleCaseName(message); //set stepID = 1
+    //   return
+    // }
+    if (curState.stepID === ChatStepTypes.initalStep) {
       if (this.chatbotValidator.validate(message, [ValidationType.emptyValue])) {
         return this.actionProvider.handleTestator(message);
       }
-      //set stepID = 2
     }
     // if (curState.stepID === 2) {
     //   return this.actionProvider.handleUndividedEstate(message); //set stepID = 3
     // }
-    if (curState.stepID === 3) {
+    if (curState.stepID === ChatStepTypes.undividedEstateStep) {
       if (curState.undividedEstate.undivided_flag === "part1") {
         return this.actionProvider.handleTotalEstateValueResponse(message)
       }
@@ -63,18 +62,22 @@ class MessageParser {
       }
 
     }
+
+    if (curState.stepID === ChatStepTypes.netWealthStep) {
+      return this.actionProvider.handleNetWealth(message)
+    }
     // if (curState.stepID === 4) {
     //   return this.actionProvider.handleUnderAge(message); //set stepID = 5
     // }
-    if (curState.stepID === 5) {
+    if (curState.stepID === ChatStepTypes.spouseStep) {
       if (this.chatbotValidator.validate(message, [ValidationType.emptyValue])) {
         return this.actionProvider.handleSpouseInput(message); //set stepID = 6
       }
     }
-    if (curState.stepID === 6) {
+    if (curState.stepID === ChatStepTypes.cohabitantStep) {
       return this.actionProvider.handleCohabitantInput(message); //set stepID = 7
     }
-    if (curState.stepID === 7) {
+    if (curState.stepID === ChatStepTypes.successorStep) {
       if (curState.successor_flag === QuestionType.part1) {
         return this.actionProvider.handleSuccessorInput(message);
       } else if (curState.successor_flag === QuestionType.part2)
@@ -88,14 +91,14 @@ class MessageParser {
         }
       }
     }
-    if (curState.stepID === 8) {
+    if (curState.stepID === ChatStepTypes.parentsStep) {
       if (curState.parent_flag === "part1") {
         return this.actionProvider.handleParentsInput(message);
       }
       else if (curState.parent_flag == "part2")
         return this.actionProvider.handleParentAliveOption(message)
     }
-    if (curState.stepID === 14) {
+    if (curState.stepID === ChatStepTypes.grandParentStep) {
       if (curState.grandParent_flag === "part1") {
         return this.actionProvider.handleGrandParentResponse(message)
       }
@@ -104,7 +107,7 @@ class MessageParser {
       }
     }
 
-    if (curState.stepID === -1) {
+    if (curState.stepID === ChatStepTypes.finalStep) {
       console.log(curState)
       return this.actionProvider.handleFinalQuestion(message)
     }

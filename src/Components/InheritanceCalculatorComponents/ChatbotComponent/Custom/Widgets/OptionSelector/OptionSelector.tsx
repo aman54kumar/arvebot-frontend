@@ -2,6 +2,7 @@ import "./OptionSelector.scss";
 import { FormattedMessage } from "react-intl";
 import { ReactElement } from "react";
 import { ChatbotInterface } from "../../../Generics";
+import { ChatStepTypes, QuestionType } from "../../../Helper/Enums/ChatStepTypes";
 
 
 const OptionSelector = (props: any): ReactElement => {
@@ -12,42 +13,42 @@ const OptionSelector = (props: any): ReactElement => {
       const curStep = state.stepID;
       // toggleInputField();
       switch (curStep) {
-        case 2: {
+        case ChatStepTypes.testatorStep: {
           actionProvider.handleUndividedEstateChoice(option);
           break;
         }
-        case 3: {
+        case ChatStepTypes.undividedEstateStep: {
           actionProvider.handleChildAliveOption(option);
           break;
         }
-        case 4: {
+        case ChatStepTypes.underAgeStep: {
           actionProvider.handleUnderAge(option);
           break;
         }
-        case 7: {
+        case ChatStepTypes.successorStep: {
           state.successor_flag = "part2"
           actionProvider.handleChildAliveOption(option);
           break;
         }
-        case 8: {
-          state.parent_flag = "part2";
+        case ChatStepTypes.parentsStep: {
+          state.parent_flag = QuestionType.part2;
           actionProvider.handleParentAliveOption(option);
           break;
         }
-        case 10: {
+        case ChatStepTypes.rearChildrenStep: {
           actionProvider.handleRearChildrenResult(option);
           break;
         }
-        case 11: {
+        case ChatStepTypes.marriedParentsStep: {
           actionProvider.handleMarriedParents(option);
           break;
         }
-        case 14: {
-          state.grandParent_flag = "part2"
+        case ChatStepTypes.grandParentStep: {
+          state.grandParent_flag = QuestionType.part2
           actionProvider.handleGrandParentAliveOption(option)
           break;
         }
-        case -1: {
+        case ChatStepTypes.finalStep: {
           actionProvider.handleFinalQuestion(option)
           break;
         }

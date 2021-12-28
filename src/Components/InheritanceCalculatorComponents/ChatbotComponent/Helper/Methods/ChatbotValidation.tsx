@@ -40,6 +40,7 @@ export class ChatbotValidation {
         }
         return true;
     }
+    // eslint-disable-next-line
     validateAmount = (message: string) => {
         return false
     }

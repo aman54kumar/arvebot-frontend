@@ -1,8 +1,8 @@
 import Person from "../ChatbotComponent/Helper/Classes/Person";
 import { NodeEntity } from "./Helper/Classes/NodeEntity";
-import { QuestionType } from "../ChatbotComponent/Helper/Enums/SuccessorParentType";
+import { ChatStepTypes, QuestionType } from "./Helper/Enums/ChatStepTypes";
 export interface ChatbotInterface {
-  stepID: number;
+  stepID: string;
   person: NodeEntity;
   testator: NodeEntity;
   caseName: string;
@@ -31,7 +31,7 @@ export interface ChatbotInterface {
 }
 
 export const ChatbotState: ChatbotInterface = {
-  stepID: 0,
+  stepID: ChatStepTypes.initalStep,
   person: new NodeEntity(0, 0),
   testator: new NodeEntity(0, 0),
   caseName: "",

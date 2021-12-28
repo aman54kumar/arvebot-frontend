@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+// import { StrictMode } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import "./index.scss";
 // import LogRocket from 'logrocket';

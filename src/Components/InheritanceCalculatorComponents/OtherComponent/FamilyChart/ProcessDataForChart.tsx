@@ -9,16 +9,14 @@ let maxLevel = -999999, minLevel = 999999;
 const xLevelArray = [[0], [-1, 1], [-1, 0, 1], [-2, -1, 1, 2]];
 let chartNodeMap = new Map<number, ChartNode>()
 let connectorArray = new Array<ChartConnector>()
-let xDiff = 200;
+let xDiff = 100;
 let yDiff = 100;
-let rndID: number;
 export const processData = (data: any): any => {
     maxLevel = -999999, minLevel = 999999;
     chartNodeMap = new Map<number, ChartNode>()
     connectorArray = new Array<ChartConnector>()
     xDiff = 200;
     yDiff = 100;
-    rndID = 1;
     // // divide nodeMap into levels
     const levelMap = getLevelMap(data);
     const maxLevelData = levelMap.get(maxLevel);
@@ -221,6 +219,3 @@ const getChartNode = (id: string) => {
     return chartNode;
 }
 
-const randomIDGenerator = () => {
-    return `rndID_${(rndID++).toString()}`
-}

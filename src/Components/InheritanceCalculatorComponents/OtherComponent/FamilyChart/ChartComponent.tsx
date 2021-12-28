@@ -7,7 +7,7 @@ import { useZoomPanHelper, useUpdateNodeInternals } from "react-flow-renderer";
 import CustomNode from "./CustomNode";
 import ChartNode from "./Classes/ChartNode";
 import ChartConnector from "./Classes/ChartConnector";
-import { CustomDetailDialog } from "./Classes/CustomDetailDialog";
+// import { CustomDetailDialog } from "./Classes/CustomDetailDialog";
 
 const flowStyles = { height: "80vh" };
 let isHandleChange = true;
@@ -45,32 +45,32 @@ const OrgChartTree = () => {
     }
   });
 
-  const onNodeMouseEnter = (event: any, node: any) => {
-    // setHoverNode(node);
-    console.log(event);
+  // const onNodeMouseEnter = (event: any, node: any) => {
+  //   // setHoverNode(node);
+  //   console.log(event);
 
-    const dialog = new CustomDetailDialog(node, event.currentTarget, chartContent)
-    dialog.showDialog();
-    const newChartContent = [...chartContent]
-    setChartContent(newChartContent)
-    isHandleChange = false;
-    // getNodeData()
-    // setRerender(!rerender)
-    // highlightPath()
+  //   const dialog = new CustomDetailDialog(node, event.currentTarget, chartContent)
+  //   dialog.showDialog();
+  //   const newChartContent = [...chartContent]
+  //   setChartContent(newChartContent)
+  //   isHandleChange = false;
+  //   // getNodeData()
+  //   // setRerender(!rerender)
+  //   // highlightPath()
 
-  }
+  // }
 
-  const onNodeMouseLeave = (event: any, node: any) => {
-    const dialog = new CustomDetailDialog(node, event.currentTarget, chartContent)
-    dialog.hideDialog();
-    const newChartContent = [...chartContent]
-    setChartContent(newChartContent)
-    isHandleChange = false;
-    // getNodeData()
+  // const onNodeMouseLeave = (event: any, node: any) => {
+  //   const dialog = new CustomDetailDialog(node, event.currentTarget, chartContent)
+  //   dialog.hideDialog();
+  //   const newChartContent = [...chartContent]
+  //   setChartContent(newChartContent)
+  //   isHandleChange = false;
+  //   // getNodeData()
 
-    // setRerender(!rerender)
+  //   // setRerender(!rerender)
 
-  }
+  // }
 
 
   return (

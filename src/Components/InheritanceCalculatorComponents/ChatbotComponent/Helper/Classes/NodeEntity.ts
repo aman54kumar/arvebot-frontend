@@ -1,4 +1,3 @@
-import { string } from "prop-types";
 import { ParentChildSelector } from "../Enums/ParentChildSelector";
 
 export class NodeEntity {

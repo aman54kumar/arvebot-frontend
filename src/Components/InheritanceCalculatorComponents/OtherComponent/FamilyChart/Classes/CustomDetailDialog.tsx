@@ -1,4 +1,3 @@
-import { createElement } from "react";
 import ChartConnector from "./ChartConnector";
 import ChartNode from "./ChartNode";
 
