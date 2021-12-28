@@ -126,7 +126,7 @@ class ActionProvider {
         state = {
           ...state,
           stepID: ChatStepTypes.undividedEstateStep,
-          undividedEstate: { ...state.undividedEstate, undivided_flag: "part1", undividedEstateChoice: undividedEstateChoiceResponse }
+          undividedEstate: { ...state.undividedEstate, undivided_flag: QuestionType.part1, undividedEstateChoice: undividedEstateChoiceResponse }
 
         }
 
@@ -162,7 +162,7 @@ class ActionProvider {
         const ownershipTypeQuestion = this.createChatBotMessage(this.QuestionConsts.OwnershipTypeQuestion, this.QuestionConsts.OwnershipQuestionWidgetOptions)
         state = {
           ...state,
-          undividedEstate: { ...state.undividedEstate, undivided_flag: "part2", totalEstateValue: parseInt(currencyIntResponse[1]) }
+          undividedEstate: { ...state.undividedEstate, undivided_flag: QuestionType.part2, totalEstateValue: parseInt(currencyIntResponse[1]) }
 
         }
         const currencyCustom = this.createClientMessage(currencyJSX)
@@ -189,7 +189,7 @@ class ActionProvider {
           ...state,
           undividedEstate: {
             ...state.undividedEstate,
-            undivided_flag: "part6",
+            undivided_flag: QuestionType.part6,
             undividedEstateSeparateWealth: state.undividedEstate.totalEstateValue / 2,
           },
 
@@ -227,7 +227,7 @@ class ActionProvider {
       else if (ownershipResponse === "DELVIS SÆREIE") {
         state = {
           ...state,
-          undividedEstate: { ...state.undividedEstate, undivided_flag: "part3" }
+          undividedEstate: { ...state.undividedEstate, undivided_flag: QuestionType.part3 }
         }
         const delvisFirstQuestion = this.createChatBotMessage(this.QuestionConsts.DelvisFirstQuestion);
         this.addMessageToBotState(delvisFirstQuestion)
@@ -235,7 +235,7 @@ class ActionProvider {
       else if (ownershipResponse === "FULLT SÆREIE") {
         state = {
           ...state,
-          undividedEstate: { ...state.undividedEstate, undivided_flag: "part5" }
+          undividedEstate: { ...state.undividedEstate, undivided_flag: QuestionType.part5 }
         }
         const fulltSaereieQuestion = this.createChatBotMessage(this.QuestionConsts.FulltSaereieQuestion);
         this.addMessageToBotState(fulltSaereieQuestion)
@@ -260,7 +260,7 @@ class ActionProvider {
         this.addMessageToBotState(currencyCustom)
         state = {
           ...state,
-          undividedEstate: { ...state.undividedEstate, undivided_flag: "part4", temp_first: parseInt(currencyIntResponse[1]) }
+          undividedEstate: { ...state.undividedEstate, undivided_flag: QuestionType.part4, temp_first: parseInt(currencyIntResponse[1]) }
         }
         const delvisSecondQuestion = this.createChatBotMessage(this.QuestionConsts.DelvisSecondQuestion)
         this.addMessageToBotState(delvisSecondQuestion)
@@ -290,7 +290,7 @@ class ActionProvider {
           ...state,
           undividedEstate: {
             ...state.undividedEstate,
-            undivided_flag: "part6",
+            undivided_flag: QuestionType.part6,
             undividedEstateSeparateWealth: (state.undividedEstate.totalEstateValue - state.undividedEstate.temp_last - state.undividedEstate.temp_first) / 2 + state.undividedEstate.temp_first
           },
           netWealth: (state.undividedEstate.totalEstateValue - state.undividedEstate.temp_last - state.undividedEstate.temp_first) / 2 + state.undividedEstate.temp_last,
@@ -322,7 +322,7 @@ class ActionProvider {
           ...state,
           undividedEstate: {
             ...state.undividedEstate,
-            undivided_flag: "part6",
+            undivided_flag: QuestionType.part6,
             undividedEstateSeparateWealth: state.undividedEstate.totalEstateValue - parseInt(fulltSaereieResponse)
           },
           netWealth: parseInt(fulltSaereieResponse),
@@ -359,7 +359,7 @@ class ActionProvider {
         state = {
           ...state,
           stepID: ChatStepTypes.undividedEstateStep,
-          successor_flag: "part1",
+          successor_flag: QuestionType.part1,
           temp_person: newUndividedSpouse,
         };
         const newSuccessorQuestion = this.createChatBotMessage(
@@ -481,7 +481,7 @@ class ActionProvider {
         state = {
           ...state,
           stepID: ChatStepTypes.successorStep,
-          successor_flag: "part3",
+          successor_flag: QuestionType.part3,
         };
         const newSuccessorQuestion = this.createChatBotMessage(
           this.QuestionConsts.addSuccessorCount(testator._personName)
@@ -506,7 +506,7 @@ class ActionProvider {
         state = {
           ...state,
           stepID: ChatStepTypes.successorStep,
-          successor_flag: "part1",
+          successor_flag: QuestionType.part1,
         };
         const newSuccessorQuestion = this.createChatBotMessage(
           this.QuestionConsts.addSuccessorQuestion1(testator._personName)
@@ -552,7 +552,7 @@ class ActionProvider {
         state = {
           ...state,
           stepID: ChatStepTypes.successorStep,
-          successor_flag: "part1",
+          successor_flag: QuestionType.part1,
         };
 
 
@@ -567,7 +567,7 @@ class ActionProvider {
         state = {
           ...state,
           stepID: ChatStepTypes.successorStep,
-          successor_flag: "part1",
+          successor_flag: QuestionType.part1,
         };
         const newSuccessorQuestion = this.createChatBotMessage(
           this.QuestionConsts.addSuccessorQuestion1(testator._personName)
@@ -623,7 +623,7 @@ class ActionProvider {
       //     state = {
       //       ...state,
       //       temp_person: currentParent,
-      //       successor_flag: "part1",
+      //       successor_flag: QuestionType.part1,
       //     }
       //     const allChildrenID = this.getParentChildrenIDStrings(currentParent._children, state)
 
@@ -699,7 +699,7 @@ class ActionProvider {
   //   state = {
   //     ...state,
   //     temp_person: child,
-  //     successor_flag: "part1"
+  //     successor_flag: QuestionType.part1
   //   }
   //   const newSuccessorQuestion = this.createChatBotMessage(
   //     this.QuestionConsts.addSuccessorQuestion1(
@@ -713,7 +713,7 @@ class ActionProvider {
   //   childDetail._deceased = false;
   //   state = {
   //     ...state,
-  //     successor_flag: "part1"
+  //     successor_flag: QuestionType.part1
   //   }
   //   const allChildrenID = this.getParentChildrenIDStrings(temp_person._children, state)
   //   const newSuccessorQuestion = this.createChatBotMessage(
@@ -800,7 +800,7 @@ class ActionProvider {
             state = {
               ...state,
               temp_person: currentParent,
-              parent_flag: "part1",
+              parent_flag: QuestionType.part1,
             }
             const allChildrenID = this.getParentChildrenIDStrings(currentParent._children, state)
 
@@ -817,7 +817,7 @@ class ActionProvider {
             if (currentParent._parents.length < 2) {
               state = {
                 ...state,
-                parent_flag: "part1",
+                parent_flag: QuestionType.part1,
                 temp_person: currentParent,
 
               }
@@ -848,13 +848,13 @@ class ActionProvider {
         if (state.temp_person.getLatestPathKey() !== ParentChildSelector.testator) {
           state = {
             ...state,
-            parent_flag: "part2",
+            parent_flag: QuestionType.part2,
             temp_child: predecessor,
           };
         } else {
           state = {
             ...state,
-            parent_flag: "part2",
+            parent_flag: QuestionType.part2,
             temp_parent: predecessor,
           };
         }
@@ -882,7 +882,7 @@ class ActionProvider {
           state = {
             ...state,
             temp_person: temp_child,
-            parent_flag: "part1",
+            parent_flag: QuestionType.part1,
           }
           temp_child_detail._deceased = true;
 
@@ -897,7 +897,7 @@ class ActionProvider {
         else {
           state = {
             ...state,
-            parent_flag: "part1"
+            parent_flag: QuestionType.part1
           }
 
           const allChildrenID = this.getParentChildrenIDStrings(temp_person._children, state)
@@ -919,7 +919,7 @@ class ActionProvider {
           state = {
             ...state,
             temp_person: temp_parent,
-            parent_flag: "part1",
+            parent_flag: QuestionType.part1,
           }
 
           temp_parent_detail._deceased = true;
@@ -941,7 +941,7 @@ class ActionProvider {
           if (temp_person._parents.length < 2) {
             state = {
               ...state,
-              parent_flag: "part1",
+              parent_flag: QuestionType.part1,
 
             }
             const allParentsID = this.getParentChildrenIDStrings(temp_person._parents, state)
@@ -981,7 +981,7 @@ class ActionProvider {
               state = {
                 ...state,
                 temp_person: currentGrandParent,
-                grandParent_flag: "part1",
+                grandParent_flag: QuestionType.part1,
               }
               const allChildrenID = this.getParentChildrenIDStrings(currentGrandParent._children, state)
               const newSuccessorQuestion = this.createChatBotMessage(
@@ -999,7 +999,7 @@ class ActionProvider {
             if (currentGrandParent._parents.length < 2) {
               state = {
                 ...state,
-                grandParent_flag: "part1",
+                grandParent_flag: QuestionType.part1,
                 temp_person: currentGrandParent,
               }
               const allParentsID = this.getParentChildrenIDStrings(currentGrandParent._parents, state)
@@ -1022,7 +1022,7 @@ class ActionProvider {
             state = {
               ...state,
               stepID: ChatStepTypes.grandParentStep,
-              grandParent_flag: "part1"
+              grandParent_flag: QuestionType.part1
             };
             const newParentQuestion = this.createChatBotMessage(
               this.QuestionConsts.addParentsQuestion1(Person.getPerson(state.person._id, state.personsMap)._personName)
@@ -1041,13 +1041,13 @@ class ActionProvider {
         if (state.temp_person.getLatestPathKey() !== ParentChildSelector.parent) {
           state = {
             ...state,
-            grandParent_flag: "part2",
+            grandParent_flag: QuestionType.part2,
             temp_child: predecessor,
           };
         } else {
           state = {
             ...state,
-            grandParent_flag: "part2",
+            grandParent_flag: QuestionType.part2,
             temp_parent: predecessor,
           };
         }
@@ -1079,7 +1079,7 @@ class ActionProvider {
             state = {
               ...state,
               temp_person: temp_child,
-              grandParent_flag: "part1",
+              grandParent_flag: QuestionType.part1,
             }
             temp_child_detail._deceased = true;
 
@@ -1094,7 +1094,7 @@ class ActionProvider {
             // if depth of grandparent's kids is more than 2 (PATH_LEVEL > 5)
             state = {
               ...state,
-              grandParent_flag: "part1"
+              grandParent_flag: QuestionType.part1
             }
 
             const allChildrenID = this.getParentChildrenIDStrings(temp_person._children, state)
@@ -1110,7 +1110,7 @@ class ActionProvider {
         else {
           state = {
             ...state,
-            grandParent_flag: "part1"
+            grandParent_flag: QuestionType.part1
           }
 
           const allChildrenID = this.getParentChildrenIDStrings(temp_person._children, state)
@@ -1131,7 +1131,7 @@ class ActionProvider {
           state = {
             ...state,
             temp_person: temp_parent,
-            grandParent_flag: "part1",
+            grandParent_flag: QuestionType.part1,
           }
 
           temp_parent_detail._deceased = true;
@@ -1152,7 +1152,7 @@ class ActionProvider {
           if (temp_person._parents.length < 2) {
             state = {
               ...state,
-              grandParent_flag: "part1",
+              grandParent_flag: QuestionType.part1,
             }
             const allGrandParentsID = this.getParentChildrenIDStrings(temp_person._parents, state)
             const newGrandParentQuestion = this.createChatBotMessage(
@@ -1180,7 +1180,7 @@ class ActionProvider {
         state = {
           ...state,
           stepID: ChatStepTypes.grandParentStep,
-          grandParent_flag: "part1",
+          grandParent_flag: QuestionType.part1,
           temp_person: NodeEntity.getNode(state.deceasedParentsArray[0], state.nodeMap),
           deceasedParentsArray: state.deceasedParentsArray.filter(item => item !== state.deceasedParentsArray[0])
         }
@@ -1238,7 +1238,7 @@ class ActionProvider {
           state = {
             ...state,
             stepID: ChatStepTypes.parentsStep,
-            parent_flag: "part1"
+            parent_flag: QuestionType.part1
           };
           const newParentQuestion = this.createChatBotMessage(
             this.QuestionConsts.addParentsQuestion1(testatorDetail._personName)
@@ -1287,7 +1287,7 @@ class ActionProvider {
       state = {
         ...state,
         stepID: ChatStepTypes.parentsStep,
-        parent_flag: "part1"
+        parent_flag: QuestionType.part1
       };
       const newParentQuestion = this.createChatBotMessage(
         this.QuestionConsts.addParentsQuestion1(testatorDetail._personName)
@@ -1405,7 +1405,7 @@ class ActionProvider {
         state = {
           ...state,
           stepID: ChatStepTypes.grandParentStep,
-          grandParent_flag: "part1",
+          grandParent_flag: QuestionType.part1,
           temp_person: NodeEntity.getNode(state.deceasedParentsArray[0], state.nodeMap),
           deceasedParentsArray: state.deceasedParentsArray.filter(item => item !== state.deceasedParentsArray[0])
         }

@@ -33,26 +33,26 @@ class MessageParser {
     //   return this.actionProvider.handleUndividedEstate(message); //set stepID = 3
     // }
     if (curState.stepID === ChatStepTypes.undividedEstateStep) {
-      if (curState.undividedEstate.undivided_flag === "part1") {
+      if (curState.undividedEstate.undivided_flag === QuestionType.part1) {
         return this.actionProvider.handleTotalEstateValueResponse(message)
       }
-      if (curState.undividedEstate.undivided_flag === "part2") {
+      if (curState.undividedEstate.undivided_flag === QuestionType.part2) {
         return this.actionProvider.handleOwnershipResponse(message)
       }
-      if (curState.undividedEstate.undivided_flag === "part3") {
+      if (curState.undividedEstate.undivided_flag === QuestionType.part3) {
         return this.actionProvider.handleDelvisFirstResponse(message)
       }
-      if (curState.undividedEstate.undivided_flag === "part4") {
+      if (curState.undividedEstate.undivided_flag === QuestionType.part4) {
         return this.actionProvider.handleDelvisSecondResponse(message)
       }
-      if (curState.undividedEstate.undivided_flag === "part5") {
+      if (curState.undividedEstate.undivided_flag === QuestionType.part5) {
         return this.actionProvider.handleFulltSaereieResponse(message); //set stepID = 4
       }
-      if (curState.undividedEstate.undivided_flag === "part6") {
-        if (curState.successor_flag === "part1") {
+      if (curState.undividedEstate.undivided_flag === QuestionType.part6) {
+        if (curState.successor_flag === QuestionType.part1) {
           return this.actionProvider.handleSuccessorInput(message)
         }
-        if (curState.successor_flag === "part2") {
+        if (curState.successor_flag === QuestionType.part2) {
           return this.actionProvider.handleChildAliveOption(message)
         }
         return this.actionProvider.handleUndividedEstateSpouse(message)
@@ -92,17 +92,17 @@ class MessageParser {
       }
     }
     if (curState.stepID === ChatStepTypes.parentsStep) {
-      if (curState.parent_flag === "part1") {
+      if (curState.parent_flag === QuestionType.part1) {
         return this.actionProvider.handleParentsInput(message);
       }
-      else if (curState.parent_flag == "part2")
+      else if (curState.parent_flag == QuestionType.part2)
         return this.actionProvider.handleParentAliveOption(message)
     }
     if (curState.stepID === ChatStepTypes.grandParentStep) {
-      if (curState.grandParent_flag === "part1") {
+      if (curState.grandParent_flag === QuestionType.part1) {
         return this.actionProvider.handleGrandParentResponse(message)
       }
-      else if (curState.grandParent_flag === "part2") {
+      else if (curState.grandParent_flag === QuestionType.part3) {
         return this.actionProvider.handleGrandParentAliveOption(message)
       }
     }

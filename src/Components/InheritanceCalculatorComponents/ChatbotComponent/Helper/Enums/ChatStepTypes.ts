@@ -1,5 +1,4 @@
 export enum ChatStepTypes {
-  finalStep = "finalStep",
   initalStep = "",
   testatorStep = "testatorStep",
   undividedEstateStep = "undividedEstateStep",
@@ -12,11 +11,15 @@ export enum ChatStepTypes {
   rearChildrenStep = "rearChildrenStep",
   marriedParentsStep = "marriedParentsStep",
   grandParentStep = "grandParentStep",
+  finalStep = "finalStep",
 }
 
 export enum QuestionType {
   part1 = "part1",
   part2 = "part2",
   part3 = "part3",
+  part4 = "part4",
+  part5 = "part5",
+  part6 = "part6",
   initialQuestion = "none",
 }

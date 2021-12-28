@@ -26,7 +26,7 @@ const OptionSelector = (props: any): ReactElement => {
           break;
         }
         case ChatStepTypes.successorStep: {
-          state.successor_flag = "part2"
+          state.successor_flag = QuestionType.part2
           actionProvider.handleChildAliveOption(option);
           break;
         }
