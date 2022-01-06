@@ -1,5 +1,6 @@
 .react-chatbot-kit-chat-container {
-  width: 40%;
+  width: 30%;
+  height: 70%;
   position: fixed;
   bottom: 6%;
   right: 0%;
@@ -17,6 +18,7 @@
 
 .react-chatbot-kit-chat-message-container {
   background-color: azure;
+  height: 110%;
 }
 
 #chatbot-warning-div {

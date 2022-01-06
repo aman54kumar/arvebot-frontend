@@ -1,5 +1,6 @@
 import { Popper, Typography } from "@mui/material";
 import { Handle, Position } from "react-flow-renderer";
+import { Textfit } from 'react-textfit';
 
 enum HandleType {
   source = "source",
@@ -36,38 +37,25 @@ const customHandleData = [
 const partnerNodeStyles = {
   background: "#fff",
   color: "#000",
-  padding: 2,
-  minWidth: "7rem",
+  padding: "5px",
+  width: "7rem",
+  height: "1.8rem",
   borderRadius: "3px",
   borderColor: "midnightblue",
   borderStyle: "solid",
   borderWidth: "1px",
   letterSpacing: "0.5px",
   lineHeight: 1.5,
+  display: "flex"
 }
 
 
 const CustomNode = (totalData: any) => {
   const data = totalData.data;
-  // const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
-  //   console.log(event);
-
-  //   setAnchorEl(event.currentTarget);
-  // };
-  // useEffect(() => {
-
-  // }, [data])
-  // const handlePopoverClose = () => {
-  //   // setAnchorEl(null);
-  // };
-  // const anchorEl = document.getElementById(`detail_${totalData.id}`) as HTMLElement;
-
 
   const isConnectable = data.isConnectable;
   // eslint-disable-next-line
   const handles = customHandleData.map((v, k) => {
-
-
     if (check(data.pos, v.position)) {
       return (
         <Handle
@@ -84,25 +72,16 @@ const CustomNode = (totalData: any) => {
   const labelString = deceasedFormatter(data.label)
   return (
     <div>
-
       <div id={`detail_${totalData.id}`} style={partnerNodeStyles}>
-        <Typography align="center" variant="subtitle2" style={{ textTransform: "uppercase", fontFamily: "Helvetica", padding: "0 5px" }}>{labelString}</Typography>
+        <div style={{ width: "6.8rem", display: "contents" }}><Textfit style={{ margin: "auto", width: "6.8rem", textAlign: "center" }} max={20} mode="single" forceSingleModeWidth={false}>{labelString}</Textfit></div>
+        {/* <Typography align="center" variant="subtitle2" style={{ textTransform: "uppercase", fontFamily: "Helvetica", padding: "0 5px" }}></Typography> */}
         {handles}
       </div>
       <Popper style={{ position: "absolute", display: data.showDialog ? "block" : "none" }}
         open={data.showDialog}
-
         anchorEl={document.getElementById(`detail_${totalData.id}`)}
-      // anchorOrigin={{
-      //   vertical: 'top',
-      //   horizontal: 'right',
-      // }}
-      // transformOrigin={{
-      //   vertical: 'top',
-      //   horizontal: 'left',
-      // }}
       >{`Hi popover ${data.label}`}</Popper>
-    </div>
+    </div >
   );
 }
 const check = (data: any, pos: string): boolean => {

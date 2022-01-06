@@ -3,6 +3,7 @@ import { FormattedMessage } from "react-intl";
 import { ReactElement } from "react";
 import { ChatbotInterface } from "../../../Generics";
 import { ChatStepTypes, QuestionType } from "../../../Helper/Enums/ChatStepTypes";
+import { messageService } from "../../../services/ChatbotCommunicator";
 
 
 const OptionSelector = (props: any): ReactElement => {
@@ -10,6 +11,9 @@ const OptionSelector = (props: any): ReactElement => {
   // toggleInputField();
   const setOption = (option: boolean) => {
     setState((state: ChatbotInterface) => {
+      messageService.addPreviousState({ ...state })
+      console.log(messageService.getPreviousStates());
+
       const curStep = state.stepID;
       // toggleInputField();
       switch (curStep) {

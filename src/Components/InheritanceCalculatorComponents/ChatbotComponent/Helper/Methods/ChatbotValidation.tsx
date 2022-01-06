@@ -34,7 +34,7 @@ export class ChatbotValidation {
     }
     validateEmpty = (message: string) => {
         //
-        if (message.trim().length === 0) {
+        if (message.length === 0) {
             // remove last message
             return false
         }

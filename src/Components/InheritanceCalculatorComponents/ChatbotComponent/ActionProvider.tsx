@@ -3,13 +3,14 @@ import InheritanceConstants from "./Helper/Methods/InheritanceConstants";
 import Person from "./Helper/Classes/Person";
 import Family from "./Helper/Classes/Family";
 import { ParentChildSelector } from "./Helper/Enums/ParentChildSelector";
-import { ChatbotInterface } from "./Generics";
+import { ChatbotInterface, ChatbotState, InitialChatbotState } from "./Generics";
 import { ChatStepTypes, QuestionType } from "./Helper/Enums/ChatStepTypes";
 import { ReactElement } from "react";
 import { CurrencyOutput, ParseCurrencyStringForOutput } from "./Helper/Methods/HandleCurrency";
 import InfoMessagesWidget from "./Custom/Widgets/InfoMessagesWidget/InfoMessagesWidget"
 import { NodeEntity } from "./Helper/Classes/NodeEntity";
 import chartSelector from "../../../store/chartSelector";
+import { messageService } from "./services/ChatbotCommunicator";
 
 class ActionProvider {
 
@@ -43,26 +44,47 @@ class ActionProvider {
     this.InheritanceConstants = new InheritanceConstants();
     this.family = new Family();
     this.stateRef = stateRef;
+    this.setRevertListeners()
+
   }
 
-  check = () => {
-    const self = this
-    if (this.isStarted) {
-      this.checkstate = setInterval(() => {
-        if (self.glb_state !== null) {
-          self.isStarted = false;
-          const customEvent = new CustomEvent("build", { detail: self.glb_state })
-          // const messagesEvent = new CustomEvent("getMessages", { detail: self.glb_state.messages })
-          document.dispatchEvent(customEvent)
-          // document.dispatchEvent(messagesEvent)
-          // close the interval
-          self.glb_state = null;
-          clearInterval(this.checkstate)
-        }
-      }, 0)
+
+
+  setRevertListeners() {
+
+    messageService.clearAllInternalSubscription();
+    const subscription = messageService.getMessageInChatbot().subscribe(message => {
+      this.revertState();
+    })
+    messageService.addInternalSubscription(subscription);
+
+  }
+  revertState = () => {
+
+    const revertCount = localStorage.getItem("revertCount");
+    let lastState: any;
+    if (revertCount) {
+      lastState = messageService.getPreviousState(parseInt(revertCount));
+    } else {
+      lastState = messageService.getPreviousState(0);
+    }
+
+
+    if (lastState) {
+      if (revertCount) {
+        localStorage.setItem("revertCount", (parseInt(revertCount) + 1).toString())
+      } else {
+        localStorage.setItem("revertCount", '1')
+      }
+      this.setState((state: any) => {
+        state = lastState
+        return this.returnState(state);
+      });
     }
   }
-
+  setPreviousStateData = (currentState: any, lastState: any) => {
+    //
+  }
   // handleCaseName = (caseNameResponse: string): void => {
   //   /**
   //    *  * function for handling caseName replies. open reply currently.
@@ -106,6 +128,7 @@ class ActionProvider {
     this.setState((state: ChatbotInterface) => ({
       ...state,
     }));
+
     this.addMessageToBotState(undividedEstateQuestion);
   };
 
@@ -858,6 +881,11 @@ class ActionProvider {
             temp_parent: predecessor,
           };
         }
+        if (state.temp_person.getLatestPathKey() !== ParentChildSelector.testator) {
+          state.temp_person.add_child(predecessor, true);
+        } else {
+          state.temp_person.add_parent(predecessor, true);
+        }
         const aliveQuestion = this.createChatBotMessage(
           this.QuestionConsts.AliveQuestion(Person.getPerson(predecessor._id, state.personsMap)._personName),
           this.QuestionConsts.AliveWidgetOptions
@@ -875,7 +903,7 @@ class ActionProvider {
       if (temp_person.getLatestPathKey() !== ParentChildSelector.testator) {
         // if temp_person is not testator, ask child question
         const temp_child = state.temp_child
-        temp_person.add_child(temp_child, true);
+        // temp_person.add_child(temp_child, true);
         const temp_child_detail = Person.getPerson(temp_child._id, state.personsMap)
 
         if (!alive) {
@@ -913,7 +941,7 @@ class ActionProvider {
       } else {
         // if temp_person is testator, ask parent question
         const temp_parent = state.temp_parent;
-        temp_person.add_parent(temp_parent, true);
+        // temp_person.add_parent(temp_parent, true);
         const temp_parent_detail = Person.getPerson(temp_parent._id, state.personsMap)
         if (!alive) {
           state = {
@@ -1556,7 +1584,25 @@ class ActionProvider {
       return [closest_alternative_class + 1, closest_alternative_distance];
     }
   };
+  check = () => {
+    const self = this
+    if (this.isStarted) {
+      this.checkstate = setInterval(() => {
+        if (self.glb_state !== null) {
+          self.isStarted = false;
+          // const customEvent = new CustomEvent("build", { detail: self.glb_state })
+          // // const messagesEvent = new CustomEvent("getMessages", { detail: self.glb_state.messages })
+          // document.dispatchEvent(customEvent)
 
+          messageService.sendMessageFromChatbot({ detail: self.glb_state });
+          // document.dispatchEvent(messagesEvent)
+          // close the interval
+          self.glb_state = null;
+          clearInterval(this.checkstate)
+        }
+      }, 0)
+    }
+  }
   returnState = (state: any) => {
     this.check();
     this.glb_state = chartSelector(state);
@@ -1570,37 +1616,12 @@ class ActionProvider {
   }
   resetChatbot = () => {
     this.setState((state: any) => {
-      state = {
-        stepID: "",
-        person: new NodeEntity(0, 0),
-        caseName: "",
-        netWealth: 0,
-        successor_flag: QuestionType.initialQuestion,
-        parent_flag: QuestionType.initialQuestion,
-        temp_person: new NodeEntity(0, 0),
-        temp_child: new NodeEntity(0, 0),
-        temp_parent: new NodeEntity(0, 0),
-        personsMap: new Map(),
-        nodeMap: new Map(),
-        id: 1,
-        deceasedParentsArray: [],
-        grandParent_flag: QuestionType.initialQuestion,
-        rearChildrenResponse: false,
-        undividedEstate: {
-          undividedEstateChoice: false,
-          undivided_flag: QuestionType.initialQuestion,
-          totalEstateValue: 0,
-          undividedEstateSeparateWealth: 0,
-          temp_first: 0,
-          temp_last: 0,
-        },
-        messages: []
-      }
+      state = InitialChatbotState
+      console.log(InitialChatbotState);
 
-      return this.returnState(state)
+      return this.returnState(state);
     });
-
-    const initialQuestion = this.createChatBotMessage(this.QuestionConsts.CaseNameQuestion);
+    const initialQuestion = this.createChatBotMessage(this.QuestionConsts.TestatorQuestion);
     this.addMessageToBotState(initialQuestion)
 
 

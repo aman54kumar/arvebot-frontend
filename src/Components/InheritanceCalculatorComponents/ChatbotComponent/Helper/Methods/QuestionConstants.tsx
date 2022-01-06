@@ -4,8 +4,6 @@ import ShowInfoWidget from "../../Custom/Widgets/ShowInfoWidget/ShowInfoWidget";
 
 class QuestionConstants {
 
-  CaseNameQuestion = (<FormattedMessage id="Chatbot.CASE_NAME_QUESTION" />);
-
   TestatorQuestion = (<FormattedMessage id="Chatbot.TESTATOR_QUESTION" />);
 
   UndividedEstateQuestion = (

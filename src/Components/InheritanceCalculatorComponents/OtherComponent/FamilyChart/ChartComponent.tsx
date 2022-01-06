@@ -2,18 +2,23 @@ import { useSelector } from "react-redux";
 import ReactFlow, { Background, BackgroundVariant, Controls } from "react-flow-renderer";
 import chartSelector from "../../../../store/chartSelector";
 import { processData } from "./ProcessDataForChart";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useZoomPanHelper, useUpdateNodeInternals } from "react-flow-renderer";
 import CustomNode from "./CustomNode";
 import ChartNode from "./Classes/ChartNode";
 import ChartConnector from "./Classes/ChartConnector";
+import { componentCommunicatorService } from "../../ChatbotComponent/services/ComponentCommunicatorService";
+
+
 // import { CustomDetailDialog } from "./Classes/CustomDetailDialog";
 
-const flowStyles = { height: "80vh" };
+const flowStyles = { height: "80vh", width: "60%" };
 let isHandleChange = true;
 const OrgChartTree = () => {
-  const result = useSelector(chartSelector);
+  // const result = useSelector(chartSelector);
+  const [result, setResult] = useState({ nodeMap: new Map(), personMap: new Map(), testator: null })
   const [chartContent, setChartContent] = useState([]);
+  const componentWillUnmount = useRef(false)
   const updateNodeInternals = useUpdateNodeInternals();
 
   const getNodeData = () => chartContent.forEach((chartData: ChartNode | ChartConnector) => {
@@ -23,9 +28,22 @@ const OrgChartTree = () => {
     }
   })
   useEffect(() => {
+    return () => {
+      componentWillUnmount.current = true
+    }
+  }, [])
+  useEffect(() => {
+    componentCommunicatorService.clearAllSubscription();
+    const subscription = componentCommunicatorService.getChatbotMessage().subscribe((data: any) => setResult(data))
+    componentCommunicatorService.addSubscription(subscription);
+    if (componentWillUnmount.current) {
+      componentCommunicatorService.clearAllSubscription();
+    }
+  }, [1])
+  useEffect(() => {
     setTimeout(() => {
       getNodeData()
-    }, 100);
+    }, 500);
 
   }, [chartContent]);
   useEffect(() => {
@@ -33,7 +51,6 @@ const OrgChartTree = () => {
     isHandleChange = true;
   }, [result])
   const { fitView } = useZoomPanHelper();
-
   const nodeTypes = {
     specialNode: CustomNode,
   };
