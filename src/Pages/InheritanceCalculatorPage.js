@@ -28,22 +28,22 @@ const InheritanceCalculatorPage = () => {
       });
     messageService.addExternalSubscription(subscription);
     setWarningDiv();
-    setRevertDiv();
+    // setRevertDiv();
     addListenerToChatInputField();
   }, [1]);
-  useEffect(() => {
-    return () => {
-      componentWillUnmount.current = true;
-    };
-  }, []);
-  useEffect(() => {
-    if (componentWillUnmount.current) {
-      messageService.clearAllExternalSubscription();
-      messageService.clearAllInternalSubscription();
-    }
-  }, [1]);
+  // useEffect(() => {
+  //   return () => {
+  //     componentWillUnmount.current = true;
+  //   };
+  // }, []);
+  // useEffect(() => {
+  //   if (componentWillUnmount.current) {
+  //     messageService.clearAllExternalSubscription();
+  //     messageService.clearAllInternalSubscription();
+  //   }
+  // }, [1]);
 
-  localStorage.setItem("isRevertListenerSet", "false");
+  // localStorage.setItem("isRevertListenerSet", "false");
   // document.removeEventListener("revert");
   const toggleBot = () => {
     const divChatBot = document.getElementsByClassName(

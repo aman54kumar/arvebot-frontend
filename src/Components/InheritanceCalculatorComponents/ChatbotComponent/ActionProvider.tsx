@@ -44,7 +44,7 @@ class ActionProvider {
     this.InheritanceConstants = new InheritanceConstants();
     this.family = new Family();
     this.stateRef = stateRef;
-    this.setRevertListeners()
+    // this.setRevertListeners()
 
   }
 
