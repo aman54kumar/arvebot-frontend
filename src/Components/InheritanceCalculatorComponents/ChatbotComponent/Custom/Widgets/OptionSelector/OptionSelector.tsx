@@ -10,58 +10,7 @@ const OptionSelector = (props: any): ReactElement => {
   const { actionProvider, setState } = props;
   // toggleInputField();
   const setOption = (option: boolean) => {
-    setState((state: ChatbotInterface) => {
-      messageService.addPreviousState({ ...state })
-      console.log(messageService.getPreviousStates());
-
-      const curStep = state.stepID;
-      // toggleInputField();
-      switch (curStep) {
-        case ChatStepTypes.testatorStep: {
-          actionProvider.handleUndividedEstateChoice(option);
-          break;
-        }
-        case ChatStepTypes.undividedEstateStep: {
-          actionProvider.handleChildAliveOption(option);
-          break;
-        }
-        case ChatStepTypes.underAgeStep: {
-          actionProvider.handleUnderAge(option);
-          break;
-        }
-        case ChatStepTypes.successorStep: {
-          state.successor_flag = QuestionType.part2
-          actionProvider.handleChildAliveOption(option);
-          break;
-        }
-        case ChatStepTypes.parentsStep: {
-          state.parent_flag = QuestionType.part2;
-          actionProvider.handleParentAliveOption(option);
-          break;
-        }
-        case ChatStepTypes.rearChildrenStep: {
-          actionProvider.handleRearChildrenResult(option);
-          break;
-        }
-        case ChatStepTypes.marriedParentsStep: {
-          actionProvider.handleMarriedParents(option);
-          break;
-        }
-        case ChatStepTypes.grandParentStep: {
-          state.grandParent_flag = QuestionType.part2
-          actionProvider.handleGrandParentAliveOption(option)
-          break;
-        }
-        case ChatStepTypes.finalStep: {
-          actionProvider.handleFinalQuestion(option)
-          break;
-        }
-        default: {
-          console.log("fix this. state: ", state);
-        }
-      }
-      return state;
-    });
+    handleOptions(option, actionProvider, setState);
   };
   const onClickHandler = (e: any): void => {
     const thisButton = e.target as HTMLButtonElement
@@ -98,7 +47,92 @@ const OptionSelector = (props: any): ReactElement => {
     </div>
   );
 };
+const handleOptions = (option: boolean, actionProvider: any, setState: any) => {
+  setState((state: ChatbotInterface) => {
+    messageService.addPreviousState({ ...state })
+    console.log(messageService.getPreviousStates());
 
+    const curStep = state.stepID;
+    // toggleInputField();
+    switch (curStep) {
+      case ChatStepTypes.testatorStep: {
+        actionProvider.handleUndividedEstateChoice(option);
+        break;
+      }
+      case ChatStepTypes.undividedEstateStep: {
+        if (state.successor_flag === QuestionType.part2) {
+          actionProvider.handleChildAliveOption(option);
+          break;
+        }
+        else if (state.parent_flag === QuestionType.part2) {
+          actionProvider.handleParentAliveOption(option);
+          break;
+        }
+        else if (state.parent_flag === QuestionType.part3) {
+          actionProvider.handleSecondParentExists(option);
+          break;
+        }
+        break;
+      }
+      case ChatStepTypes.underAgeStep: {
+        actionProvider.handleUnderAge(option);
+        break;
+      }
+      case ChatStepTypes.successorStep: {
+        state.successor_flag = QuestionType.part2
+        actionProvider.handleChildAliveOption(option);
+        break;
+      }
+      case ChatStepTypes.parentsStep: {
+        if (state.successor_flag === QuestionType.part2) {
+          actionProvider.handleChildAliveOption(option);
+          break;
+        }
+        else if (state.parent_flag === QuestionType.part2) {
+          actionProvider.handleParentAliveOption(option);
+          break;
+        }
+        else if (state.parent_flag === QuestionType.part3) {
+          actionProvider.handleSecondParentExists(option);
+          break;
+        }
+        break;
+      }
+
+      case ChatStepTypes.rearChildrenStep: {
+        actionProvider.handleRearChildrenResult(option);
+        break;
+      }
+      case ChatStepTypes.marriedParentsStep: {
+        actionProvider.handleMarriedParents(option);
+        break;
+      }
+      case ChatStepTypes.grandParentStep: {
+        if (state.successor_flag === QuestionType.part2) {
+          actionProvider.handleChildAliveOption(option);
+          break;
+        }
+        else if (state.parent_flag === QuestionType.part2) {
+          actionProvider.handleParentAliveOption(option);
+          break;
+        }
+        else if (state.parent_flag === QuestionType.part3) {
+          actionProvider.handleSecondParentExists(option);
+          break;
+        }
+        break;
+      }
+      case ChatStepTypes.finalStep: {
+        actionProvider.handleFinalQuestion(option)
+        break;
+      }
+      default: {
+        console.log("fix this. state: ", state);
+      }
+    }
+    return state;
+  });
+}
 export default OptionSelector;
 // function toggleInputField() {
 //   const chatInputField = document.querySelectorAll(

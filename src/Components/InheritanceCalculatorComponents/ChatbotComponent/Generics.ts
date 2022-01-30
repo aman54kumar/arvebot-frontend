@@ -28,6 +28,7 @@ export interface ChatbotInterface {
   };
   tempMessages: any;
   successorProcessArray: Array<[number, number]>;
+  isUndividedParent: boolean;
 }
 
 export const ChatbotState: ChatbotInterface = {
@@ -57,6 +58,7 @@ export const ChatbotState: ChatbotInterface = {
   },
   tempMessages: [],
   successorProcessArray: [],
+  isUndividedParent: false,
 };
 export const InitialChatbotState: any = {
   stepID: ChatStepTypes.initalStep,

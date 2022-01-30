@@ -12,6 +12,7 @@ export enum ChatStepTypes {
   marriedParentsStep = "marriedParentsStep",
   grandParentStep = "grandParentStep",
   finalStep = "finalStep",
+  secondParentChoice = "secondParentChoice",
 }
 
 export enum QuestionType {

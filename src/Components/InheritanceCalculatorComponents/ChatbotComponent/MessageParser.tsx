@@ -66,11 +66,22 @@ class MessageParser {
       }
       if (curState.undividedEstate.undivided_flag === QuestionType.part6) {
         if (curState.successor_flag === QuestionType.part1) {
-          return this.actionProvider.handleSuccessorInput(message)
+          return this.actionProvider.handleSuccessorInput(message);
+        } else if (curState.successor_flag === QuestionType.part2)
+          return this.actionProvider.handleChildAliveOption(message);
+        else if (curState.successor_flag === QuestionType.part3) {
+          if (this.chatbotValidator.validate(message, [ValidationType.emptyValue, ValidationType.onlyDigit])) {
+            return this.actionProvider.handleSuccessorCount(message);
+          } else {
+            // remove last message and update stepid
+            return this.actionProvider.handleValidation();
+          }
         }
-        if (curState.successor_flag === QuestionType.part2) {
-          return this.actionProvider.handleChildAliveOption(message)
+        if (curState.parent_flag === QuestionType.part1) {
+          return this.actionProvider.handleParentsInput(message);
         }
+        else if (curState.parent_flag == QuestionType.part2)
+          return this.actionProvider.handleParentAliveOption(message)
         return this.actionProvider.handleUndividedEstateSpouse(message)
       }
       else {
@@ -86,9 +97,9 @@ class MessageParser {
     //   return this.actionProvider.handleUnderAge(message); //set stepID = 5
     // }
     if (curState.stepID === ChatStepTypes.spouseStep) {
-      if (this.chatbotValidator.validate(message, [ValidationType.emptyValue])) {
-        return this.actionProvider.handleSpouseInput(message); //set stepID = 6
-      }
+      // if (this.chatbotValidator.validate(message, [ValidationType.emptyValue])) {
+      return this.actionProvider.handleSpouseInput(message); //set stepID = 6
+      // }
     }
     if (curState.stepID === ChatStepTypes.cohabitantStep) {
       return this.actionProvider.handleCohabitantInput(message); //set stepID = 7
@@ -108,6 +119,18 @@ class MessageParser {
       }
     }
     if (curState.stepID === ChatStepTypes.parentsStep) {
+      if (curState.successor_flag === QuestionType.part1) {
+        return this.actionProvider.handleSuccessorInput(message);
+      } else if (curState.successor_flag === QuestionType.part2)
+        return this.actionProvider.handleChildAliveOption(message);
+      else if (curState.successor_flag === QuestionType.part3) {
+        if (this.chatbotValidator.validate(message, [ValidationType.emptyValue, ValidationType.onlyDigit])) {
+          return this.actionProvider.handleSuccessorCount(message);
+        } else {
+          // remove last message and update stepid
+          return this.actionProvider.handleValidation();
+        }
+      }
       if (curState.parent_flag === QuestionType.part1) {
         return this.actionProvider.handleParentsInput(message);
       }
@@ -115,12 +138,29 @@ class MessageParser {
         return this.actionProvider.handleParentAliveOption(message)
     }
     if (curState.stepID === ChatStepTypes.grandParentStep) {
-      if (curState.grandParent_flag === QuestionType.part1) {
-        return this.actionProvider.handleGrandParentResponse(message)
+      // if (curState.grandParent_flag === QuestionType.part1) {
+      //   return this.actionProvider.handleGrandParentResponse(message)
+      // }
+      // else if (curState.grandParent_flag === QuestionType.part3) {
+      //   return this.actionProvider.handleGrandParentAliveOption(message)
+      // }
+      if (curState.successor_flag === QuestionType.part1) {
+        return this.actionProvider.handleSuccessorInput(message);
+      } else if (curState.successor_flag === QuestionType.part2)
+        return this.actionProvider.handleChildAliveOption(message);
+      else if (curState.successor_flag === QuestionType.part3) {
+        if (this.chatbotValidator.validate(message, [ValidationType.emptyValue, ValidationType.onlyDigit])) {
+          return this.actionProvider.handleSuccessorCount(message);
+        } else {
+          // remove last message and update stepid
+          return this.actionProvider.handleValidation();
+        }
       }
-      else if (curState.grandParent_flag === QuestionType.part3) {
-        return this.actionProvider.handleGrandParentAliveOption(message)
+      if (curState.parent_flag === QuestionType.part1) {
+        return this.actionProvider.handleParentsInput(message);
       }
+      else if (curState.parent_flag == QuestionType.part2)
+        return this.actionProvider.handleParentAliveOption(message)
     }
 
     if (curState.stepID === ChatStepTypes.finalStep) {
@@ -161,10 +201,28 @@ class MessageParser {
       });
     }
   }
+  flagSwitch = (curState: ChatbotInterface, message: any) => {
+    if (curState.successor_flag === QuestionType.part1) {
+      return this.actionProvider.handleSuccessorInput(message);
+    } else if (curState.successor_flag === QuestionType.part2)
+      return this.actionProvider.handleChildAliveOption(message);
+    else if (curState.successor_flag === QuestionType.part3) {
+      if (this.chatbotValidator.validate(message, [ValidationType.emptyValue, ValidationType.onlyDigit])) {
+        return this.actionProvider.handleSuccessorCount(message);
+      } else {
+        // remove last message and update stepid
+        return this.actionProvider.handleValidation();
+      }
+    }
+    return null
+  }
 }
 
+
+
+
 export default MessageParser;
-function dispatch(arg0: { type: string; payload: any; }) {
-  throw new Error("Function not implemented.");
-}
+// function dispatch(arg0: { type: string; payload: any; }) {
+//   throw new Error("Function not implemented.");
+// }
 

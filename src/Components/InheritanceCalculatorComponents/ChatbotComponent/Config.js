@@ -5,7 +5,6 @@ import RearChildrenOptionSelector from "./Custom/Widgets/RearChildrenOptionSelec
 import UndividedEstateWidget from "./Custom/Widgets/UndividedEstateWidget/UndividedEstateWidget";
 import "react-chatbot-kit/build/main.css";
 import "../chatbot.scss";
-// import { FormattedMessage } from "react-intl";
 import ChatHeader from "../OtherComponent/ChatHeader/ChatHeader";
 import { ChatbotState } from "./Generics";
 import Norsk from "../../../languages/translationNO.json";

@@ -133,6 +133,23 @@ class QuestionConstants {
       </div>
     );
   };
+
+  askSecondParentChoiceQuestion = (person_id: string): ReactElement => {
+    return (
+      <div>
+        <FormattedMessage id="Chatbot.SecondParentChoice" values={{ person_ID: <strong>{person_id}</strong> }} />
+      </div>
+
+    )
+  }
+
+  SecondParentWidgetOptions = {
+    widget: "optionSelectorWidget",
+    withAvatar: true,
+    loading: true,
+    terminateLoading: true,
+  };
+
   addParentsQuestion2 = (
     person_id: string,
     parent_id_string: ReactElement
@@ -271,6 +288,15 @@ class QuestionConstants {
       </div>
     );
   };
+
+  addSuccessorOfParentCount = (person_id: string, existing_child_id: ReactElement): ReactElement => {
+    return (
+      <div>
+        <FormattedMessage id="Chatbot.addSuccessorCountExistingParent"
+          values={{ person_ID: <strong>{person_id}</strong>, existing_child_ID: <strong>{existing_child_id}</strong> }} />
+      </div>
+    )
+  }
 }
 
 export default QuestionConstants;

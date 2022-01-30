@@ -43,11 +43,35 @@ export class NodeEntity {
   setPath(prevPath: Array<[number, number]>) {
     this._path = prevPath;
   }
-  getParentId() {
+  getParentId(nodeMap: Map<number, NodeEntity>) {
     if (this._path.length - 2 < 0) {
       return null;
     }
-    return this._path[this._path.length - 2][1];
+    const currId = this._path[this._path.length - 2][1];
+    const currNode = NodeEntity.getNode(currId, nodeMap);
+    if (
+      !(
+        this._children.includes(this._path[this._path.length - 2][1]) ||
+        currNode._undividedEstateSpouse === this._id
+      )
+    )
+      return this._path[this._path.length - 2][1];
+    return null;
+  }
+  getGenerationCount() {
+    let parentCount = 0;
+    if (this._path.length - 2 < 0) {
+      return 0;
+    }
+    for (let i = this._path.length - 2; i >= 0; i--) {
+      if (this._path[i][0] === ParentChildSelector.grandParent) {
+        parentCount += 1;
+        break;
+      } else {
+        parentCount += 1;
+      }
+    }
+    return parentCount;
   }
 
   add_child = (child: NodeEntity, add_for_both = true): void => {
@@ -78,13 +102,12 @@ export class NodeEntity {
     }
     parent._path = [...this._path];
 
-    parent._path.push([
-      grandParent
-        ? ParentChildSelector.grandParent
-        : ParentChildSelector.parent,
-      parent_id,
-    ]);
+    parent._path.push([ParentChildSelector.parent, parent_id]);
     parent._level = this.getLevel(parent._path);
+    if (parent._level === 2) {
+      parent._path[parent._path.length - 1][0] =
+        ParentChildSelector.grandParent;
+    }
     if (add_for_both) {
       if (!parent._children.find((obj) => obj === this._id)) {
         parent._children.push(this._id);
@@ -133,4 +156,12 @@ export class NodeEntity {
       return this._children[this._processChildNodePos++];
     }
   }
+
+  has_surviving_spouse = () => {
+    return true;
+  };
+
+  has_surviving_cohabitant = () => {
+    return true;
+  };
 }
