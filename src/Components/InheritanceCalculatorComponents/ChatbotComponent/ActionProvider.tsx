@@ -454,6 +454,11 @@ class ActionProvider {
     });
   };
 
+
+  handleSpouseChoice = (spouseChoice: boolean): void => {
+    //
+  }
+
   handleSpouseInput = (spouseResponse: string): void => {
     /**
      *  * function for handling spouseID replies.
@@ -888,9 +893,6 @@ class ActionProvider {
     this.setState((state: ChatbotInterface) => {
       if (marriedParentsResponse) {
         this.set_spouse(state.person._parents[0], state.person._parents[1], true)
-
-        // state.person._spouse = newSpouse._id
-        // state.person.setPathforPartner(ParentChildSelector.spouse, newSpouse)
         this.askFinalQuestion()
       }
       else {
@@ -1042,8 +1044,9 @@ class ActionProvider {
         // TODO
         state.successor_flag = QuestionType.initialQuestion;
         state.parent_flag = QuestionType.part3;
+        const personName = this.getPerson(state.temp_person._id, state.personsMap)._personName
         const secondParentChoiceQuestion = this.createChatBotMessage(
-          this.QuestionConsts.askSecondParentChoiceQuestion(`${state.temp_person._id}`), this.QuestionConsts.SecondParentWidgetOptions
+          this.QuestionConsts.askSecondParentChoiceQuestion(`${personName}`), this.QuestionConsts.SecondParentWidgetOptions
         )
         this.addMessageToBotState(secondParentChoiceQuestion);
         return this.returnState(state);
