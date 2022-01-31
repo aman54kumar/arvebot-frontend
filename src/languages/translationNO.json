@@ -54,6 +54,8 @@
   "Chatbot.TextBeforeSucsrUndvdSpouse": "Må disse ha vært født ved førstavdødes dødsfall?",
   "Chatbot.addSuccessorCount": "How many children {person_ID} has?",
   "Chatbot.addSuccessorCountExistingParent": "{person_ID} has {existing_child_ID} as existing child. How many additional children are there?",
+  "Chatbot.SecondParentChoice": "Does {person_ID} has a second relevant parent?",
+
   "Report.Inheritance.survivorType1": "Ektefelle",
   "Report.Inheritance.survivorType2": "Samboer med felles barn",
   "Report.Inheritance.DESC_SPOUSE_NO_CLOSE_RELATIVES": "Arvelater har ingen gjenlevende slektninger i de to første arvegangsklassene. Hele arven går da til gjenlevende ektefelle.",

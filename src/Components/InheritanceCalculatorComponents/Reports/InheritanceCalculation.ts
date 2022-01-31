@@ -4,7 +4,6 @@ import { NodeEntity } from "../ChatbotComponent/Helper/Classes/NodeEntity";
 import Norsk from "../../../languages/translationNO.json";
 import { createIntl, createIntlCache } from "react-intl";
 import InheritanceConstants from "../ChatbotComponent/Helper/Methods/InheritanceConstants";
-import Person from "../ChatbotComponent/Helper/Classes/Person";
 const cache = createIntlCache();
 const intl = createIntl({ locale: "nb-NO", messages: Norsk }, cache);
 
