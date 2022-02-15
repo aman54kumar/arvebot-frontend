@@ -118,10 +118,13 @@ class ActionProvider {
       const undividedEstateResponseModifiedResult =
         this.QuestionConsts.UndividedEstateResultText(`${undividedEstateChoiceResponse}`);
 
-      const undividedEstateClientMessage = this.createClientMessage(
-        undividedEstateResponseModifiedResult
-      );
-      this.addMessageToBotState(undividedEstateClientMessage);
+      if (state.yesNoClickFlag) {
+        const undividedEstateClientMessage = this.createClientMessage(
+          undividedEstateResponseModifiedResult
+        );
+        this.addMessageToBotState(undividedEstateClientMessage);
+      }
+      state.yesNoClickFlag = false;
 
       if (undividedEstateChoiceResponse) {
         state = {

@@ -1,4 +1,5 @@
 import ActionProvider from "../../ActionProvider";
+import { BinaryAnswerTypeNo, BinaryAnswerTypeYes } from "../Enums/BinaryAnswerTypes";
 import { DefaultWarningMessage, ValidationType } from "../Enums/ValidationType";
 
 export class ChatbotValidation {
@@ -18,8 +19,11 @@ export class ChatbotValidation {
                     validationResult = this.validateAmount(message);
                     break
                 case ValidationType.onlyDigit:
-                    validationResult = this.validateDigit(message)
+                    validationResult = this.validateDigit(message);
                     break
+                case ValidationType.incorrectValueForBoolean:
+                    validationResult = this.validateValueForBoolean(message);
+                    break;
                 default:
                     console.error("Invalid Validation type")
                     return false;
@@ -51,6 +55,14 @@ export class ChatbotValidation {
         return false
     }
 
+    validateValueForBoolean = (message: string) => {
+        if (!(message in BinaryAnswerTypeYes) && !(message in BinaryAnswerTypeNo)) {
+            return false
+        }
+
+        return true;
+    }
+
     private showWarning = (warningMessage: string) => {
         const warningDiv = document.getElementById("chatbot-warning-div");
         if (warningDiv) {
@@ -63,8 +75,10 @@ export class ChatbotValidation {
         switch (validationType) {
             case ValidationType.emptyValue:
                 return DefaultWarningMessage.emptyValueMessage;
+            case ValidationType.incorrectValueForBoolean:
+                return DefaultWarningMessage.errorForBooleanMessage;
             default:
-                return "Error";
+                return "Improve error message in ChatbotType.ts";
         }
     }
 

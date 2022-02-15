@@ -50,7 +50,7 @@ const OptionSelector = (props: any): ReactElement => {
 const handleOptions = (option: boolean, actionProvider: any, setState: any) => {
   setState((state: ChatbotInterface) => {
     messageService.addPreviousState({ ...state })
-    console.log(messageService.getPreviousStates());
+    // console.log(messageService.getPreviousStates());
 
     const curStep = state.stepID;
     // toggleInputField();

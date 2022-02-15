@@ -29,6 +29,7 @@ export interface ChatbotInterface {
   tempMessages: any;
   successorProcessArray: Array<[number, number]>;
   isUndividedParent: boolean;
+  yesNoClickFlag: boolean;
 }
 
 export const ChatbotState: ChatbotInterface = {
@@ -59,7 +60,9 @@ export const ChatbotState: ChatbotInterface = {
   tempMessages: [],
   successorProcessArray: [],
   isUndividedParent: false,
+  yesNoClickFlag: false,
 };
+
 export const InitialChatbotState: any = {
   stepID: ChatStepTypes.initalStep,
   person: new NodeEntity(0, 0),

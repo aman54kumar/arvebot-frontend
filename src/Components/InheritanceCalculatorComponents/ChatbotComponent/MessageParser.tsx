@@ -4,6 +4,7 @@ import { ChatStepTypes, QuestionType } from "./Helper/Enums/ChatStepTypes";
 import { ValidationType } from "./Helper/Enums/ValidationType";
 import { ChatbotValidation } from "./Helper/Methods/ChatbotValidation";
 import { messageService } from "./services/ChatbotCommunicator";
+import { BinaryAnswerTypeYes, BinaryAnswerTypeNo } from "../ChatbotComponent/Helper/Enums/BinaryAnswerTypes"
 
 class MessageParser {
   actionProvider: ActionProvider;
@@ -45,9 +46,29 @@ class MessageParser {
         return this.actionProvider.handleTestator(message);
       }
     }
-    // if (curState.stepID === 2) {
-    //   return this.actionProvider.handleUndividedEstate(message); //set stepID = 3
-    // }
+    if (curState.stepID === ChatStepTypes.testatorStep) {
+      message = message.toLowerCase();
+      if (this.chatbotValidator.validate(message, [ValidationType.incorrectValueForBoolean])) {
+        if (message in BinaryAnswerTypeYes) {
+          this.disableButtons()
+          return this.actionProvider.handleUndividedEstateChoice(true)
+
+        }
+        else if (message in BinaryAnswerTypeNo) {
+          this.disableButtons();
+          return this.actionProvider.handleUndividedEstateChoice(false)
+        }
+        else {
+          console.log("check for error");
+
+          // TODO validation error
+
+        }
+      }
+
+
+      // return this.actionProvider.handleUndividedEstate(message); //set stepID = 3
+    }
     if (curState.stepID === ChatStepTypes.undividedEstateStep) {
       if (curState.undividedEstate.undivided_flag === QuestionType.part1) {
         return this.actionProvider.handleTotalEstateValueResponse(message)
@@ -172,6 +193,17 @@ class MessageParser {
       return;
     }
   }
+
+  disableButtons = () => {
+    const buttonElements: any = document.getElementsByClassName("option-selector-button");
+    for (let i = 0; i < buttonElements.length; i++) {
+      const currentElement = buttonElements[i];
+      if (!currentElement.disabled)
+        currentElement.disabled = true
+      currentElement.style.pointerEvents = "none"
+    }
+  }
+
   setRevertListeners = () => {
     messageService.clearAllInternalSubscription();
     const subscription = messageService.getMessageInChatbot().subscribe(message => {
