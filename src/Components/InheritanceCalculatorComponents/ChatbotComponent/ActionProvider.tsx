@@ -661,7 +661,7 @@ class ActionProvider {
         const personId: any = Person.getPerson(child._id, state.personsMap)?._personName
         const aliveQuestion = this.createChatBotMessage(
           this.QuestionConsts.AliveQuestion(personId),
-          this.QuestionConsts.AliveWidgetOptions
+          this.QuestionConsts.YesNoWidgetOptions
         );
         this.addMessageToBotState(aliveQuestion);
         // }
@@ -674,7 +674,7 @@ class ActionProvider {
     });
   };
 
-  handleChildAliveOption = (alive: string): void => {
+  handleChildAliveOption = (alive: boolean): void => {
     this.setState((state: ChatbotInterface) => {
       const child = state.temp_child;
       const childDetail = this.getPerson(child._id, state.personsMap);
@@ -809,7 +809,7 @@ class ActionProvider {
 
       const aliveQuestion = this.createChatBotMessage(
         this.QuestionConsts.AliveQuestion(Person.getPerson(predecessor._id, state.personsMap)._personName),
-        this.QuestionConsts.AliveWidgetOptions
+        this.QuestionConsts.YesNoWidgetOptions
       );
       this.addMessageToBotState(aliveQuestion);
 
@@ -817,7 +817,7 @@ class ActionProvider {
     })
   }
 
-  handleParentAliveOption = (alive: string): void => {
+  handleParentAliveOption = (alive: boolean): void => {
     this.setState((state: ChatbotInterface) => {
       const temp_parent = state.temp_parent;
       const temp_parent_detail = Person.getPerson(temp_parent._id, state.personsMap)
@@ -924,9 +924,14 @@ class ActionProvider {
     })
   }
   // eslint-disable-next-line
-  handleFinalQuestion = (finalOption: string): void => {
+  handleFinalQuestion = (finalOption: boolean): void => {
     this.setState((state: ChatbotInterface) => {
-      console.log(state);
+      if (finalOption) {
+        console.log("prepare report and download");
+      }
+      else {
+        console.log("retry");
+      }
       return this.returnState(state)
     })
   }
@@ -1053,7 +1058,7 @@ class ActionProvider {
         ...state,
         stepID: ChatStepTypes.finalStep,
       }
-      const finalQuestion = this.createChatBotMessage(this.QuestionConsts.FinalQuestion, this.QuestionConsts.FinalQuestionWidgetOptions)
+      const finalQuestion = this.createChatBotMessage(this.QuestionConsts.FinalQuestion, this.QuestionConsts.YesNoWidgetOptions)
       this.addMessageToBotState(finalQuestion);
       return this.returnState(state)
     })
@@ -1068,7 +1073,7 @@ class ActionProvider {
         state.parent_flag = QuestionType.part3;
         const personName = this.getPerson(state.temp_person._id, state.personsMap)._personName
         const secondParentChoiceQuestion = this.createChatBotMessage(
-          this.QuestionConsts.askSecondParentChoiceQuestion(`${personName}`), this.QuestionConsts.SecondParentWidgetOptions
+          this.QuestionConsts.askSecondParentChoiceQuestion(`${personName}`), this.QuestionConsts.YesNoWidgetOptions
         )
         this.addMessageToBotState(secondParentChoiceQuestion);
         return this.returnState(state);
@@ -1152,7 +1157,7 @@ class ActionProvider {
         state.parent_flag = QuestionType.part3;
 
         const secondParentChoiceQuestion = this.createChatBotMessage(
-          this.QuestionConsts.askSecondParentChoiceQuestion(`${state.temp_person._id}`), this.QuestionConsts.SecondParentWidgetOptions
+          this.QuestionConsts.askSecondParentChoiceQuestion(`${state.temp_person._id}`), this.QuestionConsts.YesNoWidgetOptions
         )
         this.addMessageToBotState(secondParentChoiceQuestion);
         return this.returnState(state);

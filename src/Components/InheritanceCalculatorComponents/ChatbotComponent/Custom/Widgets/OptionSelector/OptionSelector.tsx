@@ -105,11 +105,6 @@ const handleOptions = (option: boolean, actionProvider: any, setState: any) => {
         }
         break;
       }
-
-      case ChatStepTypes.rearChildrenStep: {
-        actionProvider.handleRearChildrenResult(option);
-        break;
-      }
       case ChatStepTypes.marriedParentsStep: {
         actionProvider.handleMarriedParents(option);
         break;

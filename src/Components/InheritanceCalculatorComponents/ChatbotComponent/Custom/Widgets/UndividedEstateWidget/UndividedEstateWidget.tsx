@@ -10,23 +10,25 @@ const UndividedEstateWidget = (props: any): ReactElement => {
     actionProvider.handleOwnershipResponse(option);
   };
 
-  // const onClickHandler = (e: any): void => {
-  //   const thisButton = e.target as HTMLButtonElement
-  //   const nextButton = (thisButton).nextElementSibling as HTMLButtonElement
-  //   const prevButton = (thisButton).previousElementSibling as HTMLButtonElement
-  //   const otherButton = nextButton ? nextButton : prevButton
-  //   thisButton.style.pointerEvents = "none"
-  //   thisButton.disabled = true;
-  //   otherButton.style.pointerEvents = "none"
-  //   otherButton.disabled = true;
-  // }
+  const onClickHandler = (e: any): void => {
+    const thisButton = e.target as HTMLButtonElement;
+    const currentParent = thisButton.parentElement;
+    if (currentParent?.hasChildNodes) {
+      const allCurrentButtons = Object.values(currentParent.childNodes) as HTMLButtonElement[];
+      for (const childEl of allCurrentButtons) {
+        childEl.style.pointerEvents = "none";
+        childEl.disabled = true;
+      }
+      thisButton.style.background = "darkolivegreen";
+    }
+  }
   return (
     <div>
       <div className="option-selector-button-container">
         <button
           className="option-selector-button"
-          onClick={() => {
-
+          onClick={(e) => {
+            onClickHandler(e);
             setOption("FELLESEIE")
           }}
         >
@@ -34,8 +36,8 @@ const UndividedEstateWidget = (props: any): ReactElement => {
         </button>
         <button
           className="option-selector-button"
-          onClick={() => {
-
+          onClick={(e) => {
+            onClickHandler(e);
             setOption("DELVIS SÆREIE")
           }}
         >
@@ -43,8 +45,8 @@ const UndividedEstateWidget = (props: any): ReactElement => {
         </button>
         <button
           className="option-selector-button"
-          onClick={() => {
-
+          onClick={(e) => {
+            onClickHandler(e);
             setOption("FULLT SÆREIE")
           }}
         >

@@ -94,13 +94,6 @@ class QuestionConstants {
     );
   };
 
-  AliveWidgetOptions = {
-    widget: "optionSelectorWidget",
-    withAvatar: true,
-    loading: true,
-    terminateLoading: true,
-  };
-
   AliveResultText = (selectedOption: string): ReactElement => {
     const aliveResultText = selectedOption ? "Chatbot.Yes" : "Chatbot.No";
 
@@ -128,13 +121,6 @@ class QuestionConstants {
 
     )
   }
-
-  SecondParentWidgetOptions = {
-    widget: "optionSelectorWidget",
-    withAvatar: true,
-    loading: true,
-    terminateLoading: true,
-  };
 
   addParentsQuestion2 = (
     person_id: string,
@@ -200,13 +186,6 @@ class QuestionConstants {
   }
 
   FinalQuestion = (<FormattedMessage id="Chatbot.FINAL_QUESTION" />);
-
-  FinalQuestionWidgetOptions = {
-    widget: "optionSelectorWidget",
-    withAvatar: true,
-    loading: true,
-    terminateLoading: true,
-  };
 
   EmptyQuestion = <p></p>
   DefaultText = (<FormattedMessage id="Chatbot.DEFAULT_TEXT" />);
