@@ -8,16 +8,17 @@ import { messageService } from "../../../services/ChatbotCommunicator";
 
 const OptionSelector = (props: any): ReactElement => {
   const { actionProvider, setState } = props;
-  // toggleInputField();
   const setOption = (option: boolean) => {
     handleOptions(option, actionProvider, setState);
   };
+
   const onClickHandler = (e: any): void => {
     const thisButton = e.target as HTMLButtonElement
     const nextButton = (thisButton).nextElementSibling as HTMLButtonElement
     const prevButton = (thisButton).previousElementSibling as HTMLButtonElement
     const otherButton = nextButton ? nextButton : prevButton
     thisButton.style.pointerEvents = "none"
+    thisButton.style.background = "darkolivegreen";
     thisButton.disabled = true;
     otherButton.style.pointerEvents = "none"
     otherButton.disabled = true;
@@ -50,10 +51,8 @@ const OptionSelector = (props: any): ReactElement => {
 const handleOptions = (option: boolean, actionProvider: any, setState: any) => {
   setState((state: ChatbotInterface) => {
     messageService.addPreviousState({ ...state })
-    // console.log(messageService.getPreviousStates());
-
     const curStep = state.stepID;
-    // toggleInputField();
+    state.yesNoClickedFlag = true;
     switch (curStep) {
       case ChatStepTypes.testatorStep: {
         actionProvider.handleUndividedEstateChoice(option);
@@ -76,6 +75,14 @@ const handleOptions = (option: boolean, actionProvider: any, setState: any) => {
       }
       case ChatStepTypes.underAgeStep: {
         actionProvider.handleUnderAge(option);
+        break;
+      }
+      case ChatStepTypes.spouseChoice: {
+        actionProvider.handleSpouseChoice(option);
+        break;
+      }
+      case ChatStepTypes.cohabitantChoice: {
+        actionProvider.handleCohabitantChoice(option);
         break;
       }
       case ChatStepTypes.successorStep: {

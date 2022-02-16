@@ -18,29 +18,9 @@ class MessageParser {
   }
 
   parse(message: string): ReturnType<() => void> {
-    // const revertCount = localStorage.getItem("revertCount");
-    // if (revertCount && revertCount != '0') {
-    //   const revertCounts = parseInt(revertCount)
-    //   let finalState: any;
-    //   for (let i = 0; i < revertCounts; i++) {
-    //     finalState = messageService.removePreviousState()
-    //   }
-    //   localStorage.setItem("revertCount", '0');
-    //   this.state = finalState;
-
-
-    // }
-
-    // messageService.addPreviousState(this.state)
-    // console.log(messageService.getPreviousStates());
     message = message.trim();
     const curState = this.state;
-
-
-    // if (curState.stepID === ChatStepTypes.) {
-    //   this.actionProvider.handleCaseName(message); //set stepID = 1
-    //   return
-    // }
+    curState.yesNoClickedFlag = false;
     if (curState.stepID === ChatStepTypes.initalStep) {
       if (this.chatbotValidator.validate(message, [ValidationType.emptyValue])) {
         return this.actionProvider.handleTestator(message);
@@ -59,15 +39,9 @@ class MessageParser {
           return this.actionProvider.handleUndividedEstateChoice(false)
         }
         else {
-          console.log("check for error");
-
-          // TODO validation error
-
+          alert("check for error");
         }
       }
-
-
-      // return this.actionProvider.handleUndividedEstate(message); //set stepID = 3
     }
     if (curState.stepID === ChatStepTypes.undividedEstateStep) {
       if (curState.undividedEstate.undivided_flag === QuestionType.part1) {
@@ -83,7 +57,7 @@ class MessageParser {
         return this.actionProvider.handleDelvisSecondResponse(message)
       }
       if (curState.undividedEstate.undivided_flag === QuestionType.part5) {
-        return this.actionProvider.handleFulltSaereieResponse(message); //set stepID = 4
+        return this.actionProvider.handleFulltSaereieResponse(message);
       }
       if (curState.undividedEstate.undivided_flag === QuestionType.part6) {
         if (curState.successor_flag === QuestionType.part1) {
@@ -114,17 +88,72 @@ class MessageParser {
     if (curState.stepID === ChatStepTypes.netWealthStep) {
       return this.actionProvider.handleNetWealth(message)
     }
-    // if (curState.stepID === 4) {
-    //   return this.actionProvider.handleUnderAge(message); //set stepID = 5
-    // }
-    if (curState.stepID === ChatStepTypes.spouseStep) {
-      // if (this.chatbotValidator.validate(message, [ValidationType.emptyValue])) {
-      return this.actionProvider.handleSpouseInput(message); //set stepID = 6
-      // }
+    if (curState.stepID === ChatStepTypes.underAgeStep) {
+      message = message.toLowerCase();
+      if (this.chatbotValidator.validate(message, [ValidationType.incorrectValueForBoolean])) {
+        if (message in BinaryAnswerTypeYes) {
+          this.disableButtons()
+          return this.actionProvider.handleUnderAge(true)
+
+        }
+        else if (message in BinaryAnswerTypeNo) {
+          this.disableButtons();
+          return this.actionProvider.handleUnderAge(false)
+        }
+        else {
+          alert("check for error");
+        }
+      }
     }
+
+    // spouse start
+    if (curState.stepID === ChatStepTypes.spouseChoice) {
+      message = message.toLowerCase();
+      if (this.chatbotValidator.validate(message, [ValidationType.incorrectValueForBoolean])) {
+        if (message in BinaryAnswerTypeYes) {
+          this.disableButtons()
+          return this.actionProvider.handleSpouseChoice(true)
+        }
+        else if (message in BinaryAnswerTypeNo) {
+          this.disableButtons();
+          return this.actionProvider.handleSpouseChoice(false)
+        }
+        else {
+          alert("check for error");
+        }
+      }
+    }
+    if (curState.stepID === ChatStepTypes.spouseStep) {
+      if (this.chatbotValidator.validate(message, [ValidationType.emptyValue])) {
+        return this.actionProvider.handleSpouseInput(message);
+      }
+    }
+    // spouse end
+
+
+    // cohabitant start
+    if (curState.stepID === ChatStepTypes.cohabitantChoice) {
+      message = message.toLowerCase();
+      if (this.chatbotValidator.validate(message, [ValidationType.incorrectValueForBoolean])) {
+        if (message in BinaryAnswerTypeYes) {
+          this.disableButtons()
+          return this.actionProvider.handleCohabitantChoice(true)
+        }
+        else if (message in BinaryAnswerTypeNo) {
+          this.disableButtons();
+          return this.actionProvider.handleCohabitantChoice(false)
+        }
+        else {
+          alert("check for error");
+        }
+      }
+    }
+
     if (curState.stepID === ChatStepTypes.cohabitantStep) {
       return this.actionProvider.handleCohabitantInput(message); //set stepID = 7
     }
+
+    //  cohabitant end
     if (curState.stepID === ChatStepTypes.successorStep) {
       if (curState.successor_flag === QuestionType.part1) {
         return this.actionProvider.handleSuccessorInput(message);

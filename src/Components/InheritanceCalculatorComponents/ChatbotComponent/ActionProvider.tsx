@@ -96,7 +96,7 @@ class ActionProvider {
 
     const undividedEstateQuestion = this.createChatBotMessage(
       this.QuestionConsts.UndividedEstateQuestion,
-      this.QuestionConsts.UndividedEstateWidgetOptions
+      this.QuestionConsts.YesNoWidgetOptions
     );
     this.setState((state: ChatbotInterface) => ({
       ...state,
@@ -115,17 +115,16 @@ class ActionProvider {
     // TODO: need to fix the values in object and correctly implement the whole algorithm
     // TODO: check for correct text for the questions. (last step, the format of questions already available)
     this.setState((state: ChatbotInterface) => {
-      const undividedEstateResponseModifiedResult =
-        this.QuestionConsts.UndividedEstateResultText(`${undividedEstateChoiceResponse}`);
 
-      if (state.yesNoClickFlag) {
-        const undividedEstateClientMessage = this.createClientMessage(
-          undividedEstateResponseModifiedResult
-        );
-        this.addMessageToBotState(undividedEstateClientMessage);
-      }
-      state.yesNoClickFlag = false;
 
+      // if (state.yesNoClickedFlag) {
+      // const undividedEstateResponseModifiedResult =
+      //   this.QuestionConsts.UndividedEstateResultText(`${undividedEstateChoiceResponse}`);
+      //   const undividedEstateClientMessage = this.createClientMessage(
+      //     undividedEstateResponseModifiedResult
+      //   );
+      //   this.addMessageToBotState(undividedEstateClientMessage);
+      // }
       if (undividedEstateChoiceResponse) {
         state = {
           ...state,
@@ -133,7 +132,6 @@ class ActionProvider {
           undividedEstate: { ...state.undividedEstate, undivided_flag: QuestionType.part1, undividedEstateChoice: undividedEstateChoiceResponse }
 
         }
-
         const totalEstateNetValueQuestion = this.createChatBotMessage(
           this.QuestionConsts.TotalEstateNetValueQuestion
         )
@@ -220,7 +218,7 @@ class ActionProvider {
               });
               const underAgeQuestion = this.createChatBotMessage(
                 this.QuestionConsts.UnderAgeQuestion,
-                this.QuestionConsts.UnderAgeWidgetOptions
+                this.QuestionConsts.YesNoWidgetOptions
               );
               this.addMessageToBotState(underAgeQuestion);
               return this.returnState(state)
@@ -380,7 +378,7 @@ class ActionProvider {
         }
         const underAgeQuestion = this.createChatBotMessage(
           this.QuestionConsts.UnderAgeQuestion,
-          this.QuestionConsts.UnderAgeWidgetOptions
+          this.QuestionConsts.YesNoWidgetOptions
         );
         this.addMessageToBotState(underAgeQuestion)
       }
@@ -405,7 +403,7 @@ class ActionProvider {
       if (currencyIntResponse[0] === 5) {
         const underAgeQuestion = this.createChatBotMessage(
           this.QuestionConsts.UnderAgeQuestion,
-          this.QuestionConsts.UnderAgeWidgetOptions
+          this.QuestionConsts.YesNoWidgetOptions
         );
         const currencyCustom = this.createClientMessage(currencyJSX)
         this.addMessageToBotState(currencyCustom)
@@ -434,32 +432,68 @@ class ActionProvider {
 
   }
 
-  handleUnderAge = (selectedOption: string): void => {
+  handleUnderAge = (selectedOption: boolean): void => {
     this.setState((state: ChatbotInterface) => {
       state = {
         ...state,
-        stepID: ChatStepTypes.spouseStep,
+        stepID: ChatStepTypes.spouseChoice,
       }
       state.person = state.testator;
       state.temp_person = state.testator
-      this.getPerson(state.person._id, state.personsMap)._underAge = selectedOption == 'true' ? true : false;
-
-
-      const selectedOptionModified =
-        this.QuestionConsts.UnderAgeResultText(selectedOption);
-      const underAgeResponse = this.createClientMessage(selectedOptionModified);
-      this.addMessageToBotState(underAgeResponse);
-      const spouseQuestion = this.createChatBotMessage(
-        this.QuestionConsts.SpouseQuestion
+      this.getPerson(state.person._id, state.personsMap)._underAge = selectedOption == true ? true : false;
+      // if (state.yesNoClickedFlag) {
+      //   const selectedOptionModified =
+      //     this.QuestionConsts.UnderAgeResultText(selectedOption);
+      //   const underAgeResponse = this.createClientMessage(selectedOptionModified);
+      //   this.addMessageToBotState(underAgeResponse);
+      // }
+      const spouseChoiceQuestion = this.createChatBotMessage(
+        this.QuestionConsts.SpouseChoiceQuestion,
+        this.QuestionConsts.YesNoWidgetOptions
       );
-      this.addMessageToBotState(spouseQuestion);
+      this.addMessageToBotState(spouseChoiceQuestion);
       return this.returnState(state)
     });
   };
 
 
   handleSpouseChoice = (spouseChoice: boolean): void => {
-    //
+    this.setState((state: ChatbotInterface) => {
+      // Spouse present
+      if (spouseChoice) {
+        state.stepID = ChatStepTypes.spouseStep;
+
+        const spouseQuestion = this.createChatBotMessage(
+          this.QuestionConsts.SpouseQuestion
+        );
+        this.addMessageToBotState(spouseQuestion);
+      }
+      // No spouse
+      else {
+        const testator = Person.getPerson(state.person._id, state.personsMap)
+        // is Adult, then ask for cohabitant
+        if (!testator._underAge && testator.spouse === undefined) {
+          state = {
+            ...state,
+            stepID: ChatStepTypes.cohabitantChoice
+          };
+          const cohabitantChoiceQuestion = this.createChatBotMessage(this.QuestionConsts.CohabitantChoiceQuestion, this.QuestionConsts.YesNoWidgetOptions)
+          this.addMessageToBotState(cohabitantChoiceQuestion);
+        }
+        else {
+          state = {
+            ...state,
+            stepID: ChatStepTypes.successorStep,
+            successor_flag: QuestionType.part3,
+          };
+          const newSuccessorQuestion = this.createChatBotMessage(
+            this.QuestionConsts.addSuccessorCount(testator._personName)
+          );
+          this.addMessageToBotState(newSuccessorQuestion);
+        }
+      }
+      return this.returnState(state)
+    })
   }
 
   handleSpouseInput = (spouseResponse: string): void => {
@@ -471,33 +505,37 @@ class ActionProvider {
     const spouseID = spouseResponse;
     this.setState((state: ChatbotInterface) => {
       const testator = Person.getPerson(state.person._id, state.personsMap)
-      if (spouseID !== "") {
-        const newSpouse = this.createNewPerson(spouseID, state)
-        state.person._spouse = newSpouse._id
-        state.person.setPathforPartner(ParentChildSelector.spouse, newSpouse)
-        if (state.netWealth <=
-          this.InheritanceConstants.MINIMUM_INHERITANCE_SPOUSE_VS_CHILDREN) {
-          state = {
-            ...state,
-            stepID: ChatStepTypes.rearChildrenStep
-          }
-          this.askFinalQuestion();
-          return this.returnState(state);
-        }
-
+      const newSpouse = this.createNewPerson(spouseID, state)
+      state.person._spouse = newSpouse._id
+      state.person.setPathforPartner(ParentChildSelector.spouse, newSpouse)
+      if (state.netWealth <=
+        this.InheritanceConstants.MINIMUM_INHERITANCE_SPOUSE_VS_CHILDREN) {
         state = {
           ...state,
-          stepID: ChatStepTypes.successorStep,
-          successor_flag: QuestionType.part3,
-        };
-        const newSuccessorQuestion = this.createChatBotMessage(
-          this.QuestionConsts.addSuccessorCount(testator._personName)
-        );
-        this.addMessageToBotState(newSuccessorQuestion);
+          stepID: ChatStepTypes.rearChildrenStep
+        }
+        this.askFinalQuestion();
         return this.returnState(state);
       }
 
-      else if (!testator._underAge && testator.spouse === undefined) {
+      state = {
+        ...state,
+        stepID: ChatStepTypes.successorStep,
+        successor_flag: QuestionType.part3,
+      };
+      const newSuccessorQuestion = this.createChatBotMessage(
+        this.QuestionConsts.addSuccessorCount(testator._personName)
+      );
+      this.addMessageToBotState(newSuccessorQuestion);
+      return this.returnState(state);
+    });
+  }
+
+
+  handleCohabitantChoice = (cohabitantChoiceResponse: boolean): void => {
+    this.setState((state: ChatbotInterface) => {
+      // if cohabitant choice is yes
+      if (cohabitantChoiceResponse) {
         state = {
           ...state,
           stepID: ChatStepTypes.cohabitantStep,
@@ -506,23 +544,22 @@ class ActionProvider {
           this.QuestionConsts.CohabitantQuestion
         );
         this.addMessageToBotState(cohabitantQuestion);
-        return this.returnState(state);
       }
-
+      // if cohabitant choice is no
       else {
         state = {
           ...state,
           stepID: ChatStepTypes.successorStep,
           successor_flag: QuestionType.part3,
         };
+        const testator = Person.getPerson(state.person._id, state.personsMap)
         const newSuccessorQuestion = this.createChatBotMessage(
           this.QuestionConsts.addSuccessorCount(testator._personName)
         );
         this.addMessageToBotState(newSuccessorQuestion);
-        return this.returnState(state);
       }
-    });
-
+      return this.returnState(state)
+    })
   }
 
   handleCohabitantInput = (cohabitantResponse: string): void => {
@@ -535,47 +572,29 @@ class ActionProvider {
     const cohabitantID = cohabitantResponse;
     this.setState((state: ChatbotInterface) => {
       const testator = Person.getPerson(state.person._id, state.personsMap)
+      const newCohabitant = this.createNewPerson(cohabitantID, state)
+      state.person._cohabitant = newCohabitant._id
+      state.person.setPathforPartner(ParentChildSelector.cohabitant, newCohabitant)
 
-      if (cohabitantID !== "") {
-
-        const newCohabitant = this.createNewPerson(cohabitantID, state)
-        state.person._cohabitant = newCohabitant._id
-        state.person.setPathforPartner(ParentChildSelector.cohabitant, newCohabitant)
-
-        if (state.netWealth <=
-          this.InheritanceConstants.MINIMUM_INHERITANCE_SPOUSE_VS_CHILDREN) {
-          state = {
-            ...state,
-            stepID: ChatStepTypes.rearChildrenStep
-          }
-          this.askFinalQuestion();
-          return this.returnState(state);
+      if (state.netWealth <=
+        this.InheritanceConstants.MINIMUM_INHERITANCE_SPOUSE_VS_CHILDREN) {
+        state = {
+          ...state,
+          stepID: ChatStepTypes.rearChildrenStep
         }
-
-        state = {
-          ...state,
-          stepID: ChatStepTypes.successorStep,
-          successor_flag: QuestionType.part3,
-        };
-        const newSuccessorQuestion = this.createChatBotMessage(
-          this.QuestionConsts.addSuccessorCount(testator._personName)
-        );
-        this.addMessageToBotState(newSuccessorQuestion);
+        this.askFinalQuestion();
         return this.returnState(state);
       }
-
-      else {
-        state = {
-          ...state,
-          stepID: ChatStepTypes.successorStep,
-          successor_flag: QuestionType.part3,
-        };
-        const newSuccessorQuestion = this.createChatBotMessage(
-          this.QuestionConsts.addSuccessorCount(testator._personName)
-        );
-        this.addMessageToBotState(newSuccessorQuestion);
-        return this.returnState(state);
-      }
+      state = {
+        ...state,
+        stepID: ChatStepTypes.successorStep,
+        successor_flag: QuestionType.part3,
+      };
+      const newSuccessorQuestion = this.createChatBotMessage(
+        this.QuestionConsts.addSuccessorCount(testator._personName)
+      );
+      this.addMessageToBotState(newSuccessorQuestion);
+      return this.returnState(state);
     });
   };
 
@@ -982,7 +1001,7 @@ class ActionProvider {
           state.stepID = ChatStepTypes.underAgeStep;
           const underAgeQuestion = this.createChatBotMessage(
             this.QuestionConsts.UnderAgeQuestion,
-            this.QuestionConsts.UnderAgeWidgetOptions
+            this.QuestionConsts.YesNoWidgetOptions
           );
           this.addMessageToBotState(underAgeQuestion);
           return this.returnState(state)
@@ -1079,7 +1098,7 @@ class ActionProvider {
           state.stepID = ChatStepTypes.underAgeStep;
           const underAgeQuestion = this.createChatBotMessage(
             this.QuestionConsts.UnderAgeQuestion,
-            this.QuestionConsts.UnderAgeWidgetOptions
+            this.QuestionConsts.YesNoWidgetOptions
           );
           this.addMessageToBotState(underAgeQuestion);
           return this.returnState(state)

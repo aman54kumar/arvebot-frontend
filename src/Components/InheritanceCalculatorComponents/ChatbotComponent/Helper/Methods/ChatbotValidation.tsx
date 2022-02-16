@@ -56,11 +56,10 @@ export class ChatbotValidation {
     }
 
     validateValueForBoolean = (message: string) => {
-        if (!(message in BinaryAnswerTypeYes) && !(message in BinaryAnswerTypeNo)) {
-            return false
+        if (((message in BinaryAnswerTypeYes) || (message in BinaryAnswerTypeNo)) && !(message in [0, 1])) {
+            return true
         }
-
-        return true;
+        return false;
     }
 
     private showWarning = (warningMessage: string) => {

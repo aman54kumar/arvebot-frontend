@@ -10,7 +10,7 @@ class QuestionConstants {
     <FormattedMessage id="Chatbot.UNDIVIDED_ESTATE_QUESTION" />
   );
 
-  UndividedEstateWidgetOptions = {
+  YesNoWidgetOptions = {
     widget: "optionSelectorWidget",
     withAvatar: true,
     loading: true,
@@ -35,7 +35,7 @@ class QuestionConstants {
 
   UnderAgeQuestion = (<FormattedMessage id="Chatbot.UNDER_AGE_QUESTION" />);
 
-  UnderAgeResultText = (selectedOption: string): ReactElement => {
+  UnderAgeResultText = (selectedOption: boolean): ReactElement => {
     const underAgeResultText = selectedOption
       ? "Chatbot.UnderAge"
       : "Chatbot.NotUnderAge";
@@ -43,14 +43,14 @@ class QuestionConstants {
     return <FormattedMessage id={underAgeResultText} />;
   };
 
-  UnderAgeWidgetOptions = {
-    widget: "optionSelectorWidget",
-    withAvatar: true,
-    loading: true,
-    terminateLoading: true,
-  };
+
+  SpouseChoiceQuestion = (<FormattedMessage id="Chatbot.SPOUSE_EXIST_QUESTION" />);
+
 
   SpouseQuestion = (<FormattedMessage id="Chatbot.SPOUSE_QUESTION" />);
+
+
+  CohabitantChoiceQuestion = (<FormattedMessage id="Chatbot.COHABITANT_EXIST_QUESTION" />);
 
   CohabitantQuestion = (
     <div>
@@ -58,20 +58,6 @@ class QuestionConstants {
       <ShowInfoWidget text="Chatbot.COHABITANT_EXTRA_INFO" />
     </div>
   );
-
-  RearChildrenQuestion = (
-    <FormattedMessage id="Chatbot.REAR_CHILDREN_QUESTION" />
-  );
-
-  RearChildrenWidgetOptions = {
-    widget: "optionSelectorWidget",
-    withAvatar: true,
-    loading: true,
-    terminateLoading: true,
-  };
-
-
-
 
   addSuccessorQuestion1 = (person_id: string): ReactElement => {
     return (
