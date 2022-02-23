@@ -5,27 +5,34 @@ import { ValidationType } from "./Helper/Enums/ValidationType";
 import { ChatbotValidation } from "./Helper/Methods/ChatbotValidation";
 import { messageService } from "./services/ChatbotCommunicator";
 import { BinaryAnswerTypeYes, BinaryAnswerTypeNo } from "../ChatbotComponent/Helper/Enums/BinaryAnswerTypes"
+import _ from "lodash";
 
 class MessageParser {
   actionProvider: ActionProvider;
   state: any;
   chatbotValidator: ChatbotValidation;
-  constructor(actionProvider: ActionProvider, state: ChatbotInterface) {
+  constructor(actionProvider: ActionProvider, state: any) {
     this.actionProvider = actionProvider;
     this.state = state;
-    this.chatbotValidator = new ChatbotValidation(actionProvider);
+    this.chatbotValidator = new ChatbotValidation(actionProvider, state);
     // this.setRevertListeners();
   }
 
   parse(message: string): ReturnType<() => void> {
     message = message.trim();
+
     const curState = this.state;
     curState.yesNoClickedFlag = false;
+
+    // initialStep
     if (curState.stepID === ChatStepTypes.initalStep) {
       if (this.chatbotValidator.validate(message, [ValidationType.emptyValue])) {
         return this.actionProvider.handleTestator(message);
       }
+      return;
     }
+
+    //testatorStep
     if (curState.stepID === ChatStepTypes.testatorStep) {
       message = message.toLowerCase();
       if (this.chatbotValidator.validate(message, [ValidationType.incorrectValueForBoolean])) {
@@ -43,6 +50,8 @@ class MessageParser {
         }
       }
     }
+
+    // undividedEstateStep
     if (curState.stepID === ChatStepTypes.undividedEstateStep) {
       if (curState.undividedEstate.undivided_flag === QuestionType.part1) {
         return this.actionProvider.handleTotalEstateValueResponse(message)
@@ -83,7 +92,7 @@ class MessageParser {
             return this.actionProvider.handleSuccessorCount(message);
           } else {
             // remove last message and update stepid
-            return this.actionProvider.handleValidation();
+            // return this.actionProvider.handleValidation();
           }
         }
         if (curState.parent_flag === QuestionType.part1) {
@@ -113,9 +122,12 @@ class MessageParser {
 
     }
 
+    // netWealthStep
     if (curState.stepID === ChatStepTypes.netWealthStep) {
       return this.actionProvider.handleNetWealth(message)
     }
+
+    // underAgeStep
     if (curState.stepID === ChatStepTypes.underAgeStep) {
       message = message.toLowerCase();
       if (this.chatbotValidator.validate(message, [ValidationType.incorrectValueForBoolean])) {
@@ -182,6 +194,9 @@ class MessageParser {
     }
 
     //  cohabitant end
+
+
+    // successorStep
     if (curState.stepID === ChatStepTypes.successorStep) {
       if (curState.successor_flag === QuestionType.part1) {
         return this.actionProvider.handleSuccessorInput(message);
@@ -200,17 +215,20 @@ class MessageParser {
             alert("check for error");
           }
         }
-        // return this.actionProvider.handleChildAliveOption(message);
       }
       else if (curState.successor_flag === QuestionType.part3) {
         if (this.chatbotValidator.validate(message, [ValidationType.emptyValue, ValidationType.onlyDigit])) {
           return this.actionProvider.handleSuccessorCount(message);
         } else {
+          return;
           // remove last message and update stepid
-          return this.actionProvider.handleValidation();
+          // return this.actionProvider.handleValidation();
         }
       }
     }
+
+
+    //  parentsStep
     if (curState.stepID === ChatStepTypes.parentsStep) {
       if (curState.successor_flag === QuestionType.part1) {
         return this.actionProvider.handleSuccessorInput(message);
@@ -229,14 +247,12 @@ class MessageParser {
             alert("check for error");
           }
         }
-        // return this.actionProvider.handleChildAliveOption(message);
       }
       else if (curState.successor_flag === QuestionType.part3) {
         if (this.chatbotValidator.validate(message, [ValidationType.emptyValue, ValidationType.onlyDigit])) {
           return this.actionProvider.handleSuccessorCount(message);
         } else {
-          // remove last message and update stepid
-          return this.actionProvider.handleValidation();
+          return;
         }
       }
       if (curState.parent_flag === QuestionType.part1) {
@@ -257,11 +273,11 @@ class MessageParser {
             alert("check for error");
           }
         }
-        // return this.actionProvider.handleParentAliveOption(message)
       }
     }
 
-    if (ChatStepTypes.marriedParentsStep) {
+    // marriedParentsStep
+    if (curState.stepID === ChatStepTypes.marriedParentsStep) {
       message = message.toLowerCase();
       if (this.chatbotValidator.validate(message, [ValidationType.incorrectValueForBoolean])) {
         if (message in BinaryAnswerTypeYes) {
@@ -278,6 +294,9 @@ class MessageParser {
         }
       }
     }
+
+
+    // grandParentStep
     if (curState.stepID === ChatStepTypes.grandParentStep) {
       if (curState.successor_flag === QuestionType.part1) {
         return this.actionProvider.handleSuccessorInput(message);
@@ -302,8 +321,9 @@ class MessageParser {
         if (this.chatbotValidator.validate(message, [ValidationType.emptyValue, ValidationType.onlyDigit])) {
           return this.actionProvider.handleSuccessorCount(message);
         } else {
+          return;
           // remove last message and update stepid
-          return this.actionProvider.handleValidation();
+          // return this.actionProvider.handleValidation();
         }
       }
       if (curState.parent_flag === QuestionType.part1) {
@@ -327,6 +347,8 @@ class MessageParser {
       }
     }
 
+
+    // finalStep
     if (curState.stepID === ChatStepTypes.finalStep) {
       console.log(curState)
       message = message.toLowerCase();
@@ -346,10 +368,10 @@ class MessageParser {
       }
       // return this.actionProvider.handleFinalQuestion(message)
     }
-    else {
-      return this.actionProvider.handleDefault();
-      return;
-    }
+    // else {
+    //   return this.actionProvider.handleDefault();
+    //   return;
+    // }
   }
 
   disableButtons = () => {
@@ -401,7 +423,7 @@ class MessageParser {
         return this.actionProvider.handleSuccessorCount(message);
       } else {
         // remove last message and update stepid
-        return this.actionProvider.handleValidation();
+        // return this.actionProvider.handleValidation();
       }
     }
     return null

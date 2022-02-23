@@ -49,6 +49,7 @@ const OptionSelector = (props: any): ReactElement => {
   );
 };
 const handleOptions = (option: boolean, actionProvider: any, setState: any) => {
+  hideWarning();
   setState((state: ChatbotInterface) => {
     messageService.addPreviousState({ ...state })
     const curStep = state.stepID;
@@ -134,6 +135,13 @@ const handleOptions = (option: boolean, actionProvider: any, setState: any) => {
     }
     return state;
   });
+}
+const hideWarning = () => {
+  const warningDiv = document.getElementById("chatbot-warning-div");
+  if (warningDiv) {
+    warningDiv.style.display = "none";
+    return;
+  }
 }
 export default OptionSelector;
 // function toggleInputField() {

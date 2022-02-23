@@ -1,9 +1,10 @@
 import ActionProvider from "../../ActionProvider";
 import { BinaryAnswerTypeNo, BinaryAnswerTypeYes } from "../Enums/BinaryAnswerTypes";
 import { DefaultWarningMessage, ValidationType } from "../Enums/ValidationType";
+import _ from "lodash";
 
 export class ChatbotValidation {
-    constructor(private actionProvider: ActionProvider) { }
+    constructor(private actionProvider: ActionProvider, private chatbotState: any) { }
     validate = (message: string, validationTypes: Array<number>, warningMessage?: string): boolean => {
 
         for (const validationType of validationTypes) {
@@ -28,10 +29,13 @@ export class ChatbotValidation {
                     console.error("Invalid Validation type")
                     return false;
             }
-            if (!validationResult) {
+            if (!validationResult && this.chatbotState) {
                 this.showWarning(warningMessage)
-                this.actionProvider.handleValidation();
+                const messageCopy = _.cloneDeep(this.chatbotState.messages)
+                this.actionProvider.handleValidation(messageCopy);
                 return false;
+            } else {
+                this.hideWarning();
             }
         }
         return true;
@@ -70,12 +74,20 @@ export class ChatbotValidation {
             return;
         }
     }
+    private hideWarning = () => {
+        const warningDiv = document.getElementById("chatbot-warning-div");
+        if (warningDiv) {
+            warningDiv.style.display = "none";
+            return;
+        }
+    }
     getDefaultWarningMessage(validationType: ValidationType) {
         switch (validationType) {
             case ValidationType.emptyValue:
                 return DefaultWarningMessage.emptyValueMessage;
             case ValidationType.incorrectValueForBoolean:
-                return DefaultWarningMessage.errorForBooleanMessage;
+                return "error boolean message"
+            // return DefaultWarningMessage.errorForBooleanMessage;
             default:
                 return "Improve error message in ChatbotType.ts";
         }

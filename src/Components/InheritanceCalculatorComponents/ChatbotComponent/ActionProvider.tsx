@@ -11,6 +11,7 @@ import InfoMessagesWidget from "./Custom/Widgets/InfoMessagesWidget/InfoMessages
 import { NodeEntity } from "./Helper/Classes/NodeEntity";
 import chartSelector from "../../../store/chartSelector";
 import { messageService } from "./services/ChatbotCommunicator";
+import _ from "lodash";
 
 class ActionProvider {
 
@@ -372,15 +373,15 @@ class ActionProvider {
         return this.returnState(state);
       }
       else {
-        state = {
-          ...state,
-          stepID: ChatStepTypes.underAgeStep
-        }
-        const underAgeQuestion = this.createChatBotMessage(
-          this.QuestionConsts.UnderAgeQuestion,
+        const spouseChoiceQuestion = this.createChatBotMessage(
+          this.QuestionConsts.SpouseChoiceQuestion,
           this.QuestionConsts.YesNoWidgetOptions
         );
-        this.addMessageToBotState(underAgeQuestion)
+        state = {
+          ...state,
+          stepID: ChatStepTypes.spouseChoice,
+        }
+        this.addMessageToBotState(spouseChoiceQuestion);
       }
       return this.returnState(state)
     })
@@ -434,24 +435,34 @@ class ActionProvider {
 
   handleUnderAge = (selectedOption: boolean): void => {
     this.setState((state: ChatbotInterface) => {
-      state = {
-        ...state,
-        stepID: ChatStepTypes.spouseChoice,
-      }
       state.person = state.testator;
       state.temp_person = state.testator
-      this.getPerson(state.person._id, state.personsMap)._underAge = selectedOption == true ? true : false;
-      // if (state.yesNoClickedFlag) {
-      //   const selectedOptionModified =
-      //     this.QuestionConsts.UnderAgeResultText(selectedOption);
-      //   const underAgeResponse = this.createClientMessage(selectedOptionModified);
-      //   this.addMessageToBotState(underAgeResponse);
-      // }
+      this.getPerson(state.person._id, state.personsMap)._underAge = selectedOption;
+      if (selectedOption) {
+        const cohabitantChoiceQuestion = this.createChatBotMessage(
+          this.QuestionConsts.CohabitantChoiceQuestion,
+          this.QuestionConsts.YesNoWidgetOptions
+        );
+        state = {
+          ...state,
+          stepID: ChatStepTypes.cohabitantChoice,
+        }
+        this.addMessageToBotState(cohabitantChoiceQuestion);
+
+        return this.returnState(state)
+      }
+
       const spouseChoiceQuestion = this.createChatBotMessage(
         this.QuestionConsts.SpouseChoiceQuestion,
         this.QuestionConsts.YesNoWidgetOptions
       );
+      state = {
+        ...state,
+        stepID: ChatStepTypes.spouseChoice,
+      }
       this.addMessageToBotState(spouseChoiceQuestion);
+
+
       return this.returnState(state)
     });
   };
@@ -603,7 +614,6 @@ class ActionProvider {
     this.setState((state: ChatbotInterface) => {
       state.temp_person._childCount = successorCount;
       if (successorCount === 0) {
-        console.log("TODO successor count = 0 ");
         const parentID = state.temp_person.getParentId(state.nodeMap)
         if (parentID) {
           const parent = this.getNode(parentID, state.nodeMap);
@@ -1171,22 +1181,17 @@ class ActionProvider {
 
   // Generic functions
   addMessageToBotState = (messages: any): void => {
-    if (Array.isArray(messages)) {
-      this.setState((state: any) => ({
-        ...state,
-        messages: [...state.messages, ...messages],
+    this.setState((state: any) => {
+      if (Array.isArray(messages)) {
+        state.messages = [...state.messages, ...messages];
+      } else {
 
-      }));
-    } else {
-      this.setState((state: any) => ({
-        ...state,
-        messages: [...state.messages, messages],
-      }));
-    }
-    this.setState((state: any) => ({
-      ...state,
-      tempMessages: state.messages
-    }))
+        state.messages = [...state.messages, messages];
+      }
+      // const messageCopy = _.cloneDeep(state.messages)
+      // state.tempMessages = messageCopy;
+      return this.returnState(state)
+    })
   };
 
   handleDefault = (): void => {
@@ -1316,7 +1321,7 @@ class ActionProvider {
           self.glb_state = null;
           clearInterval(this.checkstate)
         }
-      }, 0)
+      }, 200)
     }
   }
   returnState = (state: any) => {
@@ -1324,9 +1329,12 @@ class ActionProvider {
     this.glb_state = chartSelector(state);
     return state;
   }
-  handleValidation = () => {
+  handleValidation = (tempMessages: any) => {
     this.setState((state: any) => {
-      state.messages = state.tempMessages;
+      if (tempMessages && tempMessages.length !== 0) {
+        state.messages = tempMessages;
+        return state;
+      }
       return state;
     })
   }
