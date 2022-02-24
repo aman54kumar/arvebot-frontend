@@ -99,10 +99,13 @@ const setRevertDiv = () => {
   }
 };
 const setWarningDiv = () => {
-  const chatParentElement = document.getElementsByClassName(
-    "react-chatbot-kit-chat-container"
-  )[0];
+  // const chatParentElement = document.getElementsByClassName(
+  //   "react-chatbot-kit-chat-container"
+  // )[0];
 
+  const chatParentElement = document.getElementsByClassName(
+    "react-chatbot-kit-chat-input-form"
+  )[0];
   const newDiv = document.createElement("div");
   newDiv.id = "chatbot-warning-div";
   newDiv.innerHTML = "warning";
@@ -111,7 +114,7 @@ const setWarningDiv = () => {
   newDiv.style.bottom = "2.5rem";
   newDiv.style.width = "100%";
   newDiv.style.display = "none";
-  chatParentElement.append(newDiv);
+  chatParentElement.prepend(newDiv);
 };
 
 const addListenerToChatInputField = () => {
