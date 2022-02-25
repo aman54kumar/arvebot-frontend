@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
 import PropTypes from "prop-types";
 import makeStyles from '@mui/styles/makeStyles';
-import Container from "@mui/material/Container";
+import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 // import LangButton from "./LangButton/LangButton";
@@ -26,9 +26,9 @@ const Copyright = (): ReactElement => {
 
 const useStyles = makeStyles((theme) => ({
   footer: {
-    backgroundColor: theme.palette.background.paper,
-    // marginTop: theme.spacing(8),
+    // backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(6, 0),
+    backgroundColor: "silver"
   },
 }));
 
@@ -37,7 +37,7 @@ const Footer = (props: propsTypes): ReactElement => {
   const { description, title } = props;
 
   return (
-    <Container maxWidth="lg" className={classes.footer}>
+    <Paper className={classes.footer}>
       <Typography variant="h6" align="center" gutterBottom>
         {title}
       </Typography>
@@ -58,7 +58,7 @@ const Footer = (props: propsTypes): ReactElement => {
           sendDataToParent={props.sendDataToParent}
         />
       ))} */}
-    </Container>
+    </Paper>
   );
 };
 

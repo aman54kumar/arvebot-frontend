@@ -66,11 +66,13 @@ const InheritanceCalculatorPage = () => {
         <OrgChartTree />
       </ReactFlowProvider>
       {
-        <Chatbot
-          config={Config}
-          actionProvider={ActionProvider}
-          messageParser={MessageParser}
-        />
+        <div className="chatbotContainer">
+          <Chatbot
+            config={Config}
+            actionProvider={ActionProvider}
+            messageParser={MessageParser}
+          />
+        </div>
       }
       <button className="ChatbotToggleButton" onClick={toggleBot}>
         <img src={botIcon} />
