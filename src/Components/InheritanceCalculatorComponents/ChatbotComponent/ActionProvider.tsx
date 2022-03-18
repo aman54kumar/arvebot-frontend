@@ -11,7 +11,8 @@ import InfoMessagesWidget from "./Custom/Widgets/InfoMessagesWidget/InfoMessages
 import { NodeEntity } from "./Helper/Classes/NodeEntity";
 import chartSelector from "../../../store/chartSelector";
 import { messageService } from "./services/ChatbotCommunicator";
-import _ from "lodash";
+import { InheritanceCalculation } from "../Reports/InheritanceCalculation";
+// import _ from "lodash";
 
 class ActionProvider {
 
@@ -54,6 +55,7 @@ class ActionProvider {
   setRevertListeners() {
 
     messageService.clearAllInternalSubscription();
+    /* eslint-disable @typescript-eslint/no-unused-vars */
     const subscription = messageService.getMessageInChatbot().subscribe(message => {
       this.revertState();
     })
@@ -937,6 +939,10 @@ class ActionProvider {
   handleFinalQuestion = (finalOption: boolean): void => {
     this.setState((state: ChatbotInterface) => {
       if (finalOption) {
+        const inheritanceCalculation = new InheritanceCalculation(this, state)
+        console.log(inheritanceCalculation.computeGenealogyInheritance(state.testator._id))
+        // console.log(inheritanceCalculation);
+
         console.log("prepare report and download");
       }
       else {

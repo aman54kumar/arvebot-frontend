@@ -1,6 +1,4 @@
-import { useSelector } from "react-redux";
 import ReactFlow, { Background, BackgroundVariant, Controls } from "react-flow-renderer";
-import chartSelector from "../../../../store/chartSelector";
 import { processData } from "./ProcessDataForChart";
 import { useEffect, useRef, useState } from "react";
 import { useZoomPanHelper, useUpdateNodeInternals } from "react-flow-renderer";

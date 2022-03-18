@@ -89,7 +89,7 @@ export class NodeEntity {
       }
     }
   };
-
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   add_parent = (
     parent: NodeEntity,
     add_for_both = true,

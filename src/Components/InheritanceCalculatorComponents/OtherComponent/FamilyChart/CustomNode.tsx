@@ -1,4 +1,4 @@
-import { Popper, Typography } from "@mui/material";
+import { Popper } from "@mui/material";
 import { Handle, Position } from "react-flow-renderer";
 import { Textfit } from 'react-textfit';
 

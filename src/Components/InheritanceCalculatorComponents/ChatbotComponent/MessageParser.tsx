@@ -5,7 +5,6 @@ import { ValidationType } from "./Helper/Enums/ValidationType";
 import { ChatbotValidation } from "./Helper/Methods/ChatbotValidation";
 import { messageService } from "./services/ChatbotCommunicator";
 import { BinaryAnswerTypeYes, BinaryAnswerTypeNo } from "../ChatbotComponent/Helper/Enums/BinaryAnswerTypes"
-import _ from "lodash";
 
 class MessageParser {
   actionProvider: ActionProvider;
@@ -19,6 +18,8 @@ class MessageParser {
   }
 
   parse(message: string): ReturnType<() => void> {
+
+
     message = message.trim();
 
     const curState = this.state;
@@ -386,6 +387,7 @@ class MessageParser {
 
   setRevertListeners = () => {
     messageService.clearAllInternalSubscription();
+    /* eslint-disable @typescript-eslint/no-unused-vars */
     const subscription = messageService.getMessageInChatbot().subscribe(message => {
       this.revertState();
     })

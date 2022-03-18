@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { Paper, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { Chatbot } from "react-chatbot-kit";
 import Config from "../Components/InheritanceCalculatorComponents/ChatbotComponent/Config.js";
 import MessageParser from "../Components/InheritanceCalculatorComponents/ChatbotComponent/MessageParser";
@@ -7,7 +7,6 @@ import ActionProvider from "../Components/InheritanceCalculatorComponents/Chatbo
 import OrgChartTree from "../Components/InheritanceCalculatorComponents/OtherComponent/FamilyChart/ChartComponent";
 import "../Components/InheritanceCalculatorComponents/OtherComponent/ChatbotToggleButton/ChatbotToggleButton.scss";
 import botIcon from "../assets/images/chat_button_logo.svg";
-import { useDispatch } from "react-redux";
 import { ReactFlowProvider } from "react-flow-renderer";
 import { messageService } from "../Components/InheritanceCalculatorComponents/ChatbotComponent/services/ChatbotCommunicator.tsx";
 import { componentCommunicatorService } from "../Components/InheritanceCalculatorComponents/ChatbotComponent/services/ComponentCommunicatorService.tsx";

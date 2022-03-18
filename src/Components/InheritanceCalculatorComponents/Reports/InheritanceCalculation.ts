@@ -22,6 +22,11 @@ interface InheritanceCalculationInterface {
   splits_with_chains: [];
   genealogy_inheritance: [];
 }
+interface inheritanceFractionListType {
+  person: number;
+  frac: number;
+  chains: Array<any>;
+}
 export class InheritanceCalculation implements InheritanceCalculationInterface {
   state: ChatbotInterface;
   ActionProvider: any;
@@ -42,18 +47,139 @@ export class InheritanceCalculation implements InheritanceCalculationInterface {
   genealogy_inheritance: [] = [];
   genealogy_splits: [] = [];
   will: string | undefined;
-  constructor(state: ChatbotInterface, will = undefined) {
+  constructor(
+    private actionProvider: ActionProvider,
+    state: ChatbotInterface,
+    will = undefined
+  ) {
     this.state = state;
-    this.ActionProvider = ActionProvider;
     this.InheritanceConstants = InheritanceConstants;
     this.person = state.person;
     this.will = will;
   }
 
+  combine_duplicates = (
+    inheritance_fraction_list: Array<inheritanceFractionListType>
+  ): Array<inheritanceFractionListType> => {
+    const combinedList = new Map<number, inheritanceFractionListType>();
+    for (const inheritanceFraction of inheritance_fraction_list) {
+      if (combinedList.has(inheritanceFraction.person)) {
+        const x = combinedList.get(inheritanceFraction.person);
+        if (x) {
+          x.frac += inheritanceFraction.frac;
+          x.chains.push(inheritanceFraction.chains);
+        }
+      } else {
+        combinedList.set(inheritanceFraction.person, {
+          person: inheritanceFraction.person,
+          frac: inheritanceFraction.frac,
+          chains: [inheritanceFraction.chains],
+        });
+      }
+    }
+    const resultArray = Array.from(combinedList.values());
+    const arrayOfObjects = [];
+    for (const rArray of resultArray) {
+      arrayOfObjects.push(rArray);
+    }
+    return arrayOfObjects;
+  };
+
+  split_evenly_between_lines = (
+    person_list: Array<number>,
+    maximum_distance: number | undefined = undefined,
+    allow_parents = false
+  ): any => {
+    if (person_list.length >= 0) {
+      let split_fraction_list = new Array<any>();
+      if (person_list.length === 0) {
+        return split_fraction_list;
+      }
+
+      const split_frac = 1 / person_list.length;
+
+      for (const person of person_list) {
+        const personDetail = this.actionProvider.getPerson(
+          person,
+          this.state.personsMap
+        );
+        const personNode = this.actionProvider.getNode(
+          person,
+          this.state.nodeMap
+        );
+        if (personDetail._deceased) {
+          if (maximum_distance === 0) {
+            return "pass";
+          } else if (
+            this.actionProvider.get_class_and_distance_closest_surviving_relative(
+              personNode,
+              this.state
+            )[1] !== 1
+          ) {
+            if (allow_parents) {
+              const temp_list: Array<inheritanceFractionListType> =
+                this.split_evenly_between_lines(personNode._parents);
+              const temp_fraction_list: Array<any> = [];
+              let level_sum = 0;
+              for (const item of temp_list) {
+                level_sum += item.frac;
+                temp_fraction_list.push([
+                  item.person,
+                  item.frac / level_sum,
+                  item.chains.concat([personDetail._personName]),
+                ]);
+              }
+              split_fraction_list.concat(temp_fraction_list);
+            } else "pass";
+          } else {
+            const temp_list: Array<inheritanceFractionListType> =
+              this.split_evenly_between_lines(personNode._children);
+            const temp_fraction_list: Array<any> = [];
+            let level_sum = 0;
+            for (const item of temp_list) {
+              level_sum += item.frac;
+            }
+            if (level_sum !== 1) {
+              for (const item of temp_list) {
+                temp_fraction_list.push([
+                  item.person,
+                  item.frac * level_sum,
+                  item.chains.concat([personDetail._personName]),
+                ]);
+              }
+            }
+            split_fraction_list.concat(temp_fraction_list);
+          }
+        } else {
+          split_fraction_list.push([person, split_frac, []]);
+        }
+      }
+      let level_sum = 0;
+      for (const item of split_fraction_list) level_sum += item[1];
+
+      if (level_sum !== 1) {
+        for (const item of split_fraction_list) {
+          split_fraction_list = [[item[0], item[1] / level_sum, item[2]]];
+        }
+      }
+      return split_fraction_list;
+    }
+
+    //   level_sum = sum(
+    //     [level_frac for successor, level_frac, chain in split_fraction_list])
+    // if level_sum != 1:
+    //     split_fraction_list = [[
+    //         successor, level_frac / level_sum, chain
+    //     ] for successor, level_frac, chain in split_fraction_list]
+    // print("-------", split_fraction_list)
+    // return split_fraction_list
+  };
+
   computeInheritance = () => {
     [this.class_closest, this.distance_closest] =
-      this.ActionProvider.get_class_and_distance_closest_surviving_relative(
-        this.state.testator
+      this.actionProvider.get_class_and_distance_closest_surviving_relative(
+        this.state.testator,
+        this.state
       );
 
     if (this.person.has_surviving_spouse()) {
@@ -198,208 +324,90 @@ export class InheritanceCalculation implements InheritanceCalculationInterface {
     );
   };
 
-  // computeGenealogyInheritance = () => {
-  //   const genealogy_inheritance_sum =
-  //     this.state.netWealth - this.survivor_inheritance_sum;
-  //   if (this.genealogy_inheritance_sum !== 0) {
-  //     this.splits_with_chains =
-  //       this.compute_default_genealogy_splits_with_chains(this.person);
-  //     const genealogy_splits = this.combine_duplicates(this.splits_with_chains);
-  //     const genealogy_inheritance = [];
-  //     for (const genealogy_split of genealogy_splits) {
-  //       genealogy_inheritance.push([
-  //         genealogy_split[0],
-  //         genealogy_split[1] * genealogy_inheritance_sum,
-  //         genealogy_split[2],
-  //       ]);
-  //     }
-  //   } else {
-  //     this.splits_with_chains = [];
-  //     this.genealogy_splits = [];
-  //     this.genealogy_inheritance = [];
-  //   }
-  // };
+  compute_default_genealogy_splits_with_chains = (person: number) => {
+    //
+    const personNode = this.actionProvider.getNode(person, this.state.nodeMap);
+    const personDetail = this.actionProvider.getPerson(
+      person,
+      this.state.personsMap
+    );
+    const [closest_class, closest_distance] =
+      this.actionProvider.get_class_and_distance_closest_surviving_relative(
+        personNode,
+        this.state
+      );
+    if (closest_class === 1) {
+      return this.split_evenly_between_lines(personNode._children);
+    } else if (closest_class === 2) {
+      const firstParentNode = this.actionProvider.getNode(
+        personNode._parents[0],
+        this.state.nodeMap
+      );
+      if (
+        !personDetail._underAge ||
+        firstParentNode._spouse === personNode._parents[1]
+      ) {
+        return this.split_evenly_between_lines(personNode._parents);
+      } else
+        return this.split_evenly_between_lines(
+          personNode._parents,
+          undefined,
+          true
+        );
+    } else if (closest_class === 3) {
+      const grandparent_splits = this.split_evenly_between_lines(
+        personNode._parents,
+        2
+      );
+      let num;
+      for (const a of grandparent_splits) {
+        if (a.length > 0) {
+          num = a.length;
+        }
+      }
+      const temp_list = [];
+      for (const split of grandparent_splits) {
+        if (split.length > 0) {
+          temp_list.push([split[0]]);
+        }
+      }
+      const resultList = [];
+      for (const item of temp_list) {
+        resultList.push([item[0], item[1] / num, item[2]]);
+      }
+      return resultList;
+    } else if (closest_class === undefined || closest_class > 3) {
+      return [];
+    }
+  };
 
-  // compute_default_genealogy_splits_with_chains = (person: NodeEntity): [] => {
-  //   const personEntity = Person.getPerson(person._id, this.state.personsMap);
-  //   const [closest_class, closest_distance] =
-  //     this.ActionProvider.get_class_and_distance_closest_surviving_relative(
-  //       person
-  //     );
-  //   if (closest_class == 1)
-  //     return this.split_evenly_between_lines(person._children);
-  //   else if (closest_class == 2) {
-  //     if (
-  //       !personEntity._underAge ||
-  //       NodeEntity.getNode(person._parents[0], this.state.nodeMap)._spouse ==
-  //         person._parents[1]
-  //     ) {
-  //       return this.split_evenly_between_lines(person._parents);
-  //     } else {
-  //       return this.split_evenly_between_lines(
-  //         person._parents,
-  //         undefined,
-  //         true
-  //       );
-  //     }
-  //   } else if (closest_class == 3) {
-  //     const grandparent_splits = [];
-  //     for (const parent of person._parents) {
-  //       grandparent_splits.push([
-  //         this.split_evenly_between_lines(
-  //           NodeEntity.getNode(parent, this.state.nodeMap)._parents,
-  //           2
-  //         ),
-  //       ]);
-  //     }
-  //     const temp_list = [];
-  //     for (const a of grandparent_splits) {
-  //       if (a.length > 0) {
-  //         temp_list.push([a]);
-  //       }
-  //     }
-  //     const num = temp_list.length;
+  computeGenealogyInheritance = (person_id: number) => {
+    this.survivor_inheritance_sum = Math.min(
+      this.state.netWealth,
+      Math.max(
+        this.minimum_surviving_inheritance,
+        this.surviving_fraction * this.state.netWealth
+      )
+    );
 
-  //     const splitList = [];
-  //     for (const split of grandparent_splits) {
-  //       if (split.length > 0) {
-  //         for (const splitContents of split[0]) {
-  //           splitList.push([
-  //             splitContents[0],
-  //             splitContents[1] / num,
-  //             splitContents[2],
-  //           ]);
-  //         }
-  //       }
-  //     }
-  //     // @ts-ignore
-  //     return splitList;
-  //   } else if (closest_class === undefined || closest_class > 3) return [];
-  //   return [];
-  // };
-
-  //   split_evenly_between_lines = (
-  //     person_list: Array<number>,
-  //     maximum_distance: undefined | number = undefined,
-  //     allow_parents = false
-  //   ): [] => {
-  //     const split_fraction_list: [] = [];
-  //     if (person_list.length == 0) {
-  //       return split_fraction_list;
-  //     }
-  //     const split_frac = 1 / person_list.length;
-
-  //     for (const person of person_list) {
-  //       const personNode = NodeEntity.getNode(person, this.state.nodeMap);
-  //       const personEntity = Person.getPerson(person, this.state.personsMap);
-  //       let split_fraction_list: [] = [];
-  //       if (personEntity._deceased) {
-  //         if (maximum_distance == 0) {
-  //           console.log("pass");
-  //         } else if (
-  //           this.ActionProvider.get_class_and_distance_closest_surviving_relative(
-  //             person
-  //           )[1] != 1
-  //         ) {
-  //           if (allow_parents) {
-  //             const temp_list: [] = this.split_evenly_between_lines(
-  //               personNode._parents
-  //             );
-  //             let level_sum = 0;
-
-  //             for (const tempListContent of temp_list) {
-  //               if (tempListContent[1]) level_sum += tempListContent[1];
-  //             }
-  //             if (level_sum != 1) {
-  //               const resultList = [];
-
-  //               for (const tempListContent of temp_list) {
-  //                 resultList.push([
-  //                   tempListContent[0],
-  //                   tempListContent[1] / level_sum,
-  //                   tempListContent[2],
-  //                 ]);
-  //               }
-  //               const temp_split_fraction_list: [] = [];
-
-  //               for (const tempListContent of temp_list) {
-  //                 temp_split_fraction_list.push([
-  //                   tempListContent[0],
-  //                   tempListContent[1] * split_frac,
-  //                   tempListContent[2] + [personNode._id],
-  //                 ]);
-  //               }
-  //               split_fraction_list = [
-  //                 ...split_fraction_list,
-  //                 ...temp_split_fraction_list,
-  //               ];
-  //             } else {
-  //               console.log("pass");
-  //             }
-  //           } else {
-  //             const temp_list = this.split_evenly_between_lines(
-  //               personNode._children
-  //             );
-  //             let level_sum = 0;
-
-  //             for (const tempListContent of temp_list) {
-  //               level_sum += tempListContent[1];
-  //             }
-  //             if (level_sum != 1) {
-  //               for (const tempListContent of temp_list) {
-  //                 temp_list.push([
-  //                   tempListContent[0],
-  //                   tempListContent[1] / level_sum,
-  //                   tempListContent[2],
-  //                 ]);
-  //               }
-  //             }
-  //             const temp_split_fraction_list = [];
-
-  //             for (const tempListContent of temp_list) {
-  //               temp_split_fraction_list.push([
-  //                 tempListContent[0],
-  //                 tempListContent[1] * split_frac,
-  //                 tempListContent[2] + [personNode._id],
-  //               ]);
-  //             }
-
-  //             split_fraction_list = [...split_fraction_list,
-  //               ...temp_split_fraction_list
-
-  //             ]
-  //         }
-  //       } else {
-  //         split_fraction_list.push([person, split_frac, []]);
-  //       }
-  //     }
-  //     let level_sum = 0;
-
-  //     for (const splitFractionListContent of split_fraction_list) {
-  //       level_sum = level_sum + splitFractionListContent[1];
-  //     }
-  //     if (level_sum != 1) {
-  //       for (const splitFractionListContent of split_fraction_list) {
-  //         split_fraction_list.push([
-  //           splitFractionListContent[0],
-  //           splitFractionListContent[1] / level_sum,
-  //           splitFractionListContent[2],
-  //         ]);
-  //       }
-  //     }
-  //     return split_fraction_list;
-  //   };
-
-  //   combine_duplicates = (inheritance_fraction_list: []): [] => {
-  //     const temp_set = new Set();
-  //     for (let i in inheritance_fraction_list) {
-  //       temp_set.add([inheritance_fraction_list[i][0]]);
-  //     }
-
-  //     for (let i in temp_set) {
-  //       temp_set[i]
-
-  //     }
-
-  //   };
+    this.genealogy_inheritance_sum =
+      this.state.netWealth - this.survivor_inheritance_sum;
+    if (this.genealogy_inheritance_sum !== 0) {
+      this.splits_with_chains =
+        this.compute_default_genealogy_splits_with_chains(person_id);
+      const genealogy_splits = this.combine_duplicates(this.splits_with_chains);
+      const genealogy_inheritance = [];
+      for (const genealogy_split of genealogy_splits) {
+        genealogy_inheritance.push([
+          genealogy_split.person,
+          genealogy_split.frac * this.genealogy_inheritance_sum,
+          genealogy_split.chains,
+        ]);
+      }
+    } else {
+      this.splits_with_chains = [];
+      this.genealogy_splits = [];
+      this.genealogy_inheritance = [];
+    }
+  };
 }
