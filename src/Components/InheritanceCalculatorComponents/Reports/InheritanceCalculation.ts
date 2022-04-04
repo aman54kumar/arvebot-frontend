@@ -44,7 +44,7 @@ export class InheritanceCalculation implements InheritanceCalculationInterface {
   survivor_inheritance_sum = 0;
   genealogy_inheritance_sum = 0;
   splits_with_chains: [] = [];
-  genealogy_inheritance: [] = [];
+  genealogy_inheritance: any = [];
   genealogy_splits: [] = [];
   will: string | undefined;
   constructor(
@@ -58,22 +58,20 @@ export class InheritanceCalculation implements InheritanceCalculationInterface {
     this.will = will;
   }
 
-  combine_duplicates = (
-    inheritance_fraction_list: Array<inheritanceFractionListType>
-  ): Array<inheritanceFractionListType> => {
-    const combinedList = new Map<number, inheritanceFractionListType>();
+  combine_duplicates = (inheritance_fraction_list: Array<any>): Array<any> => {
+    const combinedList = new Map<number, any>();
     for (const inheritanceFraction of inheritance_fraction_list) {
-      if (combinedList.has(inheritanceFraction.person)) {
-        const x = combinedList.get(inheritanceFraction.person);
+      if (combinedList.has(inheritanceFraction[0])) {
+        const x = combinedList.get(inheritanceFraction[0]);
         if (x) {
-          x.frac += inheritanceFraction.frac;
-          x.chains.push(inheritanceFraction.chains);
+          x.frac += inheritanceFraction[1];
+          x.chains.push(inheritanceFraction[2]);
         }
       } else {
-        combinedList.set(inheritanceFraction.person, {
-          person: inheritanceFraction.person,
-          frac: inheritanceFraction.frac,
-          chains: [inheritanceFraction.chains],
+        combinedList.set(inheritanceFraction[0], {
+          person: inheritanceFraction[0],
+          frac: inheritanceFraction[1],
+          chains: [inheritanceFraction[2]],
         });
       }
     }
@@ -90,80 +88,111 @@ export class InheritanceCalculation implements InheritanceCalculationInterface {
     maximum_distance: number | undefined = undefined,
     allow_parents = false
   ): any => {
-    if (person_list.length >= 0) {
-      let split_fraction_list = new Array<any>();
-      if (person_list.length === 0) {
-        return split_fraction_list;
-      }
-
-      const split_frac = 1 / person_list.length;
-
-      for (const person of person_list) {
-        const personDetail = this.actionProvider.getPerson(
-          person,
-          this.state.personsMap
-        );
-        const personNode = this.actionProvider.getNode(
-          person,
-          this.state.nodeMap
-        );
-        if (personDetail._deceased) {
-          if (maximum_distance === 0) {
-            return "pass";
-          } else if (
-            this.actionProvider.get_class_and_distance_closest_surviving_relative(
-              personNode,
-              this.state
-            )[1] !== 1
-          ) {
-            if (allow_parents) {
-              const temp_list: Array<inheritanceFractionListType> =
-                this.split_evenly_between_lines(personNode._parents);
-              const temp_fraction_list: Array<any> = [];
-              let level_sum = 0;
-              for (const item of temp_list) {
-                level_sum += item.frac;
-                temp_fraction_list.push([
-                  item.person,
-                  item.frac / level_sum,
-                  item.chains.concat([personDetail._personName]),
-                ]);
-              }
-              split_fraction_list.concat(temp_fraction_list);
-            } else "pass";
-          } else {
-            const temp_list: Array<inheritanceFractionListType> =
-              this.split_evenly_between_lines(personNode._children);
-            const temp_fraction_list: Array<any> = [];
-            let level_sum = 0;
-            for (const item of temp_list) {
-              level_sum += item.frac;
-            }
-            if (level_sum !== 1) {
-              for (const item of temp_list) {
-                temp_fraction_list.push([
-                  item.person,
-                  item.frac * level_sum,
-                  item.chains.concat([personDetail._personName]),
-                ]);
-              }
-            }
-            split_fraction_list.concat(temp_fraction_list);
-          }
-        } else {
-          split_fraction_list.push([person, split_frac, []]);
-        }
-      }
-      let level_sum = 0;
-      for (const item of split_fraction_list) level_sum += item[1];
-
-      if (level_sum !== 1) {
-        for (const item of split_fraction_list) {
-          split_fraction_list = [[item[0], item[1] / level_sum, item[2]]];
-        }
-      }
+    let split_fraction_list = new Array<any>();
+    if (person_list.length === 0) {
       return split_fraction_list;
     }
+
+    const split_frac = 1 / person_list.length;
+
+    for (const person of person_list) {
+      const personDetail = this.actionProvider.getPerson(
+        person,
+        this.state.personsMap
+      );
+      const personNode = this.actionProvider.getNode(
+        person,
+        this.state.nodeMap
+      );
+      if (personDetail._deceased) {
+        if (maximum_distance === 0) {
+          // pass
+        } else if (
+          this.actionProvider.get_class_and_distance_closest_surviving_relative(
+            personNode,
+            this.state
+          )[1] !== 1
+        ) {
+          if (allow_parents) {
+            let temp_list: any = this.split_evenly_between_lines(
+              personNode._parents
+            );
+            let level_sum = 0;
+            for (const item of temp_list) {
+              level_sum += item[1];
+            }
+            const interm_temp_list: typeof temp_list = [];
+            if (level_sum !== 1) {
+              for (const item of temp_list) {
+                interm_temp_list.push[(item[0], item[1] / level_sum, item[2])];
+              }
+              temp_list = interm_temp_list;
+            }
+
+            const temp_split_fraction_list: typeof split_fraction_list = [];
+            for (const item of temp_list) {
+              temp_split_fraction_list.push([
+                item[0],
+                item[1] * split_frac,
+                item[2] + [personDetail._personName],
+              ]);
+            }
+            split_fraction_list = split_fraction_list.concat(
+              temp_split_fraction_list
+            );
+          } else {
+            // pass
+          }
+        } else {
+          let temp_list: Array<any> = this.split_evenly_between_lines(
+            personNode._children
+          );
+          const temp_fraction_list: Array<any> = [];
+          let level_sum = 0;
+          for (const item of temp_list) {
+            level_sum += item[1];
+          }
+          if (level_sum !== 1) {
+            for (const item of temp_list) {
+              temp_fraction_list.push([
+                item[0],
+                item[1] / level_sum,
+                item[2].concat([personDetail._personName]),
+              ]);
+            }
+            temp_list = temp_fraction_list;
+          }
+          const temp_split_fraction_list: any = [];
+          for (const item of temp_list) {
+            temp_split_fraction_list.push([
+              item[0],
+              item[1] * split_frac,
+              item[2] + [personDetail._personName],
+            ]);
+          }
+          split_fraction_list = split_fraction_list.concat(
+            temp_split_fraction_list
+          );
+          console.log(split_fraction_list);
+        }
+      } else {
+        split_fraction_list.push([person, split_frac, []]);
+      }
+    }
+    let level_sum = 0;
+    for (const item of split_fraction_list) level_sum += item[1];
+
+    if (level_sum !== 1) {
+      const temp_split_fraction_list: any = [];
+      for (const item of split_fraction_list) {
+        temp_split_fraction_list.push([item[0], item[1] / level_sum, item[2]]);
+      }
+      split_fraction_list = split_fraction_list.concat(
+        temp_split_fraction_list
+      );
+    }
+    return split_fraction_list;
+    // }
 
     //   level_sum = sum(
     //     [level_frac for successor, level_frac, chain in split_fraction_list])
@@ -389,25 +418,34 @@ export class InheritanceCalculation implements InheritanceCalculationInterface {
         this.surviving_fraction * this.state.netWealth
       )
     );
-
+    // const genealogy_inheritance: any = [];
     this.genealogy_inheritance_sum =
       this.state.netWealth - this.survivor_inheritance_sum;
     if (this.genealogy_inheritance_sum !== 0) {
       this.splits_with_chains =
         this.compute_default_genealogy_splits_with_chains(person_id);
       const genealogy_splits = this.combine_duplicates(this.splits_with_chains);
-      const genealogy_inheritance = [];
-      for (const genealogy_split of genealogy_splits) {
-        genealogy_inheritance.push([
+      console.log(genealogy_splits);
+
+      genealogy_splits.map((genealogy_split) => {
+        return this.genealogy_inheritance.push([
           genealogy_split.person,
           genealogy_split.frac * this.genealogy_inheritance_sum,
           genealogy_split.chains,
         ]);
-      }
+      });
+      // for (const genealogy_split of genealogy_splits) {
+      //   genealogy_inheritance.push([
+      //     genealogy_split.person,
+      //     genealogy_split.frac * this.genealogy_inheritance_sum,
+      //     genealogy_split.chains,
+      //   ]);
+      // }
     } else {
       this.splits_with_chains = [];
       this.genealogy_splits = [];
       this.genealogy_inheritance = [];
     }
+    return this.genealogy_inheritance;
   };
 }

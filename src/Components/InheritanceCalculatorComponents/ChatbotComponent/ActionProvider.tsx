@@ -940,7 +940,9 @@ class ActionProvider {
     this.setState((state: ChatbotInterface) => {
       if (finalOption) {
         const inheritanceCalculation = new InheritanceCalculation(this, state)
-        console.log(inheritanceCalculation.computeGenealogyInheritance(state.testator._id))
+        inheritanceCalculation.computeGenealogyInheritance(state.testator._id)
+        console.log(inheritanceCalculation);
+
         // console.log(inheritanceCalculation);
 
         console.log("prepare report and download");

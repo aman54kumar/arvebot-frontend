@@ -13,15 +13,15 @@ const OptionSelector = (props: any): ReactElement => {
   };
 
   const onClickHandler = (e: any): void => {
-    const thisButton = e.target as HTMLButtonElement
-    const nextButton = (thisButton).nextElementSibling as HTMLButtonElement
-    const prevButton = (thisButton).previousElementSibling as HTMLButtonElement
-    const otherButton = nextButton ? nextButton : prevButton
-    thisButton.style.pointerEvents = "none"
-    thisButton.style.background = "darkolivegreen";
-    thisButton.disabled = true;
-    otherButton.style.pointerEvents = "none"
-    otherButton.disabled = true;
+    // const thisButton = e.target as HTMLButtonElement
+    // const nextButton = (thisButton).nextElementSibling as HTMLButtonElement
+    // const prevButton = (thisButton).previousElementSibling as HTMLButtonElement
+    // const otherButton = nextButton ? nextButton : prevButton
+    // thisButton.style.pointerEvents = "none"
+    // thisButton.style.background = "darkolivegreen";
+    // thisButton.disabled = true;
+    // otherButton.style.pointerEvents = "none"
+    // otherButton.disabled = true;
   }
   return (
     <div>
