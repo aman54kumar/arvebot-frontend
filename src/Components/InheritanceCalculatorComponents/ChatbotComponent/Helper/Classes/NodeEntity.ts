@@ -162,6 +162,7 @@ export class NodeEntity {
   };
 
   has_surviving_cohabitant = () => {
-    return true;
+    if (this._cohabitant !== null) return true;
+    return false;
   };
 }

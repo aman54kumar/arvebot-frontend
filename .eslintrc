@@ -18,5 +18,10 @@
         "allowedNames": ["self"] // Allow `const vm= this`; `[]` by default
       }
     ]
+  },
+  "globals": {
+    "document": true,
+    "foo": true,
+    "window": true
   }
 }

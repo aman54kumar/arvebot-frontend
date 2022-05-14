@@ -143,4 +143,43 @@ export class ReportUtils {
     }
     return split_fraction_list;
   };
+
+  compute_default_genealogy_splits_with_chains = (person: number): any => {
+    const personNode = this.actionProvider.getNode(person, this.state.nodeMap);
+    const [class_closest, distance_closest] =
+      this.actionProvider.get_class_and_distance_closest_surviving_relative(
+        personNode
+      );
+    if (class_closest === 1) {
+      return this.split_evenly_between_lines(personNode._children);
+    } else if (class_closest === 2) {
+      const firstParentSpouse = this.actionProvider.getNode(
+        personNode._parents[0],
+        this.state.nodeMap
+      )._spouse;
+      if (
+        !personNode._underAge ||
+        firstParentSpouse === personNode._parents[1]
+      ) {
+        return this.split_evenly_between_lines(personNode._parents);
+      } else {
+        return this.split_evenly_between_lines(
+          personNode._parents,
+          undefined,
+          true
+        );
+      }
+    } else if (class_closest === 3) {
+      const grandParent_splits = [];
+      personNode._parents.map((parent: number) => {
+        const parentNode = this.actionProvider.getNode(
+          parent,
+          this.state.nodeMap
+        );
+        grandParent_splits.push(
+          this.split_evenly_between_lines(parentNode._parents, 2)
+        );
+      });
+    } else if (class_closest === undefined || class_closest > 3) return [];
+  };
 }

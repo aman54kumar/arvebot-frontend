@@ -12,6 +12,10 @@ import { NodeEntity } from "./Helper/Classes/NodeEntity";
 import chartSelector from "../../../store/chartSelector";
 import { messageService } from "./services/ChatbotCommunicator";
 import { InheritanceCalculation } from "../Reports/InheritanceCalculation";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+// import ReactPDF from '@react-pdf/renderer';
+import FinalDocument from "../Reports/PDF/FinalDocument";
+import Delayed from "../../hooks/delayedRender"
 // import _ from "lodash";
 
 class ActionProvider {
@@ -936,14 +940,24 @@ class ActionProvider {
     })
   }
   // eslint-disable-next-line
-  handleFinalQuestion = (finalOption: boolean): void => {
+  handleFinalQuestion = (finalOption: boolean): any => {
     this.setState((state: ChatbotInterface) => {
       if (finalOption) {
-        const inheritanceCalculation = new InheritanceCalculation(this, state)
+        const inheritanceCalculation = new InheritanceCalculation(state.person._id, this, state)
         inheritanceCalculation.computeGenealogyInheritance(state.testator._id)
-        console.log(inheritanceCalculation);
 
-        // console.log(inheritanceCalculation);
+        const document = <FinalDocument inputData={inheritanceCalculation} />
+        const pdfDownloadLink = (<div>
+          <PDFDownloadLink document={document} fileName="somename.pdf">
+            {({ blob, url, loading, error }) =>
+              loading ? 'Loading document...' : 'Download now!'
+            }
+          </PDFDownloadLink>
+        </div>)
+        const pdfLink = this.createChatBotMessage(pdfDownloadLink)
+
+
+        this.addMessageToBotState(pdfLink)
 
         console.log("prepare report and download");
       }
@@ -1355,8 +1369,12 @@ class ActionProvider {
     });
     const initialQuestion = this.createChatBotMessage(this.QuestionConsts.TestatorQuestion);
     this.addMessageToBotState(initialQuestion)
+  }
 
-
+  delay = (n: number) => {
+    return new Promise(function (resolve) {
+      setTimeout(resolve, n * 1000);
+    });
   }
 }
 

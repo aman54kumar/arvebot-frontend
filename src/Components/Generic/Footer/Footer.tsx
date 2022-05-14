@@ -4,6 +4,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
+import { useTheme } from "@mui/material/styles";
 // import LangButton from "./LangButton/LangButton";
 
 interface propsTypes {
@@ -24,10 +25,10 @@ const Copyright = (): ReactElement => {
   );
 };
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   footer: {
     // backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(6, 0),
+    padding: useTheme().spacing(6),
     backgroundColor: "silver"
   },
 }));

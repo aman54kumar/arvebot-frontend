@@ -49,13 +49,15 @@ export class InheritanceCalculation implements InheritanceCalculationInterface {
   will: string | undefined;
   reportUtils: any;
   constructor(
+    person: number,
     private actionProvider: any,
     state: ChatbotInterface,
     will = undefined
   ) {
     this.state = state;
     this.InheritanceConstants = InheritanceConstants;
-    this.person = state.person;
+    this.actionProvider = actionProvider;
+    this.person = actionProvider.getPerson(person, this.state.personsMap);
     this.will = will;
     this.reportUtils = new ReportUtils(actionProvider, state);
   }
@@ -145,7 +147,7 @@ export class InheritanceCalculation implements InheritanceCalculationInterface {
         this.surviving_fraction =
           this.InheritanceConstants.FRACTION_INHERITANCE_COHABITANT_VS_CHILDREN;
         this.descriptive_text = intl.formatMessage({
-          id: "REPORT.Inheritance.DescriptiveText_firstClass4G",
+          id: "REPORT.Inheritance.DescriptiveText_firstClass_cohab_4G",
         });
       } else if (this.class_closest === 2) {
         this.old_surviving_reference_paragraphs = intl.formatMessage({
@@ -159,7 +161,7 @@ export class InheritanceCalculation implements InheritanceCalculationInterface {
         this.surviving_fraction =
           this.InheritanceConstants.FRACTION_INHERITANCE_COHABITANT_VS_PARENTS;
         this.descriptive_text = intl.formatMessage({
-          id: "REPORT.Inheritance.DescriptiveText_secondClass4G",
+          id: "REPORT.Inheritance.DescriptiveText_secondClass_cohab_4G",
         });
       } else if (this.class_closest === 3) {
         if (this.distance_closest && this.distance_closest <= 2) {
@@ -172,7 +174,7 @@ export class InheritanceCalculation implements InheritanceCalculationInterface {
           this.minimum_surviving_inheritance = 4 * this.InheritanceConstants.G;
           this.surviving_fraction = 0;
           this.descriptive_text = intl.formatMessage({
-            id: "REPORT.Inheritance.DescriptiveText_thirdClass4G",
+            id: "REPORT.Inheritance.DescriptiveText_thirdClass_cohab_4G",
           });
         } else {
           this.old_surviving_reference_paragraphs = intl.formatMessage({
@@ -197,16 +199,6 @@ export class InheritanceCalculation implements InheritanceCalculationInterface {
         id: "REPORT.Inheritance.DESC_NO_SPOUSE_OR_COHABITANT",
       });
     }
-  };
-
-  computeSurvivorInheritanceSum = () => {
-    return Math.min(
-      this.state.netWealth,
-      Math.max(
-        this.minimum_surviving_inheritance,
-        this.surviving_fraction * this.state.netWealth
-      )
-    );
   };
 
   compute_default_genealogy_splits_with_chains = (person: number) => {
