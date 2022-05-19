@@ -4,6 +4,8 @@ import Norsk from "../../../languages/translationNO.json";
 import { createIntl, createIntlCache } from "react-intl";
 import InheritanceConstants from "../ChatbotComponent/Helper/Methods/InheritanceConstants";
 import { ReportUtils } from "./ReportUtils";
+import ActionProvider from "../ChatbotComponent/ActionProvider";
+import Person from "../ChatbotComponent/Helper/Classes/Person";
 const cache = createIntlCache();
 const intl = createIntl({ locale: "nb-NO", messages: Norsk }, cache);
 
@@ -22,15 +24,15 @@ interface InheritanceCalculationInterface {
   splits_with_chains: [];
   genealogy_inheritance: [];
 }
-interface inheritanceFractionListType {
-  person: number;
-  frac: number;
-  chains: Array<any>;
-}
+// interface inheritanceFractionListType {
+//   person: number;
+//   frac: number;
+//   chains: Array<any>;
+// }
 export class InheritanceCalculation implements InheritanceCalculationInterface {
   state: ChatbotInterface;
-  ActionProvider: any;
   InheritanceConstants: any;
+  actionProvider: ActionProvider;
   person: NodeEntity;
   survivor: number | null = null;
   survivor_type = "";
@@ -50,14 +52,14 @@ export class InheritanceCalculation implements InheritanceCalculationInterface {
   reportUtils: any;
   constructor(
     person: number,
-    private actionProvider: any,
+    actionProvider: ActionProvider,
     state: ChatbotInterface,
     will = undefined
   ) {
     this.state = state;
     this.InheritanceConstants = InheritanceConstants;
     this.actionProvider = actionProvider;
-    this.person = actionProvider.getPerson(person, this.state.personsMap);
+    this.person = actionProvider.getNode(person, this.state.nodeMap);
     this.will = will;
     this.reportUtils = new ReportUtils(actionProvider, state);
   }

@@ -52,6 +52,16 @@ module.exports = {
     path: path.resolve(__dirname, "./public"),
     filename: "bundle.js",
   },
+  node: {
+    module: "empty",
+    dgram: "empty",
+    dns: "mock",
+    fs: "empty",
+    http2: "empty",
+    net: "empty",
+    tls: "empty",
+    child_process: "empty",
+  },
 };
 
 module.exports = {
@@ -107,5 +117,15 @@ module.exports = {
   devServer: {
     contentBase: path.resolve(__dirname, "./public"),
     hot: true,
+  },
+  node: {
+    module: "empty",
+    dgram: "empty",
+    dns: "mock",
+    fs: "empty",
+    http2: "empty",
+    net: "empty",
+    tls: "empty",
+    child_process: "empty",
   },
 };
