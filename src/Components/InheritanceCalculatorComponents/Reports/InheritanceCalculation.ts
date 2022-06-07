@@ -5,7 +5,6 @@ import { createIntl, createIntlCache } from "react-intl";
 import InheritanceConstants from "../ChatbotComponent/Helper/Methods/InheritanceConstants";
 import { ReportUtils } from "./ReportUtils";
 import ActionProvider from "../ChatbotComponent/ActionProvider";
-import Person from "../ChatbotComponent/Helper/Classes/Person";
 const cache = createIntlCache();
 const intl = createIntl({ locale: "nb-NO", messages: Norsk }, cache);
 
@@ -15,7 +14,7 @@ interface InheritanceCalculationInterface {
   class_closest: number | undefined;
   distance_closest: number | undefined;
   old_surviving_reference_paragraphs: string;
-  surviving_reference_paragraphs: string;
+  surviving_reference_paragraphs: Array<string>;
   minimum_surviving_inheritance: number;
   surviving_fraction: number;
   descriptive_text: string;
@@ -31,7 +30,7 @@ interface InheritanceCalculationInterface {
 // }
 export class InheritanceCalculation implements InheritanceCalculationInterface {
   state: ChatbotInterface;
-  InheritanceConstants: any;
+  inheritanceConstants: InheritanceConstants;
   actionProvider: ActionProvider;
   person: NodeEntity;
   survivor: number | null = null;
@@ -39,7 +38,7 @@ export class InheritanceCalculation implements InheritanceCalculationInterface {
   class_closest: number | undefined;
   distance_closest: number | undefined;
   old_surviving_reference_paragraphs = "";
-  surviving_reference_paragraphs = "";
+  surviving_reference_paragraphs: string[] = [];
   minimum_surviving_inheritance = 0;
   surviving_fraction = 0;
   descriptive_text = "";
@@ -51,15 +50,16 @@ export class InheritanceCalculation implements InheritanceCalculationInterface {
   will: string | undefined;
   reportUtils: any;
   constructor(
-    person: number,
+    person: NodeEntity,
     actionProvider: ActionProvider,
     state: ChatbotInterface,
+    inheritanceConstants: InheritanceConstants,
     will = undefined
   ) {
     this.state = state;
-    this.InheritanceConstants = InheritanceConstants;
+    this.inheritanceConstants = inheritanceConstants;
     this.actionProvider = actionProvider;
-    this.person = actionProvider.getNode(person, this.state.nodeMap);
+    this.person = actionProvider.getNode(person._id, this.state.nodeMap);
     this.will = will;
     this.reportUtils = new ReportUtils(actionProvider, state);
   }
@@ -82,9 +82,11 @@ export class InheritanceCalculation implements InheritanceCalculationInterface {
         this.old_surviving_reference_paragraphs = intl.formatMessage({
           id: "REPORT.Inheritance.old_surviving_reference_paragraphs_6forste",
         });
-        this.surviving_reference_paragraphs = intl.formatMessage({
-          id: "REPORT.Inheritance.surviving_reference_paragraphs_9annet",
-        });
+        this.surviving_reference_paragraphs.push(
+          intl.formatMessage({
+            id: "REPORT.Inheritance.surviving_reference_paragraphs_9annet",
+          })
+        );
         this.minimum_surviving_inheritance = 0;
         this.surviving_fraction = 1;
         this.descriptive_text = intl.formatMessage({
@@ -94,13 +96,15 @@ export class InheritanceCalculation implements InheritanceCalculationInterface {
         this.old_surviving_reference_paragraphs = intl.formatMessage({
           id: "REPORT.Inheritance.old_surviving_reference_paragraphs_6forste",
         });
-        this.surviving_reference_paragraphs = intl.formatMessage({
-          id: "REPORT.Inheritance.old_surviving_reference_paragraphs_8forste",
-        });
+        this.surviving_reference_paragraphs.push(
+          intl.formatMessage({
+            id: "REPORT.Inheritance.old_surviving_reference_paragraphs_8forste",
+          })
+        );
         this.minimum_surviving_inheritance =
-          this.InheritanceConstants.MINIMUM_INHERITANCE_SPOUSE_VS_CHILDREN;
+          this.inheritanceConstants.MINIMUM_INHERITANCE_SPOUSE_VS_CHILDREN;
         this.surviving_fraction =
-          this.InheritanceConstants.FRACTION_INHERITANCE_SPOUSE_VS_CHILDREN;
+          this.inheritanceConstants.FRACTION_INHERITANCE_SPOUSE_VS_CHILDREN;
         this.descriptive_text = intl.formatMessage({
           id: "REPORT.Inheritance.DescriptiveText4G",
         });
@@ -108,13 +112,15 @@ export class InheritanceCalculation implements InheritanceCalculationInterface {
         this.old_surviving_reference_paragraphs = intl.formatMessage({
           id: "REPORT.Inheritance.old_surviving_reference_paragraphs_6forste",
         });
-        this.surviving_reference_paragraphs = intl.formatMessage({
-          id: "REPORT.Inheritance.old_surviving_reference_paragraphs_9forste",
-        });
+        this.surviving_reference_paragraphs.push(
+          intl.formatMessage({
+            id: "REPORT.Inheritance.old_surviving_reference_paragraphs_9forste",
+          })
+        );
         this.minimum_surviving_inheritance =
-          this.InheritanceConstants.MINIMUM_INHERITANCE_SPOUSE_VS_PARENTS;
+          this.inheritanceConstants.MINIMUM_INHERITANCE_SPOUSE_VS_PARENTS;
         this.surviving_fraction =
-          this.InheritanceConstants.FRACTION_INHERITANCE_SPOUSE_VS_PARENTS;
+          this.inheritanceConstants.FRACTION_INHERITANCE_SPOUSE_VS_PARENTS;
         this.descriptive_text = intl.formatMessage({
           id: "REPORT.Inheritance.DescriptiveText6G",
         });
@@ -129,9 +135,11 @@ export class InheritanceCalculation implements InheritanceCalculationInterface {
         this.old_surviving_reference_paragraphs = intl.formatMessage({
           id: "REPORT.Inheritance.old_surviving_reference_paragraphs_28Bforste",
         });
-        this.surviving_reference_paragraphs = intl.formatMessage({
-          id: "REPORT.Inheritance.old_surviving_reference_paragraphs_12forste",
-        });
+        this.surviving_reference_paragraphs.push(
+          intl.formatMessage({
+            id: "REPORT.Inheritance.old_surviving_reference_paragraphs_12forste",
+          })
+        );
         this.minimum_surviving_inheritance = 0;
         this.surviving_fraction = 1;
         this.descriptive_text = intl.formatMessage({
@@ -141,13 +149,15 @@ export class InheritanceCalculation implements InheritanceCalculationInterface {
         this.old_surviving_reference_paragraphs = intl.formatMessage({
           id: "REPORT.Inheritance.old_surviving_reference_paragraphs_28Bforste",
         });
-        this.surviving_reference_paragraphs = intl.formatMessage({
-          id: "REPORT.Inheritance.old_surviving_reference_paragraphs_12forste",
-        });
+        this.surviving_reference_paragraphs.push(
+          intl.formatMessage({
+            id: "REPORT.Inheritance.old_surviving_reference_paragraphs_12forste",
+          })
+        );
         this.minimum_surviving_inheritance =
-          this.InheritanceConstants.MINIMUM_INHERITANCE_COHABITANT_VS_CHILDREN;
+          this.inheritanceConstants.MINIMUM_INHERITANCE_COHABITANT_VS_CHILDREN;
         this.surviving_fraction =
-          this.InheritanceConstants.FRACTION_INHERITANCE_COHABITANT_VS_CHILDREN;
+          this.inheritanceConstants.FRACTION_INHERITANCE_COHABITANT_VS_CHILDREN;
         this.descriptive_text = intl.formatMessage({
           id: "REPORT.Inheritance.DescriptiveText_firstClass_cohab_4G",
         });
@@ -155,13 +165,15 @@ export class InheritanceCalculation implements InheritanceCalculationInterface {
         this.old_surviving_reference_paragraphs = intl.formatMessage({
           id: "REPORT.Inheritance.old_surviving_reference_paragraphs_28Bforste",
         });
-        this.surviving_reference_paragraphs = intl.formatMessage({
-          id: "REPORT.Inheritance.old_surviving_reference_paragraphs_12forste",
-        });
+        this.surviving_reference_paragraphs.push(
+          intl.formatMessage({
+            id: "REPORT.Inheritance.old_surviving_reference_paragraphs_12forste",
+          })
+        );
         this.minimum_surviving_inheritance =
-          this.InheritanceConstants.MINIMUM_INHERITANCE_COHABITANT_VS_PARENTS;
+          this.inheritanceConstants.MINIMUM_INHERITANCE_COHABITANT_VS_PARENTS;
         this.surviving_fraction =
-          this.InheritanceConstants.FRACTION_INHERITANCE_COHABITANT_VS_PARENTS;
+          this.inheritanceConstants.FRACTION_INHERITANCE_COHABITANT_VS_PARENTS;
         this.descriptive_text = intl.formatMessage({
           id: "REPORT.Inheritance.DescriptiveText_secondClass_cohab_4G",
         });
@@ -170,10 +182,12 @@ export class InheritanceCalculation implements InheritanceCalculationInterface {
           this.old_surviving_reference_paragraphs = intl.formatMessage({
             id: "REPORT.Inheritance.old_surviving_reference_paragraphs_28Bforste",
           });
-          this.surviving_reference_paragraphs = intl.formatMessage({
-            id: "REPORT.Inheritance.old_surviving_reference_paragraphs_12forste",
-          });
-          this.minimum_surviving_inheritance = 4 * this.InheritanceConstants.G;
+          this.surviving_reference_paragraphs.push(
+            intl.formatMessage({
+              id: "REPORT.Inheritance.old_surviving_reference_paragraphs_12forste",
+            })
+          );
+          this.minimum_surviving_inheritance = 4 * this.inheritanceConstants.G;
           this.surviving_fraction = 0;
           this.descriptive_text = intl.formatMessage({
             id: "REPORT.Inheritance.DescriptiveText_thirdClass_cohab_4G",
@@ -182,9 +196,11 @@ export class InheritanceCalculation implements InheritanceCalculationInterface {
           this.old_surviving_reference_paragraphs = intl.formatMessage({
             id: "REPORT.Inheritance.old_surviving_reference_paragraphs_28Bforste",
           });
-          this.surviving_reference_paragraphs = intl.formatMessage({
-            id: "REPORT.Inheritance.old_surviving_reference_paragraphs_12forste",
-          });
+          this.surviving_reference_paragraphs.push(
+            intl.formatMessage({
+              id: "REPORT.Inheritance.old_surviving_reference_paragraphs_12forste",
+            })
+          );
           this.minimum_surviving_inheritance = 0;
           this.surviving_fraction = 1;
           this.descriptive_text = intl.formatMessage({
@@ -194,7 +210,7 @@ export class InheritanceCalculation implements InheritanceCalculationInterface {
       }
     } else {
       this.survivor = null;
-      this.surviving_reference_paragraphs = "";
+      this.surviving_reference_paragraphs = [];
       this.minimum_surviving_inheritance = 0;
       this.surviving_fraction = 0;
       this.descriptive_text = intl.formatMessage({
@@ -268,7 +284,6 @@ export class InheritanceCalculation implements InheritanceCalculationInterface {
         this.surviving_fraction * this.state.netWealth
       )
     );
-    // const genealogy_inheritance: any = [];
     this.genealogy_inheritance_sum =
       this.state.netWealth - this.survivor_inheritance_sum;
     if (this.genealogy_inheritance_sum !== 0) {
@@ -286,13 +301,6 @@ export class InheritanceCalculation implements InheritanceCalculationInterface {
           genealogy_split.chains,
         ]);
       });
-      // for (const genealogy_split of genealogy_splits) {
-      //   genealogy_inheritance.push([
-      //     genealogy_split.person,
-      //     genealogy_split.frac * this.genealogy_inheritance_sum,
-      //     genealogy_split.chains,
-      //   ]);
-      // }
     } else {
       this.splits_with_chains = [];
       this.genealogy_splits = [];

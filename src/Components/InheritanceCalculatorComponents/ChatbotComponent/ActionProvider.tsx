@@ -4,7 +4,11 @@ import Person from "./Helper/Classes/Person";
 import Family from "./Helper/Classes/Family";
 import { ParentChildSelector } from "./Helper/Enums/ParentChildSelector";
 import { ChatbotInterface, InitialChatbotState } from "./Generics";
-import { ChatStepTypes, QuestionType } from "./Helper/Enums/ChatStepTypes";
+import {
+  ChatStepTypes,
+  QuestionType,
+  undividedOwnershipType,
+} from "./Helper/Enums/ChatStepTypes";
 import { ReactElement } from "react";
 import {
   CurrencyOutput,
@@ -206,7 +210,7 @@ class ActionProvider {
 
   handleOwnershipResponse = (ownershipResponse: string): void => {
     this.setState((state: ChatbotInterface) => {
-      if (ownershipResponse === "FELLESEIE") {
+      if (ownershipResponse === undividedOwnershipType.felleseie) {
         state = {
           ...state,
           undividedEstate: {
@@ -214,6 +218,7 @@ class ActionProvider {
             undivided_flag: QuestionType.part6,
             undividedEstateSeparateWealth:
               state.undividedEstate.totalEstateValue / 2,
+            ownershipType: undividedOwnershipType.felleseie,
           },
 
           netWealth: state.undividedEstate.totalEstateValue / 2,
@@ -452,6 +457,7 @@ class ActionProvider {
           stepID: ChatStepTypes.undividedEstateStep,
           successor_flag: QuestionType.part3,
           temp_person: newUndividedSpouse,
+          undividedSpouseId: newUndividedSpouse._id,
         };
 
         const newSuccessorQuestion = this.createChatBotMessage(
@@ -1101,9 +1107,10 @@ class ActionProvider {
     this.setState((state: ChatbotInterface) => {
       if (finalOption) {
         const inheritanceCalculation = new InheritanceCalculation(
-          state.person._id,
+          state.person,
           this,
-          state
+          state,
+          new InheritanceConstants()
         );
         inheritanceCalculation.computeGenealogyInheritance(state.testator._id);
         console.log(inheritanceCalculation);

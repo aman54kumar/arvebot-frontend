@@ -1,7 +1,6 @@
 import { InheritanceCalculation } from "../InheritanceCalculation";
 import { PliktdelsarvCalculation } from "../PliktdelsarvCalculation";
 import { UndividedCalculation } from "../UndividedCalculation";
-import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
 
 export class InheritanceReport {
   inheritance_calculation: InheritanceCalculation;

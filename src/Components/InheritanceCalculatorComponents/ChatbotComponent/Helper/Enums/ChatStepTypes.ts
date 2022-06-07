@@ -26,3 +26,10 @@ export enum QuestionType {
   part6 = "part6",
   initialQuestion = "none",
 }
+
+export enum undividedOwnershipType {
+  felleseie = "FELLESEIE",
+  delvis = "DELVIS SÆREIE",
+  fullt = "FULLT SÆREIE",
+  none = "",
+}

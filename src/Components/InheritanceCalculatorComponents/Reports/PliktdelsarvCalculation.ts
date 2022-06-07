@@ -13,7 +13,7 @@ interface InheritanceCalculationInterface {
   class_closest: number | undefined;
   distance_closest: number | undefined;
   old_surviving_reference_paragraphs: string;
-  surviving_reference_paragraphs: string;
+  surviving_reference_paragraphs: [];
   minimum_surviving_inheritance: number;
   surviving_fraction: number;
   descriptive_text: string;
@@ -39,7 +39,7 @@ export class PliktdelsarvCalculation
   class_closest: number | undefined;
   distance_closest: number | undefined;
   old_surviving_reference_paragraphs = "";
-  surviving_reference_paragraphs = "";
+  surviving_reference_paragraphs: any = [];
   minimum_surviving_inheritance = 0;
   surviving_fraction = 0;
   descriptive_text = "";
@@ -76,19 +76,18 @@ export class PliktdelsarvCalculation
         id: "REPORT.Inheritance.survivorType1",
       });
 
-      if (this.class_closest === 1) {
-        this.surviving_reference_paragraphs = intl.formatMessage({
+      this.surviving_reference_paragraphs.push(
+        intl.formatMessage({
           id: "REPORT.Inheritance.surviving_reference_paragraphs_10annet",
-        });
+        })
+      );
+      if (this.class_closest === 1) {
         this.minimum_surviving_inheritance =
           this.InheritanceConstants.MINIMUM_INHERITANCE_SPOUSE_VS_CHILDREN;
         this.descriptive_text = intl.formatMessage({
           id: "REPORT.Inheritance.DescriptiveTest_firstClass_spouse_4G",
         });
       } else {
-        this.surviving_reference_paragraphs = intl.formatMessage({
-          id: "REPORT.Inheritance.surviving_reference_paragraphs_10annet",
-        });
         this.minimum_surviving_inheritance =
           this.InheritanceConstants.MINIMUM_INHERITANCE_SPOUSE_VS_CHILDREN;
         this.descriptive_text = intl.formatMessage({
@@ -97,7 +96,7 @@ export class PliktdelsarvCalculation
       }
     } else {
       this.survivor = null;
-      this.surviving_reference_paragraphs = "";
+      this.surviving_reference_paragraphs = [];
       this.descriptive_text =
         this.InheritanceConstants.DESC_NO_SPOUSE_OR_COHABITANT;
       this.minimum_surviving_inheritance = 0;
@@ -109,14 +108,12 @@ export class PliktdelsarvCalculation
       this.state.netWealth,
       this.minimum_surviving_inheritance
     );
-    // const genealogy_inheritance: any = [];
     this.genealogy_inheritance_sum = Math.min(
       this.state.netWealth - this.survivor_inheritance_sum,
       this.state.netWealth * this.InheritanceConstants.FRACTION_PLIKTDEL,
       this.InheritanceConstants.LINE_MAXIMUM_PLIKTDEL *
         this.state.testator._children.length
     );
-    // this.state.netWealth - this.survivor_inheritance_sum;
     if (this.genealogy_inheritance_sum !== 0) {
       this.splits_with_chains = this.reportUtils.split_evenly_between_lines(
         this.state.testator._children

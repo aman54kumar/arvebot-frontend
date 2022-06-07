@@ -12,8 +12,8 @@ interface InheritanceCalculationInterface {
   survivor_type: string;
   class_closest: number | undefined;
   distance_closest: number | undefined;
-  old_surviving_reference_paragraphs: string;
-  surviving_reference_paragraphs: string;
+  old_surviving_reference_paragraphs: [];
+  surviving_reference_paragraphs: [];
   minimum_surviving_inheritance: number;
   surviving_fraction: number;
   descriptive_text: string;
@@ -36,8 +36,8 @@ export class UndividedCalculation implements InheritanceCalculationInterface {
   survivor_type = "";
   class_closest: number | undefined;
   distance_closest: number | undefined;
-  old_surviving_reference_paragraphs = "";
-  surviving_reference_paragraphs = "";
+  old_surviving_reference_paragraphs: any = [];
+  surviving_reference_paragraphs: any = [];
   minimum_surviving_inheritance = 0;
   surviving_fraction = 0;
   descriptive_text = "";
@@ -101,9 +101,11 @@ export class UndividedCalculation implements InheritanceCalculationInterface {
           id: "REPORT.Inheritance.DescriptiveText4G",
         });
       } else if (this.class_closest === 2) {
-        this.old_surviving_reference_paragraphs = intl.formatMessage({
-          id: "REPORT.Inheritance.old_surviving_reference_paragraphs_6forste",
-        });
+        this.old_surviving_reference_paragraphs.push(
+          intl.formatMessage({
+            id: "REPORT.Inheritance.old_surviving_reference_paragraphs_6forste",
+          })
+        );
         this.old_surviving_reference_paragraphs = intl.formatMessage({
           id: "REPORT.Inheritance.old_surviving_reference_paragraphs_9forste",
         });
@@ -209,7 +211,9 @@ export class UndividedCalculation implements InheritanceCalculationInterface {
     // this.state.netWealth - this.survivor_inheritance_sum;
     if (this.genealogy_inheritance_sum !== 0) {
       this.splits_with_chains =
-        this.reportUtils.compute_default_genealogy_splits_with_chains(this.person);
+        this.reportUtils.compute_default_genealogy_splits_with_chains(
+          this.person
+        );
 
       const genealogy_splits = this.reportUtils.combine_duplicates(
         this.splits_with_chains

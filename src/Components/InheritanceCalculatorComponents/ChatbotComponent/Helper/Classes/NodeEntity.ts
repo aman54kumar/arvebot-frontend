@@ -158,7 +158,8 @@ export class NodeEntity {
   }
 
   has_surviving_spouse = () => {
-    return true;
+    if (this._spouse !== null) return true;
+    return false;
   };
 
   has_surviving_cohabitant = () => {

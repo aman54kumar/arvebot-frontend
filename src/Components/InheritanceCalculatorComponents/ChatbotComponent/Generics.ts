@@ -1,6 +1,10 @@
 import Person from "../ChatbotComponent/Helper/Classes/Person";
 import { NodeEntity } from "./Helper/Classes/NodeEntity";
-import { ChatStepTypes, QuestionType } from "./Helper/Enums/ChatStepTypes";
+import {
+  ChatStepTypes,
+  QuestionType,
+  undividedOwnershipType,
+} from "./Helper/Enums/ChatStepTypes";
 export interface ChatbotInterface {
   stepID: string;
   person: NodeEntity;
@@ -15,6 +19,7 @@ export interface ChatbotInterface {
   personsMap: Map<number, Person>;
   nodeMap: Map<number, NodeEntity>;
   id: number;
+  undividedSpouseId: number;
   deceasedParentsArray: Array<number>;
   grandParent_flag: string;
   rearChildrenResponse: boolean;
@@ -25,6 +30,7 @@ export interface ChatbotInterface {
     undividedEstateSeparateWealth: number;
     temp_first: number;
     temp_last: number;
+    ownershipType: string;
   };
   tempMessages: any;
   successorProcessArray: Array<[number, number]>;
@@ -46,6 +52,7 @@ export const ChatbotState: ChatbotInterface = {
   personsMap: new Map(),
   nodeMap: new Map(),
   id: 1,
+  undividedSpouseId: 0,
   deceasedParentsArray: [],
   grandParent_flag: QuestionType.initialQuestion,
   rearChildrenResponse: false,
@@ -56,6 +63,7 @@ export const ChatbotState: ChatbotInterface = {
     undividedEstateSeparateWealth: 0,
     temp_first: 0,
     temp_last: 0,
+    ownershipType: undividedOwnershipType.none,
   },
   tempMessages: [],
   successorProcessArray: [],
