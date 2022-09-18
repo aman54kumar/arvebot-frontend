@@ -23,12 +23,18 @@ interface InheritanceCalculationInterface {
   splits_with_chains: [];
   genealogy_inheritance: [];
 }
-// interface inheritanceFractionListType {
-//   person: number;
-//   frac: number;
-//   chains: Array<any>;
-// }
-export class InheritanceCalculation implements InheritanceCalculationInterface {
+export interface inheritanceFractionListType {
+  person: string;
+  frac: number;
+  chains: Array<string>;
+}
+
+export const splits_initial = {
+  person: "",
+  frac: 0,
+  chains: [],
+};
+export class InheritanceCalculation {
   state: ChatbotInterface;
   inheritanceConstants: InheritanceConstants;
   actionProvider: ActionProvider;
@@ -45,8 +51,8 @@ export class InheritanceCalculation implements InheritanceCalculationInterface {
   survivor_inheritance_sum = 0;
   genealogy_inheritance_sum = 0;
   splits_with_chains: [] = [];
-  genealogy_inheritance: any = [];
-  genealogy_splits: [] = [];
+  genealogy_inheritance: Array<inheritanceFractionListType> = [];
+  genealogy_splits: inheritanceFractionListType = splits_initial;
   will: string | undefined;
   reportUtils: any;
   constructor(
@@ -70,6 +76,7 @@ export class InheritanceCalculation implements InheritanceCalculationInterface {
         this.state.testator,
         this.state
       );
+    console.log(this.class_closest, this.distance_closest);
 
     if (this.person.has_surviving_spouse()) {
       // TODO define has_surviving_spouse in NodeEntity.ts
@@ -250,16 +257,24 @@ export class InheritanceCalculation implements InheritanceCalculationInterface {
           true
         );
     } else if (closest_class === 3) {
-      const grandparent_splits = this.reportUtils.split_evenly_between_lines(
-        personNode._parents,
-        2
-      );
-      let num;
+      const grandparent_splits = [];
+      for (const parent of personNode._parents) {
+        const parentNode = this.actionProvider.getNode(
+          parent,
+          this.state.nodeMap
+        );
+        grandparent_splits.push(
+          this.reportUtils.split_evenly_between_lines(parentNode._parents, 2)
+        );
+      }
+      const tempArray = [];
       for (const a of grandparent_splits) {
         if (a.length > 0) {
-          num = a.length;
+          tempArray.push(a);
         }
       }
+      const num = tempArray.length;
+
       const temp_list = [];
       for (const split of grandparent_splits) {
         if (split.length > 0) {
@@ -292,19 +307,18 @@ export class InheritanceCalculation implements InheritanceCalculationInterface {
       const genealogy_splits = this.reportUtils.combine_duplicates(
         this.splits_with_chains
       );
-      console.log(genealogy_splits);
 
       genealogy_splits.map((genealogy_split: any) => {
-        return this.genealogy_inheritance.push([
-          genealogy_split.person,
-          genealogy_split.frac * this.genealogy_inheritance_sum,
-          genealogy_split.chains,
-        ]);
+        return this.genealogy_inheritance.push({
+          person: genealogy_split.person,
+          frac: genealogy_split.frac * this.genealogy_inheritance_sum,
+          chains: genealogy_split.chains,
+        });
       });
     } else {
       this.splits_with_chains = [];
-      this.genealogy_splits = [];
-      this.genealogy_inheritance = [];
+      this.genealogy_splits = splits_initial;
+      this.genealogy_inheritance = [splits_initial];
     }
     return this.genealogy_inheritance;
   };

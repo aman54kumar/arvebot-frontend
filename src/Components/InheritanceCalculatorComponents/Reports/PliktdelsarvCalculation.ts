@@ -2,18 +2,19 @@ import { ChatbotInterface } from "../ChatbotComponent/Generics";
 import { NodeEntity } from "../ChatbotComponent/Helper/Classes/NodeEntity";
 import Norsk from "../../../languages/translationNO.json";
 import { createIntl, createIntlCache } from "react-intl";
-import InheritanceConstants from "../ChatbotComponent/Helper/Methods/InheritanceConstants";
 import { ReportUtils } from "./ReportUtils";
+import InheritanceConstants from "../ChatbotComponent/Helper/Methods/InheritanceConstants";
+import ActionProvider from "../ChatbotComponent/ActionProvider";
 const cache = createIntlCache();
 const intl = createIntl({ locale: "nb-NO", messages: Norsk }, cache);
 
-interface InheritanceCalculationInterface {
+interface PliktCalculationInterface {
   survivor: number | null;
   survivor_type: string;
   class_closest: number | undefined;
   distance_closest: number | undefined;
   old_surviving_reference_paragraphs: string;
-  surviving_reference_paragraphs: [];
+  surviving_reference_paragraphs: Array<string>;
   minimum_surviving_inheritance: number;
   surviving_fraction: number;
   descriptive_text: string;
@@ -22,42 +23,48 @@ interface InheritanceCalculationInterface {
   splits_with_chains: [];
   genealogy_inheritance: [];
 }
-interface inheritanceFractionListType {
-  person: number;
+interface pliktFractionListType {
+  person: string;
   frac: number;
-  chains: Array<any>;
+  chains: Array<string>;
 }
-export class PliktdelsarvCalculation
-  implements InheritanceCalculationInterface
-{
+export const splits_initial = {
+  person: "",
+  frac: 0,
+  chains: [],
+};
+export class PliktdelsarvCalculation {
   state: ChatbotInterface;
-  ActionProvider: any;
-  InheritanceConstants: any;
+  inheritanceConstants: InheritanceConstants;
+  actionProvider: ActionProvider;
   person: NodeEntity;
   survivor: number | null = null;
   survivor_type = "";
   class_closest: number | undefined;
   distance_closest: number | undefined;
   old_surviving_reference_paragraphs = "";
-  surviving_reference_paragraphs: any = [];
+  surviving_reference_paragraphs: string[] = [];
   minimum_surviving_inheritance = 0;
   surviving_fraction = 0;
   descriptive_text = "";
   survivor_inheritance_sum = 0;
   genealogy_inheritance_sum = 0;
   splits_with_chains: [] = [];
-  genealogy_inheritance: any = [];
-  genealogy_splits: [] = [];
+  genealogy_inheritance: Array<pliktFractionListType> = [];
+  genealogy_splits: pliktFractionListType = splits_initial;
   will: string | undefined;
   reportUtils: any;
   constructor(
-    private actionProvider: any,
+    person: NodeEntity,
+    actionProvider: ActionProvider,
     state: ChatbotInterface,
+    inheritanceConstants: InheritanceConstants,
     will = undefined
   ) {
     this.state = state;
-    this.InheritanceConstants = new InheritanceConstants();
-    this.person = state.person;
+    this.actionProvider = actionProvider;
+    this.person = actionProvider.getNode(person._id, this.state.nodeMap);
+    this.inheritanceConstants = inheritanceConstants;
     this.will = will;
     this.reportUtils = new ReportUtils(actionProvider, state);
   }
@@ -83,13 +90,13 @@ export class PliktdelsarvCalculation
       );
       if (this.class_closest === 1) {
         this.minimum_surviving_inheritance =
-          this.InheritanceConstants.MINIMUM_INHERITANCE_SPOUSE_VS_CHILDREN;
+          this.inheritanceConstants.MINIMUM_INHERITANCE_SPOUSE_VS_CHILDREN;
         this.descriptive_text = intl.formatMessage({
           id: "REPORT.Inheritance.DescriptiveTest_firstClass_spouse_4G",
         });
       } else {
         this.minimum_surviving_inheritance =
-          this.InheritanceConstants.MINIMUM_INHERITANCE_SPOUSE_VS_CHILDREN;
+          this.inheritanceConstants.MINIMUM_INHERITANCE_SPOUSE_VS_CHILDREN;
         this.descriptive_text = intl.formatMessage({
           id: "REPORT.Inheritance.DescriptiveTest_firstClass_spouse_6G",
         });
@@ -98,20 +105,33 @@ export class PliktdelsarvCalculation
       this.survivor = null;
       this.surviving_reference_paragraphs = [];
       this.descriptive_text =
-        this.InheritanceConstants.DESC_NO_SPOUSE_OR_COHABITANT;
+        this.inheritanceConstants.DESC_NO_SPOUSE_OR_COHABITANT;
       this.minimum_surviving_inheritance = 0;
     }
   };
 
-  computeGenealogyInheritance = () => {
+  computeGenealogyInheritance = (person_id: number) => {
     this.survivor_inheritance_sum = Math.min(
       this.state.netWealth,
       this.minimum_surviving_inheritance
     );
+
+    console.log(this.state.netWealth);
+    console.log(this.survivor_inheritance_sum);
+    console.log(this.state.netWealth - this.survivor_inheritance_sum);
+    console.log(
+      this.state.netWealth * this.inheritanceConstants.FRACTION_PLIKTDEL
+    );
+    console.log(
+      this.inheritanceConstants.LINE_MAXIMUM_PLIKTDEL *
+        this.state.testator._children.length
+    );
+    console.log(this.state.testator._children.length);
+
     this.genealogy_inheritance_sum = Math.min(
       this.state.netWealth - this.survivor_inheritance_sum,
-      this.state.netWealth * this.InheritanceConstants.FRACTION_PLIKTDEL,
-      this.InheritanceConstants.LINE_MAXIMUM_PLIKTDEL *
+      this.state.netWealth * this.inheritanceConstants.FRACTION_PLIKTDEL,
+      this.inheritanceConstants.LINE_MAXIMUM_PLIKTDEL *
         this.state.testator._children.length
     );
     if (this.genealogy_inheritance_sum !== 0) {
@@ -124,16 +144,16 @@ export class PliktdelsarvCalculation
       );
 
       genealogy_splits.map((genealogy_split: any) => {
-        return this.genealogy_inheritance.push([
-          genealogy_split.person,
-          genealogy_split.frac * this.genealogy_inheritance_sum,
-          genealogy_split.chains,
-        ]);
+        return this.genealogy_inheritance.push({
+          person: genealogy_split.person,
+          frac: genealogy_split.frac * this.genealogy_inheritance_sum,
+          chains: genealogy_split.chains,
+        });
       });
     } else {
       this.splits_with_chains = [];
-      this.genealogy_splits = [];
-      this.genealogy_inheritance = [];
+      this.genealogy_splits = splits_initial;
+      this.genealogy_inheritance = [splits_initial];
     }
     return this.genealogy_inheritance;
   };

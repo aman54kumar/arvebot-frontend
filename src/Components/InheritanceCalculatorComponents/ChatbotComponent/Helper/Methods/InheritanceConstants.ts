@@ -25,15 +25,50 @@ export default class InheritanceConstants {
   LINE_MAXIMUM_PLIKTDEL = 15 * this.G;
 
   LAW_LINKS = {
-    1: "https://lovdata.no/NL/lov/1972-03-03-5/§1",
-    2: "https://lovdata.no/NL/lov/1972-03-03-5/§2",
-    3: "https://lovdata.no/NL/lov/1972-03-03-5/§3",
-    4: "https://lovdata.no/NL/lov/1972-03-03-5/§4",
-    6: "https://lovdata.no/NL/lov/1972-03-03-5/§6",
-    28: "https://lovdata.no/NL/lov/1972-03-03-5/§28",
-    36: "https://lovdata.no/NL/lov/1972-03-03-5/§36",
-    46: "https://lovdata.no/NL/lov/1972-03-03-5/§46",
-    KapittelVI: "https://lovdata.no/pro/NL/lov/1972-03-03-5/KAPITTEL_1-7",
+    "4": [
+      "https://lovdata.no/dokument/NL/lov/2019-06-14-21/KAPITTEL_2-1#%C2%A74",
+      "https://lovdata.no/NL/lov/2019-06-14-21/§4",
+    ],
+    "5": [
+      "https://lovdata.no/dokument/NL/lov/2019-06-14-21/KAPITTEL_2-1#%C2%A75",
+      "https://lovdata.no/NL/lov/2019-06-14-21/§5",
+    ],
+    "6": [
+      "https://lovdata.no/dokument/NL/lov/2019-06-14-21/KAPITTEL_2-1#%C2%A76",
+      "https://lovdata.no/NL/lov/2019-06-14-21/§6",
+    ],
+    "7": [
+      "https://lovdata.no/dokument/NL/lov/2019-06-14-21/KAPITTEL_2-1#%C2%A77",
+      "https://lovdata.no/NL/lov/2019-06-14-21/§7",
+    ],
+    "8": [
+      "https://lovdata.no/dokument/NL/lov/2019-06-14-21/KAPITTEL_2-2#%C2%A78",
+      "https://lovdata.no/NL/lov/2019-06-14-21/§8",
+    ],
+    "9": [
+      "https://lovdata.no/dokument/NL/lov/2019-06-14-21/KAPITTEL_2-2#%C2%A79",
+      "https://lovdata.no/NL/lov/2019-06-14-21/§9",
+    ],
+    "10": [
+      "https://lovdata.no/dokument/NL/lov/2019-06-14-21/KAPITTEL_2-2#%C2%A710",
+      "https://lovdata.no/NL/lov/2019-06-14-21/§10",
+    ],
+    "12": [
+      "https://lovdata.no/dokument/NL/lov/2019-06-14-21/KAPITTEL_2-3#%C2%A712",
+      "https://lovdata.no/NL/lov/2019-06-14-21/§12",
+    ],
+    "50": [
+      "https://lovdata.no/dokument/NL/lov/2019-06-14-21/KAPITTEL_2-6-3#%C2%A750",
+      "https://lovdata.no/NL/lov/2019-06-14-21/§50",
+    ],
+    "75": [
+      "https://lovdata.no/dokument/NL/lov/2019-06-14-21/KAPITTEL_2-8#%C2%A775",
+      "https://lovdata.no/NL/lov/2019-06-14-21/§75",
+    ],
+    "76": [
+      "https://lovdata.no/dokument/NL/lov/2019-06-14-21/KAPITTEL_2-9#%C2%A776",
+      "https://lovdata.no/NL/lov/2019-06-14-21/§76",
+    ],
   };
 
   CODE_PARAGRAPHS = {

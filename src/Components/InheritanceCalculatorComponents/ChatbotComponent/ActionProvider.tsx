@@ -22,7 +22,7 @@ import { InheritanceCalculation } from "../Reports/InheritanceCalculation";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 // import ReactPDF from '@react-pdf/renderer';
 import FinalDocument from "../Reports/PDF/FinalDocument";
-import Delayed from "../../hooks/delayedRender";
+import { PliktdelsarvCalculation } from "../Reports/PliktdelsarvCalculation";
 // import _ from "lodash";
 
 class ActionProvider {
@@ -1112,10 +1112,25 @@ class ActionProvider {
           state,
           new InheritanceConstants()
         );
+        inheritanceCalculation.computeInheritance();
         inheritanceCalculation.computeGenealogyInheritance(state.testator._id);
-        console.log(inheritanceCalculation);
 
-        const document = <FinalDocument inputData={inheritanceCalculation} />;
+        const pliktdelsarvCalculation = new PliktdelsarvCalculation(
+          state.person,
+          this,
+          state,
+          new InheritanceConstants()
+        );
+        pliktdelsarvCalculation.computeInheritance();
+        pliktdelsarvCalculation.computeGenealogyInheritance(state.testator._id);
+        const document = (
+          <FinalDocument
+            inputData={{
+              inheritanceCalculation: inheritanceCalculation,
+              pliktdelsarvCalculation: pliktdelsarvCalculation,
+            }}
+          />
+        );
         const pdfDownloadLink = (
           <div>
             <PDFDownloadLink document={document} fileName="somename.pdf">
@@ -1126,7 +1141,6 @@ class ActionProvider {
           </div>
         );
         const pdfLink = this.createChatBotMessage(pdfDownloadLink);
-
         this.addMessageToBotState(pdfLink);
 
         console.log("prepare report and download");
@@ -1614,7 +1628,6 @@ class ActionProvider {
   resetChatbot = () => {
     this.setState((state: any) => {
       state = InitialChatbotState;
-      console.log(InitialChatbotState);
 
       return this.returnState(state);
     });

@@ -1,26 +1,8 @@
-import {
-  ChatStepTypes,
-  undividedOwnershipType,
-} from "../../../../ChatbotComponent/Helper/Enums/ChatStepTypes";
-import { InheritanceCalculation } from "../../../InheritanceCalculation";
-import { currencyFormatNO } from "../common/pdf_utils";
+import { undividedOwnershipType } from "../../../../../ChatbotComponent/Helper/Enums/ChatStepTypes";
+import { InheritanceCalculation } from "../../../../InheritanceCalculation";
+import { currencyFormatNO } from "../pdf_utils";
 
-export const IntroductionUtils = (value: InheritanceCalculation) => {
-  const currencyFormatted = currencyFormatNO(value.state.netWealth);
-
-  const testatorName = value.actionProvider.getPerson(
-    1,
-    value.state.personsMap
-  )._personName;
-
-  return {
-    currencyFormatted: currencyFormatted,
-    testatorName: testatorName,
-    undividedEstateResults: undividedEstateResults(value),
-  };
-};
-
-const undividedEstateResults = (value: InheritanceCalculation) => {
+const undivided_estate_results = (value: InheritanceCalculation) => {
   const finalresult = "";
   const first_partly_separate = value.state.undividedEstate.temp_first;
   const testator_name = value.actionProvider.getPerson(
@@ -63,4 +45,17 @@ const undividedEstateResults = (value: InheritanceCalculation) => {
     }
   }
   return finalresult;
+};
+
+export const IntroductionUtils = (value: InheritanceCalculation) => {
+  const currencyFormatted = currencyFormatNO(value.state.netWealth);
+
+  const testatorName = value.actionProvider.getPerson(
+    1,
+    value.state.personsMap
+  )._personName;
+  return {
+    currencyFormatted: currencyFormatted,
+    testatorName: testatorName,
+  };
 };
