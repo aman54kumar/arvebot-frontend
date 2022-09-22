@@ -12,6 +12,7 @@ import { InheritanceCalculation } from "../InheritanceCalculation";
 import "react-pdf/dist/umd/Page/AnnotationLayer.css";
 import { PliktdelsarvCalculation } from "../PliktdelsarvCalculation";
 import { UndividedCalculation } from "../UndividedCalculation";
+import { FifthSection } from "./Sections/fifthSection/fifthSection";
 
 interface FinalObjectInput {
   inheritanceCalculation: InheritanceCalculation;
@@ -44,6 +45,7 @@ const FinalDocument = (props: { inputData: FinalObjectInput }) => {
           <SecondSection />
           <ThirdSection />
           <FourthSection />
+          <FifthSection />
           <Footer />
         </UserContext.Provider>
       </Page>

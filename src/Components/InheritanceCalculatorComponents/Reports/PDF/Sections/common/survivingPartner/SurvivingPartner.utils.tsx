@@ -35,7 +35,9 @@ const SurvivingPartnerUtils = (value: InheritanceCalculation) => {
 
   return (
     <View>
-      <Text style={styles.subheading}>Gjenlevende ektefelle eller samboer</Text>
+      <Text style={styles.paragraphHeading}>
+        Gjenlevende ektefelle eller samboer
+      </Text>
       {inheritanceDescriptiveText}
       {legalReferenceText}
     </View>

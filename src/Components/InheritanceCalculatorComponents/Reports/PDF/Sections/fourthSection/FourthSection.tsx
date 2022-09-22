@@ -7,6 +7,7 @@ export const FourthSection = () => {
   return (
     <View style={styles.section}>
       <Text style={styles.subheading}>Merknader og forbehold</Text>
+      {"\n\n"}
       <NationalInsurance />
       <GeneralReservations />
     </View>

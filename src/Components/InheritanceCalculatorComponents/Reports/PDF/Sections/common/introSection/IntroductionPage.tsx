@@ -11,7 +11,7 @@ export const IntroductionPage = (props: { inheritanceMode: boolean }) => {
     const value = useContext(UserContext).inheritanceCalculation;
     const calculatedValues = IntroductionUtils(value);
     return (
-      <View style={[styles.section, { marginTop: 40 }]}>
+      <View style={[styles.section]}>
         <Text style={[styles.heading, { textAlign: "center" }]}>
           Beregning av arv
         </Text>
@@ -25,6 +25,6 @@ export const IntroductionPage = (props: { inheritanceMode: boolean }) => {
   } else {
     const value = useContext(UserContext).pliktdelsarvCalculation;
     const pliktIntroText = IntroductionPliktUtils(value);
-    return <View style={[styles.section]}>{pliktIntroText}</View>;
+    return <View>{pliktIntroText}</View>;
   }
 };

@@ -31,13 +31,14 @@ export const styles = StyleSheet.create({
     fontFamily: "Helvetica-Bold",
   },
   paragraphHeading: {
-    fontSize: 10,
+    fontSize: 12,
     color: "#365F91",
     fontFamily: "Helvetica-Bold",
   },
   paragraph: {
     fontSize: 10,
     fontFamily: "Times-Roman",
+    margin: 10,
   },
   pageNumber: {
     position: "absolute",
@@ -74,5 +75,13 @@ export const styles = StyleSheet.create({
   },
   marginTop: {
     marginTop: 10,
+  },
+  redText: {
+    color: "#ff0000",
+  },
+  image: {
+    marginVertical: 10,
+    marginHorizontal: 15,
+    backgroundColor: "white",
   },
 });

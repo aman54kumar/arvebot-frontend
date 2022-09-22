@@ -40,7 +40,7 @@ const getGenealogyText = (
     );
   } else {
     return (
-      <Text>
+      <Text style={styles.paragraph}>
         <Bold>{genealogy_inheritance_sum}</Bold>{" "}
         <Text style={styles.paragraph}>
           fordeles på livsarvingene slik at det blir likt på hver gren.
@@ -48,74 +48,10 @@ const getGenealogyText = (
         </Text>
         <Text style={styles.paragraph}>{legal_reference_text}</Text>
         {"\n\n"}
-        <Text style={styles.paragraph}>{genealogyInheritanceText}</Text>;
+        <Text style={styles.paragraph}>{genealogyInheritanceText}</Text>
       </Text>
     );
   }
-  // if (genealogy_inheritance_sum === 0) {
-  //   console.log("genealogy_inheritance_sum === 0");
-  //   return (
-  //     <Text style={styles.paragraph}>
-  //       Det er ingen slektsarv igjen å fordele.
-  //     </Text>
-  //   );
-  // } else if (
-  //   value.class_closest === undefined ||
-  //   (value.class_closest === 3 &&
-  //     value.distance_closest &&
-  //     value.distance_closest > 2)
-  // ) {
-  //   let code_paragraph = "6 første ledd, andre punktum";
-  //   const legalReference1 = add_legal_reference(
-  //     code_paragraph,
-  //     value.inheritanceConstants.CODE_PARAGRAPHS,
-  //     value.inheritanceConstants.LAW_LINKS
-  //   );
-  //   code_paragraph = "76 første ledd, første punktum";
-  //   const legalReference2 = add_legal_reference(
-  //     code_paragraph,
-  //     value.inheritanceConstants.CODE_PARAGRAPHS,
-  //     value.inheritanceConstants.LAW_LINKS
-  //   );
-  //   return (
-  //     <View>
-  //       <Text style={styles.paragraph}>
-  //         "Testator har ingen nære slektninger."
-  //       </Text>
-  //       <Text style={styles.paragraph}>{legalReference1}</Text>
-  //       <View>
-  //         <Text style={styles.subheading}>Frivillig arbeid</Text>
-  //         <Bold>{currencyFormatNO(value.genealogy_inheritance_sum)}</Bold>
-  //         <Text style={styles.paragraph}>
-  //           {" "}
-  //           vil gå til frivillig arbeid til fordel for barn og unge.
-  //         </Text>
-  //         <Text style={styles.paragraph}>{legalReference2}</Text>
-  //       </View>
-  //     </View>
-  //   );
-  // } else {
-  //   return (
-  //     <View>
-  //       <Text style={styles.paragraph}>
-  //         De gjenværende{" "}
-  //         <Bold>{currencyFormatNO(genealogy_inheritance_sum)}</Bold> fordeles på
-  //         slekten slik at det blir likt på hver gren i den aktuelle
-  //         arvegangsklasse. Nærmeste levende slektning er i arvegangsklasse{" "}
-  //         {value.class_closest}
-  //         {getParagraph(
-  //           value.class_closest,
-  //           value.inheritanceConstants.CODE_PARAGRAPHS,
-  //           value.inheritanceConstants.LAW_LINKS
-  //         )}
-  //       </Text>
-  //       <Text style={styles.paragraph}>
-  //         {"\n\n"}
-  //         {genealogy_inheritance_text(value)}
-  //       </Text>
-  //     </View>
-  //   );
-  // }
 };
 
 const getParagraph = (
@@ -155,9 +91,10 @@ const genealogy_inheritance_text = (value: PliktdelsarvCalculation) => {
   for (const i of Object.entries(value.genealogy_inheritance)) {
     const tempVar = i[1];
     finalGenealogyInheritanceText = (
-      <Text>
+      <Text style={styles.paragraph}>
         Person med person-id <Bold>{tempVar.person}</Bold> arver totalt{" "}
-        <Bold>{tempVar.frac} </Bold>.{unravel_chains_to_string(tempVar.chains)}
+        <Bold>{currencyFormatNO(tempVar.frac)} </Bold>.
+        {unravel_chains_to_string(tempVar.chains)}
       </Text>
     );
   }

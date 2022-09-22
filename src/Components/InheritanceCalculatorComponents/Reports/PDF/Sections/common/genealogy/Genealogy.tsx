@@ -11,7 +11,7 @@ export const Genealogy = (props: { inheritanceMode: boolean }) => {
     const genealogyParagraph = GenealogyUtils(value);
     return (
       <View style={styles.section} break>
-        <Text style={styles.subheading}>Slektsarv</Text>
+        <Text style={styles.paragraphHeading}>Slektsarv</Text>
         {genealogyParagraph}
       </View>
     );
@@ -20,7 +20,7 @@ export const Genealogy = (props: { inheritanceMode: boolean }) => {
     const genealogyPliktParagraph = GenealogyPliktUtils(value);
     return (
       <View style={styles.section} break>
-        <Text style={styles.subheading}>Slektsarv</Text>
+        <Text style={styles.paragraphHeading}>Slektsarv</Text>
         {genealogyPliktParagraph}
       </View>
     );

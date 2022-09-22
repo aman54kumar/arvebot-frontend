@@ -20,8 +20,6 @@ export const add_legal_references = (
   CODE_PARAGRAPHS: any
 ) => {
   code_paragraphs.forEach((code_paragraph) => {
-    console.log(code_paragraph);
-
     return (
       <View>
         <Text></Text>
@@ -44,22 +42,22 @@ export const add_legal_reference = (
   return (
     <View>
       {"\n\n"}
-      <Text style={styles.paragraph}>
+      <Text>
         Arveloven § <Bold>{code_paragraph}</Bold>:{" "}
         <Italic>{CODE_PARAGRAPHS[code_paragraph]}</Italic>
         {"\n\n"}
-        <Text style={styles.paragraph}>{lovdataLink}</Text>
+        <Text>{lovdataLink}</Text>
       </Text>
     </View>
   );
 };
 
-const addLovdataLink = (code_paragraph: string, LAW_LINKS: any) => {
+export const addLovdataLink = (code_paragraph: string, LAW_LINKS: any) => {
   const code_paragraph_code = code_paragraph.replace(/[^\d].*/, "");
   const hyperlinkText = add_hyperlink(LAW_LINKS[code_paragraph_code]);
   return (
     <View>
-      <Text style={styles.paragraph}>
+      <Text>
         For å lese lovteksten i kontekst hos Lovdata, gå til {hyperlinkText}.
       </Text>
     </View>

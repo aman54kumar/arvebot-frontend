@@ -26,7 +26,7 @@ const getPliktIntroString = (value: PliktdelsarvCalculation) => {
   );
   return (
     <Text style={styles.paragraph}>
-      <Text style={styles.paragraph}>
+      <Text>
         Denne delen inneholder en beregning av pliktdelsarv etter arvelater med
         person-id
       </Text>{" "}

@@ -23,7 +23,7 @@ export const Summary = (props: { inheritanceMode: boolean }) => {
     const summaryTable = SummaryUtils(value);
     return (
       <View style={styles.section}>
-        <Text style={styles.subheading}>Sammendrag</Text>
+        <Text style={styles.paragraphHeading}>Sammendrag</Text>
         <View style={styles.marginTop}>{summaryTable}</View>
       </View>
     );
@@ -32,7 +32,7 @@ export const Summary = (props: { inheritanceMode: boolean }) => {
     const summaryPliktTable = SummaryPliktUtils(value);
     return (
       <View style={styles.section}>
-        <Text style={styles.subheading}>Sammendrag</Text>
+        <Text style={styles.paragraphHeading}>Sammendrag</Text>
         <View style={styles.marginTop}>{summaryPliktTable}</View>
       </View>
     );
