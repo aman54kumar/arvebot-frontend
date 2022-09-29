@@ -8,7 +8,9 @@ import SurvivingPartnerPliktUtils from "./SurvivingPartnerPlikt.utils";
 export const SurvivingPartner = (props: { inheritanceMode: boolean }) => {
   if (props.inheritanceMode) {
     const value = useContext(UserContext).inheritanceCalculation;
+
     const survivingPartnerParagraph = SurvivingPartnerUtils(value);
+
     return <View style={styles.section}>{survivingPartnerParagraph}</View>;
   } else {
     const value = useContext(UserContext).pliktdelsarvCalculation;

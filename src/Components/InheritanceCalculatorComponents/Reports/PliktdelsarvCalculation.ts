@@ -116,18 +116,6 @@ export class PliktdelsarvCalculation {
       this.minimum_surviving_inheritance
     );
 
-    console.log(this.state.netWealth);
-    console.log(this.survivor_inheritance_sum);
-    console.log(this.state.netWealth - this.survivor_inheritance_sum);
-    console.log(
-      this.state.netWealth * this.inheritanceConstants.FRACTION_PLIKTDEL
-    );
-    console.log(
-      this.inheritanceConstants.LINE_MAXIMUM_PLIKTDEL *
-        this.state.testator._children.length
-    );
-    console.log(this.state.testator._children.length);
-
     this.genealogy_inheritance_sum = Math.min(
       this.state.netWealth - this.survivor_inheritance_sum,
       this.state.netWealth * this.inheritanceConstants.FRACTION_PLIKTDEL,

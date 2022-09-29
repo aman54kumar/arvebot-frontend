@@ -28,19 +28,26 @@ const SurvivingPartnerUtils = (value: InheritanceCalculation) => {
     survivor_inheritance_sum,
     genealogy_inheritance_sum
   );
-  const legalReferenceText = add_legal_references(
+  const legalReferenceTextArray = add_legal_references(
     value.surviving_reference_paragraphs,
-    value.inheritanceConstants.CODE_PARAGRAPHS
+    value.inheritanceConstants.CODE_PARAGRAPHS,
+    value.inheritanceConstants.LAW_LINKS
   );
-
   return (
-    <View>
+    <Text>
       <Text style={styles.paragraphHeading}>
-        Gjenlevende ektefelle eller samboer
+        Gjenlevende ektefelle eller samboer {"\n"}
       </Text>
-      {inheritanceDescriptiveText}
-      {legalReferenceText}
-    </View>
+      <Text style={styles.paragraph}>{inheritanceDescriptiveText}</Text>
+      {legalReferenceTextArray.map((legalReferenceText) => (
+        <Text
+          key={legalReferenceTextArray.indexOf(legalReferenceText)}
+          style={styles.paragraph}
+        >
+          {legalReferenceText}
+        </Text>
+      ))}
+    </Text>
   );
 };
 
@@ -67,7 +74,7 @@ const getInheritanceDescriptiveText = (
     ].includes(descriptive_text)
   ) {
     return (
-      <Text>
+      <Text style={styles.paragraph}>
         {descriptive_text} Den etterlatte har person-id{" "}
         <Bold>{survivor_name}</Bold>. Arv til gjenlevende er{" "}
         {survivor_inheritance_sum}.

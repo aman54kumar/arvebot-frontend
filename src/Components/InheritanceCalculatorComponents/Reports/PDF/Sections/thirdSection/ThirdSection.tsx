@@ -5,6 +5,11 @@ import { IntroductionPage } from "../common/introSection/IntroductionPage";
 import { Summary } from "../common/summary/Summary";
 import { SurvivingPartner } from "../common/survivingPartner/SurvivingPartner";
 
+/* SurvivingPartner -> Gjenlevende ektefelle eller samboer
+   Genealogy -> Slektsarv
+   Summary -> Sammendrag
+*/
+
 export const ThirdSection = () => {
   return (
     <View style={styles.section}>

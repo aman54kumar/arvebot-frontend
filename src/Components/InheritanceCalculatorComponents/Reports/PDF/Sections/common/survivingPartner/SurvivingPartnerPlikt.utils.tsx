@@ -28,19 +28,30 @@ const SurvivingPartnerPliktUtils = (value: PliktdelsarvCalculation) => {
     survivor_inheritance_sum,
     genealogy_inheritance_sum
   );
-  const legalReferenceText = add_legal_references(
+  const legalReferenceTextArray = add_legal_references(
     value.surviving_reference_paragraphs,
-    value.inheritanceConstants.CODE_PARAGRAPHS
+    value.inheritanceConstants.CODE_PARAGRAPHS,
+    value.inheritanceConstants.LAW_LINKS
   );
 
   return (
-    <View>
+    <Text>
       <Text style={styles.paragraphHeading}>
-        Gjenlevende ektefelle eller samboer
+        Gjenlevende ektefelle eller samboer{"\n"}
       </Text>
-      {inheritanceDescriptiveText}
-      {legalReferenceText}
-    </View>
+      <Text style={styles.paragraph}>
+        OBS! Nye regler for samboer - sjekk ut{"\n\n"}
+      </Text>
+      <Text style={styles.paragraph}>{inheritanceDescriptiveText}</Text>
+      {legalReferenceTextArray.map((legalReferenceText) => (
+        <Text
+          key={legalReferenceTextArray.indexOf(legalReferenceText)}
+          style={styles.paragraph}
+        >
+          {legalReferenceText}
+        </Text>
+      ))}
+    </Text>
   );
 };
 
@@ -69,7 +80,7 @@ const getInheritanceDescriptiveText = (
     return (
       <Text>
         {descriptive_text} Den etterlatte har person-id{" "}
-        <Bold>{survivor_name}</Bold>. Arv til gjenlevende er{" "}
+        <Bold>{survivor_name}</Bold>. Minstearv til gjenlevende er{" "}
         {survivor_inheritance_sum}.
       </Text>
     );
@@ -78,9 +89,8 @@ const getInheritanceDescriptiveText = (
       <Text style={styles.paragraph}>
         {" "}
         {descriptive_text} Den etterlatte har person-id{" "}
-        <Bold>{survivor_name}</Bold>. Arv til gjenlevende er{" "}
-        <Bold>{survivor_inheritance_sum}</Bold>, og de resterende{" "}
-        <Bold>{genealogy_inheritance_sum}</Bold> går til slekten.
+        <Bold>{survivor_name}</Bold>. Minstearv til gjenlevende er{" "}
+        <Bold>{survivor_inheritance_sum}</Bold>.
       </Text>
     );
   }

@@ -79,9 +79,11 @@ export const styles = StyleSheet.create({
   redText: {
     color: "#ff0000",
   },
-  image: {
-    marginVertical: 10,
-    marginHorizontal: 15,
+  imageView: {
     backgroundColor: "white",
+  },
+  image: {
+    backgroundColor: "white",
+    marginTop: 20,
   },
 });

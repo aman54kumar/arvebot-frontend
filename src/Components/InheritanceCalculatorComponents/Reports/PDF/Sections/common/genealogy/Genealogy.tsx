@@ -9,6 +9,7 @@ export const Genealogy = (props: { inheritanceMode: boolean }) => {
   if (props.inheritanceMode) {
     const value = useContext(UserContext).inheritanceCalculation;
     const genealogyParagraph = GenealogyUtils(value);
+
     return (
       <View style={styles.section} break>
         <Text style={styles.paragraphHeading}>Slektsarv</Text>

@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import PropTypes from "prop-types";
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
@@ -29,7 +29,7 @@ const useStyles = makeStyles(() => ({
   footer: {
     // backgroundColor: theme.palette.background.paper,
     padding: useTheme().spacing(6),
-    backgroundColor: "silver"
+    backgroundColor: "silver",
   },
 }));
 

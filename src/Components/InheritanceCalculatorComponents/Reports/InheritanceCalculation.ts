@@ -76,7 +76,6 @@ export class InheritanceCalculation {
         this.state.testator,
         this.state
       );
-    console.log(this.class_closest, this.distance_closest);
 
     if (this.person.has_surviving_spouse()) {
       // TODO define has_surviving_spouse in NodeEntity.ts

@@ -7,7 +7,7 @@ export const FifthSection = () => {
   const [url, setUrl] = useState("src/assets/images/arvebot-logo.png");
   const node = document.querySelector(".react-flow") as Node;
   domtoimage
-    .toJpeg(node, {
+    .toPng(node, {
       filter: (node: Node): boolean => {
         // we don't want to add the minimap and the controls to the image
 
@@ -17,7 +17,6 @@ export const FifthSection = () => {
         ) {
           return false;
         }
-
         return true;
       },
     })
@@ -28,7 +27,7 @@ export const FifthSection = () => {
       console.error("oops, something went wrong!", error);
     });
   return (
-    <View>
+    <View style={styles.imageView} break>
       <Image style={styles.image} src={url} />
     </View>
   );

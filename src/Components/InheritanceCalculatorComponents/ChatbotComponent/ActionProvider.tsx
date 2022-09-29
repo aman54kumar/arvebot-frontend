@@ -23,7 +23,7 @@ import { PDFDownloadLink } from "@react-pdf/renderer";
 // import ReactPDF from '@react-pdf/renderer';
 import FinalDocument from "../Reports/PDF/FinalDocument";
 import { PliktdelsarvCalculation } from "../Reports/PliktdelsarvCalculation";
-// import _ from "lodash";
+import { PDFViewer } from "@react-pdf/renderer";
 
 class ActionProvider {
   createChatBotMessage: (
@@ -1131,6 +1131,7 @@ class ActionProvider {
             }}
           />
         );
+
         const pdfDownloadLink = (
           <div>
             <PDFDownloadLink document={document} fileName="somename.pdf">

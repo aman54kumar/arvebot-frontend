@@ -27,7 +27,7 @@ export const getSummaryValues = (
     };
   }
   for (const gen_inherit of value.genealogy_inheritance) {
-    if (gen_inherit !== splits_initial) {
+    if (gen_inherit.person !== "") {
       const summaryCell = {
         survivorName: gen_inherit.person,
         survivorType: `Slekt i ${value.class_closest}. arvegangsklasse`,

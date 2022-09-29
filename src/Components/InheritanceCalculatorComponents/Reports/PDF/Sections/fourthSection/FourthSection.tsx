@@ -6,8 +6,7 @@ import { NationalInsurance } from "./nationalInsurance/NationalInsurance";
 export const FourthSection = () => {
   return (
     <View style={styles.section}>
-      <Text style={styles.subheading}>Merknader og forbehold</Text>
-      {"\n\n"}
+      <Text style={styles.subheading}>Merknader og forbehold{"\n\n"}</Text>
       <NationalInsurance />
       <GeneralReservations />
     </View>

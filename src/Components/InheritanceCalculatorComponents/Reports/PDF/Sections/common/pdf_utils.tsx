@@ -17,20 +17,16 @@ export const currencyFormatNO = (currencyValue: number): string => {
 
 export const add_legal_references = (
   code_paragraphs: string[],
-  CODE_PARAGRAPHS: any
+  CODE_PARAGRAPHS: any,
+  LAW_LINKS: any
 ) => {
+  const legalReferenceTextArray: any[] = [];
   code_paragraphs.forEach((code_paragraph) => {
-    return (
-      <View>
-        <Text></Text>
-        <Text>
-          <Bold> Arveloven § {code_paragraph}:</Bold>
-          <Italic>{CODE_PARAGRAPHS[code_paragraph]}</Italic>
-        </Text>
-      </View>
+    legalReferenceTextArray.push(
+      add_legal_reference(code_paragraph, CODE_PARAGRAPHS, LAW_LINKS)
     );
   });
-  //   add lovdata link
+  return legalReferenceTextArray;
 };
 
 export const add_legal_reference = (
@@ -40,15 +36,13 @@ export const add_legal_reference = (
 ) => {
   const lovdataLink = addLovdataLink(code_paragraph, LAW_LINKS);
   return (
-    <View>
+    <Text>
       {"\n\n"}
-      <Text>
-        Arveloven § <Bold>{code_paragraph}</Bold>:{" "}
-        <Italic>{CODE_PARAGRAPHS[code_paragraph]}</Italic>
-        {"\n\n"}
-        <Text>{lovdataLink}</Text>
-      </Text>
-    </View>
+      <Bold>Arveloven § {code_paragraph}:</Bold>{" "}
+      <Italic>{CODE_PARAGRAPHS[code_paragraph]}</Italic>
+      {"\n\n"}
+      <Text>{lovdataLink}</Text>
+    </Text>
   );
 };
 
@@ -56,11 +50,9 @@ export const addLovdataLink = (code_paragraph: string, LAW_LINKS: any) => {
   const code_paragraph_code = code_paragraph.replace(/[^\d].*/, "");
   const hyperlinkText = add_hyperlink(LAW_LINKS[code_paragraph_code]);
   return (
-    <View>
-      <Text>
-        For å lese lovteksten i kontekst hos Lovdata, gå til {hyperlinkText}.
-      </Text>
-    </View>
+    <Text>
+      For å lese lovteksten i kontekst hos Lovdata, gå til {hyperlinkText}.
+    </Text>
   );
 };
 

@@ -24,8 +24,6 @@ const getGenealogyText = (
   value: InheritanceCalculation
 ) => {
   if (genealogy_inheritance_sum === 0) {
-    console.log("genealogy_inheritance_sum === 0");
-
     return (
       <Text style={styles.paragraph}>
         Det er ingen slektsarv igjen å fordele.
