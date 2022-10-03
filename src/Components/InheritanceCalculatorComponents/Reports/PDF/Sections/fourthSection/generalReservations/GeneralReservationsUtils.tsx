@@ -1,16 +1,16 @@
 import { Text, View } from "@react-pdf/renderer";
 import { useContext } from "react";
+import InheritanceConstants from "../../../../../ChatbotComponent/Helper/Methods/InheritanceConstants";
 import { UserContext } from "../../../FinalDocument";
 import { styles } from "../../../styles";
 import { addLovdataLink } from "../../common/pdf_utils";
 
 const generalReservationsUtils = () => {
-  const value = useContext(UserContext).inheritanceCalculation;
   return {
     uskifteText: getUskifteText(),
     testamentText: getTestamentText(),
-    avkortingText: getavkortingText(value),
-    barnText: getBarnText(value),
+    avkortingText: getavkortingText(),
+    barnText: getBarnText(),
   };
 };
 
@@ -32,11 +32,11 @@ const getTestamentText = () => (
   </Text>
 );
 
-const getavkortingText = (value: any) => {
+const getavkortingText = () => {
   const code_paragraph = "75 første ledd";
   const lovdata_link = addLovdataLink(
     code_paragraph,
-    value.inheritanceConstants.LAW_LINKS
+    InheritanceConstants.LAW_LINKS
   );
   return (
     <Text style={styles.paragraph}>
@@ -56,7 +56,7 @@ const getavkortingText = (value: any) => {
   );
 };
 
-const getBarnText = (value: any) => {
+const getBarnText = () => {
   const code_paragraph = "7";
   return (
     <Text style={styles.paragraph}>
@@ -64,7 +64,7 @@ const getBarnText = (value: any) => {
       {"\n"}
       <Text>Vær obs på de særskilte bestemmelsene i arveloven § 7.</Text>
       <Text>
-        {addLovdataLink(code_paragraph, value.inheritanceConstants.LAW_LINKS)}
+        {addLovdataLink(code_paragraph, InheritanceConstants.LAW_LINKS)}
       </Text>
     </Text>
   );

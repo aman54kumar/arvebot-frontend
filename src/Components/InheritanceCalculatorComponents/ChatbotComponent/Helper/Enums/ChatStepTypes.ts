@@ -15,16 +15,19 @@ export enum ChatStepTypes {
   grandParentStep = "grandParentStep",
   finalStep = "finalStep",
   secondParentChoice = "secondParentChoice",
+  testatorOtherChildStep = "testatorOtherChildStep",
 }
 
 export enum QuestionType {
+  initialQuestion = "none",
   part1 = "part1",
   part2 = "part2",
   part3 = "part3",
   part4 = "part4",
   part5 = "part5",
   part6 = "part6",
-  initialQuestion = "none",
+  part7 = "part7",
+  part8 = "part8",
 }
 
 export enum undividedOwnershipType {

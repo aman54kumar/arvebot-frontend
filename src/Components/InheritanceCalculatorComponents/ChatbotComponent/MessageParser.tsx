@@ -73,39 +73,13 @@ class MessageParser {
       if (curState.undividedEstate.undivided_flag === QuestionType.part5) {
         return this.actionProvider.handleFulltSaereieResponse(message);
       }
-      if (curState.undividedEstate.undivided_flag === QuestionType.part6) {
-        if (curState.successor_flag === QuestionType.part1) {
-          return this.actionProvider.handleSuccessorInput(message);
-        } else if (curState.successor_flag === QuestionType.part2) {
-          message = message.toLowerCase();
-          if (
-            this.chatbotValidator.validate(message, [
-              ValidationType.incorrectValueForBoolean,
-            ])
-          ) {
-            if (message in BinaryAnswerTypeYes) {
-              this.disableButtons();
-              return this.actionProvider.handleChildAliveOption(true);
-            } else if (message in BinaryAnswerTypeNo) {
-              this.disableButtons();
-              return this.actionProvider.handleChildAliveOption(false);
-            } else {
-              alert("check for error");
-            }
-          }
-        } else if (curState.successor_flag === QuestionType.part3) {
-          if (
-            this.chatbotValidator.validate(message, [
-              ValidationType.emptyValue,
-              ValidationType.onlyDigit,
-            ])
-          ) {
-            return this.actionProvider.handleSuccessorCount(message);
-          } else {
-            // remove last message and update stepid
-            // return this.actionProvider.handleValidation();
-          }
-        }
+      if (
+        curState.undividedEstate.undivided_flag === QuestionType.part6 ||
+        curState.undividedEstate.undivided_flag === QuestionType.part7
+      ) {
+        return handleSuccessor(message, curState, this);
+      }
+      if (curState.undividedEstate.undivided_flag === QuestionType.part8) {
         if (curState.parent_flag === QuestionType.part1) {
           return this.actionProvider.handleParentsInput(message);
         } else if (curState.parent_flag == QuestionType.part2) {
@@ -125,13 +99,29 @@ class MessageParser {
               alert("check for error");
             }
           }
+        } else if (curState.parent_flag === QuestionType.part3) {
+          if (
+            this.chatbotValidator.validate(message, [
+              ValidationType.incorrectValueForBoolean,
+            ])
+          ) {
+            if (message in BinaryAnswerTypeYes) {
+              this.disableButtons();
+              return this.actionProvider.handleSecondParentExists(true);
+            } else if (message in BinaryAnswerTypeNo) {
+              this.disableButtons();
+              return this.actionProvider.handleSecondParentExists(false);
+            } else {
+              alert("check for error");
+            }
+          }
         }
-        return this.actionProvider.handleUndividedEstateSpouse(message);
-      } else {
-        return this.actionProvider.handleNetWealth(message);
       }
     }
 
+    if (curState.stepID === ChatStepTypes.testatorOtherChildStep) {
+      return handleSuccessor(message, curState, this);
+    }
     // netWealthStep
     if (curState.stepID === ChatStepTypes.netWealthStep) {
       return this.actionProvider.handleNetWealth(message);
@@ -296,6 +286,22 @@ class MessageParser {
           } else if (message in BinaryAnswerTypeNo) {
             this.disableButtons();
             return this.actionProvider.handleParentAliveOption(false);
+          } else {
+            alert("check for error");
+          }
+        }
+      } else if (curState.parent_flag === QuestionType.part3) {
+        if (
+          this.chatbotValidator.validate(message, [
+            ValidationType.incorrectValueForBoolean,
+          ])
+        ) {
+          if (message in BinaryAnswerTypeYes) {
+            this.disableButtons();
+            return this.actionProvider.handleSecondParentExists(true);
+          } else if (message in BinaryAnswerTypeNo) {
+            this.disableButtons();
+            return this.actionProvider.handleSecondParentExists(false);
           } else {
             alert("check for error");
           }
@@ -467,7 +473,45 @@ class MessageParser {
     return null;
   };
 }
-
+const handleSuccessor = (
+  message: string,
+  curState: ChatbotInterface,
+  messageParser: MessageParser
+) => {
+  if (curState.successor_flag === QuestionType.part1) {
+    return messageParser.actionProvider.handleSuccessorInput(message);
+  } else if (curState.successor_flag === QuestionType.part2) {
+    message = message.toLowerCase();
+    if (
+      messageParser.chatbotValidator.validate(message, [
+        ValidationType.incorrectValueForBoolean,
+      ])
+    ) {
+      if (message in BinaryAnswerTypeYes) {
+        messageParser.disableButtons();
+        return messageParser.actionProvider.handleChildAliveOption(true);
+      } else if (message in BinaryAnswerTypeNo) {
+        messageParser.disableButtons();
+        return messageParser.actionProvider.handleChildAliveOption(false);
+      } else {
+        alert("check for error");
+      }
+    }
+  } else if (curState.successor_flag === QuestionType.part3) {
+    if (
+      messageParser.chatbotValidator.validate(message, [
+        ValidationType.emptyValue,
+        ValidationType.onlyDigit,
+      ])
+    ) {
+      return messageParser.actionProvider.handleSuccessorCount(message);
+    } else {
+      // remove last message and update stepid
+      // return this.actionProvider.handleValidation();
+    }
+  }
+  return messageParser.actionProvider.handleUndividedEstateSpouse(message);
+};
 export default MessageParser;
 // function dispatch(arg0: { type: string; payload: any; }) {
 //   throw new Error("Function not implemented.");

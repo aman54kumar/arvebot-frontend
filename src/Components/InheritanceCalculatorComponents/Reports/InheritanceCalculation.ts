@@ -36,7 +36,6 @@ export const splits_initial = {
 };
 export class InheritanceCalculation {
   state: ChatbotInterface;
-  inheritanceConstants: InheritanceConstants;
   actionProvider: ActionProvider;
   person: NodeEntity;
   survivor: number | null = null;
@@ -59,11 +58,9 @@ export class InheritanceCalculation {
     person: NodeEntity,
     actionProvider: ActionProvider,
     state: ChatbotInterface,
-    inheritanceConstants: InheritanceConstants,
     will = undefined
   ) {
     this.state = state;
-    this.inheritanceConstants = inheritanceConstants;
     this.actionProvider = actionProvider;
     this.person = actionProvider.getNode(person._id, this.state.nodeMap);
     this.will = will;
@@ -108,9 +105,9 @@ export class InheritanceCalculation {
           })
         );
         this.minimum_surviving_inheritance =
-          this.inheritanceConstants.MINIMUM_INHERITANCE_SPOUSE_VS_CHILDREN;
+          InheritanceConstants.MINIMUM_INHERITANCE_SPOUSE_VS_CHILDREN;
         this.surviving_fraction =
-          this.inheritanceConstants.FRACTION_INHERITANCE_SPOUSE_VS_CHILDREN;
+          InheritanceConstants.FRACTION_INHERITANCE_SPOUSE_VS_CHILDREN;
         this.descriptive_text = intl.formatMessage({
           id: "REPORT.Inheritance.DescriptiveText4G",
         });
@@ -124,9 +121,9 @@ export class InheritanceCalculation {
           })
         );
         this.minimum_surviving_inheritance =
-          this.inheritanceConstants.MINIMUM_INHERITANCE_SPOUSE_VS_PARENTS;
+          InheritanceConstants.MINIMUM_INHERITANCE_SPOUSE_VS_PARENTS;
         this.surviving_fraction =
-          this.inheritanceConstants.FRACTION_INHERITANCE_SPOUSE_VS_PARENTS;
+          InheritanceConstants.FRACTION_INHERITANCE_SPOUSE_VS_PARENTS;
         this.descriptive_text = intl.formatMessage({
           id: "REPORT.Inheritance.DescriptiveText6G",
         });
@@ -161,9 +158,9 @@ export class InheritanceCalculation {
           })
         );
         this.minimum_surviving_inheritance =
-          this.inheritanceConstants.MINIMUM_INHERITANCE_COHABITANT_VS_CHILDREN;
+          InheritanceConstants.MINIMUM_INHERITANCE_COHABITANT_VS_CHILDREN;
         this.surviving_fraction =
-          this.inheritanceConstants.FRACTION_INHERITANCE_COHABITANT_VS_CHILDREN;
+          InheritanceConstants.FRACTION_INHERITANCE_COHABITANT_VS_CHILDREN;
         this.descriptive_text = intl.formatMessage({
           id: "REPORT.Inheritance.DescriptiveText_firstClass_cohab_4G",
         });
@@ -177,9 +174,9 @@ export class InheritanceCalculation {
           })
         );
         this.minimum_surviving_inheritance =
-          this.inheritanceConstants.MINIMUM_INHERITANCE_COHABITANT_VS_PARENTS;
+          InheritanceConstants.MINIMUM_INHERITANCE_COHABITANT_VS_PARENTS;
         this.surviving_fraction =
-          this.inheritanceConstants.FRACTION_INHERITANCE_COHABITANT_VS_PARENTS;
+          InheritanceConstants.FRACTION_INHERITANCE_COHABITANT_VS_PARENTS;
         this.descriptive_text = intl.formatMessage({
           id: "REPORT.Inheritance.DescriptiveText_secondClass_cohab_4G",
         });
@@ -193,7 +190,7 @@ export class InheritanceCalculation {
               id: "REPORT.Inheritance.old_surviving_reference_paragraphs_12forste",
             })
           );
-          this.minimum_surviving_inheritance = 4 * this.inheritanceConstants.G;
+          this.minimum_surviving_inheritance = 4 * InheritanceConstants.G;
           this.surviving_fraction = 0;
           this.descriptive_text = intl.formatMessage({
             id: "REPORT.Inheritance.DescriptiveText_thirdClass_cohab_4G",

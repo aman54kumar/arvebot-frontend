@@ -1,13 +1,13 @@
 import { ReactElement, useRef, useState } from "react";
 import Popover from "@mui/material/Popover";
 import "./ShowInfoWidget.scss";
-import LiveHelpIcon from '@mui/icons-material/LiveHelp';
-import makeStyles from '@mui/styles/makeStyles';
+import LiveHelpIcon from "@mui/icons-material/LiveHelp";
+import makeStyles from "@mui/styles/makeStyles";
 import { FormattedMessage } from "react-intl";
 import { useTheme } from "@mui/material/styles";
 // import { Typography } from "@mui/material";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((_) => ({
   popover: {
     pointerEvents: "none",
   },

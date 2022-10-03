@@ -1,4 +1,5 @@
 import { Text, View } from "@react-pdf/renderer";
+import InheritanceConstants from "../../../../../ChatbotComponent/Helper/Methods/InheritanceConstants";
 import { InheritanceCalculation } from "../../../../InheritanceCalculation";
 import { styles } from "../../../styles";
 import {
@@ -38,15 +39,15 @@ const getGenealogyText = (
     let code_paragraph = "6 første ledd, andre punktum";
     const legalReference1 = add_legal_reference(
       code_paragraph,
-      value.inheritanceConstants.CODE_PARAGRAPHS,
-      value.inheritanceConstants.LAW_LINKS
+      InheritanceConstants.CODE_PARAGRAPHS,
+      InheritanceConstants.LAW_LINKS
     );
 
     code_paragraph = "76 første ledd, første punktum";
     const legalReference2 = add_legal_reference(
       code_paragraph,
-      value.inheritanceConstants.CODE_PARAGRAPHS,
-      value.inheritanceConstants.LAW_LINKS
+      InheritanceConstants.CODE_PARAGRAPHS,
+      InheritanceConstants.LAW_LINKS
     );
     return (
       <View>
@@ -76,8 +77,8 @@ const getGenealogyText = (
           {value.class_closest}
           {getParagraph(
             value.class_closest,
-            value.inheritanceConstants.CODE_PARAGRAPHS,
-            value.inheritanceConstants.LAW_LINKS
+            InheritanceConstants.CODE_PARAGRAPHS,
+            InheritanceConstants.LAW_LINKS
           )}
         </Text>
         <Text style={styles.paragraph}>

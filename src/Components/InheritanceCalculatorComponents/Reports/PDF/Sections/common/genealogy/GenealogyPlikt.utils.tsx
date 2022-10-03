@@ -1,4 +1,5 @@
 import { Text, View } from "@react-pdf/renderer";
+import InheritanceConstants from "../../../../../ChatbotComponent/Helper/Methods/InheritanceConstants";
 import { PliktdelsarvCalculation } from "../../../../PliktdelsarvCalculation";
 import { styles } from "../../../styles";
 import {
@@ -28,8 +29,8 @@ const getGenealogyText = (
   const code_paragraph = "50 første ledd";
   const legal_reference_text = add_legal_reference(
     code_paragraph,
-    value.inheritanceConstants.CODE_PARAGRAPHS,
-    value.inheritanceConstants.LAW_LINKS
+    InheritanceConstants.CODE_PARAGRAPHS,
+    InheritanceConstants.LAW_LINKS
   );
   const genealogyInheritanceText = genealogy_inheritance_text(value);
   if (value.genealogy_inheritance_sum === 0) {

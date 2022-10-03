@@ -4,6 +4,7 @@ export class NodeEntity {
   _id: number;
   _level: number;
   _path: Array<[number, number]>;
+  _partnerPath: Array<[number, number]>;
   _parents: Array<number>;
   _children: Array<number>;
   _spouse: number | null;
@@ -12,10 +13,12 @@ export class NodeEntity {
   _relationshipMap: Map<string, string>;
   _childCount: number;
   _processChildNodePos: number;
+  _partnerNode: number | null;
   constructor(id: number, level: number) {
     this._id = id;
     this._level = level;
     this._path = [];
+    this._partnerPath = [];
     this._parents = [];
     this._children = [];
     this._spouse = null;
@@ -24,6 +27,7 @@ export class NodeEntity {
     this._relationshipMap = this._getRelationshipMap();
     this._childCount = 0;
     this._processChildNodePos = 0;
+    this._partnerNode = null;
   }
   _getRelationshipMap = (): Map<string, string> => {
     return new Map<string, string>([
@@ -40,9 +44,11 @@ export class NodeEntity {
     ]);
     return new Map<string, string>();
   };
+
   setPath(prevPath: Array<[number, number]>) {
     this._path = prevPath;
   }
+
   getParentId(nodeMap: Map<number, NodeEntity>) {
     if (this._path.length - 2 < 0) {
       return null;
@@ -58,6 +64,7 @@ export class NodeEntity {
       return this._path[this._path.length - 2][1];
     return null;
   }
+
   getGenerationCount() {
     let parentCount = 0;
     if (this._path.length - 2 < 0) {
@@ -74,15 +81,25 @@ export class NodeEntity {
     return parentCount;
   }
 
-  add_child = (child: NodeEntity, add_for_both = true): void => {
+  add_child = (
+    child: NodeEntity,
+    add_for_both = true,
+    isPartner = false
+  ): void => {
     const children_array = this._children;
     const child_id = child._id;
     if (!children_array.find((obj) => obj === child_id)) {
       this._children.push(child_id);
     }
-    child._path = [...this._path];
-    child._path.push([ParentChildSelector.child, child_id]);
-    child._level = this.getLevel(child._path);
+    if (!isPartner) {
+      child._path = [...this._path];
+      child._path.push([ParentChildSelector.child, child_id]);
+      child._level = this.getLevel(child._path);
+    } else {
+      child._partnerPath = [...this._path];
+      child._partnerPath.push([ParentChildSelector.child, child_id]);
+      // child._level = this.getLevel(child._path);
+    }
     if (add_for_both) {
       if (!child._parents.find((obj) => obj === this._id)) {
         child._parents.push(this._id);
@@ -90,6 +107,7 @@ export class NodeEntity {
     }
   };
   /* eslint-disable @typescript-eslint/no-unused-vars */
+
   add_parent = (
     parent: NodeEntity,
     add_for_both = true,
@@ -151,6 +169,7 @@ export class NodeEntity {
     partner._path = [...this._path];
     partner._path.push([partnerSelector, partner._id]);
   };
+
   getChildUnprocessedNode() {
     if (this._processChildNodePos < this._children.length) {
       return this._children[this._processChildNodePos++];

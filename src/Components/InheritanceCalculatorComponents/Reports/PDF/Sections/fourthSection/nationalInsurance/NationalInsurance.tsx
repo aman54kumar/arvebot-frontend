@@ -1,5 +1,6 @@
 import { Text, View } from "@react-pdf/renderer";
 import { useContext } from "react";
+import InheritanceConstants from "../../../../../ChatbotComponent/Helper/Methods/InheritanceConstants";
 import { UserContext } from "../../../FinalDocument";
 import { styles } from "../../../styles";
 import { currencyFormatNO } from "../../common/pdf_utils";
@@ -16,7 +17,7 @@ export const NationalInsurance = () => {
 };
 
 const getNationalInsuranceString = () => {
-  const value = useContext(UserContext).inheritanceCalculation;
+  // const value = useContext(UserContext).inheritanceCalculation;
   return (
     <Text>
       <Text>
@@ -24,7 +25,7 @@ const getNationalInsuranceString = () => {
         grunnbeløp i folketrygden. I beregningene er det forutsatt at
         grunnbeløpet i folketrygden er på{" "}
       </Text>
-      <Bold>{currencyFormatNO(value.inheritanceConstants.G)}</Bold>.
+      <Bold>{currencyFormatNO(InheritanceConstants.G)}</Bold>.
     </Text>
   );
 };

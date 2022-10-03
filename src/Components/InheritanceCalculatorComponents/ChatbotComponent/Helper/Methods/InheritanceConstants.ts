@@ -1,30 +1,30 @@
 export default class InheritanceConstants {
-  DESC_COHABITANT_WITHOUT_COMMON_CHILD =
+  static DESC_COHABITANT_WITHOUT_COMMON_CHILD =
     "Arvelater har ikke felles barn med samboer og vedkommende har ikke krav på arv (MED MINDRE DE VENTER FELLES BARN!).";
-  DESC_NO_SPOUSE_OR_COHABITANT =
+  static DESC_NO_SPOUSE_OR_COHABITANT =
     "Arvelater etterlater hverken ektefelle eller samboer.";
-  DESC_COHABITANT_NO_CLOSE_RELATIVES_2 =
+  static DESC_COHABITANT_NO_CLOSE_RELATIVES_2 =
     "Arvelaters nærmeste gjenlevende slektning er i tredje arvegangsklasse, men etterkommer av barnebarn av arvelaters besteforeldre. Hele arven går da til gjenlevende samboer med felles barn.";
-  DESC_COHABITANT_NO_CLOSE_RELATIVES =
+  static DESC_COHABITANT_NO_CLOSE_RELATIVES =
     "Arvelater har ingen gjenlevende slektninger i de tre første arvegangsklassene. Hele arven går da til gjenlevende samboer med felles barn.";
-  DESC_SPOUSE_NO_CLOSE_RELATIVES_2 =
+  static DESC_SPOUSE_NO_CLOSE_RELATIVES_2 =
     "Arvelaters nærmeste gjenlevende slektning er i andre arvegangsklasse, men etterkommer av barnebarn av arvelaters besteforeldre. Hele arven går da til gjenlevende ektefellep.";
-  DESC_SPOUSE_NO_CLOSE_RELATIVES =
+  static DESC_SPOUSE_NO_CLOSE_RELATIVES =
     "Arvelater har ingen gjenlevende slektninger i de to første arvegangsklassene. Hele arven går da til gjenlevende ektefelle.";
 
-  G = 101351;
-  MINIMUM_INHERITANCE_SPOUSE_VS_CHILDREN = 4 * this.G;
-  FRACTION_INHERITANCE_SPOUSE_VS_CHILDREN = 1 / 4;
-  MINIMUM_INHERITANCE_SPOUSE_VS_PARENTS = 6 * this.G;
-  FRACTION_INHERITANCE_SPOUSE_VS_PARENTS = 1 / 2;
-  MINIMUM_INHERITANCE_COHABITANT_VS_CHILDREN = 4 * this.G;
-  FRACTION_INHERITANCE_COHABITANT_VS_CHILDREN = 0;
-  MINIMUM_INHERITANCE_COHABITANT_VS_PARENTS = 4 * this.G;
-  FRACTION_INHERITANCE_COHABITANT_VS_PARENTS = 0;
-  FRACTION_PLIKTDEL = 2 / 3;
-  LINE_MAXIMUM_PLIKTDEL = 15 * this.G;
+  static G = 101351;
+  static MINIMUM_INHERITANCE_SPOUSE_VS_CHILDREN = 4 * this.G;
+  static FRACTION_INHERITANCE_SPOUSE_VS_CHILDREN = 1 / 4;
+  static MINIMUM_INHERITANCE_SPOUSE_VS_PARENTS = 6 * this.G;
+  static FRACTION_INHERITANCE_SPOUSE_VS_PARENTS = 1 / 2;
+  static MINIMUM_INHERITANCE_COHABITANT_VS_CHILDREN = 4 * this.G;
+  static FRACTION_INHERITANCE_COHABITANT_VS_CHILDREN = 0;
+  static MINIMUM_INHERITANCE_COHABITANT_VS_PARENTS = 4 * this.G;
+  static FRACTION_INHERITANCE_COHABITANT_VS_PARENTS = 0;
+  static FRACTION_PLIKTDEL = 2 / 3;
+  static LINE_MAXIMUM_PLIKTDEL = 15 * this.G;
 
-  LAW_LINKS = {
+  static LAW_LINKS = {
     "4": [
       "https://lovdata.no/dokument/NL/lov/2019-06-14-21/KAPITTEL_2-1#%C2%A74",
       "https://lovdata.no/NL/lov/2019-06-14-21/§4",
@@ -71,7 +71,7 @@ export default class InheritanceConstants {
     ],
   };
 
-  CODE_PARAGRAPHS = {
+  static CODE_PARAGRAPHS = {
     "4 første og annet ledd":
       "De nærmeste slektsarvingene er arvelaterens livsarvinger.\n\nArven deles likt mellom arvelaterens barn, om ikke noe annet følger av særskilte lovregler. Hvis et barn er død, går dette barnets del av arven til barnets livsarvinger med lik andel på hver gren. På samme måte arver fjernere livsarvinger. Hvis et barn er død og ikke etterlater seg livsarvinger, går dette barnets del av arven til de andre barna eller deres livsarvinger med lik andel på hver gren.",
     "5 første, andre og tredje ledd":

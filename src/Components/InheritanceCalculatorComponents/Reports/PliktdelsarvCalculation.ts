@@ -35,7 +35,6 @@ export const splits_initial = {
 };
 export class PliktdelsarvCalculation {
   state: ChatbotInterface;
-  inheritanceConstants: InheritanceConstants;
   actionProvider: ActionProvider;
   person: NodeEntity;
   survivor: number | null = null;
@@ -58,13 +57,11 @@ export class PliktdelsarvCalculation {
     person: NodeEntity,
     actionProvider: ActionProvider,
     state: ChatbotInterface,
-    inheritanceConstants: InheritanceConstants,
     will = undefined
   ) {
     this.state = state;
     this.actionProvider = actionProvider;
     this.person = actionProvider.getNode(person._id, this.state.nodeMap);
-    this.inheritanceConstants = inheritanceConstants;
     this.will = will;
     this.reportUtils = new ReportUtils(actionProvider, state);
   }
@@ -90,13 +87,13 @@ export class PliktdelsarvCalculation {
       );
       if (this.class_closest === 1) {
         this.minimum_surviving_inheritance =
-          this.inheritanceConstants.MINIMUM_INHERITANCE_SPOUSE_VS_CHILDREN;
+          InheritanceConstants.MINIMUM_INHERITANCE_SPOUSE_VS_CHILDREN;
         this.descriptive_text = intl.formatMessage({
           id: "REPORT.Inheritance.DescriptiveTest_firstClass_spouse_4G",
         });
       } else {
         this.minimum_surviving_inheritance =
-          this.inheritanceConstants.MINIMUM_INHERITANCE_SPOUSE_VS_CHILDREN;
+          InheritanceConstants.MINIMUM_INHERITANCE_SPOUSE_VS_CHILDREN;
         this.descriptive_text = intl.formatMessage({
           id: "REPORT.Inheritance.DescriptiveTest_firstClass_spouse_6G",
         });
@@ -104,8 +101,7 @@ export class PliktdelsarvCalculation {
     } else {
       this.survivor = null;
       this.surviving_reference_paragraphs = [];
-      this.descriptive_text =
-        this.inheritanceConstants.DESC_NO_SPOUSE_OR_COHABITANT;
+      this.descriptive_text = InheritanceConstants.DESC_NO_SPOUSE_OR_COHABITANT;
       this.minimum_surviving_inheritance = 0;
     }
   };
@@ -118,8 +114,8 @@ export class PliktdelsarvCalculation {
 
     this.genealogy_inheritance_sum = Math.min(
       this.state.netWealth - this.survivor_inheritance_sum,
-      this.state.netWealth * this.inheritanceConstants.FRACTION_PLIKTDEL,
-      this.inheritanceConstants.LINE_MAXIMUM_PLIKTDEL *
+      this.state.netWealth * InheritanceConstants.FRACTION_PLIKTDEL,
+      InheritanceConstants.LINE_MAXIMUM_PLIKTDEL *
         this.state.testator._children.length
     );
     if (this.genealogy_inheritance_sum !== 0) {
