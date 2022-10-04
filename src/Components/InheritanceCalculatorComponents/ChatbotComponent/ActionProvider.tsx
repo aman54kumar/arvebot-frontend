@@ -33,6 +33,16 @@ import {
 } from "./ActionProviderMethods/HandleUndividedEstate";
 import QuestionConstants from "./Helper/Methods/QuestionConstants";
 import InheritanceConstants from "./Helper/Methods/InheritanceConstants";
+import {
+  handleNetWealth,
+  handleTestator,
+  handleUnderAge,
+} from "./ActionProviderMethods/HandleTestatorInformation";
+import {
+  handleCohabitantChoice,
+  handleSpouseOption,
+  handleSpouseInput,
+} from "./ActionProviderMethods/HandlePartner";
 
 class ActionProvider {
   createChatBotMessage: (
@@ -101,26 +111,9 @@ class ActionProvider {
   // }
 
   handleTestator = (testatorResponse: string): void => {
-    /**
-     *  * function for handling personID replies.
-     *  * stepID is updated to 2 and then proceed to wealth question.
-     *  * open reply, no conditions for now.
-     */
-
-    const undividedEstateQuestion = this.createChatBotMessage(
-      QuestionConstants.UndividedEstateQuestion,
-      QuestionConstants.YesNoWidgetOptions
-    );
-    this.setState((state: ChatbotInterface) => ({
-      ...state,
-      stepID: ChatStepTypes.testatorStep,
-      testator: this.createTestator(testatorResponse, state),
-    }));
-    this.setState((state: ChatbotInterface) => ({
-      ...state,
-    }));
-
-    this.addMessageToBotState(undividedEstateQuestion);
+    this.setState((state: ChatbotInterface) => {
+      return handleTestator(testatorResponse, state, this);
+    });
   };
 
   handleUndividedEstateChoice = (
@@ -177,116 +170,19 @@ class ActionProvider {
      *  * conditions for reply in currencyDisplayValue function.
      */
     this.setState((state: ChatbotInterface) => {
-      const netWealthQuestion = this.createChatBotMessage(
-        QuestionConstants.NetWealthQuestion
-      );
-      const currencyIntResponse = CurrencyOutput(currencyResponse);
-      const currencyStringResponse = ParseCurrencyStringForOutput(
-        currencyIntResponse[1]
-      );
-      const currencyJSX = <InfoMessagesWidget label={currencyStringResponse} />;
-      if (currencyIntResponse[0] === 5) {
-        const underAgeQuestion = this.createChatBotMessage(
-          QuestionConstants.UnderAgeQuestion,
-          QuestionConstants.YesNoWidgetOptions
-        );
-        const currencyCustom = this.createClientMessage(currencyJSX);
-        this.addMessageToBotState(currencyCustom);
-
-        state = {
-          ...state,
-          stepID: ChatStepTypes.underAgeStep,
-          netWealth: parseInt(currencyIntResponse[1]),
-        };
-        if (state.netWealth <= 0) {
-          this.askFinalQuestion();
-        }
-        this.addMessageToBotState(underAgeQuestion);
-      } else {
-        const netWealthWarning = this.createChatBotMessage(
-          QuestionConstants.NetWealthWarning
-        );
-
-        this.addMessageToBotState(netWealthWarning);
-        this.addMessageToBotState(netWealthQuestion);
-      }
-
-      return this.returnState(state);
+      return handleNetWealth(currencyResponse, state, this);
     });
   }
 
   handleUnderAge = (selectedOption: boolean): void => {
     this.setState((state: ChatbotInterface) => {
-      state.person = state.testator;
-      state.temp_person = state.testator;
-      this.getPerson(state.person._id, state.personsMap)._underAge =
-        selectedOption;
-      if (selectedOption) {
-        const cohabitantChoiceQuestion = this.createChatBotMessage(
-          QuestionConstants.CohabitantChoiceQuestion,
-          QuestionConstants.YesNoWidgetOptions
-        );
-        state = {
-          ...state,
-          stepID: ChatStepTypes.cohabitantChoice,
-        };
-        this.addMessageToBotState(cohabitantChoiceQuestion);
-
-        return this.returnState(state);
-      }
-
-      const spouseChoiceQuestion = this.createChatBotMessage(
-        QuestionConstants.SpouseChoiceQuestion,
-        QuestionConstants.YesNoWidgetOptions
-      );
-      state = {
-        ...state,
-        stepID: ChatStepTypes.spouseChoice,
-      };
-      this.addMessageToBotState(spouseChoiceQuestion);
-
-      return this.returnState(state);
+      return handleUnderAge(selectedOption, state, this);
     });
   };
 
   handleSpouseChoice = (spouseChoice: boolean): void => {
     this.setState((state: ChatbotInterface) => {
-      // Spouse present
-      if (spouseChoice) {
-        state.stepID = ChatStepTypes.spouseStep;
-
-        const spouseQuestion = this.createChatBotMessage(
-          QuestionConstants.SpouseQuestion
-        );
-        this.addMessageToBotState(spouseQuestion);
-      }
-      // No spouse
-      else {
-        const testator = Person.getPerson(state.person._id, state.personsMap);
-        // is Adult, then ask for cohabitant
-        if (!testator._underAge && testator.spouse === undefined) {
-          state = {
-            ...state,
-            stepID: ChatStepTypes.cohabitantChoice,
-          };
-          const cohabitantChoiceQuestion = this.createChatBotMessage(
-            QuestionConstants.CohabitantChoiceQuestion,
-            QuestionConstants.YesNoWidgetOptions
-          );
-          this.addMessageToBotState(cohabitantChoiceQuestion);
-        } else {
-          state = {
-            ...state,
-            stepID: ChatStepTypes.successorStep,
-            successor_flag: QuestionType.part3,
-          };
-          const newSuccessorQuestion = this.createChatBotMessage(
-            QuestionConstants.addSuccessorCount(testator._personName)
-          );
-          this.addMessageToBotState(newSuccessorQuestion);
-        }
-      }
-      return this.returnState(state);
+      return handleSpouseOption(spouseChoice, state, this);
     });
   };
 
@@ -298,63 +194,13 @@ class ActionProvider {
      */
     const spouseID = spouseResponse;
     this.setState((state: ChatbotInterface) => {
-      const testator = Person.getPerson(state.person._id, state.personsMap);
-      const newSpouse = this.createNewPerson(spouseID, state);
-      state.person._spouse = newSpouse._id;
-      state.person.setPathforPartner(ParentChildSelector.spouse, newSpouse);
-      if (
-        state.netWealth <=
-        InheritanceConstants.MINIMUM_INHERITANCE_SPOUSE_VS_CHILDREN
-      ) {
-        state = {
-          ...state,
-          stepID: ChatStepTypes.rearChildrenStep,
-        };
-        this.askFinalQuestion();
-        return this.returnState(state);
-      }
-
-      state = {
-        ...state,
-        stepID: ChatStepTypes.successorStep,
-        successor_flag: QuestionType.part3,
-      };
-      state.testator._partnerNode = newSpouse._id;
-      const newSuccessorQuestion = this.createChatBotMessage(
-        QuestionConstants.addSuccessorCount(testator._personName)
-      );
-      this.addMessageToBotState(newSuccessorQuestion);
-      return this.returnState(state);
+      return handleSpouseInput(spouseID, state, this);
     });
   };
 
   handleCohabitantChoice = (cohabitantChoiceResponse: boolean): void => {
     this.setState((state: ChatbotInterface) => {
-      // if cohabitant choice is yes
-      if (cohabitantChoiceResponse) {
-        state = {
-          ...state,
-          stepID: ChatStepTypes.cohabitantStep,
-        };
-        const cohabitantQuestion = this.createChatBotMessage(
-          QuestionConstants.CohabitantQuestion
-        );
-        this.addMessageToBotState(cohabitantQuestion);
-      }
-      // if cohabitant choice is no
-      else {
-        state = {
-          ...state,
-          stepID: ChatStepTypes.successorStep,
-          successor_flag: QuestionType.part3,
-        };
-        const testator = Person.getPerson(state.person._id, state.personsMap);
-        const newSuccessorQuestion = this.createChatBotMessage(
-          QuestionConstants.addSuccessorCount(testator._personName)
-        );
-        this.addMessageToBotState(newSuccessorQuestion);
-      }
-      return this.returnState(state);
+      return handleCohabitantChoice(cohabitantChoiceResponse, state, this);
     });
   };
 
@@ -853,25 +699,25 @@ class ActionProvider {
       return this.returnState(state);
     });
   };
-  handleClosingStep = (state: ChatbotInterface, isTwoParent = true) => {
+  handleClosingStep = (state: ChatbotInterface, isSecondParent = true) => {
     switch (state.stepID) {
       case ChatStepTypes.successorStep:
         this.closestSurvivingRelativeChildren();
         break;
       case ChatStepTypes.parentsStep:
         state.temp_person = state.person;
-        this.closestSurvivingRelativeParents(isTwoParent);
+        this.closestSurvivingRelativeParents(isSecondParent);
         break;
       case ChatStepTypes.undividedEstateStep:
         state.temp_person = state.person;
-        handleUndividedStep(state, this, isTwoParent);
+        handleUndividedStep(state, this, isSecondParent);
         break;
       case ChatStepTypes.grandParentStep:
         state.temp_person = this.getNode(
           state.deceasedParentsArray[0],
           state.nodeMap
         );
-        this.closestSurvivingRelativeGrandParents(isTwoParent);
+        this.closestSurvivingRelativeGrandParents(true);
         break;
 
       case ChatStepTypes.testatorOtherChildStep:
@@ -990,9 +836,9 @@ class ActionProvider {
     });
   };
 
-  closestSurvivingRelativeParents = (isTwoParent = true) => {
+  closestSurvivingRelativeParents = (isSecondParent = true) => {
     this.setState((state: ChatbotInterface) => {
-      if (isTwoParent && state.temp_person._parents.length < 2) {
+      if (isSecondParent && state.temp_person._parents.length < 2) {
         // TODO
         state.successor_flag = QuestionType.initialQuestion;
         state.parent_flag = QuestionType.part3;
@@ -1078,16 +924,19 @@ class ActionProvider {
     });
   };
 
-  closestSurvivingRelativeGrandParents = (isTwoParent = true) => {
+  closestSurvivingRelativeGrandParents = (isSecondParent = true) => {
     this.setState((state: ChatbotInterface) => {
-      if (isTwoParent && state.temp_person._parents.length < 2) {
+      if (isSecondParent && state.temp_person._parents.length < 2) {
         // TODO
         state.successor_flag = QuestionType.initialQuestion;
         state.parent_flag = QuestionType.part3;
-
+        const grandparentName = this.getPerson(
+          state.temp_person._id,
+          state.personsMap
+        );
         const secondParentChoiceQuestion = this.createChatBotMessage(
           QuestionConstants.askSecondParentChoiceQuestion(
-            `${state.temp_person._id}`
+            `${grandparentName._personName}`
           ),
           QuestionConstants.YesNoWidgetOptions
         );
@@ -1097,8 +946,8 @@ class ActionProvider {
       state.deceasedParentsArray = state.deceasedParentsArray.filter(
         (item) => item !== state.deceasedParentsArray[0]
       );
-      this.askForNextGrandParent;
-      return state;
+      this.askForNextGrandParent();
+      return this.returnState(state);
     });
   };
 

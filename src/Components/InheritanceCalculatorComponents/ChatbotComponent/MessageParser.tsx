@@ -363,8 +363,7 @@ class MessageParser {
           // remove last message and update stepid
           // return this.actionProvider.handleValidation();
         }
-      }
-      if (curState.parent_flag === QuestionType.part1) {
+      } else if (curState.parent_flag === QuestionType.part1) {
         return this.actionProvider.handleParentsInput(message);
       } else if (curState.parent_flag == QuestionType.part2) {
         message = message.toLowerCase();
@@ -379,6 +378,22 @@ class MessageParser {
           } else if (message in BinaryAnswerTypeNo) {
             this.disableButtons();
             return this.actionProvider.handleParentAliveOption(false);
+          } else {
+            alert("check for error");
+          }
+        }
+      } else if (curState.parent_flag === QuestionType.part3) {
+        if (
+          this.chatbotValidator.validate(message, [
+            ValidationType.incorrectValueForBoolean,
+          ])
+        ) {
+          if (message in BinaryAnswerTypeYes) {
+            this.disableButtons();
+            return this.actionProvider.handleSecondParentExists(true);
+          } else if (message in BinaryAnswerTypeNo) {
+            this.disableButtons();
+            return this.actionProvider.handleSecondParentExists(false);
           } else {
             alert("check for error");
           }
