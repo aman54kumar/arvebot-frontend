@@ -8,6 +8,7 @@ export const styles = StyleSheet.create({
     flexDirection: "column",
     paddingLeft: 20,
     paddingRight: 20,
+    paddingBottom: 30,
   },
   section: {
     margin: 10,

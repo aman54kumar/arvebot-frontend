@@ -1,10 +1,9 @@
-import { Popper } from "@mui/material";
 import { Handle, Position } from "react-flow-renderer";
-import { Textfit } from 'react-textfit';
+import { Textfit } from "react-textfit";
 
 enum HandleType {
   source = "source",
-  target = "target"
+  target = "target",
 }
 
 const customHandleData = [
@@ -12,43 +11,67 @@ const customHandleData = [
     type: "source",
     position: Position.Right,
     id: "s_right",
-    style: { top: "50%", background: '#555' },
+    style: { top: "50%", background: "#555" },
   },
   {
     type: "source",
     position: Position.Bottom,
     id: "s_bottom",
-    style: { left: "50%", background: '#555' },
+    style: { left: "50%", background: "#555" },
   },
   {
     type: "target",
     position: Position.Left,
     id: "t_left",
-    style: { top: "50%", background: '#555' },
+    style: { top: "50%", background: "#555" },
   },
   {
     type: "target",
     position: Position.Top,
     id: "t_top",
-    style: { left: "50%", background: '#555' },
+    style: { left: "50%", background: "#555" },
   },
 ];
 
-const partnerNodeStyles = {
-  background: "#fff",
-  color: "#000",
-  padding: "5px",
-  width: "7rem",
-  height: "1.8rem",
-  borderRadius: "3px",
-  borderColor: "midnightblue",
-  borderStyle: "solid",
-  borderWidth: "1px",
-  letterSpacing: "0.5px",
-  lineHeight: 1.5,
-  display: "flex"
-}
+const condition = false;
+const inheritanceDisplay = condition ? "block" : "none";
 
+const partnerNodeStyles = {
+  OuterDiv: {
+    background: "#fff",
+    color: "#000",
+    width: "7rem",
+    // height: "1.8rem",
+    borderRadius: "3px",
+    borderColor: "midnightblue",
+    borderStyle: "solid",
+    borderWidth: "1px",
+    letterSpacing: "0.5px",
+  },
+  innerDiv1: {
+    width: "6.8rem",
+    display: "contents",
+    height: `${condition ? "100%" : "2 / 3"}%`,
+    padding: "5%",
+  },
+  innerDiv2: {
+    display: inheritanceDisplay,
+    borderTop: "black solid 1px",
+    padding: "0 2px",
+    letterSpacing: 0,
+  },
+  textFitStyle: {
+    margin: "auto",
+    textAlign: "center",
+    fontSize: "90%",
+    paddingBottom: "0.2rem",
+  },
+  subtitle: {
+    fontSize: "0.5rem",
+    margin: 0,
+    whiteSpace: "nowrap" as const,
+  },
+};
 
 const CustomNode = (totalData: any) => {
   const data = totalData.data;
@@ -66,31 +89,44 @@ const CustomNode = (totalData: any) => {
           style={v.style}
           isConnectable={isConnectable}
         />
-      )
+      );
     }
   });
-  const labelString = deceasedFormatter(data.label)
+  const labelString = deceasedFormatter(data.label);
   return (
     <div>
-      <div id={`detail_${totalData.id}`} style={partnerNodeStyles}>
-        <div style={{ width: "6.8rem", display: "contents" }}><Textfit style={{ margin: "auto", width: "6.8rem", textAlign: "center" }} max={20} mode="single" forceSingleModeWidth={false}>{labelString}</Textfit></div>
+      <div id={`detail_${totalData.id}`} style={partnerNodeStyles.OuterDiv}>
+        <div style={partnerNodeStyles.innerDiv1}>
+          <Textfit
+            style={partnerNodeStyles.textFitStyle}
+            max={20}
+            mode="single"
+            forceSingleModeWidth={false}
+          >
+            {labelString}
+          </Textfit>
+        </div>
+        <div style={partnerNodeStyles.innerDiv2}>
+          <p style={partnerNodeStyles.subtitle}>Amount: NOK </p>
+        </div>
         {/* <Typography align="center" variant="subtitle2" style={{ textTransform: "uppercase", fontFamily: "Helvetica", padding: "0 5px" }}></Typography> */}
         {handles}
       </div>
-      <Popper style={{ position: "absolute", display: data.showDialog ? "block" : "none" }}
+      {/* <Popper style={{ position: "absolute", display: data.showDialog ? "block" : "none" }}
         open={data.showDialog}
         anchorEl={document.getElementById(`detail_${totalData.id}`)}
-      >{`Hi popover ${data.label}`}</Popper>
-    </div >
+      >{`Hi popover ${data.label}`}</Popper> */}
+    </div>
   );
-}
+};
 const check = (data: any, pos: string): boolean => {
-  if (data && (
-    data.left === pos ||
-    data.right === pos ||
-    data.top === pos ||
-    data.bottom === pos
-  ))
+  if (
+    data &&
+    (data.left === pos ||
+      data.right === pos ||
+      data.top === pos ||
+      data.bottom === pos)
+  )
     return true;
 
   return false;
@@ -104,8 +140,7 @@ const deceasedFormatter = (personString: string) => {
   //   spanElement.innerHTML = `tempArray[0] <p style="color: red">tempArray[1]</p>`
   //   return spanElement
   // }
-  return personString
-}
+  return personString;
+};
 
-
-export default CustomNode
+export default CustomNode;

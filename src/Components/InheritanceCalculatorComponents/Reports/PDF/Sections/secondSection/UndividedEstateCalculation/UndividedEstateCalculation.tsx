@@ -2,14 +2,18 @@ import { Text, View } from "@react-pdf/renderer";
 import { useContext } from "react";
 import { styles } from "../../../styles";
 import { UserContext } from "../../../FinalDocument";
+import {
+  getUndividedRelativeText,
+  getUndividedSummaryTable,
+} from "./UndividedEstateCalculationUtils";
+import { UndividedCalculation } from "../../../../UndividedCalculation";
 
-export const UndividedEstateCalculation = () => {
-  const value = useContext(UserContext).inheritanceCalculation;
+export const UndividedEstateCalculation = (): JSX.Element => {
+  const value = useContext(UserContext).undividedCalculation;
   let undividedResult = "";
   if (value.state.undividedEstate.undividedEstateChoice) {
-    const addUndividedEstateRelatives = add_undivided_estate_relatives();
-    const addUndividedEstateSummary = add_undivided_estate_summary();
-    // TODO prepare these functions
+    const addUndividedEstateRelatives = add_undivided_estate_relatives(value);
+    const addUndividedEstateSummary = add_undivided_estate_summary(value);
     undividedResult =
       addUndividedEstateRelatives + " " + addUndividedEstateSummary;
   } else {
@@ -23,10 +27,26 @@ export const UndividedEstateCalculation = () => {
   );
 };
 
-const add_undivided_estate_relatives = () => {
-  return "add_undivided_estate_relatives";
+const add_undivided_estate_relatives = (
+  value: UndividedCalculation
+): JSX.Element => {
+  const UndividedRelativeText = getUndividedRelativeText(value);
+  return (
+    <Text style={styles.paragraph}>
+      <Text style={styles.paragraphHeading}>Slektsarv</Text>
+      <Text>{UndividedRelativeText}</Text>
+    </Text>
+  );
 };
 
-const add_undivided_estate_summary = () => {
-  return "add_undivided_estate_summary";
+const add_undivided_estate_summary = (
+  value: UndividedCalculation
+): JSX.Element => {
+  const UndividedSummaryTable = getUndividedSummaryTable(value);
+  return (
+    <Text style={styles.paragraph}>
+      <Text style={styles.paragraphHeading}>Sammendrag</Text>
+      <Text>{UndividedSummaryTable}</Text>
+    </Text>
+  );
 };

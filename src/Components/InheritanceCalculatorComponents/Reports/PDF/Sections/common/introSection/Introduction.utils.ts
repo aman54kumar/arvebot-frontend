@@ -1,3 +1,4 @@
+import { getPerson } from "../../../../../ChatbotComponent/ActionProviderMethods/OtherChatbotMethods";
 import { undividedOwnershipType } from "../../../../../ChatbotComponent/Helper/Enums/ChatStepTypes";
 import { InheritanceCalculation } from "../../../../InheritanceCalculation";
 import { currencyFormatNO } from "../pdf_utils";
@@ -5,12 +6,12 @@ import { currencyFormatNO } from "../pdf_utils";
 const undivided_estate_results = (value: InheritanceCalculation) => {
   const finalresult = "";
   const first_partly_separate = value.state.undividedEstate.temp_first;
-  const testator_name = value.actionProvider.getPerson(
+  const testator_name = getPerson(
     value.state.testator._id,
     value.state.personsMap
   )._personName;
   const second_partly_separate = value.state.undividedEstate.temp_last;
-  const undivided_spouse_name = value.actionProvider.getPerson(
+  const undivided_spouse_name = getPerson(
     value.state.undividedSpouseId,
     value.state.personsMap
   )._personName;
@@ -50,10 +51,7 @@ const undivided_estate_results = (value: InheritanceCalculation) => {
 export const IntroductionUtils = (value: InheritanceCalculation) => {
   const currencyFormatted = currencyFormatNO(value.state.netWealth);
 
-  const testatorName = value.actionProvider.getPerson(
-    1,
-    value.state.personsMap
-  )._personName;
+  const testatorName = getPerson(1, value.state.personsMap)._personName;
   return {
     currencyFormatted: currencyFormatted,
     testatorName: testatorName,

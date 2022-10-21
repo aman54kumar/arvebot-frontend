@@ -10,7 +10,7 @@ import { SurvivingPartner } from "../common/survivingPartner/SurvivingPartner";
    Summary -> Sammendrag
 */
 
-export const ThirdSection = () => {
+export const ThirdSection = (): JSX.Element => {
   return (
     <View style={styles.section}>
       <Text style={styles.subheading}>Pliktdelsarv</Text>

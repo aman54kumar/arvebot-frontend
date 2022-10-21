@@ -5,13 +5,13 @@ import { styles } from "../../../styles";
 import GenealogyUtils from "./Genealogy.utils";
 import GenealogyPliktUtils from "./GenealogyPlikt.utils";
 
-export const Genealogy = (props: { inheritanceMode: boolean }) => {
+export const Genealogy = (props: { inheritanceMode: boolean }): JSX.Element => {
   if (props.inheritanceMode) {
     const value = useContext(UserContext).inheritanceCalculation;
     const genealogyParagraph = GenealogyUtils(value);
 
     return (
-      <View style={styles.section} break>
+      <View style={styles.section} wrap={false}>
         <Text style={styles.paragraphHeading}>Slektsarv</Text>
         {genealogyParagraph}
       </View>
@@ -20,7 +20,7 @@ export const Genealogy = (props: { inheritanceMode: boolean }) => {
     const value = useContext(UserContext).pliktdelsarvCalculation;
     const genealogyPliktParagraph = GenealogyPliktUtils(value);
     return (
-      <View style={styles.section} break>
+      <View style={styles.section} wrap={false}>
         <Text style={styles.paragraphHeading}>Slektsarv</Text>
         {genealogyPliktParagraph}
       </View>

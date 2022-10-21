@@ -80,7 +80,7 @@ const OrgChartTree = () => {
         elementsSelectable={false}
         nodesDraggable={false}
       >
-        <Background variant={BackgroundVariant.Dots} gap={1} size={2} />
+        <Background variant={BackgroundVariant.Lines} gap={1} size={2} />
         <Controls />
       </ReactFlow>
     </div>

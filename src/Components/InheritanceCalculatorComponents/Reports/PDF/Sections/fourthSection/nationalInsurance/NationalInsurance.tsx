@@ -6,10 +6,10 @@ import { styles } from "../../../styles";
 import { currencyFormatNO } from "../../common/pdf_utils";
 import { Bold } from "../../common/text-styles/Bold";
 
-export const NationalInsurance = () => {
+export const NationalInsurance = (): JSX.Element => {
   const NationalInsuranceText = getNationalInsuranceString();
   return (
-    <View style={styles.section} break>
+    <View style={styles.section} wrap={false}>
       <Text style={styles.paragraphHeading}>Folketrygdens grunnbeløp</Text>
       <Text style={styles.paragraph}>{NationalInsuranceText}</Text>
     </View>
@@ -19,7 +19,7 @@ export const NationalInsurance = () => {
 const getNationalInsuranceString = () => {
   // const value = useContext(UserContext).inheritanceCalculation;
   return (
-    <Text>
+    <Text wrap={false}>
       <Text>
         Enkelte terskelverdier beregnes utfra det til enhver tid gjeldende
         grunnbeløp i folketrygden. I beregningene er det forutsatt at

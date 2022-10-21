@@ -4,7 +4,6 @@ import { SecondSection } from "./Sections/secondSection/SecondSection";
 import { ThirdSection } from "./Sections/thirdSection/ThirdSection";
 import { FourthSection } from "./Sections/fourthSection/FourthSection";
 import { styles } from "./styles";
-import { IntroductionPage } from "./Sections/common/introSection/IntroductionPage";
 import { Footer } from "./Sections/common/Footer";
 import { Header } from "./Sections/common/Header";
 import { createContext } from "react";
@@ -17,27 +16,29 @@ import { FifthSection } from "./Sections/fifthSection/fifthSection";
 interface FinalObjectInput {
   inheritanceCalculation: InheritanceCalculation;
   pliktdelsarvCalculation: PliktdelsarvCalculation;
-  // undividedCalculation: UndividedCalculation|
+  undividedCalculation: UndividedCalculation;
 }
 
 export const UserContext = createContext(
   {} as {
     inheritanceCalculation: InheritanceCalculation;
     pliktdelsarvCalculation: PliktdelsarvCalculation;
+    undividedCalculation: UndividedCalculation;
   }
 );
 // First Section - Introduction, Inheritance
 // Second Section - Uskiftearv
 // Third Section - Pliktdelsarv
 // Fourth Section - Merknader og forbehold
-const FinalDocument = (props: { inputData: FinalObjectInput }) => {
+const FinalDocument = (props: { inputData: FinalObjectInput }): JSX.Element => {
   return (
     <Document>
-      <Page size="A4" style={styles.page}>
+      <Page size="A4" style={styles.page} wrap>
         <UserContext.Provider
           value={{
             inheritanceCalculation: props.inputData.inheritanceCalculation,
             pliktdelsarvCalculation: props.inputData.pliktdelsarvCalculation,
+            undividedCalculation: props.inputData.undividedCalculation,
           }}
         >
           <Header />

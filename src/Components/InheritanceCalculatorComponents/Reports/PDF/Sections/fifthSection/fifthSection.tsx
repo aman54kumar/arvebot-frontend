@@ -1,9 +1,9 @@
-import { Image, Text, View } from "@react-pdf/renderer";
+import { Image, View } from "@react-pdf/renderer";
 import { styles } from "../../styles";
 import domtoimage from "dom-to-image";
 import { useState } from "react";
 
-export const FifthSection = () => {
+export const FifthSection = (): JSX.Element => {
   const [url, setUrl] = useState("src/assets/images/arvebot-logo.png");
   const node = document.querySelector(".react-flow") as Node;
   domtoimage
@@ -27,7 +27,7 @@ export const FifthSection = () => {
       console.error("oops, something went wrong!", error);
     });
   return (
-    <View style={styles.imageView} break>
+    <View style={styles.imageView} wrap={false}>
       <Image style={styles.image} src={url} />
     </View>
   );

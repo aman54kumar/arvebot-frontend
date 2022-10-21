@@ -1,4 +1,5 @@
 import { Text } from "@react-pdf/renderer";
+import { getPerson } from "../../../../../ChatbotComponent/ActionProviderMethods/OtherChatbotMethods";
 import { PliktdelsarvCalculation } from "../../../../PliktdelsarvCalculation";
 import { styles } from "../../../styles";
 import { currencyFormatNO } from "../pdf_utils";
@@ -8,7 +9,7 @@ export const IntroductionPliktUtils = (value: PliktdelsarvCalculation) => {
 };
 
 const getPliktIntroString = (value: PliktdelsarvCalculation) => {
-  const person_name = value.actionProvider.getPerson(
+  const person_name = getPerson(
     value.person._id,
     value.state.personsMap
   )._personName;
@@ -20,7 +21,7 @@ const getPliktIntroString = (value: PliktdelsarvCalculation) => {
     value.genealogy_inheritance_sum
   );
   const available_for_will = currencyFormatNO(
-    value.state.netWealth -
+    value.netWealth -
       value.survivor_inheritance_sum -
       value.genealogy_inheritance_sum
   );

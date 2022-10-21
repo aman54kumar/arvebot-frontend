@@ -4,8 +4,8 @@ import { PliktdelsarvCalculation } from "../../../../PliktdelsarvCalculation";
 import { styles } from "../../../styles";
 import {
   add_legal_reference,
-  add_legal_references,
   currencyFormatNO,
+  unravel_chains_to_string,
 } from "../pdf_utils";
 import { Bold } from "../text-styles/Bold";
 
@@ -94,63 +94,12 @@ const genealogy_inheritance_text = (value: PliktdelsarvCalculation) => {
     finalGenealogyInheritanceText = (
       <Text style={styles.paragraph}>
         Person med person-id <Bold>{tempVar.person}</Bold> arver totalt{" "}
-        <Bold>{currencyFormatNO(tempVar.frac)} </Bold>.
-        {unravel_chains_to_string(tempVar.chains)}
+        <Bold>{currencyFormatNO(tempVar.frac)} </Bold>
+        {unravel_chains_to_string([tempVar.chains])}.
       </Text>
     );
   }
   return finalGenealogyInheritanceText;
-};
-
-function enumerate(it: any) {
-  const resultArray = [];
-  for (const [index, element] of it.entries()) {
-    resultArray.push([index, element]);
-  }
-  return resultArray;
-}
-
-const unravel_chain_to_string = (chain: any[]): string[] | undefined => {
-  if (chain.length === 0) {
-    return undefined;
-  }
-  let s = chain[0];
-  for (const [ind, link] of enumerate(chain)) {
-    if (ind !== 0) {
-      s = `${s} som er stedfortreder for person med person-id ${link}`;
-    }
-  }
-  return s;
-};
-
-const unravel_chains_to_string = (chains: any[]): string => {
-  let text = "";
-  const chains_unraveled = chains.map((chain) => {
-    const unraveled_chains = unravel_chain_to_string(chain);
-    if (unraveled_chains !== undefined) {
-      return unraveled_chains;
-    }
-  });
-
-  const n = chains_unraveled.length;
-
-  if (n === 0) {
-    text = "";
-  } else if (n === 1) {
-    text = ` som stedfortreder for ${chains_unraveled[0]}`;
-  } else {
-    text = ` som stedfortreder for `;
-    for (const [ind, unraveled_chain] of enumerate(chains_unraveled)) {
-      if (ind === 0) {
-        text += `${unraveled_chain}`;
-      } else if (ind === n - 1) {
-        text += ` og som stedfortreder for ${unraveled_chain}`;
-      } else {
-        text += `, som stedfortreder for ${unraveled_chain}`;
-      }
-    }
-  }
-  return text;
 };
 
 export default GenealogyPliktUtils;

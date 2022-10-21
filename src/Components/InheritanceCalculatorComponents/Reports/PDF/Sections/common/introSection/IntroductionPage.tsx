@@ -6,12 +6,14 @@ import { IntroductionUtils } from "./Introduction.utils";
 import { Bold } from "../text-styles/Bold";
 import { IntroductionPliktUtils } from "./IntroductionPlikt.utils";
 
-export const IntroductionPage = (props: { inheritanceMode: boolean }) => {
+export const IntroductionPage = (props: {
+  inheritanceMode: boolean;
+}): JSX.Element => {
   if (props.inheritanceMode) {
     const value = useContext(UserContext).inheritanceCalculation;
     const calculatedValues = IntroductionUtils(value);
     return (
-      <View style={[styles.section]}>
+      <View style={[styles.section]} wrap={false}>
         <Text style={[styles.heading, { textAlign: "center" }]}>
           Beregning av arv
         </Text>
@@ -25,6 +27,6 @@ export const IntroductionPage = (props: { inheritanceMode: boolean }) => {
   } else {
     const value = useContext(UserContext).pliktdelsarvCalculation;
     const pliktIntroText = IntroductionPliktUtils(value);
-    return <View>{pliktIntroText}</View>;
+    return <View wrap={false}>{pliktIntroText}</View>;
   }
 };

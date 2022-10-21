@@ -7,7 +7,7 @@ export const SecondSection = () => {
   const value = useContext(UserContext).inheritanceCalculation;
 
   const undividedStateElement = (
-    <View style={styles.section}>
+    <View style={styles.section} wrap={false}>
       <Text style={styles.subheading}>Uskiftearv</Text>
       <UndividedEstateCalculation />
     </View>

@@ -1,7 +1,5 @@
-import { Text, View } from "@react-pdf/renderer";
-import { useContext } from "react";
+import { Text } from "@react-pdf/renderer";
 import InheritanceConstants from "../../../../../ChatbotComponent/Helper/Methods/InheritanceConstants";
-import { UserContext } from "../../../FinalDocument";
 import { styles } from "../../../styles";
 import { addLovdataLink } from "../../common/pdf_utils";
 

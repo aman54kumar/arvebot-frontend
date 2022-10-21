@@ -10,7 +10,7 @@ import { SurvivingPartner } from "../common/survivingPartner/SurvivingPartner";
    Summary -> Sammendrag
 */
 
-export const FirstSection = () => {
+export const FirstSection = (): JSX.Element => {
   return (
     <View style={styles.section}>
       <IntroductionPage inheritanceMode />
