@@ -7,7 +7,7 @@ import {
   add_legal_reference,
   currencyFormatNO,
   unravel_chains_to_string,
-} from "../../common/pdf_utils";
+} from "../../../../pdf_utils";
 import { TableElement } from "../../common/react-pdf-table/Table";
 import { summaryValueType } from "../../common/summary/Summary";
 import { Bold } from "../../common/text-styles/Bold";

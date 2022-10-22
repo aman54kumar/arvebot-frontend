@@ -1,6 +1,6 @@
 import { Text, Link } from "@react-pdf/renderer";
-import { Bold } from "./text-styles/Bold";
-import { Italic } from "./text-styles/Italic";
+import { Bold } from "./PDF/Sections/common/text-styles/Bold";
+import { Italic } from "./PDF/Sections/common/text-styles/Italic";
 import "react-pdf/dist/umd/Page/AnnotationLayer.css";
 
 export const currencyFormatNO = (currencyValue: number): string => {

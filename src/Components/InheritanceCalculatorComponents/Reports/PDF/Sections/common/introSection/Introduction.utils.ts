@@ -1,7 +1,7 @@
 import { getPerson } from "../../../../../ChatbotComponent/ActionProviderMethods/OtherChatbotMethods";
 import { undividedOwnershipType } from "../../../../../ChatbotComponent/Helper/Enums/ChatStepTypes";
 import { InheritanceCalculation } from "../../../../InheritanceCalculation";
-import { currencyFormatNO } from "../pdf_utils";
+import { currencyFormatNO } from "../../../../pdf_utils";
 
 const undivided_estate_results = (value: InheritanceCalculation) => {
   const finalresult = "";

@@ -1,5 +1,5 @@
 import { TableElement } from "../react-pdf-table/Table";
-import { currencyFormatNO } from "../pdf_utils";
+import { currencyFormatNO } from "../../../../pdf_utils";
 import { summaryValueType } from "./Summary";
 import { InheritanceCalculation } from "../../../../InheritanceCalculation";
 import { getPerson } from "../../../../../ChatbotComponent/ActionProviderMethods/OtherChatbotMethods";

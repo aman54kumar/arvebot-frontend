@@ -6,7 +6,7 @@ import {
   add_legal_reference,
   currencyFormatNO,
   unravel_chains_to_string,
-} from "../pdf_utils";
+} from "../../../../pdf_utils";
 import { Bold } from "../text-styles/Bold";
 
 const GenealogyPliktUtils = (value: PliktdelsarvCalculation) => {

@@ -4,7 +4,7 @@ import InheritanceConstants from "../../../../../ChatbotComponent/Helper/Methods
 import { InheritanceCalculation } from "../../../../InheritanceCalculation";
 import { PliktdelsarvCalculation } from "../../../../PliktdelsarvCalculation";
 import { styles } from "../../../styles";
-import { add_legal_references, currencyFormatNO } from "../pdf_utils";
+import { add_legal_references, currencyFormatNO } from "../../../../pdf_utils";
 import { Bold } from "../text-styles/Bold";
 
 const SurvivingPartnerUtils = (

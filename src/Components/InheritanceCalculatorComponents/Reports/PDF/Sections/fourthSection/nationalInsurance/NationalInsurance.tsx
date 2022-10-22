@@ -3,7 +3,7 @@ import { useContext } from "react";
 import InheritanceConstants from "../../../../../ChatbotComponent/Helper/Methods/InheritanceConstants";
 import { UserContext } from "../../../FinalDocument";
 import { styles } from "../../../styles";
-import { currencyFormatNO } from "../../common/pdf_utils";
+import { currencyFormatNO } from "../../../../pdf_utils";
 import { Bold } from "../../common/text-styles/Bold";
 
 export const NationalInsurance = (): JSX.Element => {

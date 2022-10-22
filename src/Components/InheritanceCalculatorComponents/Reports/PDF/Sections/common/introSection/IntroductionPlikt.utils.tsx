@@ -2,7 +2,7 @@ import { Text } from "@react-pdf/renderer";
 import { getPerson } from "../../../../../ChatbotComponent/ActionProviderMethods/OtherChatbotMethods";
 import { PliktdelsarvCalculation } from "../../../../PliktdelsarvCalculation";
 import { styles } from "../../../styles";
-import { currencyFormatNO } from "../pdf_utils";
+import { currencyFormatNO } from "../../../../pdf_utils";
 
 export const IntroductionPliktUtils = (value: PliktdelsarvCalculation) => {
   return getPliktIntroString(value);

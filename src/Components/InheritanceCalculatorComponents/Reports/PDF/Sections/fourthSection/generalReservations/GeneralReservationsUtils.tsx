@@ -1,7 +1,7 @@
 import { Text } from "@react-pdf/renderer";
 import InheritanceConstants from "../../../../../ChatbotComponent/Helper/Methods/InheritanceConstants";
 import { styles } from "../../../styles";
-import { addLovdataLink } from "../../common/pdf_utils";
+import { addLovdataLink } from "../../../../pdf_utils";
 
 const generalReservationsUtils = () => {
   return {
