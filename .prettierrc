@@ -1,0 +1,14 @@
+{
+    "printWidth": 80,
+    "tabWidth": 4,
+    "trailingComma": "all",
+    "singleQuote": true,
+    "semi": true,
+    "importOrder": [
+        "(^@|^[A-Za-z])(?!internals)(.*(?<!tyles)$)",
+        "(^[.]|^@internals)(?!^[A-Za-z])(.*(?<!tyles)$)",
+        "tyles"
+    ],
+    "importOrderSeparation": true,
+    "importOrderSortSpecifiers": true
+}

@@ -175,6 +175,9 @@ export class NodeEntity {
       return this._children[this._processChildNodePos++];
     }
   }
+  updateProcessChildNodePos() {
+    this._processChildNodePos++;
+  }
 
   has_surviving_spouse = () => {
     if (this._spouse !== null) return true;

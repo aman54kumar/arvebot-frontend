@@ -13,7 +13,7 @@ import {
   handleClosingStep,
 } from "./OtherChatbotMethods";
 
-export const handleSuccessorCount = (
+export const handleSuccessorCnt = (
   res: string,
   state: ChatbotInterface,
   actionProvider: ActionProvider
@@ -44,6 +44,7 @@ export const handleSuccessorCount = (
         state.nodeMap
       );
       currentPartnerNode.add_child(child, true, true);
+      currentPartnerNode.updateProcessChildNodePos();
     }
   }
   state.id = itr_id;

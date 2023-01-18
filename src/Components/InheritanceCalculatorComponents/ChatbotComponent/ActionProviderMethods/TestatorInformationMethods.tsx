@@ -43,7 +43,8 @@ export const handleNetWealth = (
   actionProvider: ActionProvider
 ) => {
   const netWealthQuestion = actionProvider.createChatBotMessage(
-    QuestionConstants.NetWealthQuestion
+    QuestionConstants.NetWealthQuestion,
+    { withAvatar: true }
   );
   const currencyIntResponse = CurrencyOutput(res);
   const currencyStringResponse = ParseCurrencyStringForOutput(

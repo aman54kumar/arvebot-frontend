@@ -10,14 +10,21 @@ import { UndividedCalculation } from "../../../../UndividedCalculation";
 
 export const UndividedEstateCalculation = (): JSX.Element => {
   const value = useContext(UserContext).undividedCalculation;
-  let undividedResult = "";
+  let undividedResult: JSX.Element;
   if (value.state.undividedEstate.undividedEstateChoice) {
     const addUndividedEstateRelatives = add_undivided_estate_relatives(value);
     const addUndividedEstateSummary = add_undivided_estate_summary(value);
-    undividedResult =
-      addUndividedEstateRelatives + " " + addUndividedEstateSummary;
+    undividedResult = (
+      <Text>
+        <Text>{addUndividedEstateRelatives}</Text>
+        {"\n"}
+        <Text>{addUndividedEstateSummary}</Text>
+      </Text>
+    );
   } else {
-    undividedResult = "Ingen uskiftesituasjon";
+    undividedResult = (
+      <Text style={styles.paragraph}>Ingen uskiftesituasjon</Text>
+    );
   }
   return (
     <View style={styles.section} break>
@@ -34,6 +41,7 @@ const add_undivided_estate_relatives = (
   return (
     <Text style={styles.paragraph}>
       <Text style={styles.paragraphHeading}>Slektsarv</Text>
+      {"\n"}
       <Text>{UndividedRelativeText}</Text>
     </Text>
   );
@@ -46,6 +54,7 @@ const add_undivided_estate_summary = (
   return (
     <Text style={styles.paragraph}>
       <Text style={styles.paragraphHeading}>Sammendrag</Text>
+      {"\n"}
       <Text>{UndividedSummaryTable}</Text>
     </Text>
   );

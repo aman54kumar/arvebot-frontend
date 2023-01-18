@@ -1,10 +1,10 @@
 // import { StrictMode } from "react";
-import { BrowserRouter as Router } from "react-router-dom";
-import "./index.scss";
+import { HashRouter as Router } from 'react-router-dom';
+import './index.scss';
 // import * as Sentry from "@sentry/react";
 // import { BrowserTracing } from "@sentry/tracing";
-import App from "./App";
-import { render } from "react-dom";
+import App from './App';
+import { render } from 'react-dom';
 
 /***
 ** Uncomment for sentry logging
@@ -16,10 +16,10 @@ Sentry.init({
 });
 */
 render(
-  // <StrictMode>
-  <Router>
-    <App />
-  </Router>,
-  // </StrictMode>,
-  document.getElementById("app")
+    // <StrictMode>
+    <Router>
+        <App />
+    </Router>,
+    // </StrictMode>,
+    document.getElementById('app'),
 );

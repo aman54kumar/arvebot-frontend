@@ -13,7 +13,7 @@ import { componentCommunicatorService } from "../Components/InheritanceCalculato
 
 const InheritanceCalculatorPage = () => {
   let prev = "block";
-  const componentWillUnmount = useRef(false);
+  // const componentWillUnmount = useRef(false);
   useEffect(() => {
     messageService.clearAllExternalSubscription();
     const subscription = messageService
@@ -79,26 +79,26 @@ const InheritanceCalculatorPage = () => {
     </div>
   );
 };
-const setRevertDiv = () => {
-  const chatParentElement = document.getElementsByClassName(
-    "react-chatbot-kit-chat-input-container"
-  )[0];
-  if (!document.getElementById("revert-div")) {
-    const chatContainer = document.getElementsByClassName(
-      "react-chatbot-kit-chat-container"
-    )[0];
-    chatContainer.id = "chat_container";
-    const newDiv = document.createElement("div");
-    newDiv.id = "revert-div";
-    const revertButton = document.createElement("button");
-    revertButton.innerText = "Revert";
-    newDiv.appendChild(revertButton);
-    chatParentElement.prepend(newDiv);
-    revertButton.addEventListener("click", ({ event }) => {
-      messageService.sendMessageToChatbot("ON CLICK");
-    });
-  }
-};
+// const setRevertDiv = () => {
+//   const chatParentElement = document.getElementsByClassName(
+//     "react-chatbot-kit-chat-input-container"
+//   )[0];
+//   if (!document.getElementById("revert-div")) {
+//     const chatContainer = document.getElementsByClassName(
+//       "react-chatbot-kit-chat-container"
+//     )[0];
+//     chatContainer.id = "chat_container";
+//     const newDiv = document.createElement("div");
+//     newDiv.id = "revert-div";
+//     const revertButton = document.createElement("button");
+//     revertButton.innerText = "Revert";
+//     newDiv.appendChild(revertButton);
+//     chatParentElement.prepend(newDiv);
+//     revertButton.addEventListener("click", ({ event }) => {
+//       messageService.sendMessageToChatbot("ON CLICK");
+//     });
+//   }
+// };
 const setWarningDiv = () => {
   // const chatParentElement = document.getElementsByClassName(
   //   "react-chatbot-kit-chat-container"

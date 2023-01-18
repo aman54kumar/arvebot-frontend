@@ -1,23 +1,34 @@
 {
-  "compilerOptions": {
-    "target": "es2015",
-    "lib": ["dom", "dom.iterable", "esnext", "es5", "es6"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
-    "typeRoots": ["./types", "./node_modules/@types"],
-    "sourceMap": true
-  },
-  "exclude": ["node_modules", "types"],
-  "include": ["src"]
+    "compilerOptions": {
+        "target": "es2015",
+        "lib": ["dom", "dom.iterable", "esnext", "es5", "es6"],
+        "allowJs": true,
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "noFallthroughCasesInSwitch": true,
+        "module": "esnext",
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "noEmit": true,
+        "jsx": "react-jsx",
+        "typeRoots": ["./types", "./node_modules/@types"],
+        "sourceMap": true
+    },
+    "exclude": ["node_modules", "types"],
+    "include": ["src"],
+    "paths": {
+        "@internals/assets/*": ["./src/assets/*"],
+        "@internals/components": ["./src/components/index.ts"],
+        "@internals/helpers": ["./src/helpers/index.ts"],
+        "@internals/hooks/*": ["./src/hooks/*"],
+        "@internals/mocks": ["./src/mocks/index.ts"],
+        "@internals/screens": ["./src/screens/index.ts"],
+        "@internals/styles": ["./src/styles/index.ts"],
+        "@internals/theme": ["./src/theme/index.ts"],
+        "@internals/types": ["./src/types/index.ts"]
+    }
 }
