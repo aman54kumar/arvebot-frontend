@@ -2,33 +2,20 @@ import './OptionSelector.scss';
 import { FormattedMessage } from 'react-intl';
 import { ReactElement } from 'react';
 import { ChatbotInterface } from '../../../Generics';
-import {
-    ChatStepTypes,
-    QuestionType,
-} from '../../../Helper/Enums/ChatStepTypes';
-import { messageService } from '../../../services/ChatbotCommunicator';
 import ActionProvider from '../../../ActionProvider';
-import {
-    BinaryAnswerTypeNo,
-    BinaryAnswerTypeYes,
-} from '../../../Helper/Enums/BinaryAnswerTypes';
 
-const OptionSelector = (props: any): ReactElement => {
-    const { actionProvider, setState } = props;
-    const setOption = (option: boolean) => {
-        handleOptions(option, actionProvider, setState);
-    };
-
+const OptionSelector = ({ actionProvider, ...rest }: any): ReactElement => {
     const onClickHandler = (e: any): void => {
-        // const thisButton = e.target as HTMLButtonElement
-        // const nextButton = (thisButton).nextElementSibling as HTMLButtonElement
-        // const prevButton = (thisButton).previousElementSibling as HTMLButtonElement
-        // const otherButton = nextButton ? nextButton : prevButton
-        // thisButton.style.pointerEvents = "none"
-        // thisButton.style.background = "darkolivegreen";
-        // thisButton.disabled = true;
-        // otherButton.style.pointerEvents = "none"
-        // otherButton.disabled = true;
+        const thisButton = e.target as HTMLButtonElement;
+        const nextButton = thisButton.nextElementSibling as HTMLButtonElement;
+        const prevButton =
+            thisButton.previousElementSibling as HTMLButtonElement;
+        const otherButton = nextButton ? nextButton : prevButton;
+        thisButton.style.pointerEvents = 'none';
+        thisButton.style.background = 'darkolivegreen';
+        thisButton.disabled = true;
+        otherButton.style.pointerEvents = 'none';
+        otherButton.disabled = true;
     };
     return (
         <div>
@@ -37,7 +24,7 @@ const OptionSelector = (props: any): ReactElement => {
                     className="option-selector-button"
                     onClick={(e) => {
                         onClickHandler(e);
-                        setOption(true);
+                        handleOptions(true, actionProvider);
                     }}
                 >
                     <FormattedMessage id="Chatbot.Yes" />
@@ -46,7 +33,7 @@ const OptionSelector = (props: any): ReactElement => {
                     className="option-selector-button"
                     onClick={(e) => {
                         onClickHandler(e);
-                        setOption(false);
+                        handleOptions(false, actionProvider);
                     }}
                 >
                     <FormattedMessage id="Chatbot.No" />
@@ -55,92 +42,29 @@ const OptionSelector = (props: any): ReactElement => {
         </div>
     );
 };
-const handleOptions = (
-    option: boolean,
-    actionProvider: ActionProvider,
-    setState: any,
-) => {
+
+const handleOptions = (option: boolean, actionProvider: ActionProvider) => {
     hideWarning();
-    setState((state: ChatbotInterface) => {
-        messageService.addPreviousState({ ...state });
-        const curStep = state.stepID;
-        state.yesNoClickedFlag = true;
-        switch (curStep) {
-            case ChatStepTypes.testatorStep: {
-                actionProvider.handleUndividedEstateChoice(option);
-                break;
-            }
-            case ChatStepTypes.undividedEstateStep: {
-                if (state.successor_flag === QuestionType.part2) {
-                    actionProvider.handleChildAliveOption(option);
-                    break;
-                } else if (state.parent_flag === QuestionType.part2) {
-                    actionProvider.handleParentAliveOption(option);
-                    break;
-                } else if (state.parent_flag === QuestionType.part3) {
-                    actionProvider.handleSecondParentExists(option);
-                    break;
-                }
-                break;
-            }
-            case ChatStepTypes.underAgeStep: {
-                actionProvider.handleUnderAge(option);
-                break;
-            }
-            case ChatStepTypes.spouseChoice: {
-                actionProvider.handleSpouseChoice(option);
-                break;
-            }
-            case ChatStepTypes.cohabitantChoice: {
-                actionProvider.handleCohabitantChoice(option);
-                break;
-            }
-            case ChatStepTypes.successorStep: {
-                state.successor_flag = QuestionType.part2;
-                actionProvider.handleChildAliveOption(option);
-                break;
-            }
-            case ChatStepTypes.parentsStep: {
-                if (state.successor_flag === QuestionType.part2) {
-                    actionProvider.handleChildAliveOption(option);
-                    break;
-                } else if (state.parent_flag === QuestionType.part2) {
-                    actionProvider.handleParentAliveOption(option);
-                    break;
-                } else if (state.parent_flag === QuestionType.part3) {
-                    actionProvider.handleSecondParentExists(option);
-                    break;
-                }
-                break;
-            }
-            case ChatStepTypes.marriedParentsStep: {
-                actionProvider.handleMarriedParents(option);
-                break;
-            }
-            case ChatStepTypes.grandParentStep: {
-                if (state.successor_flag === QuestionType.part2) {
-                    actionProvider.handleChildAliveOption(option);
-                    break;
-                } else if (state.parent_flag === QuestionType.part2) {
-                    actionProvider.handleParentAliveOption(option);
-                    break;
-                } else if (state.parent_flag === QuestionType.part3) {
-                    actionProvider.handleSecondParentExists(option);
-                    break;
-                }
-                break;
-            }
-            case ChatStepTypes.finalStep: {
-                actionProvider.handleFinalQuestion(option);
-                break;
-            }
-            default: {
-                console.log('fix this. state: ', state);
-            }
-        }
-        return state;
+    actionProvider.setState((state: ChatbotInterface) => {
+        state = {
+            ...state,
+            yesNoClickedFlag: true,
+        };
+        const optionSelected = option ? 'yes' : 'no';
+        const returnValue =
+            optionSelected === 'yes' ? (
+                <FormattedMessage id="Chatbot.Yes" />
+            ) : (
+                <FormattedMessage id="Chatbot.No" />
+            );
+        const clientMessage = actionProvider.createClientMessage(returnValue);
+        actionProvider.addMessageToBotState(clientMessage);
+
+        actionProvider.handleMessage(optionSelected, state);
+        return actionProvider.returnState(state);
     });
 };
+
 const hideWarning = () => {
     const warningDiv = document.getElementById('chatbot-warning-div');
     if (warningDiv) {
@@ -149,10 +73,3 @@ const hideWarning = () => {
     }
 };
 export default OptionSelector;
-// function toggleInputField() {
-//   const chatInputField = document.querySelectorAll(
-//     ".react-chatbot-kit-chat-input"
-//   ) as NodeListOf<HTMLElement>;
-//   if (chatInputField)
-//     chatInputField[0]. = !chatInputField.disabled;
-// }

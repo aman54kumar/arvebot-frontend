@@ -44,8 +44,12 @@ import {
     handleClosestSurvivingRelativeParents,
     handleFinalQuestionDef,
 } from './ActionProviderMethods/OtherChatbotMethods';
+import { commonMethods } from './Helper/Methods/CommonMethods';
 
 class ActionProvider {
+    handleMessage(message: string, state: ChatbotInterface) {
+        return commonMethods(message, state, this);
+    }
     createChatBotMessage: (
         questionElement: ReactElement,
         widget?: Record<string, unknown>,
@@ -72,7 +76,6 @@ class ActionProvider {
         this.setState = setStateFunc;
         this.createClientMessage = createClientMessage;
         this.stateRef = stateRef;
-        // this.setRevertListeners()
     }
 
     setRevertListeners() {
@@ -109,10 +112,6 @@ class ActionProvider {
             });
         }
     };
-    // setPreviousStateData = (currentState: any, lastState: any) => {
-    //
-    // }
-
     handleTestator = (testatorResponse: string): void => {
         this.setState((state: ChatbotInterface) => {
             return handleTestator(testatorResponse, state, this);
@@ -391,7 +390,7 @@ class ActionProvider {
         });
     };
 
-    check = () => {
+    check = (delay: number) => {
         const self = this;
         if (this.isStarted) {
             this.checkstate = setInterval(() => {
@@ -404,11 +403,11 @@ class ActionProvider {
                     self.glb_state = null;
                     clearInterval(this.checkstate);
                 }
-            }, 200);
+            }, delay);
         }
     };
-    returnState = (state: any) => {
-        this.check();
+    returnState = (state: any, delay = 200) => {
+        this.check(delay);
         this.glb_state = chartSelector(state);
         return state;
     };
@@ -422,9 +421,8 @@ class ActionProvider {
         });
     };
     resetChatbot = () => {
-        this.setState((state: any) => {
+        this.setState((state: ChatbotInterface) => {
             state = InitialChatbotState;
-
             return this.returnState(state);
         });
         const initialQuestion = this.createChatBotMessage(

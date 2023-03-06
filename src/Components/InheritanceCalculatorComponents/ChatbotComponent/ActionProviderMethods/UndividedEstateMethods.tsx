@@ -145,7 +145,10 @@ export const undividedOwnershipResponse = (
                     actionProvider.askFinalQuestion();
                 } else {
                     actionProvider.setState((state: ChatbotInterface) => {
-                        state.stepID = ChatStepTypes.underAgeStep;
+                        state = {
+                            ...state,
+                            stepID: ChatStepTypes.underAgeStep,
+                        };
                     });
                     const underAgeQuestion =
                         actionProvider.createChatBotMessage(
@@ -453,7 +456,10 @@ const askTestatorOtherChildrenQuestion = (
     state: ChatbotInterface,
     actionProvider: ActionProvider,
 ) => {
-    state.stepID = ChatStepTypes.testatorOtherChildStep;
+    state = {
+        ...state,
+        stepID: ChatStepTypes.testatorOtherChildStep,
+    };
     state.successor_flag = QuestionType.part3;
     state.person = state.testator;
     state.temp_person = state.testator;
