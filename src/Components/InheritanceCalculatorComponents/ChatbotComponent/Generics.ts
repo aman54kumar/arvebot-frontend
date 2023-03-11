@@ -5,6 +5,7 @@ import {
     QuestionType,
     undividedOwnershipType,
 } from './Helper/Enums/ChatStepTypes';
+import _ from 'lodash';
 export interface ChatbotInterface {
     stepID: string;
     person: NodeEntity;
@@ -37,7 +38,7 @@ export interface ChatbotInterface {
     yesNoClickedFlag: boolean;
 }
 
-export const ChatbotState: ChatbotInterface = {
+const initChatbotState: ChatbotInterface = {
     stepID: ChatStepTypes.initalStep,
     person: new NodeEntity(0, 0),
     testator: new NodeEntity(0, 0),
@@ -69,7 +70,7 @@ export const ChatbotState: ChatbotInterface = {
     yesNoClickedFlag: false,
 };
 
-export const InitialChatbotState: any = {
-    ...ChatbotState,
-    messages: [],
-};
+export const ChatbotState: ChatbotInterface = { ...initChatbotState };
+
+export const InitialChatbotState: any = _.cloneDeep(initChatbotState);
+InitialChatbotState.messages = [];

@@ -83,7 +83,7 @@ class ActionProvider {
         /* eslint-disable @typescript-eslint/no-unused-vars */
         const subscription = messageService
             .getMessageInChatbot()
-            .subscribe((message) => {
+            .subscribe((message: any) => {
                 this.revertState();
             });
         messageService.addInternalSubscription(subscription);
@@ -407,22 +407,20 @@ class ActionProvider {
         }
     };
     returnState = (state: any, delay = 200) => {
-        this.check(delay);
-        this.glb_state = chartSelector(state);
+        setTimeout(() => {
+            this.check(delay);
+            this.glb_state = chartSelector(state);
+        }, delay);
         return state;
     };
-    handleValidation = (tempMessages: any) => {
-        this.setState((state: any) => {
-            if (tempMessages && tempMessages.length !== 0) {
-                state.messages = tempMessages;
-                return state;
-            }
-            return state;
-        });
-    };
+
     resetChatbot = () => {
-        this.setState((state: ChatbotInterface) => {
+        this.setState((state: any) => {
             state = InitialChatbotState;
+            state.messages = [];
+            state.personMap = new Map();
+            state.nodeMap = new Map();
+            state.testator = new NodeEntity(0, 0);
             return this.returnState(state);
         });
         const initialQuestion = this.createChatBotMessage(
@@ -434,6 +432,16 @@ class ActionProvider {
     delay = (n: number) => {
         return new Promise(function (resolve) {
             setTimeout(resolve, n * 1000);
+        });
+    };
+
+    handleValidation = (tempMessages: any) => {
+        this.setState((state: any) => {
+            if (tempMessages && tempMessages.length !== 0) {
+                state.messages = tempMessages;
+                return state;
+            }
+            return state;
         });
     };
 }

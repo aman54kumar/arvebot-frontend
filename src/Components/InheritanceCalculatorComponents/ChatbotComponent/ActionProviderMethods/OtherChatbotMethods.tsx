@@ -36,7 +36,7 @@ export const handleFinalQuestionDef = (
             </div>
         );
         const pdfLink = actionProvider.createChatBotMessage(pdfDownloadLink);
-        console.log(pdfLink);
+        console.log(pdfDownloadLink);
 
         actionProvider.addMessageToBotState(pdfLink);
 
