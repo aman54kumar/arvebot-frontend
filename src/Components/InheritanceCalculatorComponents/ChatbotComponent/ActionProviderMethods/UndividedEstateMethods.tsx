@@ -22,7 +22,7 @@ import {
 
 export const undividedEstateChoice = (
     undividedEstateChoiceResponse: boolean,
-    state: ChatbotInterface,
+    state: any,
     actionProvider: ActionProvider,
 ) => {
     if (undividedEstateChoiceResponse) {
@@ -38,7 +38,10 @@ export const undividedEstateChoice = (
         const totalEstateNetValueQuestion = actionProvider.createChatBotMessage(
             QuestionConstants.TotalEstateNetValueQuestion,
         );
-        actionProvider.addMessageToBotState(totalEstateNetValueQuestion);
+        state = actionProvider.addMessageToBotState(
+            totalEstateNetValueQuestion,
+            state,
+        );
     } else {
         state = {
             ...state,
@@ -52,14 +55,14 @@ export const undividedEstateChoice = (
         const netWealthQuestion = actionProvider.createChatBotMessage(
             QuestionConstants.NetWealthQuestion,
         );
-        actionProvider.addMessageToBotState(netWealthQuestion);
+        state = actionProvider.addMessageToBotState(netWealthQuestion, state);
     }
-    return actionProvider.returnState(state);
+    return state;
 };
 
 export const totalEstateValue = (
     totalEstateValueResponse: string,
-    state: ChatbotInterface,
+    state: any,
     actionProvider: ActionProvider,
 ) => {
     const totalEstateValueQuestion = actionProvider.createChatBotMessage(
@@ -84,22 +87,28 @@ export const totalEstateValue = (
             },
         };
         const currencyCustom = actionProvider.createClientMessage(currencyJSX);
-        actionProvider.addMessageToBotState(currencyCustom);
-        actionProvider.addMessageToBotState(ownershipTypeQuestion);
+        state = actionProvider.addMessageToBotState(currencyCustom, state);
+        state = actionProvider.addMessageToBotState(
+            ownershipTypeQuestion,
+            state,
+        );
     } else {
         const totalEstateWarning = actionProvider.createChatBotMessage(
             QuestionConstants.TotalEstateNetValueWarning,
         );
 
-        actionProvider.addMessageToBotState(totalEstateWarning);
-        actionProvider.addMessageToBotState(totalEstateValueQuestion);
+        state = actionProvider.addMessageToBotState(totalEstateWarning, state);
+        state = actionProvider.addMessageToBotState(
+            totalEstateValueQuestion,
+            state,
+        );
     }
-    return actionProvider.returnState(state);
+    return state;
 };
 
 export const undividedOwnershipResponse = (
     ownershipResponse: string,
-    state: ChatbotInterface,
+    state: any,
     actionProvider: ActionProvider,
 ) => {
     if (ownershipResponse === undividedOwnershipType.felleseie) {
@@ -120,7 +129,10 @@ export const undividedOwnershipResponse = (
                 actionProvider.createChatBotMessage(
                     QuestionConstants.UndividedEstateSpouseQuestion,
                 );
-            actionProvider.addMessageToBotState(undividedEstateSpouseQuestion);
+            state = actionProvider.addMessageToBotState(
+                undividedEstateSpouseQuestion,
+                state,
+            );
         } else {
             if (
                 state.person !== state.testator &&
@@ -142,9 +154,9 @@ export const undividedOwnershipResponse = (
                 }
 
                 if (state.netWealth <= 0) {
-                    actionProvider.askFinalQuestion();
+                    actionProvider.askFinalQuestion(state);
                 } else {
-                    actionProvider.setState((state: ChatbotInterface) => {
+                    actionProvider.setState((state: any) => {
                         state = {
                             ...state,
                             stepID: ChatStepTypes.underAgeStep,
@@ -155,8 +167,11 @@ export const undividedOwnershipResponse = (
                             QuestionConstants.UnderAgeQuestion,
                             QuestionConstants.YesNoWidgetOptions,
                         );
-                    actionProvider.addMessageToBotState(underAgeQuestion);
-                    return actionProvider.returnState(state);
+                    state = actionProvider.addMessageToBotState(
+                        underAgeQuestion,
+                        state,
+                    );
+                    return state;
                 }
             }
         }
@@ -171,7 +186,7 @@ export const undividedOwnershipResponse = (
         const delvisFirstQuestion = actionProvider.createChatBotMessage(
             QuestionConstants.DelvisFirstQuestion,
         );
-        actionProvider.addMessageToBotState(delvisFirstQuestion);
+        state = actionProvider.addMessageToBotState(delvisFirstQuestion, state);
     } else if (ownershipResponse === 'FULLT SÆREIE') {
         state = {
             ...state,
@@ -183,7 +198,10 @@ export const undividedOwnershipResponse = (
         const fulltSaereieQuestion = actionProvider.createChatBotMessage(
             QuestionConstants.FulltSaereieQuestion,
         );
-        actionProvider.addMessageToBotState(fulltSaereieQuestion);
+        state = actionProvider.addMessageToBotState(
+            fulltSaereieQuestion,
+            state,
+        );
     } else {
         const ownershipTypeWarning = actionProvider.createChatBotMessage(
             QuestionConstants.OwnershipTypeWarning,
@@ -192,15 +210,21 @@ export const undividedOwnershipResponse = (
             QuestionConstants.OwnershipTypeQuestion,
             QuestionConstants.OwnershipQuestionWidgetOptions,
         );
-        actionProvider.addMessageToBotState(ownershipTypeWarning);
-        actionProvider.addMessageToBotState(ownershipTypeQuestion);
+        state = actionProvider.addMessageToBotState(
+            ownershipTypeWarning,
+            state,
+        );
+        state = actionProvider.addMessageToBotState(
+            ownershipTypeQuestion,
+            state,
+        );
     }
-    return actionProvider.returnState(state);
+    return state;
 };
 
 export const delvisFirstResponse = (
     response: string,
-    state: ChatbotInterface,
+    state: any,
     actionProvider: ActionProvider,
 ) => {
     const currencyIntResponse = CurrencyOutput(response);
@@ -210,7 +234,7 @@ export const delvisFirstResponse = (
     const currencyJSX = <InfoMessagesWidget label={currencyStringResponse} />;
     if (currencyIntResponse[0] === 5) {
         const currencyCustom = actionProvider.createClientMessage(currencyJSX);
-        actionProvider.addMessageToBotState(currencyCustom);
+        state = actionProvider.addMessageToBotState(currencyCustom, state);
         state = {
             ...state,
             undividedEstate: {
@@ -222,7 +246,10 @@ export const delvisFirstResponse = (
         const delvisSecondQuestion = actionProvider.createChatBotMessage(
             QuestionConstants.DelvisSecondQuestion,
         );
-        actionProvider.addMessageToBotState(delvisSecondQuestion);
+        state = actionProvider.addMessageToBotState(
+            delvisSecondQuestion,
+            state,
+        );
     } else {
         const netWealthWarning = actionProvider.createChatBotMessage(
             QuestionConstants.NetWealthWarning,
@@ -230,15 +257,15 @@ export const delvisFirstResponse = (
         const delvisFirstQuestion = actionProvider.createChatBotMessage(
             QuestionConstants.DelvisFirstQuestion,
         );
-        actionProvider.addMessageToBotState(netWealthWarning);
-        actionProvider.addMessageToBotState(delvisFirstQuestion);
+        state = actionProvider.addMessageToBotState(netWealthWarning, state);
+        state = actionProvider.addMessageToBotState(delvisFirstQuestion, state);
     }
-    return actionProvider.returnState(state);
+    return state;
 };
 
 export const delvisSecondResponse = (
     res: string,
-    state: ChatbotInterface,
+    state: any,
     actionProvider: ActionProvider,
 ) => {
     const currencyIntResponse = CurrencyOutput(res);
@@ -248,7 +275,7 @@ export const delvisSecondResponse = (
     const currencyJSX = <InfoMessagesWidget label={currencyStringResponse} />;
     if (currencyIntResponse[0] === 5) {
         const currencyCustom = actionProvider.createClientMessage(currencyJSX);
-        actionProvider.addMessageToBotState(currencyCustom);
+        state = actionProvider.addMessageToBotState(currencyCustom, state);
         state.undividedEstate.temp_last = parseInt(currencyIntResponse[1]);
         state = {
             ...state,
@@ -273,7 +300,10 @@ export const delvisSecondResponse = (
             actionProvider.createChatBotMessage(
                 QuestionConstants.UndividedEstateSpouseQuestion,
             );
-        actionProvider.addMessageToBotState(undividedEstateSpouseQuestion);
+        state = actionProvider.addMessageToBotState(
+            undividedEstateSpouseQuestion,
+            state,
+        );
     } else {
         const netWealthWarning = actionProvider.createChatBotMessage(
             QuestionConstants.NetWealthWarning,
@@ -281,15 +311,18 @@ export const delvisSecondResponse = (
         const delvisSecondQuestion = actionProvider.createChatBotMessage(
             QuestionConstants.DelvisSecondQuestion,
         );
-        actionProvider.addMessageToBotState(netWealthWarning);
-        actionProvider.addMessageToBotState(delvisSecondQuestion);
+        state = actionProvider.addMessageToBotState(netWealthWarning, state);
+        state = actionProvider.addMessageToBotState(
+            delvisSecondQuestion,
+            state,
+        );
     }
-    return actionProvider.returnState(state);
+    return state;
 };
 
 export const delvisFulltResponse = (
     res: string,
-    state: ChatbotInterface,
+    state: any,
     actionProvider: ActionProvider,
 ) => {
     const currencyIntResponse = CurrencyOutput(res);
@@ -299,7 +332,7 @@ export const delvisFulltResponse = (
     const currencyJSX = <InfoMessagesWidget label={currencyStringResponse} />;
     if (currencyIntResponse[0] === 5) {
         const currencyCustom = actionProvider.createClientMessage(currencyJSX);
-        actionProvider.addMessageToBotState(currencyCustom);
+        state = actionProvider.addMessageToBotState(currencyCustom, state);
         state = {
             ...state,
             undividedEstate: {
@@ -315,7 +348,10 @@ export const delvisFulltResponse = (
                 actionProvider.createChatBotMessage(
                     QuestionConstants.UndividedEstateSpouseQuestion,
                 );
-            actionProvider.addMessageToBotState(undividedEstateSpouseQuestion);
+            state = actionProvider.addMessageToBotState(
+                undividedEstateSpouseQuestion,
+                state,
+            );
         }
     } else {
         const netWealthWarning = actionProvider.createChatBotMessage(
@@ -324,15 +360,18 @@ export const delvisFulltResponse = (
         const fulltSaereieQuestion = actionProvider.createChatBotMessage(
             QuestionConstants.FulltSaereieQuestion,
         );
-        actionProvider.addMessageToBotState(netWealthWarning);
-        actionProvider.addMessageToBotState(fulltSaereieQuestion);
+        state = actionProvider.addMessageToBotState(netWealthWarning, state);
+        state = actionProvider.addMessageToBotState(
+            fulltSaereieQuestion,
+            state,
+        );
     }
-    return actionProvider.returnState(state);
+    return state;
 };
 
 export const undividedEstateSpouse = (
     res: string,
-    state: ChatbotInterface,
+    state: any,
     actionProvider: ActionProvider,
 ) => {
     const undividedSpouseID = res;
@@ -357,7 +396,10 @@ export const undividedEstateSpouse = (
     const textBeforeSucsrUndvdSpouse = actionProvider.createChatBotMessage(
         QuestionConstants.TextBeforeSucsrUndvdSpouse,
     );
-    actionProvider.addMessageToBotState(textBeforeSucsrUndvdSpouse);
+    state = actionProvider.addMessageToBotState(
+        textBeforeSucsrUndvdSpouse,
+        state,
+    );
     state = {
         ...state,
         stepID: ChatStepTypes.undividedEstateStep,
@@ -369,11 +411,14 @@ export const undividedEstateSpouse = (
     const newSuccessorTogetherQuestion = actionProvider.createChatBotMessage(
         QuestionConstants.undividedChildrenTogetherCount(),
     );
-    actionProvider.addMessageToBotState(newSuccessorTogetherQuestion);
-    return actionProvider.returnState(state);
+    state = actionProvider.addMessageToBotState(
+        newSuccessorTogetherQuestion,
+        state,
+    );
+    return state;
 };
 export const handleUndividedStep = (
-    state: ChatbotInterface,
+    state: any,
     actionProvider: ActionProvider,
     isTwoParent: boolean,
 ) => {
@@ -387,7 +432,10 @@ export const handleUndividedStep = (
             actionProvider.createChatBotMessage(
                 QuestionConstants.undvdSpouseOtherSuccessorQuestion(),
             );
-        actionProvider.addMessageToBotState(newSuccessorUndvdSpouseQuestion);
+        state = actionProvider.addMessageToBotState(
+            newSuccessorUndvdSpouseQuestion,
+            state,
+        );
     } else if (state.undividedEstate.undivided_flag === QuestionType.part7) {
         const temp_class_undivided_spouse =
             get_class_and_distance_closest_surviving_relative(
@@ -404,7 +452,10 @@ export const handleUndividedStep = (
                     testatorDetail._personName,
                 ),
             );
-            actionProvider.addMessageToBotState(newParentQuestion);
+            state = actionProvider.addMessageToBotState(
+                newParentQuestion,
+                state,
+            );
         } else {
             askTestatorOtherChildrenQuestion(state, actionProvider);
         }
@@ -423,8 +474,11 @@ export const handleUndividedStep = (
                     ),
                     QuestionConstants.YesNoWidgetOptions,
                 );
-            actionProvider.addMessageToBotState(secondParentChoiceQuestion);
-            return actionProvider.returnState(state);
+            state = actionProvider.addMessageToBotState(
+                secondParentChoiceQuestion,
+                state,
+            );
+            return state;
         }
         if (state.testator._undividedEstateSpouse) {
             const temp_class_undivided_spouse =
@@ -442,18 +496,18 @@ export const handleUndividedStep = (
                 state.undividedEstate.undividedEstateSeparateWealth = 0;
             }
             if (state.netWealth <= 0) {
-                actionProvider.askFinalQuestion();
+                actionProvider.askFinalQuestion(state);
                 return state;
             } else {
                 askTestatorOtherChildrenQuestion(state, actionProvider);
             }
         }
     }
-    return actionProvider.returnState(state);
+    return state;
 };
 
 const askTestatorOtherChildrenQuestion = (
-    state: ChatbotInterface,
+    state: any,
     actionProvider: ActionProvider,
 ) => {
     state = {
@@ -466,5 +520,9 @@ const askTestatorOtherChildrenQuestion = (
     const testatorOtherSuccessorQuestion = actionProvider.createChatBotMessage(
         QuestionConstants.testatorOtherSuccessorQuestion(),
     );
-    actionProvider.addMessageToBotState(testatorOtherSuccessorQuestion);
+    state = actionProvider.addMessageToBotState(
+        testatorOtherSuccessorQuestion,
+        state,
+    );
+    return state;
 };

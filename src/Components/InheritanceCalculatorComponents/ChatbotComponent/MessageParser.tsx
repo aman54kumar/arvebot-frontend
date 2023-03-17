@@ -1,19 +1,19 @@
 import ActionProvider from './ActionProvider';
 import { ChatbotInterface } from './Generics';
+import { messageService } from './services/ChatbotCommunicator';
 
 class MessageParser {
     actionProvider: ActionProvider;
-    state: ChatbotInterface;
+    state: any;
     constructor(actionProvider: ActionProvider, state: any) {
         this.actionProvider = actionProvider;
         this.state = state;
     }
 
     parse(message: string): ReturnType<() => void> {
-        message = message.trim();
-        const curState = this.state;
-        curState.yesNoClickedFlag = false;
-        this.actionProvider.handleMessage(message, curState);
+        // store previous state
+        this.state.yesNoClickedFlag = false;
+        this.actionProvider.handleMessage(message);
     }
 }
 

@@ -9,7 +9,7 @@ import { createNewPerson } from './OtherChatbotMethods';
 
 export const handleSpouseOption = (
     res: boolean,
-    state: ChatbotInterface,
+    state: any,
     actionProvider: ActionProvider,
 ) => {
     // Spouse present
@@ -21,7 +21,7 @@ export const handleSpouseOption = (
         const spouseQuestion = actionProvider.createChatBotMessage(
             QuestionConstants.SpouseQuestion,
         );
-        actionProvider.addMessageToBotState(spouseQuestion);
+        state = actionProvider.addMessageToBotState(spouseQuestion, state);
     }
     // No spouse
     else {
@@ -37,7 +37,10 @@ export const handleSpouseOption = (
                     QuestionConstants.CohabitantChoiceQuestion,
                     QuestionConstants.YesNoWidgetOptions,
                 );
-            actionProvider.addMessageToBotState(cohabitantChoiceQuestion);
+            state = actionProvider.addMessageToBotState(
+                cohabitantChoiceQuestion,
+                state,
+            );
         } else {
             state = {
                 ...state,
@@ -47,15 +50,18 @@ export const handleSpouseOption = (
             const newSuccessorQuestion = actionProvider.createChatBotMessage(
                 QuestionConstants.addSuccessorCount(testator._personName),
             );
-            actionProvider.addMessageToBotState(newSuccessorQuestion);
+            state = actionProvider.addMessageToBotState(
+                newSuccessorQuestion,
+                state,
+            );
         }
     }
-    return actionProvider.returnState(state);
+    return state;
 };
 
 export const handleSpouseInput = (
     res: string,
-    state: ChatbotInterface,
+    state: any,
     actionProvider: ActionProvider,
 ) => {
     /**
@@ -76,8 +82,8 @@ export const handleSpouseInput = (
             ...state,
             stepID: ChatStepTypes.rearChildrenStep,
         };
-        actionProvider.askFinalQuestion();
-        return actionProvider.returnState(state);
+        actionProvider.askFinalQuestion(state);
+        return state;
     }
 
     state = {
@@ -92,13 +98,13 @@ export const handleSpouseInput = (
     const newSuccessorQuestion = actionProvider.createChatBotMessage(
         QuestionConstants.addSuccessorCount(testator._personName),
     );
-    actionProvider.addMessageToBotState(newSuccessorQuestion);
-    return actionProvider.returnState(state);
+    state = actionProvider.addMessageToBotState(newSuccessorQuestion, state);
+    return state;
 };
 
 export const handleCohabitantChoice = (
     res: boolean,
-    state: ChatbotInterface,
+    state: any,
     actionProvider: ActionProvider,
 ) => {
     // if cohabitant choice is yes
@@ -110,7 +116,7 @@ export const handleCohabitantChoice = (
         const cohabitantQuestion = actionProvider.createChatBotMessage(
             QuestionConstants.CohabitantQuestion,
         );
-        actionProvider.addMessageToBotState(cohabitantQuestion);
+        state = actionProvider.addMessageToBotState(cohabitantQuestion, state);
     }
     // if cohabitant choice is no
     else {
@@ -123,14 +129,17 @@ export const handleCohabitantChoice = (
         const newSuccessorQuestion = actionProvider.createChatBotMessage(
             QuestionConstants.addSuccessorCount(testator._personName),
         );
-        actionProvider.addMessageToBotState(newSuccessorQuestion);
+        state = actionProvider.addMessageToBotState(
+            newSuccessorQuestion,
+            state,
+        );
     }
-    return actionProvider.returnState(state);
+    return state;
 };
 
 export const handleCohabitantInput = (
     res: string,
-    state: ChatbotInterface,
+    state: any,
     actionProvider: ActionProvider,
 ) => {
     /**
@@ -157,8 +166,8 @@ export const handleCohabitantInput = (
             ...state,
             stepID: ChatStepTypes.rearChildrenStep,
         };
-        actionProvider.askFinalQuestion();
-        return actionProvider.returnState(state);
+        actionProvider.askFinalQuestion(state);
+        return state;
     }
     state = {
         ...state,
@@ -168,6 +177,6 @@ export const handleCohabitantInput = (
     const newSuccessorQuestion = actionProvider.createChatBotMessage(
         QuestionConstants.addSuccessorCount(testator._personName),
     );
-    actionProvider.addMessageToBotState(newSuccessorQuestion);
-    return actionProvider.returnState(state);
+    state = actionProvider.addMessageToBotState(newSuccessorQuestion, state);
+    return state;
 };

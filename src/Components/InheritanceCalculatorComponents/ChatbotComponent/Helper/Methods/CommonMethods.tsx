@@ -11,14 +11,14 @@ import { returnKeyFromEnteredNumberText } from './NumberInput';
 
 export const commonMethods = (
     message: string,
-    curState: ChatbotInterface,
+    curState: any,
     actionProvider: ActionProvider,
 ) => {
     const chatbotValidator = new ChatbotValidation(actionProvider, curState);
     // initialStep
     if (curState.stepID === ChatStepTypes.initalStep) {
         if (chatbotValidator.validate(message, [ValidationType.emptyValue])) {
-            return actionProvider.handleTestator(message);
+            return actionProvider.handleTestator(message, curState);
         }
         return;
     }
@@ -33,10 +33,16 @@ export const commonMethods = (
         ) {
             if (message in BinaryAnswerTypeYes) {
                 disableButtons();
-                return actionProvider.handleUndividedEstateChoice(true);
+                return actionProvider.handleUndividedEstateChoice(
+                    true,
+                    curState,
+                );
             } else if (message in BinaryAnswerTypeNo) {
                 disableButtons();
-                return actionProvider.handleUndividedEstateChoice(false);
+                return actionProvider.handleUndividedEstateChoice(
+                    false,
+                    curState,
+                );
             } else {
                 alert('check for error');
             }
@@ -46,19 +52,22 @@ export const commonMethods = (
     // undividedEstateStep
     if (curState.stepID === ChatStepTypes.undividedEstateStep) {
         if (curState.undividedEstate.undivided_flag === QuestionType.part1) {
-            return actionProvider.handleTotalEstateValueResponse(message);
+            return actionProvider.handleTotalEstateValueResponse(
+                message,
+                curState,
+            );
         }
         if (curState.undividedEstate.undivided_flag === QuestionType.part2) {
-            return actionProvider.handleOwnershipResponse(message);
+            return actionProvider.handleOwnershipResponse(message, curState);
         }
         if (curState.undividedEstate.undivided_flag === QuestionType.part3) {
-            return actionProvider.handleDelvisFirstResponse(message);
+            return actionProvider.handleDelvisFirstResponse(message, curState);
         }
         if (curState.undividedEstate.undivided_flag === QuestionType.part4) {
-            return actionProvider.handleDelvisSecondResponse(message);
+            return actionProvider.handleDelvisSecondResponse(message, curState);
         }
         if (curState.undividedEstate.undivided_flag === QuestionType.part5) {
-            return actionProvider.handleFulltSaereieResponse(message);
+            return actionProvider.handleFulltSaereieResponse(message, curState);
         }
         if (
             curState.undividedEstate.undivided_flag === QuestionType.part6 ||
@@ -73,7 +82,7 @@ export const commonMethods = (
         }
         if (curState.undividedEstate.undivided_flag === QuestionType.part8) {
             if (curState.parent_flag === QuestionType.part1) {
-                return actionProvider.handleParentsInput(message);
+                return actionProvider.handleParentsInput(message, curState);
             } else if (curState.parent_flag == QuestionType.part2) {
                 message = message.toLowerCase();
                 if (
@@ -83,10 +92,16 @@ export const commonMethods = (
                 ) {
                     if (message in BinaryAnswerTypeYes) {
                         disableButtons();
-                        return actionProvider.handleParentAliveOption(true);
+                        return actionProvider.handleParentAliveOption(
+                            true,
+                            curState,
+                        );
                     } else if (message in BinaryAnswerTypeNo) {
                         disableButtons();
-                        return actionProvider.handleParentAliveOption(false);
+                        return actionProvider.handleParentAliveOption(
+                            false,
+                            curState,
+                        );
                     } else {
                         alert('check for error');
                     }
@@ -99,10 +114,16 @@ export const commonMethods = (
                 ) {
                     if (message in BinaryAnswerTypeYes) {
                         disableButtons();
-                        return actionProvider.handleSecondParentExists(true);
+                        return actionProvider.handleSecondParentExists(
+                            true,
+                            curState,
+                        );
                     } else if (message in BinaryAnswerTypeNo) {
                         disableButtons();
-                        return actionProvider.handleSecondParentExists(false);
+                        return actionProvider.handleSecondParentExists(
+                            false,
+                            curState,
+                        );
                     } else {
                         alert('check for error');
                     }
@@ -124,7 +145,7 @@ export const commonMethods = (
         if (
             chatbotValidator.validate(message, [ValidationType.invalidAmount])
         ) {
-            return actionProvider.handleNetWealth(message);
+            return actionProvider.handleNetWealth(message, curState);
         }
     }
 
@@ -138,10 +159,10 @@ export const commonMethods = (
         ) {
             if (message in BinaryAnswerTypeYes) {
                 disableButtons();
-                return actionProvider.handleUnderAge(true);
+                return actionProvider.handleUnderAge(true, curState);
             } else if (message in BinaryAnswerTypeNo) {
                 disableButtons();
-                return actionProvider.handleUnderAge(false);
+                return actionProvider.handleUnderAge(false, curState);
             } else {
                 alert('check for error');
             }
@@ -158,10 +179,10 @@ export const commonMethods = (
         ) {
             if (message in BinaryAnswerTypeYes) {
                 disableButtons();
-                return actionProvider.handleSpouseChoice(true);
+                return actionProvider.handleSpouseChoice(true, curState);
             } else if (message in BinaryAnswerTypeNo) {
                 disableButtons();
-                return actionProvider.handleSpouseChoice(false);
+                return actionProvider.handleSpouseChoice(false, curState);
             } else {
                 alert('check for error');
             }
@@ -169,7 +190,7 @@ export const commonMethods = (
     }
     if (curState.stepID === ChatStepTypes.spouseStep) {
         if (chatbotValidator.validate(message, [ValidationType.emptyValue])) {
-            return actionProvider.handleSpouseInput(message);
+            return actionProvider.handleSpouseInput(message, curState);
         }
     }
     // spouse end
@@ -184,10 +205,10 @@ export const commonMethods = (
         ) {
             if (message in BinaryAnswerTypeYes) {
                 disableButtons();
-                return actionProvider.handleCohabitantChoice(true);
+                return actionProvider.handleCohabitantChoice(true, curState);
             } else if (message in BinaryAnswerTypeNo) {
                 disableButtons();
-                return actionProvider.handleCohabitantChoice(false);
+                return actionProvider.handleCohabitantChoice(false, curState);
             } else {
                 alert('check for error');
             }
@@ -195,7 +216,7 @@ export const commonMethods = (
     }
 
     if (curState.stepID === ChatStepTypes.cohabitantStep) {
-        return actionProvider.handleCohabitantInput(message); //set stepID = 7
+        return actionProvider.handleCohabitantInput(message, curState); //set stepID = 7
     }
 
     //  cohabitant end
@@ -203,7 +224,7 @@ export const commonMethods = (
     // successorStep
     if (curState.stepID === ChatStepTypes.successorStep) {
         if (curState.successor_flag === QuestionType.part1) {
-            return actionProvider.handleSuccessorInput(message);
+            return actionProvider.handleSuccessorInput(message, curState);
         } else if (curState.successor_flag === QuestionType.part2) {
             message = message.toLowerCase();
             if (
@@ -213,10 +234,16 @@ export const commonMethods = (
             ) {
                 if (message in BinaryAnswerTypeYes) {
                     disableButtons();
-                    return actionProvider.handleChildAliveOption(true);
+                    return actionProvider.handleChildAliveOption(
+                        true,
+                        curState,
+                    );
                 } else if (message in BinaryAnswerTypeNo) {
                     disableButtons();
-                    return actionProvider.handleChildAliveOption(false);
+                    return actionProvider.handleChildAliveOption(
+                        false,
+                        curState,
+                    );
                 } else {
                     alert('check for error');
                 }
@@ -230,7 +257,10 @@ export const commonMethods = (
                     ValidationType.onlyDigit,
                 ])
             ) {
-                return actionProvider.handleSuccessorCount(convertedMessage);
+                return actionProvider.handleSuccessorCount(
+                    convertedMessage,
+                    curState,
+                );
             } else {
                 return;
                 // remove last message and update stepid
@@ -242,7 +272,7 @@ export const commonMethods = (
     //  parentsStep
     if (curState.stepID === ChatStepTypes.parentsStep) {
         if (curState.successor_flag === QuestionType.part1) {
-            return actionProvider.handleSuccessorInput(message);
+            return actionProvider.handleSuccessorInput(message, curState);
         } else if (curState.successor_flag === QuestionType.part2) {
             message = message.toLowerCase();
             if (
@@ -252,10 +282,16 @@ export const commonMethods = (
             ) {
                 if (message in BinaryAnswerTypeYes) {
                     disableButtons();
-                    return actionProvider.handleChildAliveOption(true);
+                    return actionProvider.handleChildAliveOption(
+                        true,
+                        curState,
+                    );
                 } else if (message in BinaryAnswerTypeNo) {
                     disableButtons();
-                    return actionProvider.handleChildAliveOption(false);
+                    return actionProvider.handleChildAliveOption(
+                        false,
+                        curState,
+                    );
                 } else {
                     alert('check for error');
                 }
@@ -267,13 +303,13 @@ export const commonMethods = (
                     ValidationType.onlyDigit,
                 ])
             ) {
-                return actionProvider.handleSuccessorCount(message);
+                return actionProvider.handleSuccessorCount(message, curState);
             } else {
                 return;
             }
         }
         if (curState.parent_flag === QuestionType.part1) {
-            return actionProvider.handleParentsInput(message);
+            return actionProvider.handleParentsInput(message, curState);
         } else if (curState.parent_flag == QuestionType.part2) {
             message = message.toLowerCase();
             if (
@@ -283,10 +319,16 @@ export const commonMethods = (
             ) {
                 if (message in BinaryAnswerTypeYes) {
                     disableButtons();
-                    return actionProvider.handleParentAliveOption(true);
+                    return actionProvider.handleParentAliveOption(
+                        true,
+                        curState,
+                    );
                 } else if (message in BinaryAnswerTypeNo) {
                     disableButtons();
-                    return actionProvider.handleParentAliveOption(false);
+                    return actionProvider.handleParentAliveOption(
+                        false,
+                        curState,
+                    );
                 } else {
                     alert('check for error');
                 }
@@ -299,10 +341,16 @@ export const commonMethods = (
             ) {
                 if (message in BinaryAnswerTypeYes) {
                     disableButtons();
-                    return actionProvider.handleSecondParentExists(true);
+                    return actionProvider.handleSecondParentExists(
+                        true,
+                        curState,
+                    );
                 } else if (message in BinaryAnswerTypeNo) {
                     disableButtons();
-                    return actionProvider.handleSecondParentExists(false);
+                    return actionProvider.handleSecondParentExists(
+                        false,
+                        curState,
+                    );
                 } else {
                     alert('check for error');
                 }
@@ -320,10 +368,10 @@ export const commonMethods = (
         ) {
             if (message in BinaryAnswerTypeYes) {
                 disableButtons();
-                return actionProvider.handleMarriedParents(true);
+                return actionProvider.handleMarriedParents(true, curState);
             } else if (message in BinaryAnswerTypeNo) {
                 disableButtons();
-                return actionProvider.handleMarriedParents(false);
+                return actionProvider.handleMarriedParents(false, curState);
             } else {
                 alert('check for error');
             }
@@ -333,7 +381,7 @@ export const commonMethods = (
     // grandParentStep
     if (curState.stepID === ChatStepTypes.grandParentStep) {
         if (curState.successor_flag === QuestionType.part1) {
-            return actionProvider.handleSuccessorInput(message);
+            return actionProvider.handleSuccessorInput(message, curState);
         } else if (curState.successor_flag === QuestionType.part2) {
             message = message.toLowerCase();
             if (
@@ -343,10 +391,16 @@ export const commonMethods = (
             ) {
                 if (message in BinaryAnswerTypeYes) {
                     disableButtons();
-                    return actionProvider.handleChildAliveOption(true);
+                    return actionProvider.handleChildAliveOption(
+                        true,
+                        curState,
+                    );
                 } else if (message in BinaryAnswerTypeNo) {
                     disableButtons();
-                    return actionProvider.handleChildAliveOption(false);
+                    return actionProvider.handleChildAliveOption(
+                        false,
+                        curState,
+                    );
                 } else {
                     alert('check for error');
                 }
@@ -358,14 +412,14 @@ export const commonMethods = (
                     ValidationType.onlyDigit,
                 ])
             ) {
-                return actionProvider.handleSuccessorCount(message);
+                return actionProvider.handleSuccessorCount(message, curState);
             } else {
                 return;
                 // remove last message and update stepid
                 // return actionProvider.handleValidation();
             }
         } else if (curState.parent_flag === QuestionType.part1) {
-            return actionProvider.handleParentsInput(message);
+            return actionProvider.handleParentsInput(message, curState);
         } else if (curState.parent_flag == QuestionType.part2) {
             message = message.toLowerCase();
             if (
@@ -375,10 +429,16 @@ export const commonMethods = (
             ) {
                 if (message in BinaryAnswerTypeYes) {
                     disableButtons();
-                    return actionProvider.handleParentAliveOption(true);
+                    return actionProvider.handleParentAliveOption(
+                        true,
+                        curState,
+                    );
                 } else if (message in BinaryAnswerTypeNo) {
                     disableButtons();
-                    return actionProvider.handleParentAliveOption(false);
+                    return actionProvider.handleParentAliveOption(
+                        false,
+                        curState,
+                    );
                 } else {
                     alert('check for error');
                 }
@@ -391,10 +451,16 @@ export const commonMethods = (
             ) {
                 if (message in BinaryAnswerTypeYes) {
                     disableButtons();
-                    return actionProvider.handleSecondParentExists(true);
+                    return actionProvider.handleSecondParentExists(
+                        true,
+                        curState,
+                    );
                 } else if (message in BinaryAnswerTypeNo) {
                     disableButtons();
-                    return actionProvider.handleSecondParentExists(false);
+                    return actionProvider.handleSecondParentExists(
+                        false,
+                        curState,
+                    );
                 } else {
                     alert('check for error');
                 }
@@ -412,10 +478,10 @@ export const commonMethods = (
         ) {
             if (message in BinaryAnswerTypeYes) {
                 disableButtons();
-                return actionProvider.handleFinalQuestion(true);
+                return actionProvider.handleFinalQuestion(true, curState);
             } else if (message in BinaryAnswerTypeNo) {
                 disableButtons();
-                return actionProvider.handleFinalQuestion(false);
+                return actionProvider.handleFinalQuestion(false, curState);
             } else {
                 alert('check for error');
             }
@@ -427,6 +493,9 @@ const disableButtons = () => {
     const buttonElements: any = document.getElementsByClassName(
         'option-selector-button',
     );
+    // const lastBtnEl = buttonElements[buttonElements.length-1]
+    // if (!lastBtnEl.disabled) lastBtnEl.disabled = true;
+    //     lastBtnEl.style.pointerEvents = 'none';
     for (let i = 0; i < buttonElements.length; i++) {
         const currentElement = buttonElements[i];
         if (!currentElement.disabled) currentElement.disabled = true;
@@ -490,7 +559,7 @@ const handleSuccessor = (
     chatbotValidator: ChatbotValidation,
 ) => {
     if (curState.successor_flag === QuestionType.part1) {
-        return actionProvider.handleSuccessorInput(message);
+        return actionProvider.handleSuccessorInput(message, curState);
     } else if (curState.successor_flag === QuestionType.part2) {
         message = message.toLowerCase();
         if (
@@ -500,10 +569,10 @@ const handleSuccessor = (
         ) {
             if (message in BinaryAnswerTypeYes) {
                 disableButtons();
-                return actionProvider.handleChildAliveOption(true);
+                return actionProvider.handleChildAliveOption(true, curState);
             } else if (message in BinaryAnswerTypeNo) {
                 disableButtons();
-                return actionProvider.handleChildAliveOption(false);
+                return actionProvider.handleChildAliveOption(false, curState);
             } else {
                 alert('check for error');
             }
@@ -515,11 +584,11 @@ const handleSuccessor = (
                 ValidationType.onlyDigit,
             ])
         ) {
-            return actionProvider.handleSuccessorCount(message);
+            return actionProvider.handleSuccessorCount(message, curState);
         } else {
             // remove last message and update stepid
             // return this.actionProvider.handleValidation();
         }
     }
-    return actionProvider.handleUndividedEstateSpouse(message);
+    return actionProvider.handleUndividedEstateSpouse(message, curState);
 };

@@ -73,4 +73,33 @@ const initChatbotState: ChatbotInterface = {
 export const ChatbotState: ChatbotInterface = { ...initChatbotState };
 
 export const InitialChatbotState: any = _.cloneDeep(initChatbotState);
+
+export const cloneState = (curState: any, prevState: any) => {
+    curState.messages = prevState.messages;
+    curState.personMap = prevState.personMap;
+    curState.nodeMap = prevState.nodeMap;
+    curState.testator = prevState.testator;
+    curState.stepID = prevState.stepID;
+    curState.person = prevState.person;
+    curState.netWealth = prevState.netWealth;
+    curState.successor_flag = prevState.successor_flag;
+    curState.parent_flag = prevState.parent_flag;
+    curState.temp_person = prevState.temp_person;
+    curState.temp_child = prevState.temp_child;
+    curState.id = prevState.id;
+    curState.undividedSpouseId = prevState.undividedSpouseId;
+    curState.deceasedParentsArray = prevState.deceasedParentsArray;
+    curState.deceasedParentsArray = prevState.deceasedParentsArray;
+    curState.grandParent_flag = prevState.grandParent_flag;
+    curState.rearChildrenResponse = prevState.rearChildrenResponse;
+    curState.undividedEstate = prevState.undividedEstate;
+    curState.tempMessages = prevState.tempMessages;
+    curState.successorProcessArray = prevState.successorProcessArray;
+    curState.isUndividedParent = prevState.isUndividedParent;
+    curState.yesNoClickedFlag = prevState.yesNoClickedFlag;
+    curState.testator = prevState.testator;
+    curState.testator = prevState.testator;
+    curState.testator = prevState.testator;
+    return curState;
+};
 InitialChatbotState.messages = [];

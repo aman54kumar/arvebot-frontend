@@ -6,14 +6,22 @@ export const GeneralReservations = (): JSX.Element => {
     const generalReservationsText = generalReservationsUtils();
     return (
         <View style={styles.section} wrap={false}>
-            {generalReservationsText.uskifteText}
-            {'\n\n'}
-            {generalReservationsText.testamentText}
-            {'\n\n'}
-            {generalReservationsText.avkortingText}
-            {'\n\n'}
-            {generalReservationsText.barnText}
-            {'\n\n'}
+            <Text>
+                {generalReservationsText.uskifteText}
+                {'\n\n'}
+            </Text>
+            <Text>
+                {generalReservationsText.testamentText}
+                {'\n\n'}
+            </Text>
+            <Text>
+                {generalReservationsText.avkortingText}
+                {'\n\n'}
+            </Text>
+            <Text>
+                {generalReservationsText.barnText}
+                {'\n\n'}
+            </Text>
         </View>
     );
 };

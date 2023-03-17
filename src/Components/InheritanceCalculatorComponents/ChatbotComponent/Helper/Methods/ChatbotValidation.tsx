@@ -41,7 +41,10 @@ export class ChatbotValidation {
             if (!validationResult && this.chatbotState) {
                 this.showWarning(warningMessage);
                 const messageCopy = _.cloneDeep(this.chatbotState.messages);
-                this.actionProvider.handleValidation(messageCopy);
+                this.actionProvider.handleValidation(
+                    messageCopy,
+                    this.actionProvider.stateRef,
+                );
                 return false;
             } else {
                 this.hideWarning();

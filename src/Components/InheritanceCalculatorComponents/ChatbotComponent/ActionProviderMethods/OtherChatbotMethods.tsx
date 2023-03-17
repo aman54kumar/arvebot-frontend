@@ -15,7 +15,7 @@ import { handleUndividedStep } from './UndividedEstateMethods';
 
 export const handleFinalQuestionDef = (
     res: boolean,
-    state: ChatbotInterface,
+    state: any,
     actionProvider: ActionProvider,
 ) => {
     if (res) {
@@ -38,15 +38,15 @@ export const handleFinalQuestionDef = (
         const pdfLink = actionProvider.createChatBotMessage(pdfDownloadLink);
         console.log(pdfDownloadLink);
 
-        actionProvider.addMessageToBotState(pdfLink);
+        state = actionProvider.addMessageToBotState(pdfLink, state);
 
         console.log('prepare report and download');
     }
-    return actionProvider.returnState(state);
+    return state;
 };
 
 const computeInheritances = (
-    state: ChatbotInterface,
+    state: any,
     actionProvider: ActionProvider,
 ): JSX.Element => {
     const inheritanceCalculation = new InheritanceCalculation(
@@ -90,37 +90,43 @@ const computeInheritances = (
 };
 
 export const handleClosingStep = (
-    state: ChatbotInterface,
+    state: any,
     actionProvider: ActionProvider,
     isSecondParent = true,
 ) => {
     switch (state.stepID) {
         case ChatStepTypes.successorStep:
-            actionProvider.closestSurvivingRelativeChildren();
-            break;
+            return actionProvider.closestSurvivingRelativeChildren(state);
         case ChatStepTypes.parentsStep:
             state.temp_person = state.person;
-            actionProvider.closestSurvivingRelativeParents(isSecondParent);
-            break;
+            state = actionProvider.closestSurvivingRelativeParents(
+                isSecondParent,
+                state,
+            );
+            return state;
         case ChatStepTypes.undividedEstateStep:
             state.temp_person = state.person;
-            handleUndividedStep(state, actionProvider, isSecondParent);
-            break;
+            state = handleUndividedStep(state, actionProvider, isSecondParent);
+            return state;
         case ChatStepTypes.grandParentStep:
             state.temp_person = getNode(
                 state.deceasedParentsArray[0],
                 state.nodeMap,
             );
-            actionProvider.closestSurvivingRelativeGrandParents(true);
-            break;
+            state = actionProvider.closestSurvivingRelativeGrandParents(
+                true,
+                state,
+            );
+            return state;
 
         case ChatStepTypes.testatorOtherChildStep:
-            actionProvider.askUnderAgeQuestion();
+            state = actionProvider.askUnderAgeQuestion(state);
+            return state;
     }
 };
 
 export const handleClosestSurvivingRelativeChildren = (
-    state: ChatbotInterface,
+    state: any,
     actionProvider: ActionProvider,
 ) => {
     const testator = state.person;
@@ -147,8 +153,11 @@ export const handleClosestSurvivingRelativeChildren = (
                     testatorDetail._personName,
                 ),
             );
-            actionProvider.addMessageToBotState(newParentQuestion);
-            return actionProvider.returnState(state);
+            state = actionProvider.addMessageToBotState(
+                newParentQuestion,
+                state,
+            );
+            return state;
         }
     }
 
@@ -158,8 +167,8 @@ export const handleClosestSurvivingRelativeChildren = (
             stepID: ChatStepTypes.rearChildrenStep,
         };
 
-        actionProvider.askFinalQuestion();
-        return actionProvider.returnState(state);
+        state = actionProvider.askFinalQuestion(state);
+        return state;
     }
 
     if (
@@ -167,8 +176,8 @@ export const handleClosestSurvivingRelativeChildren = (
         state.netWealth <=
             InheritanceConstants.MINIMUM_INHERITANCE_SPOUSE_VS_PARENTS
     ) {
-        actionProvider.askFinalQuestion();
-        return actionProvider.returnState(state);
+        state = actionProvider.askFinalQuestion(state);
+        return state;
     }
 
     if (
@@ -176,8 +185,8 @@ export const handleClosestSurvivingRelativeChildren = (
         state.netWealth <=
             InheritanceConstants.MINIMUM_INHERITANCE_COHABITANT_VS_PARENTS
     ) {
-        actionProvider.askFinalQuestion();
-        return actionProvider.returnState(state);
+        state = actionProvider.askFinalQuestion(state);
+        return state;
     }
     state = {
         ...state,
@@ -189,13 +198,13 @@ export const handleClosestSurvivingRelativeChildren = (
     const newParentQuestion = actionProvider.createChatBotMessage(
         QuestionConstants.addParentsQuestion1(testatorDetail._personName),
     );
-    actionProvider.addMessageToBotState(newParentQuestion);
-    return actionProvider.returnState(state);
+    state = actionProvider.addMessageToBotState(newParentQuestion, state);
+    return state;
 };
 
 export const handleClosestSurvivingRelativeParents = (
     isSecondParent: boolean,
-    state: ChatbotInterface,
+    state: any,
     actionProvider: ActionProvider,
 ) => {
     if (isSecondParent && state.temp_person._parents.length < 2) {
@@ -210,20 +219,23 @@ export const handleClosestSurvivingRelativeParents = (
             QuestionConstants.askSecondParentChoiceQuestion(`${personName}`),
             QuestionConstants.YesNoWidgetOptions,
         );
-        actionProvider.addMessageToBotState(secondParentChoiceQuestion);
-        return actionProvider.returnState(state);
+        state = actionProvider.addMessageToBotState(
+            secondParentChoiceQuestion,
+            state,
+        );
+        return state;
     }
 
     if (state.person._spouse !== null) {
-        actionProvider.askFinalQuestion();
-        return actionProvider.returnState(state);
+        actionProvider.askFinalQuestion(state);
+        return state;
     }
     const temp_class = get_class_and_distance_closest_surviving_relative(
         state.person,
         state,
     )[0];
     const eitherParentsDeceased =
-        state.person._parents.filter((p_id) => {
+        state.person._parents.filter((p_id: any) => {
             return Person.getPerson(p_id, state.personsMap)._deceased;
         }).length !== 0;
     const personDetail = Person.getPerson(state.person._id, state.personsMap);
@@ -242,12 +254,12 @@ export const handleClosestSurvivingRelativeParents = (
             state.personsMap,
         );
         if (!personDetail._underAge) {
-            actionProvider.askFinalQuestion();
-            return actionProvider.returnState(state);
+            actionProvider.askFinalQuestion(state);
+            return state;
         }
         if (state.person._parents.length !== 2) {
-            actionProvider.askFinalQuestion();
-            return actionProvider.returnState(state);
+            actionProvider.askFinalQuestion(state);
+            return state;
         }
 
         if (parent1Detail._deceased) {
@@ -261,8 +273,11 @@ export const handleClosestSurvivingRelativeParents = (
                     parent2Detail._personName,
                 ),
             );
-            actionProvider.addMessageToBotState(marriedParentsQn);
-            return actionProvider.returnState(state);
+            state = actionProvider.addMessageToBotState(
+                marriedParentsQn,
+                state,
+            );
+            return state;
         } else {
             state = {
                 ...state,
@@ -274,18 +289,21 @@ export const handleClosestSurvivingRelativeParents = (
                     parent2Detail._personName,
                 ),
             );
-            actionProvider.addMessageToBotState(marriedParentsQn);
-            return actionProvider.returnState(state);
+            state = actionProvider.addMessageToBotState(
+                marriedParentsQn,
+                state,
+            );
+            return state;
         }
     } else {
-        actionProvider.grandParentFirst();
-        return actionProvider.returnState(state);
+        state = actionProvider.grandParentFirst(state);
+        return state;
     }
 };
 
 export const handleClosestSurvivingRelativeGrandParens = (
     isSecondParent: boolean,
-    state: ChatbotInterface,
+    state: any,
     actionProvider: ActionProvider,
 ) => {
     if (isSecondParent && state.temp_person._parents.length < 2) {
@@ -302,14 +320,17 @@ export const handleClosestSurvivingRelativeGrandParens = (
             ),
             QuestionConstants.YesNoWidgetOptions,
         );
-        actionProvider.addMessageToBotState(secondParentChoiceQuestion);
-        return actionProvider.returnState(state);
+        state = actionProvider.addMessageToBotState(
+            secondParentChoiceQuestion,
+            state,
+        );
+        return state;
     }
     state.deceasedParentsArray = state.deceasedParentsArray.filter(
-        (item) => item !== state.deceasedParentsArray[0],
+        (item: any) => item !== state.deceasedParentsArray[0],
     );
-    actionProvider.askForNextGrandParent();
-    return actionProvider.returnState(state);
+    state = actionProvider.askForNextGrandParent(state);
+    return state;
 };
 
 const surviving_successor_distance = (
@@ -421,4 +442,67 @@ export const getNode = (id: number, nodeMap: Map<number, NodeEntity>) => {
         throw new Error('Node not found with given id:' + id);
     }
     return node;
+};
+export const add_parent = (
+    parent: NodeEntity,
+    state: any,
+    add_for_both = true,
+    grandParent = false,
+): void => {
+    // const parents_array = this._parents;
+    const parent_id = parent._id;
+    let isParentPresent = false;
+    const person = state.temp_person;
+    for (const p of person._parents) {
+        if (p === parent_id) {
+            isParentPresent = true;
+            break;
+        }
+    }
+
+    // const t = this._parents.find((obj) => obj === parent_id);
+    if (!isParentPresent) {
+        person._parents.push(parent_id);
+    }
+    parent._path = [...person._path];
+
+    parent._path.push([ParentChildSelector.parent, parent_id]);
+    parent._level = person.getLevel(parent._path);
+    if (parent._level === 2) {
+        parent._path[parent._path.length - 1][0] =
+            ParentChildSelector.grandParent;
+    }
+    if (add_for_both) {
+        if (!parent._children.find((obj) => obj === person._id)) {
+            parent._children.push(person._id);
+        }
+    }
+    return state;
+};
+export const add_child = (
+    child: NodeEntity,
+    state: any,
+    add_for_both = true,
+    isPartner = false,
+): void => {
+    const partnerNode = state.temp_person._partnerNode;
+    const children_array = partnerNode._children;
+    const child_id = child._id;
+    if (!children_array.find((obj: any) => obj === child_id)) {
+        partnerNode._children.push(child_id);
+    }
+    if (!isPartner) {
+        child._path = [...partnerNode._path];
+        child._path.push([ParentChildSelector.child, child_id]);
+        child._level = partnerNode.getLevel(child._path);
+    } else {
+        child._partnerPath = [...partnerNode._path];
+        child._partnerPath.push([ParentChildSelector.child, child_id]);
+        // child._level = this.getLevel(child._path);
+    }
+    if (add_for_both) {
+        if (!child._parents.find((obj) => obj === partnerNode._id)) {
+            child._parents.push(partnerNode._id);
+        }
+    }
 };

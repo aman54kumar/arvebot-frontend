@@ -45,10 +45,69 @@ import {
     handleFinalQuestionDef,
 } from './ActionProviderMethods/OtherChatbotMethods';
 import { commonMethods } from './Helper/Methods/CommonMethods';
-
+import _ from 'lodash';
+import { FormattedMessage } from 'react-intl';
 class ActionProvider {
-    handleMessage(message: string, state: ChatbotInterface) {
-        return commonMethods(message, state, this);
+    handleMessage(message: string, isClicked = false) {
+        this.setState((state: any) => {
+            if (isClicked) {
+                state = {
+                    ...state,
+                    yesNoClickedFlag: true,
+                };
+                const returnValue =
+                    message === 'yes' ? (
+                        <FormattedMessage id="Chatbot.Yes" />
+                    ) : (
+                        <FormattedMessage id="Chatbot.No" />
+                    );
+                const clientMessage = this.createClientMessage(returnValue);
+                state = this.addMessageToBotState(clientMessage, state);
+            }
+            // state.messages = curState.messages;
+            // state.personMap = curState.personMap;
+            // state.nodeMap = curState.nodeMap;
+            // state.testator = curState.testator;
+            // state.stepID = curState.stepID;
+            // state.person = curState.person;
+            // state.netWealth = curState.netWealth;
+            // state.successor_flag = curState.successor_flag;
+            // state.parent_flag = curState.parent_flag;
+            // state.temp_person = curState.temp_person;
+            // state.temp_child = curState.temp_child;
+            // state.id = curState.id;
+            // state.undividedSpouseId = curState.undividedSpouseId;
+            // state.deceasedParentsArray = curState.deceasedParentsArray;
+            // state.deceasedParentsArray = curState.deceasedParentsArray;
+            // state.grandParent_flag = curState.grandParent_flag;
+            // state.rearChildrenResponse = curState.rearChildrenResponse;
+            // state.undividedEstate = curState.undividedEstate;
+            // state.tempMessages = curState.tempMessages;
+            // state.successorProcessArray = curState.successorProcessArray;
+            // state.isUndividedParent = curState.isUndividedParent;
+            // state.yesNoClickedFlag = curState.yesNoClickedFlag;
+            let finalState: any;
+            if (messageService.getRevert()) {
+                finalState = messageService.removePreviousStates(
+                    messageService.getRevertCnt(),
+                );
+                messageService.resetRevertCnt();
+                messageService.resetRevert();
+
+                finalState.messages.push(
+                    state.messages[state.messages.length - 1],
+                );
+                state = finalState;
+            }
+            const prevState = _.cloneDeep(state);
+            prevState.messages.pop();
+            messageService.addPreviousState(prevState);
+            console.log(state);
+            message = message.trim();
+            state = commonMethods(message, state, this);
+            console.log(state);
+            return this.returnState(state);
+        });
     }
     createChatBotMessage: (
         questionElement: ReactElement,
@@ -112,189 +171,136 @@ class ActionProvider {
             });
         }
     };
-    handleTestator = (testatorResponse: string): void => {
-        this.setState((state: ChatbotInterface) => {
-            return handleTestator(testatorResponse, state, this);
-        });
+    handleTestator = (testatorResponse: string, state: any) => {
+        return handleTestator(testatorResponse, state, this);
     };
 
     handleUndividedEstateChoice = (
         undividedEstateChoiceResponse: boolean,
-    ): void => {
+        state: any,
+    ) => {
         // TODO: implement Yes/No conditions for undivided states.
         // TODO: need to fix the values in object and correctly implement the whole algorithm
         // TODO: check for correct text for the questions. (last step, the format of questions already available)
-        this.setState((state: ChatbotInterface) => {
-            return undividedEstateChoice(
-                undividedEstateChoiceResponse,
-                state,
-                this,
-            );
-        });
+        return undividedEstateChoice(
+            undividedEstateChoiceResponse,
+            state,
+            this,
+        );
     };
 
     handleTotalEstateValueResponse = (
         totalEstateValueResponse: string,
-    ): void => {
-        this.setState((state: ChatbotInterface) => {
-            return totalEstateValue(totalEstateValueResponse, state, this);
-        });
+        state: any,
+    ) => {
+        return totalEstateValue(totalEstateValueResponse, state, this);
     };
 
-    handleOwnershipResponse = (ownershipResponse: string): void => {
-        this.setState((state: ChatbotInterface) => {
-            return undividedOwnershipResponse(ownershipResponse, state, this);
-        });
+    handleOwnershipResponse = (ownershipResponse: string, state: any) => {
+        return undividedOwnershipResponse(ownershipResponse, state, this);
     };
 
-    handleDelvisFirstResponse = (res: string): void => {
-        this.setState((state: ChatbotInterface) => {
-            return delvisFirstResponse(res, state, this);
-        });
+    handleDelvisFirstResponse = (res: string, state: any) => {
+        return delvisFirstResponse(res, state, this);
     };
 
-    handleDelvisSecondResponse = (res: string): void => {
-        this.setState((state: ChatbotInterface) => {
-            return delvisSecondResponse(res, state, this);
-        });
+    handleDelvisSecondResponse = (res: string, state: any) => {
+        return delvisSecondResponse(res, state, this);
     };
 
-    handleFulltSaereieResponse = (res: string): void => {
-        this.setState((state: ChatbotInterface) => {
-            return delvisFulltResponse(res, state, this);
-        });
+    handleFulltSaereieResponse = (res: string, state: any) => {
+        return delvisFulltResponse(res, state, this);
     };
 
-    handleUndividedEstateSpouse = (res: string): void => {
-        this.setState((state: ChatbotInterface) => {
-            return undividedEstateSpouse(res, state, this);
-        });
+    handleUndividedEstateSpouse = (res: string, state: any) => {
+        return undividedEstateSpouse(res, state, this);
     };
 
-    handleNetWealth(currencyResponse: string): void {
+    handleNetWealth(currencyResponse: string, state: any) {
         /**
          *  * function for handling wealth replies.
          *  * stepID is updated to 3 and then proceed to underage question.
          *  * conditions for reply in currencyDisplayValue function.
          */
-        this.setState((state: ChatbotInterface) => {
-            return handleNetWealth(currencyResponse, state, this);
-        });
+
+        return handleNetWealth(currencyResponse, state, this);
     }
 
-    handleUnderAge = (selectedOption: boolean): void => {
-        this.setState((state: ChatbotInterface) => {
-            return handleUnderAge(selectedOption, state, this);
-        });
+    handleUnderAge = (selectedOption: boolean, state: any) => {
+        return handleUnderAge(selectedOption, state, this);
     };
 
-    handleSpouseChoice = (spouseChoice: boolean): void => {
-        this.setState((state: ChatbotInterface) => {
-            return handleSpouseOption(spouseChoice, state, this);
-        });
+    handleSpouseChoice = (spouseChoice: boolean, state: any) => {
+        return handleSpouseOption(spouseChoice, state, this);
     };
 
-    handleSpouseInput = (spouseResponse: string): void => {
-        const spouseID = spouseResponse;
-        this.setState((state: ChatbotInterface) => {
-            return handleSpouseInput(spouseID, state, this);
-        });
+    handleSpouseInput = (spouseResponse: string, state: any) => {
+        return handleSpouseInput(spouseResponse, state, this);
     };
 
-    handleCohabitantChoice = (cohabitantChoiceResponse: boolean): void => {
-        this.setState((state: ChatbotInterface) => {
-            return handleCohabitantChoice(
-                cohabitantChoiceResponse,
-                state,
-                this,
-            );
-        });
+    handleCohabitantChoice = (
+        cohabitantChoiceResponse: boolean,
+        state: any,
+    ) => {
+        return handleCohabitantChoice(cohabitantChoiceResponse, state, this);
     };
 
-    handleCohabitantInput = (cohabitantResponse: string): void => {
-        const cohabitantID = cohabitantResponse;
-        this.setState((state: ChatbotInterface) => {
-            return handleCohabitantInput(cohabitantID, state, this);
-        });
+    handleCohabitantInput = (cohabitantResponse: string, state: any) => {
+        return handleCohabitantInput(cohabitantResponse, state, this);
     };
 
-    handleSuccessorCount(successorCountResponse: string): void {
-        this.setState((state: ChatbotInterface) => {
-            return handleSuccessorCnt(successorCountResponse, state, this);
-        });
+    handleSuccessorCount(successorCountResponse: string, state: any) {
+        return handleSuccessorCnt(successorCountResponse, state, this);
     }
-    handleSuccessorInput = (successorResponse: string): void => {
-        const child_name = successorResponse;
-        this.setState((state: ChatbotInterface) => {
-            return handleSuccessorInput(successorResponse, state, this);
-        });
+    handleSuccessorInput = (successorResponse: string, state: any) => {
+        return handleSuccessorInput(successorResponse, state, this);
     };
 
-    handleChildAliveOption = (aliveResponse: boolean): void => {
-        this.setState((state: ChatbotInterface) => {
-            return handleChildAliveOption(aliveResponse, state, this);
-        });
+    handleChildAliveOption = (aliveResponse: boolean, state: any) => {
+        return handleChildAliveOption(aliveResponse, state, this);
     };
 
-    handleSecondParentExists = (secondParentChoice: boolean): void => {
-        this.setState((state: ChatbotInterface) => {
-            return handleSecondParentExists(secondParentChoice, state, this);
-        });
+    handleSecondParentExists = (secondParentChoice: boolean, state: any) => {
+        return handleSecondParentExists(secondParentChoice, state, this);
     };
 
-    handleParentsInput = (parentResponse: string): void => {
-        this.setState((state: ChatbotInterface) => {
-            return handleParentsInput(parentResponse, state, this);
-        });
+    handleParentsInput = (parentResponse: string, state: any) => {
+        return handleParentsInput(parentResponse, state, this);
     };
 
-    handleParentAliveOption = (alive: boolean): void => {
-        this.setState((state: ChatbotInterface) => {
-            return handleParentAliveOption(alive, state, this);
-        });
+    handleParentAliveOption = (alive: boolean, state: any) => {
+        return handleParentAliveOption(alive, state, this);
     };
 
-    grandParentFirst = () => {
-        this.setState((state: ChatbotInterface) => {
-            return handleGrandParentFirst(state, this);
-        });
+    grandParentFirst = (state: any) => {
+        return handleGrandParentFirst(state, this);
     };
 
-    askForNextGrandParent = () => {
-        this.setState((state: ChatbotInterface) => {
-            return handleAskForNextGrandParent(state, this);
-        });
+    askForNextGrandParent = (state: any) => {
+        return handleAskForNextGrandParent(state, this);
     };
 
     // TODO check options
-    handleMarriedParents = (marriedParentsResponse: boolean): void => {
-        this.setState((state: ChatbotInterface) => {
-            return handleMarriedParents(marriedParentsResponse, state, this);
-        });
+    handleMarriedParents = (marriedParentsResponse: boolean, state: any) => {
+        return handleMarriedParents(marriedParentsResponse, state, this);
     };
 
     // eslint-disable-next-line
-    handleFinalQuestion = (finalOption: boolean): void => {
-        this.setState((state: any) => {
-            return handleFinalQuestionDef(finalOption, state, this);
-        });
+    handleFinalQuestion = (finalOption: boolean, state: any) => {
+        return handleFinalQuestionDef(finalOption, state, this);
     };
 
-    askUnderAgeQuestion = () => {
-        this.setState((state: ChatbotInterface) => {
-            return handleAskUnderAgeQuestion(state, this);
-        });
+    askUnderAgeQuestion = (state: any) => {
+        return handleAskUnderAgeQuestion(state, this);
     };
 
-    closestSurvivingRelativeChildren = () => {
-        this.setState((state: ChatbotInterface) => {
-            return handleClosestSurvivingRelativeChildren(state, this);
-        });
+    closestSurvivingRelativeChildren = (state: any) => {
+        return handleClosestSurvivingRelativeChildren(state, this);
     };
 
     getParentChildrenIDStrings = (
         collection: Array<number>,
-        state: ChatbotInterface,
+        state: any,
     ): ReactElement => {
         return (
             <strong>{`{{ ${collection
@@ -308,54 +314,76 @@ class ActionProvider {
         );
     };
 
-    askFinalQuestion = (): void => {
-        this.setState((state: ChatbotInterface) => {
-            state = {
-                ...state,
-                stepID: ChatStepTypes.finalStep,
-            };
-            const finalQuestion = this.createChatBotMessage(
-                QuestionConstants.FinalQuestion,
-                QuestionConstants.YesNoWidgetOptions,
-            );
-            this.addMessageToBotState(finalQuestion);
-            return this.returnState(state);
-        });
+    askFinalQuestion = (state: any) => {
+        // if (state == null) {
+        state = {
+            ...state,
+            stepID: ChatStepTypes.finalStep,
+        };
+        const finalQuestion = this.createChatBotMessage(
+            QuestionConstants.FinalQuestion,
+            QuestionConstants.YesNoWidgetOptions,
+        );
+        state = this.addMessageToBotState(finalQuestion, state);
+        return state;
+        // }
+        // this.setState((state: ChatbotInterface) => {
+        //     state = {
+        //         ...state,
+        //         stepID: ChatStepTypes.finalStep,
+        //     };
+        //     const finalQuestion = this.createChatBotMessage(
+        //         QuestionConstants.FinalQuestion,
+        //         QuestionConstants.YesNoWidgetOptions,
+        //     );
+        //     state = this.addMessageToBotState(finalQuestion, state);
+        //     return this.returnState(state);
+        // });
     };
 
-    closestSurvivingRelativeParents = (isSecondParent = true) => {
-        this.setState((state: ChatbotInterface) => {
-            return handleClosestSurvivingRelativeParents(
-                isSecondParent,
-                state,
-                this,
-            );
-        });
+    closestSurvivingRelativeParents = (isSecondParent = true, state: any) => {
+        return handleClosestSurvivingRelativeParents(
+            isSecondParent,
+            state,
+            this,
+        );
     };
 
-    closestSurvivingRelativeGrandParents = (isSecondParent = true) => {
-        this.setState((state: ChatbotInterface) => {
-            return handleClosestSurvivingRelativeGrandParens(
-                isSecondParent,
-                state,
-                this,
-            );
-        });
+    closestSurvivingRelativeGrandParents = (
+        isSecondParent = true,
+        state: any,
+    ) => {
+        return handleClosestSurvivingRelativeGrandParens(
+            isSecondParent,
+            state,
+            this,
+        );
     };
 
     // Generic functions
-    addMessageToBotState = (messages: any): void => {
-        this.setState((state: any) => {
-            if (Array.isArray(messages)) {
-                state.messages = [...state.messages, ...messages];
-            } else {
-                state.messages = [...state.messages, messages];
-            }
-            return this.returnState(state);
-        });
+    addMessageToBotState = (messages: any, curState: any): any => {
+        // if (!curState) {
+        //     this.setState((state: any) => {
+        //         if (Array.isArray(messages)) {
+        //             state.messages = [...state.messages, ...messages];
+        //         } else {
+        //             state.messages = [...state.messages, messages];
+        //         }
+        //         return this.returnState(state);
+        //     });
+        // } else
+        // {
+        if (Array.isArray(messages)) {
+            curState.messages = [...curState.messages, ...messages];
+        } else {
+            curState.messages = [...curState.messages, messages];
+        }
+        return curState;
+        // return this.returnState(state);
+        // }
     };
 
-    handleDefault = (): void => {
+    handleDefault = () => {
         const message = this.createChatBotMessage(
             QuestionConstants.DefaultText,
             {
@@ -363,7 +391,7 @@ class ActionProvider {
             },
         );
 
-        this.addMessageToBotState(message);
+        this.addMessageToBotState(message, null);
     };
 
     generateNextID = (id: number) => {
@@ -378,16 +406,15 @@ class ActionProvider {
         firstSpouse_id: number,
         secondSpouse_id: number,
         add_for_both: boolean,
-    ): void => {
-        this.setState((state: any) => {
-            NodeEntity.getNode(firstSpouse_id, state.nodeMap)._spouse =
-                secondSpouse_id;
-            if (add_for_both) {
-                NodeEntity.getNode(secondSpouse_id, state.nodeMap)._spouse =
-                    firstSpouse_id;
-            }
-            return this.returnState(state);
-        });
+        state: any,
+    ) => {
+        NodeEntity.getNode(firstSpouse_id, state.nodeMap)._spouse =
+            secondSpouse_id;
+        if (add_for_both) {
+            NodeEntity.getNode(secondSpouse_id, state.nodeMap)._spouse =
+                firstSpouse_id;
+        }
+        return state;
     };
 
     check = (delay: number) => {
@@ -421,28 +448,81 @@ class ActionProvider {
             state.personMap = new Map();
             state.nodeMap = new Map();
             state.testator = new NodeEntity(0, 0);
+            const initialQuestion = this.createChatBotMessage(
+                QuestionConstants.TestatorQuestion,
+            );
+            state = this.addMessageToBotState(initialQuestion, state);
             return this.returnState(state);
         });
-        const initialQuestion = this.createChatBotMessage(
-            QuestionConstants.TestatorQuestion,
-        );
-        this.addMessageToBotState(initialQuestion);
     };
+    revertLastState = () => {
+        // let curState = this.stateRef;
+        // console.log('revertLastState');
+        // const prevState = messageService.removePreviousState();
+        // if (prevState == null) {
+        //     this.resetChatbot();
+        //     return this.returnState(curState);
+        // }
+        // curState = {
+        //     ...prevState,
+        // };
+        // this.setState((state: any) => {
+        //     state = InitialChatbotState;
+        //     state.messages = [];
+        //     state.personMap = new Map();
+        //     state.nodeMap = new Map();
+        //     state.testator = new NodeEntity(0, 0);
+        //     return this.returnState(state);
+        // });
 
+        // curState.messages = prevState.messages;
+        // curState.personMap = prevState.personMap;
+        // curState.nodeMap = prevState.nodeMap;
+        // curState.testator = prevState.testator;
+        // curState.stepID = prevState.stepID;
+        // this.setState((state: any) => {
+
+        //     state = _.cloneDeep(prevState);
+        //     state.messages = prevState.messages;
+        //     state.personMap = prevState.personMap;
+        //     state.nodeMap = prevState.nodeMap;
+        //     state.testator = prevState.testator;
+        //     state.stepID = prevState.stepID;
+        //     return this.returnState(state, 500);
+        // });
+        messageService.setRevert();
+        // messageService.printPreviousStates();
+        this.setState((state: any) => {
+            // console.log('revertLastState');
+            // messageService.printPreviousStates();
+            // console.log('Revert Cnt: ' + messageService.getRevertCnt());
+            const prevState = messageService.getPreviousState(
+                messageService.getRevertCnt(),
+            );
+            messageService.addRevertCnt();
+            if (prevState == null) {
+                this.resetChatbot();
+                return this.returnState(state);
+            }
+            state = prevState;
+
+            return this.returnState(state);
+        });
+    };
     delay = (n: number) => {
         return new Promise(function (resolve) {
             setTimeout(resolve, n * 1000);
         });
     };
 
-    handleValidation = (tempMessages: any) => {
-        this.setState((state: any) => {
-            if (tempMessages && tempMessages.length !== 0) {
-                state.messages = tempMessages;
-                return state;
-            }
+    handleValidation = (tempMessages: any, state: any) => {
+        // this.setState((state: any) => {
+        if (tempMessages && tempMessages.length !== 0) {
+            state.messages = tempMessages;
             return state;
-        });
+        }
+        return state;
+        // });
     };
 }
 

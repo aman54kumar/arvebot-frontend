@@ -11,7 +11,7 @@ import { createTestator, getPerson } from './OtherChatbotMethods';
 
 export const handleTestator = (
     res: string,
-    state: ChatbotInterface,
+    state: any,
     actionProvider: ActionProvider,
 ) => {
     /**
@@ -33,13 +33,12 @@ export const handleTestator = (
         ...state,
     };
 
-    actionProvider.addMessageToBotState(undividedEstateQuestion);
-    return actionProvider.returnState(state);
+    return actionProvider.addMessageToBotState(undividedEstateQuestion, state);
 };
 
 export const handleNetWealth = (
     res: string,
-    state: ChatbotInterface,
+    state: any,
     actionProvider: ActionProvider,
 ) => {
     const netWealthQuestion = actionProvider.createChatBotMessage(
@@ -57,7 +56,7 @@ export const handleNetWealth = (
             QuestionConstants.YesNoWidgetOptions,
         );
         const currencyCustom = actionProvider.createClientMessage(currencyJSX);
-        actionProvider.addMessageToBotState(currencyCustom);
+        state = actionProvider.addMessageToBotState(currencyCustom, state);
 
         state = {
             ...state,
@@ -65,24 +64,24 @@ export const handleNetWealth = (
             netWealth: parseInt(currencyIntResponse[1]),
         };
         if (state.netWealth <= 0) {
-            actionProvider.askFinalQuestion();
+            actionProvider.askFinalQuestion(state);
         }
-        actionProvider.addMessageToBotState(underAgeQuestion);
+        state = actionProvider.addMessageToBotState(underAgeQuestion, state);
     } else {
         const netWealthWarning = actionProvider.createChatBotMessage(
             QuestionConstants.NetWealthWarning,
         );
 
-        actionProvider.addMessageToBotState(netWealthWarning);
-        actionProvider.addMessageToBotState(netWealthQuestion);
+        state = actionProvider.addMessageToBotState(netWealthWarning, state);
+        state = actionProvider.addMessageToBotState(netWealthQuestion, state);
     }
 
-    return actionProvider.returnState(state);
+    return state;
 };
 
 export const handleUnderAge = (
     res: boolean,
-    state: ChatbotInterface,
+    state: any,
     actionProvider: ActionProvider,
 ) => {
     state.person = state.testator;
@@ -97,9 +96,12 @@ export const handleUnderAge = (
             ...state,
             stepID: ChatStepTypes.cohabitantChoice,
         };
-        actionProvider.addMessageToBotState(cohabitantChoiceQuestion);
+        state = actionProvider.addMessageToBotState(
+            cohabitantChoiceQuestion,
+            state,
+        );
 
-        return actionProvider.returnState(state);
+        return state;
     }
 
     const spouseChoiceQuestion = actionProvider.createChatBotMessage(
@@ -110,13 +112,13 @@ export const handleUnderAge = (
         ...state,
         stepID: ChatStepTypes.spouseChoice,
     };
-    actionProvider.addMessageToBotState(spouseChoiceQuestion);
+    state = actionProvider.addMessageToBotState(spouseChoiceQuestion, state);
 
-    return actionProvider.returnState(state);
+    return state;
 };
 
 export const handleAskUnderAgeQuestion = (
-    state: ChatbotInterface,
+    state: any,
     actionProvider: ActionProvider,
 ) => {
     state = {
@@ -127,6 +129,6 @@ export const handleAskUnderAgeQuestion = (
         QuestionConstants.UnderAgeQuestion,
         QuestionConstants.YesNoWidgetOptions,
     );
-    actionProvider.addMessageToBotState(underAgeQuestion);
-    return actionProvider.returnState(state);
+    state = actionProvider.addMessageToBotState(underAgeQuestion, state);
+    return state;
 };

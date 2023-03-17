@@ -1,7 +1,6 @@
 import './OptionSelector.scss';
 import { FormattedMessage } from 'react-intl';
 import { ReactElement } from 'react';
-import { ChatbotInterface } from '../../../Generics';
 import ActionProvider from '../../../ActionProvider';
 
 const OptionSelector = ({ actionProvider, ...rest }: any): ReactElement => {
@@ -45,24 +44,13 @@ const OptionSelector = ({ actionProvider, ...rest }: any): ReactElement => {
 
 const handleOptions = (option: boolean, actionProvider: ActionProvider) => {
     hideWarning();
-    actionProvider.setState((state: ChatbotInterface) => {
-        state = {
-            ...state,
-            yesNoClickedFlag: true,
-        };
-        const optionSelected = option ? 'yes' : 'no';
-        const returnValue =
-            optionSelected === 'yes' ? (
-                <FormattedMessage id="Chatbot.Yes" />
-            ) : (
-                <FormattedMessage id="Chatbot.No" />
-            );
-        const clientMessage = actionProvider.createClientMessage(returnValue);
-        actionProvider.addMessageToBotState(clientMessage);
 
-        actionProvider.handleMessage(optionSelected, state);
-        return actionProvider.returnState(state);
-    });
+    // store previous state
+    // actionProvider.setState((state: any) => {
+
+    const optionSelected = option ? 'yes' : 'no';
+
+    actionProvider.handleMessage(optionSelected, true);
 };
 
 const hideWarning = () => {

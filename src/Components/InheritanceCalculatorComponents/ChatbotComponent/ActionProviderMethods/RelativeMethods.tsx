@@ -5,6 +5,7 @@ import Person from '../Helper/Classes/Person';
 import { ChatStepTypes, QuestionType } from '../Helper/Enums/ChatStepTypes';
 import QuestionConstants from '../Helper/Methods/QuestionConstants';
 import {
+    add_parent,
     createEmptyNode,
     createNewPerson,
     getNode,
@@ -12,10 +13,12 @@ import {
     get_class_and_distance_closest_surviving_relative,
     handleClosingStep,
 } from './OtherChatbotMethods';
+import _ from 'lodash';
+import { ParentChildSelector } from '../Helper/Enums/ParentChildSelector';
 
 export const handleSuccessorCnt = (
     res: string,
-    state: ChatbotInterface,
+    state: any,
     actionProvider: ActionProvider,
 ) => {
     const successorCount = parseInt(res);
@@ -26,11 +29,15 @@ export const handleSuccessorCnt = (
             const parent = getNode(parentID, state.nodeMap);
             state.temp_person = parent;
             const successorProcessArray = state.successorProcessArray;
-            handleNoSuccessorCase(state, successorProcessArray, actionProvider);
+            state = handleNoSuccessorCase(
+                state,
+                successorProcessArray,
+                actionProvider,
+            );
         } else {
-            handleClosingStep(state, actionProvider);
+            return handleClosingStep(state, actionProvider);
         }
-        return actionProvider.returnState(state);
+        return state;
     }
 
     const questionType = state.temp_person._children.length === 0;
@@ -50,7 +57,7 @@ export const handleSuccessorCnt = (
     state.id = itr_id;
     if (
         state.successorProcessArray.filter(
-            (t) => t[0] === state.temp_person._level,
+            (t: any) => t[0] === state.temp_person._level,
         ).length === 0
     ) {
         state.successorProcessArray.push([state.temp_person._level, 1]);
@@ -65,7 +72,10 @@ export const handleSuccessorCnt = (
         const newSuccessorQuestion = actionProvider.createChatBotMessage(
             QuestionConstants.addSuccessorQuestion1(personName),
         );
-        actionProvider.addMessageToBotState(newSuccessorQuestion);
+        state = actionProvider.addMessageToBotState(
+            newSuccessorQuestion,
+            state,
+        );
     } else {
         const allChildrenID = actionProvider.getParentChildrenIDStrings(
             state.temp_person._children,
@@ -74,14 +84,17 @@ export const handleSuccessorCnt = (
         const newSuccessorQuestion = actionProvider.createChatBotMessage(
             QuestionConstants.addSuccessorQuestion2(personName, allChildrenID),
         );
-        actionProvider.addMessageToBotState(newSuccessorQuestion);
+        state = actionProvider.addMessageToBotState(
+            newSuccessorQuestion,
+            state,
+        );
     }
-    return actionProvider.returnState(state);
+    return state;
 };
 
 export const handleSuccessorInput = (
     res: string,
-    state: ChatbotInterface,
+    state: any,
     actionProvider: ActionProvider,
 ) => {
     const childID = state.temp_person.getChildUnprocessedNode();
@@ -103,9 +116,9 @@ export const handleSuccessorInput = (
             QuestionConstants.AliveQuestion(personId),
             QuestionConstants.YesNoWidgetOptions,
         );
-        actionProvider.addMessageToBotState(aliveQuestion);
+        state = actionProvider.addMessageToBotState(aliveQuestion, state);
         // }
-        return actionProvider.returnState(state);
+        return state;
     } else {
         // error case
         console.log('Count of children exceeded');
@@ -113,7 +126,7 @@ export const handleSuccessorInput = (
 };
 
 const handleNoSuccessorCase = (
-    state: ChatbotInterface,
+    state: any,
     successorProcessArray: Array<[number, number]>,
     actionProvider: ActionProvider,
 ) => {
@@ -136,8 +149,10 @@ const handleNoSuccessorCase = (
                     allChildrenID,
                 ),
             );
-            actionProvider.addMessageToBotState(newSuccessorQuestion);
-            return actionProvider.returnState(state);
+            state = actionProvider.addMessageToBotState(
+                newSuccessorQuestion,
+                state,
+            );
         } else if (state.temp_person._childCount === childItrPos) {
             let currentParentID = state.temp_person._id;
             let currentParent = NodeEntity.getNode(
@@ -167,7 +182,7 @@ const handleNoSuccessorCase = (
 
             if (!isCurrentParentID) {
                 // exit case
-                handleClosingStep(state, actionProvider);
+                return handleClosingStep(state, actionProvider);
             } else {
                 successorProcessArray[successorProcessArray.length - 1][1] =
                     successorProcessArray[successorProcessArray.length - 1][1] +
@@ -190,8 +205,10 @@ const handleNoSuccessorCase = (
                             allChildrenID,
                         ),
                     );
-                actionProvider.addMessageToBotState(newSuccessorQuestion);
-                return actionProvider.returnState(state);
+                state = actionProvider.addMessageToBotState(
+                    newSuccessorQuestion,
+                    state,
+                );
             }
         } else {
             throw new Error('state.temp_person._childCount < childItrPos case');
@@ -199,11 +216,12 @@ const handleNoSuccessorCase = (
     } else {
         throw new Error('childItrPos is null');
     }
+    return state;
 };
 
 export const handleChildAliveOption = (
     res: boolean,
-    state: ChatbotInterface,
+    state: any,
     actionProvider: ActionProvider,
 ) => {
     const child = state.temp_child;
@@ -212,19 +230,23 @@ export const handleChildAliveOption = (
     const successorProcessArray = state.successorProcessArray;
     if (res) {
         childDetail._deceased = false;
-        handleNoSuccessorCase(state, successorProcessArray, actionProvider);
+        state = handleNoSuccessorCase(
+            state,
+            successorProcessArray,
+            actionProvider,
+        );
     } else {
         // not alive
         childDetail._deceased = true;
         if (state.stepID === ChatStepTypes.grandParentStep) {
             const generationCount = child.getGenerationCount();
             if (generationCount === 2) {
-                handleNoSuccessorCase(
+                state = handleNoSuccessorCase(
                     state,
                     successorProcessArray,
                     actionProvider,
                 );
-                return actionProvider.returnState(state);
+                return state;
             }
         }
         state = {
@@ -235,15 +257,17 @@ export const handleChildAliveOption = (
         const newSuccessorQuestion = actionProvider.createChatBotMessage(
             QuestionConstants.addSuccessorCount(childDetail._personName),
         );
-        actionProvider.addMessageToBotState(newSuccessorQuestion);
-        return actionProvider.returnState(state);
+        state = actionProvider.addMessageToBotState(
+            newSuccessorQuestion,
+            state,
+        );
     }
-    return actionProvider.returnState(state);
+    return state;
 };
 
 export const handleSecondParentExists = (
     res: boolean,
-    state: ChatbotInterface,
+    state: any,
     actionProvider: ActionProvider,
 ) => {
     if (res) {
@@ -263,47 +287,50 @@ export const handleSecondParentExists = (
                 allParentsID,
             ),
         );
-        actionProvider.addMessageToBotState(newParentQuestion);
+        state = actionProvider.addMessageToBotState(newParentQuestion, state);
     } else {
-        handleClosingStep(state, actionProvider, false);
+        return handleClosingStep(state, actionProvider, false);
         // if (state.stepID !== ChatStepTypes.grandParentStep) {
         //   actionProvider.closestSurvivingRelativeParents(false);
         // } else {
         //   actionProvider.closestSurvivingRelativeGrandParents(false);
         // }
     }
-    return actionProvider.returnState(state);
+    return state;
 };
 
 export const handleParentsInput = (
     res: string,
-    state: ChatbotInterface,
+    state: any,
     actionProvider: ActionProvider,
 ) => {
     const predecessor_id = res;
     const predecessor = createNewPerson(predecessor_id, state, actionProvider);
+
     state = {
         ...state,
         parent_flag: QuestionType.part2,
         temp_parent: predecessor,
     };
-
-    state.temp_person.add_parent(predecessor, true);
-
+    state = { ...state };
+    const temp_person = state.temp_person;
+    // temp_person.add_parent(predecessor, true);
+    state = add_parent(predecessor, state, true);
+    state = { ...state };
     const aliveQuestion = actionProvider.createChatBotMessage(
         QuestionConstants.AliveQuestion(
             Person.getPerson(predecessor._id, state.personsMap)._personName,
         ),
         QuestionConstants.YesNoWidgetOptions,
     );
-    actionProvider.addMessageToBotState(aliveQuestion);
+    state = actionProvider.addMessageToBotState(aliveQuestion, state);
 
-    return actionProvider.returnState(state);
+    return state;
 };
 
 export const handleParentAliveOption = (
     res: boolean,
-    state: ChatbotInterface,
+    state: any,
     actionProvider: ActionProvider,
 ) => {
     const temp_parent = state.temp_parent;
@@ -329,22 +356,25 @@ export const handleParentAliveOption = (
                 allChildrenID,
             ),
         );
-        actionProvider.addMessageToBotState(newSuccessorQuestion);
-        return actionProvider.returnState(state);
+        state = actionProvider.addMessageToBotState(
+            newSuccessorQuestion,
+            state,
+        );
+        // return state;
     } else {
         temp_parent_detail._deceased = false;
-        handleClosingStep(state, actionProvider);
+        state = handleClosingStep(state, actionProvider);
         // if (state.stepID !== ChatStepTypes.grandParentStep) {
         //   actionProvider.closestSurvivingRelativeParents();
         // } else {
         //   actionProvider.closestSurvivingRelativeGrandParents();
         // }
     }
-    return actionProvider.returnState(state);
+    return state;
 };
 
 export const handleGrandParentFirst = (
-    state: ChatbotInterface,
+    state: any,
     actionProvider: ActionProvider,
 ) => {
     const testatorNode = NodeEntity.getNode(state.person._id, state.nodeMap);
@@ -384,16 +414,16 @@ export const handleGrandParentFirst = (
                 temp_person_detail._personName,
             ),
         );
-        actionProvider.addMessageToBotState(newParentQuestion);
+        state = actionProvider.addMessageToBotState(newParentQuestion, state);
     } else {
         console.log('check situation if it arrives here');
-        actionProvider.askFinalQuestion();
+        state = actionProvider.askFinalQuestion(state);
     }
-    return actionProvider.returnState(state);
+    return state;
 };
 
 export const handleAskForNextGrandParent = (
-    state: ChatbotInterface,
+    state: any,
     actionProvider: ActionProvider,
 ) => {
     if (state.deceasedParentsArray.length !== 0) {
@@ -417,16 +447,16 @@ export const handleAskForNextGrandParent = (
                 temp_person_detail._personName,
             ),
         );
-        actionProvider.addMessageToBotState(newParentQuestion);
+        state = actionProvider.addMessageToBotState(newParentQuestion, state);
     } else {
-        actionProvider.askFinalQuestion();
+        state = actionProvider.askFinalQuestion(state);
     }
-    return actionProvider.returnState(state);
+    return state;
 };
 
 export const handleMarriedParents = (
     res: boolean,
-    state: ChatbotInterface,
+    state: any,
     actionProvider: ActionProvider,
 ) => {
     if (res) {
@@ -434,10 +464,11 @@ export const handleMarriedParents = (
             state.person._parents[0],
             state.person._parents[1],
             true,
+            state,
         );
-        actionProvider.askFinalQuestion();
+        state = actionProvider.askFinalQuestion(state);
     } else {
-        actionProvider.grandParentFirst();
+        state = actionProvider.grandParentFirst(state);
     }
-    return actionProvider.returnState(state);
+    return state;
 };
