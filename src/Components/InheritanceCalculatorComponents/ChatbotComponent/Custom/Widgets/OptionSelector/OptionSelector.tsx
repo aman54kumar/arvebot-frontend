@@ -4,18 +4,6 @@ import { ReactElement } from 'react';
 import ActionProvider from '../../../ActionProvider';
 
 const OptionSelector = ({ actionProvider, ...rest }: any): ReactElement => {
-    const onClickHandler = (e: any): void => {
-        const thisButton = e.target as HTMLButtonElement;
-        const nextButton = thisButton.nextElementSibling as HTMLButtonElement;
-        const prevButton =
-            thisButton.previousElementSibling as HTMLButtonElement;
-        const otherButton = nextButton ? nextButton : prevButton;
-        thisButton.style.pointerEvents = 'none';
-        thisButton.style.background = 'darkolivegreen';
-        thisButton.disabled = true;
-        otherButton.style.pointerEvents = 'none';
-        otherButton.disabled = true;
-    };
     return (
         <div>
             <div className="option-selector-button-container">
@@ -40,6 +28,18 @@ const OptionSelector = ({ actionProvider, ...rest }: any): ReactElement => {
             </div>
         </div>
     );
+};
+
+const onClickHandler = (e: any): void => {
+    const thisButton = e.target as HTMLButtonElement;
+    const nextButton = thisButton.nextElementSibling as HTMLButtonElement;
+    const prevButton = thisButton.previousElementSibling as HTMLButtonElement;
+    const otherButton = nextButton ? nextButton : prevButton;
+    thisButton.style.pointerEvents = 'none';
+    thisButton.style.background = 'darkolivegreen';
+    thisButton.disabled = true;
+    otherButton.style.pointerEvents = 'none';
+    otherButton.disabled = true;
 };
 
 const handleOptions = (option: boolean, actionProvider: ActionProvider) => {

@@ -457,7 +457,7 @@ export const handleUndividedStep = (
                 state,
             );
         } else {
-            askTestatorOtherChildrenQuestion(state, actionProvider);
+            state = askTestatorOtherChildrenQuestion(state, actionProvider);
         }
     } else {
         if (isTwoParent && state.temp_person._parents.length < 2) {
@@ -499,7 +499,7 @@ export const handleUndividedStep = (
                 actionProvider.askFinalQuestion(state);
                 return state;
             } else {
-                askTestatorOtherChildrenQuestion(state, actionProvider);
+                state = askTestatorOtherChildrenQuestion(state, actionProvider);
             }
         }
     }

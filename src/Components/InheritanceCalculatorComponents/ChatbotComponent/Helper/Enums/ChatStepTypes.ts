@@ -36,3 +36,9 @@ export enum undividedOwnershipType {
     fullt = 'FULLT SÆREIE',
     none = '',
 }
+
+export enum FormattedMessages {
+    FELLESEIE = 'Chatbot.OWNERSHIP_TYPE1',
+    DELVIS = 'Chatbot.OWNERSHIP_TYPE2',
+    FULLT = 'Chatbot.OWNERSHIP_TYPE3',
+}

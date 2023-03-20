@@ -46,24 +46,28 @@ import {
 } from './ActionProviderMethods/OtherChatbotMethods';
 import { commonMethods } from './Helper/Methods/CommonMethods';
 import _ from 'lodash';
-import { FormattedMessage } from 'react-intl';
+import {
+    getReturnValueFromBooleanWidget,
+    getReturnValueFromUndividedWidget,
+} from './Helper/Methods/OtherMethods';
 class ActionProvider {
-    handleMessage(message: string, isClicked = false) {
+    handleMessage(message: string, isClicked = false, isClickedUndiv = false) {
         this.setState((state: any) => {
-            if (isClicked) {
-                state = {
-                    ...state,
-                    yesNoClickedFlag: true,
-                };
-                const returnValue =
-                    message === 'yes' ? (
-                        <FormattedMessage id="Chatbot.Yes" />
-                    ) : (
-                        <FormattedMessage id="Chatbot.No" />
-                    );
-                const clientMessage = this.createClientMessage(returnValue);
-                state = this.addMessageToBotState(clientMessage, state);
-            }
+            const widgetFunctions = [
+                { widget: isClicked, func: getReturnValueFromBooleanWidget },
+                {
+                    widget: isClickedUndiv,
+                    func: getReturnValueFromUndividedWidget,
+                },
+            ];
+
+            widgetFunctions.forEach(({ widget, func }) => {
+                if (widget) {
+                    const returnValue = func(message, state);
+                    const clientMessage = this.createClientMessage(returnValue);
+                    state = this.addMessageToBotState(clientMessage, state);
+                }
+            });
             // state.messages = curState.messages;
             // state.personMap = curState.personMap;
             // state.nodeMap = curState.nodeMap;
@@ -102,10 +106,10 @@ class ActionProvider {
             const prevState = _.cloneDeep(state);
             prevState.messages.pop();
             messageService.addPreviousState(prevState);
-            console.log(state);
+            // console.log(state);
             message = message.trim();
             state = commonMethods(message, state, this);
-            console.log(state);
+            // console.log(state);
             return this.returnState(state);
         });
     }
@@ -179,9 +183,6 @@ class ActionProvider {
         undividedEstateChoiceResponse: boolean,
         state: any,
     ) => {
-        // TODO: implement Yes/No conditions for undivided states.
-        // TODO: need to fix the values in object and correctly implement the whole algorithm
-        // TODO: check for correct text for the questions. (last step, the format of questions already available)
         return undividedEstateChoice(
             undividedEstateChoiceResponse,
             state,
