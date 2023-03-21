@@ -1,6 +1,4 @@
 import ActionProvider from '../ActionProvider';
-import InfoMessagesWidget from '../Custom/Widgets/InfoMessagesWidget/InfoMessagesWidget';
-import { ChatbotInterface } from '../Generics';
 import Person from '../Helper/Classes/Person';
 import {
     ChatStepTypes,
@@ -73,7 +71,7 @@ export const totalEstateValue = (
     const currencyStringResponse = ParseCurrencyStringForOutput(
         currencyIntResponse[1],
     );
-    const currencyJSX = <InfoMessagesWidget label={currencyStringResponse} />;
+    const currencyJSX = <div>{currencyStringResponse}</div>;
     if (currencyIntResponse[0] === 5) {
         const ownershipTypeQuestion = actionProvider.createChatBotMessage(
             QuestionConstants.OwnershipTypeQuestion,
@@ -87,6 +85,7 @@ export const totalEstateValue = (
                 totalEstateValue: parseInt(currencyIntResponse[1]),
             },
         };
+        state.messages.pop();
         const currencyCustom = actionProvider.createClientMessage(currencyJSX);
         state = actionProvider.addMessageToBotState(currencyCustom, state);
         state = actionProvider.addMessageToBotState(
@@ -231,8 +230,9 @@ export const delvisFirstResponse = (
     const currencyStringResponse = ParseCurrencyStringForOutput(
         currencyIntResponse[1],
     );
-    const currencyJSX = <InfoMessagesWidget label={currencyStringResponse} />;
+    const currencyJSX = <div>{currencyStringResponse}</div>;
     if (currencyIntResponse[0] === 5) {
+        state.messages.pop();
         const currencyCustom = actionProvider.createClientMessage(currencyJSX);
         state = actionProvider.addMessageToBotState(currencyCustom, state);
         state = {
@@ -272,8 +272,9 @@ export const delvisSecondResponse = (
     const currencyStringResponse = ParseCurrencyStringForOutput(
         currencyIntResponse[1],
     );
-    const currencyJSX = <InfoMessagesWidget label={currencyStringResponse} />;
+    const currencyJSX = <div>{currencyStringResponse}</div>;
     if (currencyIntResponse[0] === 5) {
+        state.messages.pop();
         const currencyCustom = actionProvider.createClientMessage(currencyJSX);
         state = actionProvider.addMessageToBotState(currencyCustom, state);
         state.undividedEstate.temp_last = parseInt(currencyIntResponse[1]);
@@ -329,8 +330,9 @@ export const delvisFulltResponse = (
     const currencyStringResponse = ParseCurrencyStringForOutput(
         currencyIntResponse[1],
     );
-    const currencyJSX = <InfoMessagesWidget label={currencyStringResponse} />;
+    const currencyJSX = <div>{currencyStringResponse}</div>;
     if (currencyIntResponse[0] === 5) {
+        state.messages.pop();
         const currencyCustom = actionProvider.createClientMessage(currencyJSX);
         state = actionProvider.addMessageToBotState(currencyCustom, state);
         state = {

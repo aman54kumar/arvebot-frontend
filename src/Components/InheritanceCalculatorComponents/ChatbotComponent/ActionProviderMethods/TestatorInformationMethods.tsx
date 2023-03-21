@@ -51,7 +51,6 @@ export const handleNetWealth = (
     const currencyStringResponse = ParseCurrencyStringForOutput(
         currencyIntResponse[1],
     );
-    // const currencyJSX = <InfoMessagesWidget label={currencyStringResponse} />;
     const currencyJSX = <div>{currencyStringResponse}</div>;
     if (currencyIntResponse[0] === 5) {
         const underAgeQuestion = actionProvider.createChatBotMessage(

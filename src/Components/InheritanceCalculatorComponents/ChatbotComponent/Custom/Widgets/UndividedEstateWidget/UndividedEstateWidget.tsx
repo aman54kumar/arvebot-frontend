@@ -17,45 +17,40 @@ const UndividedEstateWidget = ({
     // };
 
     return (
-        <div>
-            <div className="option-selector-button-container">
-                <button
-                    className="option-selector-button"
-                    onClick={(e) => {
-                        onClickHandler(e);
-                        handleOptions(
-                            undividedOwnershipType.felleseie,
-                            actionProvider,
-                        );
-                    }}
-                >
-                    <FormattedMessage id="Chatbot.OWNERSHIP_TYPE1" />
-                </button>
-                <button
-                    className="option-selector-button"
-                    onClick={(e) => {
-                        onClickHandler(e);
-                        handleOptions(
-                            undividedOwnershipType.delvis,
-                            actionProvider,
-                        );
-                    }}
-                >
-                    <FormattedMessage id="Chatbot.OWNERSHIP_TYPE2" />
-                </button>
-                <button
-                    className="option-selector-button"
-                    onClick={(e) => {
-                        onClickHandler(e);
-                        handleOptions(
-                            undividedOwnershipType.fullt,
-                            actionProvider,
-                        );
-                    }}
-                >
-                    <FormattedMessage id="Chatbot.OWNERSHIP_TYPE3" />
-                </button>
-            </div>
+        <div className="option-selector-button-container">
+            <button
+                className="option-selector-button"
+                onClick={(e) => {
+                    onClickHandler(e);
+                    handleOptions(
+                        undividedOwnershipType.felleseie,
+                        actionProvider,
+                    );
+                }}
+            >
+                <FormattedMessage id="Chatbot.OWNERSHIP_TYPE1" />
+            </button>
+            <button
+                className="option-selector-button"
+                onClick={(e) => {
+                    onClickHandler(e);
+                    handleOptions(
+                        undividedOwnershipType.delvis,
+                        actionProvider,
+                    );
+                }}
+            >
+                <FormattedMessage id="Chatbot.OWNERSHIP_TYPE2" />
+            </button>
+            <button
+                className="option-selector-button"
+                onClick={(e) => {
+                    onClickHandler(e);
+                    handleOptions(undividedOwnershipType.fullt, actionProvider);
+                }}
+            >
+                <FormattedMessage id="Chatbot.OWNERSHIP_TYPE3" />
+            </button>
         </div>
     );
 };
