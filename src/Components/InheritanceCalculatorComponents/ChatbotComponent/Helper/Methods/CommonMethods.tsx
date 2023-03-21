@@ -14,6 +14,36 @@ import {
     getReturnValueFromUndividedWidget,
 } from './OtherMethods';
 import _ from 'lodash';
+import {
+    handleNetWealth,
+    handleTestator,
+    handleUnderAge,
+} from '../../ActionProviderMethods/TestatorInformationMethods';
+import {
+    delvisFirstResponse,
+    delvisFulltResponse,
+    delvisSecondResponse,
+    totalEstateValue,
+    undividedEstateChoice,
+    undividedEstateSpouse,
+    undividedOwnershipResponse,
+} from '../../ActionProviderMethods/UndividedEstateMethods';
+import {
+    handleChildAliveOption,
+    handleMarriedParents,
+    handleParentAliveOption,
+    handleParentsInput,
+    handleSecondParentExists,
+    handleSuccessorCnt,
+    handleSuccessorInput,
+} from '../../ActionProviderMethods/RelativeMethods';
+import {
+    handleCohabitantChoice,
+    handleCohabitantInput,
+    handleSpouseInput,
+    handleSpouseOption,
+} from '../../ActionProviderMethods/PartnerMethods';
+import { handleFinalQuestionDef } from '../../ActionProviderMethods/OtherChatbotMethods';
 
 export const commonMethods = (
     message: string,
@@ -24,7 +54,7 @@ export const commonMethods = (
     // initialStep
     if (curState.stepID === ChatStepTypes.initalStep) {
         if (chatbotValidator.validate(message, [ValidationType.emptyValue])) {
-            return actionProvider.handleTestator(message, curState);
+            return handleTestator(message, curState, actionProvider);
         }
         return;
     }
@@ -37,43 +67,35 @@ export const commonMethods = (
                 ValidationType.incorrectValueForBoolean,
             ])
         ) {
-            if (message in BinaryAnswerTypeYes) {
-                disableButtons();
-                return actionProvider.handleUndividedEstateChoice(
-                    true,
-                    curState,
-                );
-            } else if (message in BinaryAnswerTypeNo) {
-                disableButtons();
-                return actionProvider.handleUndividedEstateChoice(
-                    false,
-                    curState,
-                );
-            } else {
-                alert('check for error');
-            }
+            return evaluateBooleanMessage(
+                message,
+                curState,
+                actionProvider,
+                undividedEstateChoice,
+            );
         }
     }
 
     // undividedEstateStep
     if (curState.stepID === ChatStepTypes.undividedEstateStep) {
         if (curState.undividedEstate.undivided_flag === QuestionType.part1) {
-            return actionProvider.handleTotalEstateValueResponse(
-                message,
-                curState,
-            );
+            return totalEstateValue(message, curState, actionProvider);
         }
         if (curState.undividedEstate.undivided_flag === QuestionType.part2) {
-            return actionProvider.handleOwnershipResponse(message, curState);
+            return undividedOwnershipResponse(
+                message,
+                curState,
+                actionProvider,
+            );
         }
         if (curState.undividedEstate.undivided_flag === QuestionType.part3) {
-            return actionProvider.handleDelvisFirstResponse(message, curState);
+            return delvisFirstResponse(message, curState, actionProvider);
         }
         if (curState.undividedEstate.undivided_flag === QuestionType.part4) {
-            return actionProvider.handleDelvisSecondResponse(message, curState);
+            return delvisSecondResponse(message, curState, actionProvider);
         }
         if (curState.undividedEstate.undivided_flag === QuestionType.part5) {
-            return actionProvider.handleFulltSaereieResponse(message, curState);
+            return delvisFulltResponse(message, curState, actionProvider);
         }
         if (
             curState.undividedEstate.undivided_flag === QuestionType.part6 ||
@@ -88,7 +110,7 @@ export const commonMethods = (
         }
         if (curState.undividedEstate.undivided_flag === QuestionType.part8) {
             if (curState.parent_flag === QuestionType.part1) {
-                return actionProvider.handleParentsInput(message, curState);
+                return handleParentsInput(message, curState, actionProvider);
             } else if (curState.parent_flag == QuestionType.part2) {
                 message = message.toLowerCase();
                 if (
@@ -96,21 +118,12 @@ export const commonMethods = (
                         ValidationType.incorrectValueForBoolean,
                     ])
                 ) {
-                    if (message in BinaryAnswerTypeYes) {
-                        disableButtons();
-                        return actionProvider.handleParentAliveOption(
-                            true,
-                            curState,
-                        );
-                    } else if (message in BinaryAnswerTypeNo) {
-                        disableButtons();
-                        return actionProvider.handleParentAliveOption(
-                            false,
-                            curState,
-                        );
-                    } else {
-                        alert('check for error');
-                    }
+                    return evaluateBooleanMessage(
+                        message,
+                        curState,
+                        actionProvider,
+                        handleParentAliveOption,
+                    );
                 }
             } else if (curState.parent_flag === QuestionType.part3) {
                 if (
@@ -118,21 +131,12 @@ export const commonMethods = (
                         ValidationType.incorrectValueForBoolean,
                     ])
                 ) {
-                    if (message in BinaryAnswerTypeYes) {
-                        disableButtons();
-                        return actionProvider.handleSecondParentExists(
-                            true,
-                            curState,
-                        );
-                    } else if (message in BinaryAnswerTypeNo) {
-                        disableButtons();
-                        return actionProvider.handleSecondParentExists(
-                            false,
-                            curState,
-                        );
-                    } else {
-                        alert('check for error');
-                    }
+                    return evaluateBooleanMessage(
+                        message,
+                        curState,
+                        actionProvider,
+                        handleSecondParentExists,
+                    );
                 }
             }
         }
@@ -151,7 +155,7 @@ export const commonMethods = (
         if (
             chatbotValidator.validate(message, [ValidationType.invalidAmount])
         ) {
-            return actionProvider.handleNetWealth(message, curState);
+            return handleNetWealth(message, curState, actionProvider);
         }
     }
 
@@ -163,15 +167,12 @@ export const commonMethods = (
                 ValidationType.incorrectValueForBoolean,
             ])
         ) {
-            if (message in BinaryAnswerTypeYes) {
-                disableButtons();
-                return actionProvider.handleUnderAge(true, curState);
-            } else if (message in BinaryAnswerTypeNo) {
-                disableButtons();
-                return actionProvider.handleUnderAge(false, curState);
-            } else {
-                alert('check for error');
-            }
+            return evaluateBooleanMessage(
+                message,
+                curState,
+                actionProvider,
+                handleUnderAge,
+            );
         }
     }
 
@@ -183,20 +184,17 @@ export const commonMethods = (
                 ValidationType.incorrectValueForBoolean,
             ])
         ) {
-            if (message in BinaryAnswerTypeYes) {
-                disableButtons();
-                return actionProvider.handleSpouseChoice(true, curState);
-            } else if (message in BinaryAnswerTypeNo) {
-                disableButtons();
-                return actionProvider.handleSpouseChoice(false, curState);
-            } else {
-                alert('check for error');
-            }
+            return evaluateBooleanMessage(
+                message,
+                curState,
+                actionProvider,
+                handleSpouseOption,
+            );
         }
     }
     if (curState.stepID === ChatStepTypes.spouseStep) {
         if (chatbotValidator.validate(message, [ValidationType.emptyValue])) {
-            return actionProvider.handleSpouseInput(message, curState);
+            return handleSpouseInput(message, curState, actionProvider);
         }
     }
     // spouse end
@@ -209,20 +207,17 @@ export const commonMethods = (
                 ValidationType.incorrectValueForBoolean,
             ])
         ) {
-            if (message in BinaryAnswerTypeYes) {
-                disableButtons();
-                return actionProvider.handleCohabitantChoice(true, curState);
-            } else if (message in BinaryAnswerTypeNo) {
-                disableButtons();
-                return actionProvider.handleCohabitantChoice(false, curState);
-            } else {
-                alert('check for error');
-            }
+            return evaluateBooleanMessage(
+                message,
+                curState,
+                actionProvider,
+                handleCohabitantChoice,
+            );
         }
     }
 
     if (curState.stepID === ChatStepTypes.cohabitantStep) {
-        return actionProvider.handleCohabitantInput(message, curState); //set stepID = 7
+        return handleCohabitantInput(message, curState, actionProvider);
     }
 
     //  cohabitant end
@@ -230,7 +225,7 @@ export const commonMethods = (
     // successorStep
     if (curState.stepID === ChatStepTypes.successorStep) {
         if (curState.successor_flag === QuestionType.part1) {
-            return actionProvider.handleSuccessorInput(message, curState);
+            return handleSuccessorInput(message, curState, actionProvider);
         } else if (curState.successor_flag === QuestionType.part2) {
             message = message.toLowerCase();
             if (
@@ -238,21 +233,12 @@ export const commonMethods = (
                     ValidationType.incorrectValueForBoolean,
                 ])
             ) {
-                if (message in BinaryAnswerTypeYes) {
-                    disableButtons();
-                    return actionProvider.handleChildAliveOption(
-                        true,
-                        curState,
-                    );
-                } else if (message in BinaryAnswerTypeNo) {
-                    disableButtons();
-                    return actionProvider.handleChildAliveOption(
-                        false,
-                        curState,
-                    );
-                } else {
-                    alert('check for error');
-                }
+                return evaluateBooleanMessage(
+                    message,
+                    curState,
+                    actionProvider,
+                    handleChildAliveOption,
+                );
             }
         } else if (curState.successor_flag === QuestionType.part3) {
             const convertedMessage = returnKeyFromEnteredNumberText(message);
@@ -263,11 +249,14 @@ export const commonMethods = (
                     ValidationType.onlyDigit,
                 ])
             ) {
-                return actionProvider.handleSuccessorCount(
+                return handleSuccessorCnt(
                     convertedMessage,
                     curState,
+                    actionProvider,
                 );
             } else {
+                console.log('check if it comes here');
+
                 return;
                 // remove last message and update stepid
                 // return actionProvider.handleValidation();
@@ -278,7 +267,7 @@ export const commonMethods = (
     //  parentsStep
     if (curState.stepID === ChatStepTypes.parentsStep) {
         if (curState.successor_flag === QuestionType.part1) {
-            return actionProvider.handleSuccessorInput(message, curState);
+            return handleSuccessorInput(message, curState, actionProvider);
         } else if (curState.successor_flag === QuestionType.part2) {
             message = message.toLowerCase();
             if (
@@ -286,21 +275,12 @@ export const commonMethods = (
                     ValidationType.incorrectValueForBoolean,
                 ])
             ) {
-                if (message in BinaryAnswerTypeYes) {
-                    disableButtons();
-                    return actionProvider.handleChildAliveOption(
-                        true,
-                        curState,
-                    );
-                } else if (message in BinaryAnswerTypeNo) {
-                    disableButtons();
-                    return actionProvider.handleChildAliveOption(
-                        false,
-                        curState,
-                    );
-                } else {
-                    alert('check for error');
-                }
+                return evaluateBooleanMessage(
+                    message,
+                    curState,
+                    actionProvider,
+                    handleChildAliveOption,
+                );
             }
         } else if (curState.successor_flag === QuestionType.part3) {
             if (
@@ -309,13 +289,15 @@ export const commonMethods = (
                     ValidationType.onlyDigit,
                 ])
             ) {
-                return actionProvider.handleSuccessorCount(message, curState);
+                return handleSuccessorCnt(message, curState, actionProvider);
             } else {
+                console.log('check if comes here');
+
                 return;
             }
         }
         if (curState.parent_flag === QuestionType.part1) {
-            return actionProvider.handleParentsInput(message, curState);
+            return handleParentsInput(message, curState, actionProvider);
         } else if (curState.parent_flag == QuestionType.part2) {
             message = message.toLowerCase();
             if (
@@ -323,21 +305,12 @@ export const commonMethods = (
                     ValidationType.incorrectValueForBoolean,
                 ])
             ) {
-                if (message in BinaryAnswerTypeYes) {
-                    disableButtons();
-                    return actionProvider.handleParentAliveOption(
-                        true,
-                        curState,
-                    );
-                } else if (message in BinaryAnswerTypeNo) {
-                    disableButtons();
-                    return actionProvider.handleParentAliveOption(
-                        false,
-                        curState,
-                    );
-                } else {
-                    alert('check for error');
-                }
+                return evaluateBooleanMessage(
+                    message,
+                    curState,
+                    actionProvider,
+                    handleParentAliveOption,
+                );
             }
         } else if (curState.parent_flag === QuestionType.part3) {
             if (
@@ -345,21 +318,12 @@ export const commonMethods = (
                     ValidationType.incorrectValueForBoolean,
                 ])
             ) {
-                if (message in BinaryAnswerTypeYes) {
-                    disableButtons();
-                    return actionProvider.handleSecondParentExists(
-                        true,
-                        curState,
-                    );
-                } else if (message in BinaryAnswerTypeNo) {
-                    disableButtons();
-                    return actionProvider.handleSecondParentExists(
-                        false,
-                        curState,
-                    );
-                } else {
-                    alert('check for error');
-                }
+                return evaluateBooleanMessage(
+                    message,
+                    curState,
+                    actionProvider,
+                    handleSecondParentExists,
+                );
             }
         }
     }
@@ -372,22 +336,19 @@ export const commonMethods = (
                 ValidationType.incorrectValueForBoolean,
             ])
         ) {
-            if (message in BinaryAnswerTypeYes) {
-                disableButtons();
-                return actionProvider.handleMarriedParents(true, curState);
-            } else if (message in BinaryAnswerTypeNo) {
-                disableButtons();
-                return actionProvider.handleMarriedParents(false, curState);
-            } else {
-                alert('check for error');
-            }
+            return evaluateBooleanMessage(
+                message,
+                curState,
+                actionProvider,
+                handleMarriedParents,
+            );
         }
     }
 
     // grandParentStep
     if (curState.stepID === ChatStepTypes.grandParentStep) {
         if (curState.successor_flag === QuestionType.part1) {
-            return actionProvider.handleSuccessorInput(message, curState);
+            return handleSuccessorInput(message, curState, actionProvider);
         } else if (curState.successor_flag === QuestionType.part2) {
             message = message.toLowerCase();
             if (
@@ -395,21 +356,12 @@ export const commonMethods = (
                     ValidationType.incorrectValueForBoolean,
                 ])
             ) {
-                if (message in BinaryAnswerTypeYes) {
-                    disableButtons();
-                    return actionProvider.handleChildAliveOption(
-                        true,
-                        curState,
-                    );
-                } else if (message in BinaryAnswerTypeNo) {
-                    disableButtons();
-                    return actionProvider.handleChildAliveOption(
-                        false,
-                        curState,
-                    );
-                } else {
-                    alert('check for error');
-                }
+                return evaluateBooleanMessage(
+                    message,
+                    curState,
+                    actionProvider,
+                    handleChildAliveOption,
+                );
             }
         } else if (curState.successor_flag === QuestionType.part3) {
             if (
@@ -418,14 +370,14 @@ export const commonMethods = (
                     ValidationType.onlyDigit,
                 ])
             ) {
-                return actionProvider.handleSuccessorCount(message, curState);
+                return handleSuccessorCnt(message, curState, actionProvider);
             } else {
                 return;
                 // remove last message and update stepid
                 // return actionProvider.handleValidation();
             }
         } else if (curState.parent_flag === QuestionType.part1) {
-            return actionProvider.handleParentsInput(message, curState);
+            return handleParentsInput(message, curState, actionProvider);
         } else if (curState.parent_flag == QuestionType.part2) {
             message = message.toLowerCase();
             if (
@@ -433,21 +385,12 @@ export const commonMethods = (
                     ValidationType.incorrectValueForBoolean,
                 ])
             ) {
-                if (message in BinaryAnswerTypeYes) {
-                    disableButtons();
-                    return actionProvider.handleParentAliveOption(
-                        true,
-                        curState,
-                    );
-                } else if (message in BinaryAnswerTypeNo) {
-                    disableButtons();
-                    return actionProvider.handleParentAliveOption(
-                        false,
-                        curState,
-                    );
-                } else {
-                    alert('check for error');
-                }
+                return evaluateBooleanMessage(
+                    message,
+                    curState,
+                    actionProvider,
+                    handleParentAliveOption,
+                );
             }
         } else if (curState.parent_flag === QuestionType.part3) {
             if (
@@ -455,21 +398,12 @@ export const commonMethods = (
                     ValidationType.incorrectValueForBoolean,
                 ])
             ) {
-                if (message in BinaryAnswerTypeYes) {
-                    disableButtons();
-                    return actionProvider.handleSecondParentExists(
-                        true,
-                        curState,
-                    );
-                } else if (message in BinaryAnswerTypeNo) {
-                    disableButtons();
-                    return actionProvider.handleSecondParentExists(
-                        false,
-                        curState,
-                    );
-                } else {
-                    alert('check for error');
-                }
+                return evaluateBooleanMessage(
+                    message,
+                    curState,
+                    actionProvider,
+                    handleSecondParentExists,
+                );
             }
         }
     }
@@ -482,19 +416,16 @@ export const commonMethods = (
                 ValidationType.incorrectValueForBoolean,
             ])
         ) {
-            if (message in BinaryAnswerTypeYes) {
-                disableButtons();
-                return actionProvider.handleFinalQuestion(true, curState);
-            } else if (message in BinaryAnswerTypeNo) {
-                disableButtons();
-                return actionProvider.handleFinalQuestion(false, curState);
-            } else {
-                alert('check for error');
-            }
+            return evaluateBooleanMessage(
+                message,
+                curState,
+                actionProvider,
+                handleFinalQuestionDef,
+            );
         }
-        // return actionProvider.handleFinalQuestion(message)
     }
 };
+
 const disableButtons = () => {
     const buttonElements: any = document.getElementsByClassName(
         'option-selector-button',
@@ -509,48 +440,6 @@ const disableButtons = () => {
     }
 };
 
-// const setRevertListeners = () => {
-//     messageService.clearAllInternalSubscription();
-//     /* eslint-disable @typescript-eslint/no-unused-vars */
-//     const subscription = messageService
-//         .getMessageInChatbot()
-//         .subscribe((message) => {
-//             this.revertState();
-//         });
-//     messageService.addInternalSubscription(subscription);
-// };
-// const revertState = () => {
-//     const lastState = messageService.removePreviousState();
-//     console.log('setting state:');
-//     console.log(lastState);
-
-//     const previousStates: any = messageService.getPreviousStates();
-//     console.log('previous States:');
-//     console.log(previousStates);
-
-//
-//     }
-// };
-// const flagSwitch = (curState: ChatbotInterface, message: any) => {
-//     if (curState.successor_flag === QuestionType.part1) {
-//         return this.actionProvider.handleSuccessorInput(message);
-//     } else if (curState.successor_flag === QuestionType.part2)
-//         return this.actionProvider.handleChildAliveOption(message);
-//     else if (curState.successor_flag === QuestionType.part3) {
-//         if (
-//             chatbotValidator.validate(message, [
-//                 ValidationType.emptyValue,
-//                 ValidationType.onlyDigit,
-//             ])
-//         ) {
-//             return this.actionProvider.handleSuccessorCount(message);
-//         } else {
-//             // remove last message and update stepid
-//             // return this.actionProvider.handleValidation();
-//         }
-//     }
-//     return null;
-// };
 const handleSuccessor = (
     message: string,
     curState: ChatbotInterface,
@@ -558,7 +447,7 @@ const handleSuccessor = (
     chatbotValidator: ChatbotValidation,
 ) => {
     if (curState.successor_flag === QuestionType.part1) {
-        return actionProvider.handleSuccessorInput(message, curState);
+        return handleSuccessorInput(message, curState, actionProvider);
     } else if (curState.successor_flag === QuestionType.part2) {
         message = message.toLowerCase();
         if (
@@ -566,15 +455,12 @@ const handleSuccessor = (
                 ValidationType.incorrectValueForBoolean,
             ])
         ) {
-            if (message in BinaryAnswerTypeYes) {
-                disableButtons();
-                return actionProvider.handleChildAliveOption(true, curState);
-            } else if (message in BinaryAnswerTypeNo) {
-                disableButtons();
-                return actionProvider.handleChildAliveOption(false, curState);
-            } else {
-                alert('check for error');
-            }
+            return evaluateBooleanMessage(
+                message,
+                curState,
+                actionProvider,
+                handleChildAliveOption,
+            );
         }
     } else if (curState.successor_flag === QuestionType.part3) {
         if (
@@ -583,13 +469,14 @@ const handleSuccessor = (
                 ValidationType.onlyDigit,
             ])
         ) {
-            return actionProvider.handleSuccessorCount(message, curState);
+            return handleSuccessorCnt(message, curState, actionProvider);
         } else {
+            return;
             // remove last message and update stepid
             // return this.actionProvider.handleValidation();
         }
     }
-    return actionProvider.handleUndividedEstateSpouse(message, curState);
+    return undividedEstateSpouse(message, curState, actionProvider);
 };
 
 export const handleWidgetFunctions = (
@@ -646,7 +533,13 @@ export const handleMessage = (
             messageService.resetRevertCnt();
             messageService.resetRevert();
 
-            finalState.messages.push(state.messages[state.messages.length - 1]);
+            if (
+                finalState.messages[finalState.messages.length - 1] !==
+                state.messages[state.messages.length - 1]
+            )
+                finalState.messages.push(
+                    state.messages[state.messages.length - 1],
+                );
             state = finalState;
         }
         const prevState = _.cloneDeep(state);
@@ -657,4 +550,22 @@ export const handleMessage = (
         focusWritingArea();
         return actionProvider.returnState(state);
     });
+};
+
+const evaluateBooleanMessage = (
+    message: string,
+    curState: any,
+    actionProvider: any,
+    func: any,
+) => {
+    disableButtons();
+    return message in BinaryAnswerTypeYes
+        ? typeof func === 'function'
+            ? func(true, curState, actionProvider)
+            : alert('func is not a function')
+        : message in BinaryAnswerTypeNo
+        ? typeof func === 'function'
+            ? func(false, curState, actionProvider)
+            : alert('func is not a function')
+        : alert('check for error');
 };

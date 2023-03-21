@@ -1,16 +1,22 @@
 import { PDFDownloadLink } from '@react-pdf/renderer';
+import { ReactElement } from 'react';
 import { InheritanceCalculation } from '../../Reports/InheritanceCalculation';
 import FinalDocument from '../../Reports/PDF/FinalDocument';
 import { PliktdelsarvCalculation } from '../../Reports/PliktdelsarvCalculation';
 import { UndividedCalculation } from '../../Reports/UndividedCalculation';
 import ActionProvider from '../ActionProvider';
-import { ChatbotInterface } from '../Generics';
 import { NodeEntity } from '../Helper/Classes/NodeEntity';
 import Person from '../Helper/Classes/Person';
 import { ChatStepTypes, QuestionType } from '../Helper/Enums/ChatStepTypes';
 import { ParentChildSelector } from '../Helper/Enums/ParentChildSelector';
 import InheritanceConstants from '../Helper/Methods/InheritanceConstants';
 import QuestionConstants from '../Helper/Methods/QuestionConstants';
+import { messageService } from '../services/ChatbotCommunicator';
+import {
+    handleAskForNextGrandParent,
+    handleGrandParentFirst,
+} from './RelativeMethods';
+import { handleAskUnderAgeQuestion } from './TestatorInformationMethods';
 import { handleUndividedStep } from './UndividedEstateMethods';
 
 export const handleFinalQuestionDef = (
@@ -93,13 +99,17 @@ export const handleClosingStep = (
 ) => {
     switch (state.stepID) {
         case ChatStepTypes.successorStep:
-            state = actionProvider.closestSurvivingRelativeChildren(state);
+            state = handleClosestSurvivingRelativeChildren(
+                state,
+                actionProvider,
+            );
             return state;
         case ChatStepTypes.parentsStep:
             state.temp_person = state.person;
-            state = actionProvider.closestSurvivingRelativeParents(
+            state = handleClosestSurvivingRelativeParents(
                 isSecondParent,
                 state,
+                actionProvider,
             );
             return state;
         case ChatStepTypes.undividedEstateStep:
@@ -111,14 +121,15 @@ export const handleClosingStep = (
                 state.deceasedParentsArray[0],
                 state.nodeMap,
             );
-            state = actionProvider.closestSurvivingRelativeGrandParents(
-                true,
+            state = handleClosestSurvivingRelativeGrandParens(
+                isSecondParent,
                 state,
+                actionProvider,
             );
             return state;
 
         case ChatStepTypes.testatorOtherChildStep:
-            state = actionProvider.askUnderAgeQuestion(state);
+            state = handleAskUnderAgeQuestion(state, actionProvider);
             return state;
     }
 };
@@ -165,7 +176,7 @@ export const handleClosestSurvivingRelativeChildren = (
             stepID: ChatStepTypes.rearChildrenStep,
         };
 
-        state = actionProvider.askFinalQuestion(state);
+        state = askFinalQuestion(state, actionProvider);
         return state;
     }
 
@@ -174,7 +185,7 @@ export const handleClosestSurvivingRelativeChildren = (
         state.netWealth <=
             InheritanceConstants.MINIMUM_INHERITANCE_SPOUSE_VS_PARENTS
     ) {
-        state = actionProvider.askFinalQuestion(state);
+        state = askFinalQuestion(state, actionProvider);
         return state;
     }
 
@@ -183,7 +194,7 @@ export const handleClosestSurvivingRelativeChildren = (
         state.netWealth <=
             InheritanceConstants.MINIMUM_INHERITANCE_COHABITANT_VS_PARENTS
     ) {
-        state = actionProvider.askFinalQuestion(state);
+        state = askFinalQuestion(state, actionProvider);
         return state;
     }
     state = {
@@ -225,7 +236,7 @@ export const handleClosestSurvivingRelativeParents = (
     }
 
     if (state.person._spouse !== null) {
-        state = actionProvider.askFinalQuestion(state);
+        state = askFinalQuestion(state, actionProvider);
         return state;
     }
     const temp_class = get_class_and_distance_closest_surviving_relative(
@@ -252,11 +263,11 @@ export const handleClosestSurvivingRelativeParents = (
             state.personsMap,
         );
         if (!personDetail._underAge) {
-            state = actionProvider.askFinalQuestion(state);
+            state = askFinalQuestion(state, actionProvider);
             return state;
         }
         if (state.person._parents.length !== 2) {
-            state = actionProvider.askFinalQuestion(state);
+            state = askFinalQuestion(state, actionProvider);
             return state;
         }
 
@@ -294,7 +305,7 @@ export const handleClosestSurvivingRelativeParents = (
             return state;
         }
     } else {
-        state = actionProvider.grandParentFirst(state);
+        state = handleGrandParentFirst(state, actionProvider);
         return state;
     }
 };
@@ -327,7 +338,7 @@ export const handleClosestSurvivingRelativeGrandParens = (
     state.deceasedParentsArray = state.deceasedParentsArray.filter(
         (item: any) => item !== state.deceasedParentsArray[0],
     );
-    state = actionProvider.askForNextGrandParent(state);
+    state = handleAskForNextGrandParent(state, actionProvider);
     return state;
 };
 
@@ -501,6 +512,83 @@ export const add_child = (
     if (add_for_both) {
         if (!child._parents.find((obj) => obj === partnerNode._id)) {
             child._parents.push(partnerNode._id);
+        }
+    }
+};
+
+export const askFinalQuestion = (
+    state: any,
+    actionProvider: ActionProvider,
+) => {
+    state = {
+        ...state,
+        stepID: ChatStepTypes.finalStep,
+    };
+    const finalQuestion = actionProvider.createChatBotMessage(
+        QuestionConstants.FinalQuestion,
+        QuestionConstants.YesNoWidgetOptions,
+    );
+    state = actionProvider.addMessageToBotState(finalQuestion, state);
+    return state;
+};
+
+export const getParentChildrenIDStrings = (
+    collection: Array<number>,
+    state: any,
+): ReactElement => {
+    return (
+        <strong>{`{{ ${collection
+            .map(
+                (child_id) =>
+                    Person.getPerson(child_id, state.personsMap)._personName,
+            )
+            .filter((name) => name !== '')
+            .join(', ')} }}`}</strong>
+    );
+};
+
+export const revertState = (actionProvider: ActionProvider) => {
+    const revertCount = localStorage.getItem('revertCount');
+    let lastState: any;
+    if (revertCount) {
+        lastState = messageService.getPreviousState(parseInt(revertCount));
+    } else {
+        lastState = messageService.getPreviousState(0);
+    }
+
+    if (lastState) {
+        if (revertCount) {
+            localStorage.setItem(
+                'revertCount',
+                (parseInt(revertCount) + 1).toString(),
+            );
+        } else {
+            localStorage.setItem('revertCount', '1');
+        }
+        actionProvider.setState((state: any) => {
+            state = lastState;
+            return actionProvider.returnState(state);
+        });
+    }
+};
+
+export const clearBooleanOptions = () => {
+    const chatAreaElement = document.getElementsByClassName(
+        'react-chatbot-kit-chat-message-container',
+    )[0] as HTMLDivElement;
+    const buttonElementArray = chatAreaElement.querySelectorAll(
+        'div.option-selector-button-container',
+    );
+    const lastButtonDiv = buttonElementArray[buttonElementArray.length - 1];
+    if (
+        lastButtonDiv.nextElementSibling?.nextElementSibling
+            ?.nextElementSibling ===
+        document.querySelector('div[style="padding-bottom: 15px;"]')
+    ) {
+        for (const btn of lastButtonDiv.children) {
+            btn.removeAttribute('disabled');
+            btn.removeAttribute('style');
+            btn.setAttribute('style', 'background-color:#2dabf9');
         }
     }
 };

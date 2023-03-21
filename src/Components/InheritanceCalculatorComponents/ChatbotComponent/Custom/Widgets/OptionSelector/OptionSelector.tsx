@@ -6,27 +6,25 @@ import { handleMessage } from '../../../Helper/Methods/CommonMethods';
 
 const OptionSelector = ({ actionProvider, ...rest }: any): ReactElement => {
     return (
-        <div>
-            <div className="option-selector-button-container">
-                <button
-                    className="option-selector-button"
-                    onClick={(e) => {
-                        onClickHandler(e);
-                        handleOptions(true, actionProvider);
-                    }}
-                >
-                    <FormattedMessage id="Chatbot.Yes" />
-                </button>
-                <button
-                    className="option-selector-button"
-                    onClick={(e) => {
-                        onClickHandler(e);
-                        handleOptions(false, actionProvider);
-                    }}
-                >
-                    <FormattedMessage id="Chatbot.No" />
-                </button>
-            </div>
+        <div className="option-selector-button-container">
+            <button
+                className="option-selector-button"
+                onClick={(e) => {
+                    onClickHandler(e);
+                    handleOptions(true, actionProvider);
+                }}
+            >
+                <FormattedMessage id="Chatbot.Yes" />
+            </button>
+            <button
+                className="option-selector-button"
+                onClick={(e) => {
+                    onClickHandler(e);
+                    handleOptions(false, actionProvider);
+                }}
+            >
+                <FormattedMessage id="Chatbot.No" />
+            </button>
         </div>
     );
 };

@@ -1,7 +1,5 @@
 import ActionProvider from './ActionProvider';
-import { ChatbotInterface } from './Generics';
 import { handleMessage } from './Helper/Methods/CommonMethods';
-import { messageService } from './services/ChatbotCommunicator';
 
 class MessageParser {
     actionProvider: ActionProvider;

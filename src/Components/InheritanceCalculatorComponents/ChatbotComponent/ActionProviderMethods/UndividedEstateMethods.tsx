@@ -14,6 +14,7 @@ import {
 } from '../Helper/Methods/HandleCurrency';
 import QuestionConstants from '../Helper/Methods/QuestionConstants';
 import {
+    askFinalQuestion,
     createNewPerson,
     getNode,
     getPerson,
@@ -154,7 +155,7 @@ export const undividedOwnershipResponse = (
                 }
 
                 if (state.netWealth <= 0) {
-                    state = actionProvider.askFinalQuestion(state);
+                    state = askFinalQuestion(state, actionProvider);
                 } else {
                     state = {
                         ...state,
@@ -495,7 +496,7 @@ export const handleUndividedStep = (
                 state.undividedEstate.undividedEstateSeparateWealth = 0;
             }
             if (state.netWealth <= 0) {
-                state = actionProvider.askFinalQuestion(state);
+                state = askFinalQuestion(state, actionProvider);
                 return state;
             } else {
                 state = askTestatorOtherChildrenQuestion(state, actionProvider);

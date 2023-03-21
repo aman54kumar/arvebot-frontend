@@ -6,9 +6,11 @@ import { ChatStepTypes, QuestionType } from '../Helper/Enums/ChatStepTypes';
 import QuestionConstants from '../Helper/Methods/QuestionConstants';
 import {
     add_parent,
+    askFinalQuestion,
     createEmptyNode,
     createNewPerson,
     getNode,
+    getParentChildrenIDStrings,
     getPerson,
     get_class_and_distance_closest_surviving_relative,
     handleClosingStep,
@@ -77,7 +79,7 @@ export const handleSuccessorCnt = (
             state,
         );
     } else {
-        const allChildrenID = actionProvider.getParentChildrenIDStrings(
+        const allChildrenID = getParentChildrenIDStrings(
             state.temp_person._children,
             state,
         );
@@ -138,7 +140,7 @@ const handleNoSuccessorCase = (
                 childItrPos + 1;
             // ask childid question
             state.successor_flag = QuestionType.part1;
-            const allChildrenID = actionProvider.getParentChildrenIDStrings(
+            const allChildrenID = getParentChildrenIDStrings(
                 state.temp_person._children,
                 state,
             );
@@ -194,7 +196,7 @@ const handleNoSuccessorCase = (
                     state.personsMap,
                 );
                 state.successor_flag = QuestionType.part1;
-                const allChildrenID = actionProvider.getParentChildrenIDStrings(
+                const allChildrenID = getParentChildrenIDStrings(
                     currentParent._children,
                     state,
                 );
@@ -276,7 +278,7 @@ export const handleSecondParentExists = (
             ...state,
             parent_flag: QuestionType.part1,
         };
-        const allParentsID = actionProvider.getParentChildrenIDStrings(
+        const allParentsID = getParentChildrenIDStrings(
             temp_person._parents,
             state,
         );
@@ -346,7 +348,7 @@ export const handleParentAliveOption = (
             successor_flag: QuestionType.part3,
         };
         temp_parent._processChildNodePos += 1;
-        const allChildrenID = actionProvider.getParentChildrenIDStrings(
+        const allChildrenID = getParentChildrenIDStrings(
             temp_parent._children,
             state,
         );
@@ -417,7 +419,7 @@ export const handleGrandParentFirst = (
         state = actionProvider.addMessageToBotState(newParentQuestion, state);
     } else {
         console.log('check situation if it arrives here');
-        state = actionProvider.askFinalQuestion(state);
+        state = askFinalQuestion(state, actionProvider);
     }
     return state;
 };
@@ -449,7 +451,7 @@ export const handleAskForNextGrandParent = (
         );
         state = actionProvider.addMessageToBotState(newParentQuestion, state);
     } else {
-        state = actionProvider.askFinalQuestion(state);
+        state = askFinalQuestion(state, actionProvider);
     }
     return state;
 };
@@ -466,9 +468,9 @@ export const handleMarriedParents = (
             true,
             state,
         );
-        state = actionProvider.askFinalQuestion(state);
+        state = askFinalQuestion(state, actionProvider);
     } else {
-        state = actionProvider.grandParentFirst(state);
+        state = askFinalQuestion(state, actionProvider);
     }
     return state;
 };

@@ -1,13 +1,15 @@
 import ActionProvider from '../ActionProvider';
-import InfoMessagesWidget from '../Custom/Widgets/InfoMessagesWidget/InfoMessagesWidget';
-import { ChatbotInterface } from '../Generics';
 import { ChatStepTypes } from '../Helper/Enums/ChatStepTypes';
 import {
     CurrencyOutput,
     ParseCurrencyStringForOutput,
 } from '../Helper/Methods/HandleCurrency';
 import QuestionConstants from '../Helper/Methods/QuestionConstants';
-import { createTestator, getPerson } from './OtherChatbotMethods';
+import {
+    askFinalQuestion,
+    createTestator,
+    getPerson,
+} from './OtherChatbotMethods';
 
 export const handleTestator = (
     res: string,
@@ -49,12 +51,14 @@ export const handleNetWealth = (
     const currencyStringResponse = ParseCurrencyStringForOutput(
         currencyIntResponse[1],
     );
-    const currencyJSX = <InfoMessagesWidget label={currencyStringResponse} />;
+    // const currencyJSX = <InfoMessagesWidget label={currencyStringResponse} />;
+    const currencyJSX = <div>{currencyStringResponse}</div>;
     if (currencyIntResponse[0] === 5) {
         const underAgeQuestion = actionProvider.createChatBotMessage(
             QuestionConstants.UnderAgeQuestion,
             QuestionConstants.YesNoWidgetOptions,
         );
+        state.messages.pop();
         const currencyCustom = actionProvider.createClientMessage(currencyJSX);
         state = actionProvider.addMessageToBotState(currencyCustom, state);
 
@@ -64,7 +68,7 @@ export const handleNetWealth = (
             netWealth: parseInt(currencyIntResponse[1]),
         };
         if (state.netWealth <= 0) {
-            state = actionProvider.askFinalQuestion(state);
+            state = askFinalQuestion(state, actionProvider);
         }
         state = actionProvider.addMessageToBotState(underAgeQuestion, state);
     } else {

@@ -5,7 +5,7 @@ import { ChatStepTypes, QuestionType } from '../Helper/Enums/ChatStepTypes';
 import { ParentChildSelector } from '../Helper/Enums/ParentChildSelector';
 import InheritanceConstants from '../Helper/Methods/InheritanceConstants';
 import QuestionConstants from '../Helper/Methods/QuestionConstants';
-import { createNewPerson } from './OtherChatbotMethods';
+import { askFinalQuestion, createNewPerson } from './OtherChatbotMethods';
 
 export const handleSpouseOption = (
     res: boolean,
@@ -82,7 +82,7 @@ export const handleSpouseInput = (
             ...state,
             stepID: ChatStepTypes.rearChildrenStep,
         };
-        state = actionProvider.askFinalQuestion(state);
+        state = askFinalQuestion(state, actionProvider);
         return state;
     }
 
@@ -166,7 +166,7 @@ export const handleCohabitantInput = (
             ...state,
             stepID: ChatStepTypes.rearChildrenStep,
         };
-        state = actionProvider.askFinalQuestion(state);
+        state = askFinalQuestion(state, actionProvider);
         return state;
     }
     state = {
