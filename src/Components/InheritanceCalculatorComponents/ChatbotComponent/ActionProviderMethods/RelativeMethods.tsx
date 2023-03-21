@@ -35,7 +35,7 @@ export const handleSuccessorCnt = (
                 actionProvider,
             );
         } else {
-            return handleClosingStep(state, actionProvider);
+            state = handleClosingStep(state, actionProvider);
         }
         return state;
     }
@@ -289,7 +289,7 @@ export const handleSecondParentExists = (
         );
         state = actionProvider.addMessageToBotState(newParentQuestion, state);
     } else {
-        return handleClosingStep(state, actionProvider, false);
+        state = handleClosingStep(state, actionProvider, false);
         // if (state.stepID !== ChatStepTypes.grandParentStep) {
         //   actionProvider.closestSurvivingRelativeParents(false);
         // } else {

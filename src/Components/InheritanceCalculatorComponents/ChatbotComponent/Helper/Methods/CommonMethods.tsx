@@ -1,5 +1,6 @@
 import ActionProvider from '../../ActionProvider';
 import { ChatbotInterface } from '../../Generics';
+import { messageService } from '../../services/ChatbotCommunicator';
 import {
     BinaryAnswerTypeYes,
     BinaryAnswerTypeNo,
@@ -8,6 +9,11 @@ import { ChatStepTypes, QuestionType } from '../Enums/ChatStepTypes';
 import { ValidationType } from '../Enums/ValidationType';
 import { ChatbotValidation } from './ChatbotValidation';
 import { returnKeyFromEnteredNumberText } from './NumberInput';
+import {
+    getReturnValueFromBooleanWidget,
+    getReturnValueFromUndividedWidget,
+} from './OtherMethods';
+import _ from 'lodash';
 
 export const commonMethods = (
     message: string,
@@ -522,14 +528,7 @@ const disableButtons = () => {
 //     console.log('previous States:');
 //     console.log(previousStates);
 
-//     if (lastState) {
-//         this.actionProvider.setState((state: any) => {
-//             state = lastState;
-//             console.log('final state');
-//             console.log(state);
-
-//             return state;
-//         });
+//
 //     }
 // };
 // const flagSwitch = (curState: ChatbotInterface, message: any) => {
@@ -591,4 +590,71 @@ const handleSuccessor = (
         }
     }
     return actionProvider.handleUndividedEstateSpouse(message, curState);
+};
+
+export const handleWidgetFunctions = (
+    message: string,
+    actionProvider: ActionProvider,
+    state: any,
+    isClicked: boolean,
+    isClickedUndiv: boolean,
+) => {
+    const widgetFunctions = [
+        { widget: isClicked, func: getReturnValueFromBooleanWidget },
+        { widget: isClickedUndiv, func: getReturnValueFromUndividedWidget },
+    ];
+
+    widgetFunctions.forEach(({ widget, func }) => {
+        if (widget) {
+            const returnValue = func(message, state);
+            const clientMessage =
+                actionProvider.createClientMessage(returnValue);
+            state = actionProvider.addMessageToBotState(clientMessage, state);
+        }
+    });
+    return state;
+};
+
+export const focusWritingArea = () => {
+    const inputBoxElement = document.getElementsByClassName(
+        'react-chatbot-kit-chat-input',
+    )[0] as HTMLInputElement;
+    if (inputBoxElement) {
+        inputBoxElement.focus();
+    }
+};
+
+export const handleMessage = (
+    actionProvider: ActionProvider,
+    message: string,
+    isClicked = false,
+    isClickedUndiv = false,
+) => {
+    actionProvider.setState((state: any) => {
+        handleWidgetFunctions(
+            message,
+            actionProvider,
+            state,
+            isClicked,
+            isClickedUndiv,
+        );
+        let finalState: any;
+        if (messageService.getRevert()) {
+            finalState = messageService.removePreviousStates(
+                messageService.getRevertCnt(),
+            );
+            messageService.resetRevertCnt();
+            messageService.resetRevert();
+
+            finalState.messages.push(state.messages[state.messages.length - 1]);
+            state = finalState;
+        }
+        const prevState = _.cloneDeep(state);
+        prevState.messages.pop();
+        messageService.addPreviousState(prevState);
+        message = message.trim();
+        state = commonMethods(message, state, actionProvider);
+        focusWritingArea();
+        return actionProvider.returnState(state);
+    });
 };

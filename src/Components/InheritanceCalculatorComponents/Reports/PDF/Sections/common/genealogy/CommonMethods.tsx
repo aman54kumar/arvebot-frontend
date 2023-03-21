@@ -12,8 +12,9 @@ export const getGenealogyInheritanceText = (
 ) => {
     const finalGenealogyInheritanceText = [];
     for (const obj of value.genealogy_inheritance) {
+        const id = Math.random().toString(36).substring(7);
         finalGenealogyInheritanceText.push(
-            <Text>
+            <Text key={id}>
                 Person med person-id <Bold>{obj.person}</Bold> arver totalt{' '}
                 <Bold>{currencyFormatNO(obj.frac)} </Bold>
                 {unravel_chains_to_string([obj.chains])}.{'\n'}

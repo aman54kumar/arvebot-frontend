@@ -32,8 +32,8 @@ export const handleTestator = (
     state = {
         ...state,
     };
-
-    return actionProvider.addMessageToBotState(undividedEstateQuestion, state);
+    state = actionProvider.addMessageToBotState(undividedEstateQuestion, state);
+    return state;
 };
 
 export const handleNetWealth = (
@@ -64,7 +64,7 @@ export const handleNetWealth = (
             netWealth: parseInt(currencyIntResponse[1]),
         };
         if (state.netWealth <= 0) {
-            actionProvider.askFinalQuestion(state);
+            state = actionProvider.askFinalQuestion(state);
         }
         state = actionProvider.addMessageToBotState(underAgeQuestion, state);
     } else {

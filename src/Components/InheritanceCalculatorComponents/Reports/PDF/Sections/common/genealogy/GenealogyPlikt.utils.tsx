@@ -15,9 +15,9 @@ const GenealogyPliktUtils = (value: PliktdelsarvCalculation) => {
     const genealogyText = getGenealogyText(genealogy_inheritance_sum, value);
 
     return (
-        <View>
+        <Text>
             <Text>{genealogyText}</Text>
-        </View>
+        </Text>
     );
 };
 
@@ -81,10 +81,10 @@ const getParagraph = (
         LAW_LINKS,
     );
     return (
-        <View>
+        <Text>
             <Text>{helpText}</Text>
             <Text>{legalReferenceText}</Text>
-        </View>
+        </Text>
     );
 };
 

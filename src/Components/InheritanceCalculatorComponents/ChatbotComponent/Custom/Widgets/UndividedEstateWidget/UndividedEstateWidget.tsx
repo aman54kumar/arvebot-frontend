@@ -3,6 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import { ReactElement } from 'react';
 import ActionProvider from '../../../ActionProvider';
 import { undividedOwnershipType } from '../../../Helper/Enums/ChatStepTypes';
+import { handleMessage } from '../../../Helper/Methods/CommonMethods';
 
 const UndividedEstateWidget = ({
     actionProvider,
@@ -61,7 +62,7 @@ const UndividedEstateWidget = ({
 
 const handleOptions = (option: string, actionProvider: ActionProvider) => {
     hideWarning();
-    actionProvider.handleMessage(option, false, true);
+    handleMessage(actionProvider, option, false, true);
 };
 
 const onClickHandler = (e: any): void => {

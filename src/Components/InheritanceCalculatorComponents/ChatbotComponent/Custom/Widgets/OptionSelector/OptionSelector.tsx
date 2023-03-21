@@ -2,6 +2,7 @@ import './OptionSelector.scss';
 import { FormattedMessage } from 'react-intl';
 import { ReactElement } from 'react';
 import ActionProvider from '../../../ActionProvider';
+import { handleMessage } from '../../../Helper/Methods/CommonMethods';
 
 const OptionSelector = ({ actionProvider, ...rest }: any): ReactElement => {
     return (
@@ -44,13 +45,8 @@ const onClickHandler = (e: any): void => {
 
 const handleOptions = (option: boolean, actionProvider: ActionProvider) => {
     hideWarning();
-
-    // store previous state
-    // actionProvider.setState((state: any) => {
-
     const optionSelected = option ? 'yes' : 'no';
-
-    actionProvider.handleMessage(optionSelected, true);
+    handleMessage(actionProvider, optionSelected, true, false);
 };
 
 const hideWarning = () => {

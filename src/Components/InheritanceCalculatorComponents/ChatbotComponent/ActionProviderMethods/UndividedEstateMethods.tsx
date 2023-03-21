@@ -154,14 +154,13 @@ export const undividedOwnershipResponse = (
                 }
 
                 if (state.netWealth <= 0) {
-                    actionProvider.askFinalQuestion(state);
+                    state = actionProvider.askFinalQuestion(state);
                 } else {
-                    actionProvider.setState((state: any) => {
-                        state = {
-                            ...state,
-                            stepID: ChatStepTypes.underAgeStep,
-                        };
-                    });
+                    state = {
+                        ...state,
+                        stepID: ChatStepTypes.underAgeStep,
+                    };
+
                     const underAgeQuestion =
                         actionProvider.createChatBotMessage(
                             QuestionConstants.UnderAgeQuestion,
@@ -496,7 +495,7 @@ export const handleUndividedStep = (
                 state.undividedEstate.undividedEstateSeparateWealth = 0;
             }
             if (state.netWealth <= 0) {
-                actionProvider.askFinalQuestion(state);
+                state = actionProvider.askFinalQuestion(state);
                 return state;
             } else {
                 state = askTestatorOtherChildrenQuestion(state, actionProvider);

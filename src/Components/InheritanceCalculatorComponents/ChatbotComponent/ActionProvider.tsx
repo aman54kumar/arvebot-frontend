@@ -44,75 +44,44 @@ import {
     handleClosestSurvivingRelativeParents,
     handleFinalQuestionDef,
 } from './ActionProviderMethods/OtherChatbotMethods';
-import { commonMethods } from './Helper/Methods/CommonMethods';
-import _ from 'lodash';
 import {
-    getReturnValueFromBooleanWidget,
-    getReturnValueFromUndividedWidget,
-} from './Helper/Methods/OtherMethods';
+    commonMethods,
+    focusWritingArea,
+    handleWidgetFunctions,
+} from './Helper/Methods/CommonMethods';
+import _ from 'lodash';
 class ActionProvider {
-    handleMessage(message: string, isClicked = false, isClickedUndiv = false) {
-        this.setState((state: any) => {
-            const widgetFunctions = [
-                { widget: isClicked, func: getReturnValueFromBooleanWidget },
-                {
-                    widget: isClickedUndiv,
-                    func: getReturnValueFromUndividedWidget,
-                },
-            ];
+    // handleMessage(message: string, isClicked = false, isClickedUndiv = false) {
+    //     this.setState((state: any) => {
+    //         handleWidgetFunctions(
+    //             message,
+    //             this,
+    //             state,
+    //             isClicked,
+    //             isClickedUndiv,
+    //         );
+    //         let finalState: any;
+    //         if (messageService.getRevert()) {
+    //             finalState = messageService.removePreviousStates(
+    //                 messageService.getRevertCnt(),
+    //             );
+    //             messageService.resetRevertCnt();
+    //             messageService.resetRevert();
 
-            widgetFunctions.forEach(({ widget, func }) => {
-                if (widget) {
-                    const returnValue = func(message, state);
-                    const clientMessage = this.createClientMessage(returnValue);
-                    state = this.addMessageToBotState(clientMessage, state);
-                }
-            });
-            // state.messages = curState.messages;
-            // state.personMap = curState.personMap;
-            // state.nodeMap = curState.nodeMap;
-            // state.testator = curState.testator;
-            // state.stepID = curState.stepID;
-            // state.person = curState.person;
-            // state.netWealth = curState.netWealth;
-            // state.successor_flag = curState.successor_flag;
-            // state.parent_flag = curState.parent_flag;
-            // state.temp_person = curState.temp_person;
-            // state.temp_child = curState.temp_child;
-            // state.id = curState.id;
-            // state.undividedSpouseId = curState.undividedSpouseId;
-            // state.deceasedParentsArray = curState.deceasedParentsArray;
-            // state.deceasedParentsArray = curState.deceasedParentsArray;
-            // state.grandParent_flag = curState.grandParent_flag;
-            // state.rearChildrenResponse = curState.rearChildrenResponse;
-            // state.undividedEstate = curState.undividedEstate;
-            // state.tempMessages = curState.tempMessages;
-            // state.successorProcessArray = curState.successorProcessArray;
-            // state.isUndividedParent = curState.isUndividedParent;
-            // state.yesNoClickedFlag = curState.yesNoClickedFlag;
-            let finalState: any;
-            if (messageService.getRevert()) {
-                finalState = messageService.removePreviousStates(
-                    messageService.getRevertCnt(),
-                );
-                messageService.resetRevertCnt();
-                messageService.resetRevert();
-
-                finalState.messages.push(
-                    state.messages[state.messages.length - 1],
-                );
-                state = finalState;
-            }
-            const prevState = _.cloneDeep(state);
-            prevState.messages.pop();
-            messageService.addPreviousState(prevState);
-            // console.log(state);
-            message = message.trim();
-            state = commonMethods(message, state, this);
-            // console.log(state);
-            return this.returnState(state);
-        });
-    }
+    //             finalState.messages.push(
+    //                 state.messages[state.messages.length - 1],
+    //             );
+    //             state = finalState;
+    //         }
+    //         const prevState = _.cloneDeep(state);
+    //         prevState.messages.pop();
+    //         messageService.addPreviousState(prevState);
+    //         message = message.trim();
+    //         state = commonMethods(message, state, this);
+    //         focusWritingArea();
+    //         return this.returnState(state);
+    //     });
+    // }
     createChatBotMessage: (
         questionElement: ReactElement,
         widget?: Record<string, unknown>,

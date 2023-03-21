@@ -36,10 +36,7 @@ export const handleFinalQuestionDef = (
             </div>
         );
         const pdfLink = actionProvider.createChatBotMessage(pdfDownloadLink);
-        console.log(pdfDownloadLink);
-
         state = actionProvider.addMessageToBotState(pdfLink, state);
-
         console.log('prepare report and download');
     }
     return state;
@@ -96,7 +93,8 @@ export const handleClosingStep = (
 ) => {
     switch (state.stepID) {
         case ChatStepTypes.successorStep:
-            return actionProvider.closestSurvivingRelativeChildren(state);
+            state = actionProvider.closestSurvivingRelativeChildren(state);
+            return state;
         case ChatStepTypes.parentsStep:
             state.temp_person = state.person;
             state = actionProvider.closestSurvivingRelativeParents(
@@ -227,7 +225,7 @@ export const handleClosestSurvivingRelativeParents = (
     }
 
     if (state.person._spouse !== null) {
-        actionProvider.askFinalQuestion(state);
+        state = actionProvider.askFinalQuestion(state);
         return state;
     }
     const temp_class = get_class_and_distance_closest_surviving_relative(
@@ -254,11 +252,11 @@ export const handleClosestSurvivingRelativeParents = (
             state.personsMap,
         );
         if (!personDetail._underAge) {
-            actionProvider.askFinalQuestion(state);
+            state = actionProvider.askFinalQuestion(state);
             return state;
         }
         if (state.person._parents.length !== 2) {
-            actionProvider.askFinalQuestion(state);
+            state = actionProvider.askFinalQuestion(state);
             return state;
         }
 

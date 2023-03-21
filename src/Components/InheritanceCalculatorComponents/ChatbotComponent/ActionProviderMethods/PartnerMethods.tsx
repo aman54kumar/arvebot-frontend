@@ -82,7 +82,7 @@ export const handleSpouseInput = (
             ...state,
             stepID: ChatStepTypes.rearChildrenStep,
         };
-        actionProvider.askFinalQuestion(state);
+        state = actionProvider.askFinalQuestion(state);
         return state;
     }
 
@@ -166,7 +166,7 @@ export const handleCohabitantInput = (
             ...state,
             stepID: ChatStepTypes.rearChildrenStep,
         };
-        actionProvider.askFinalQuestion(state);
+        state = actionProvider.askFinalQuestion(state);
         return state;
     }
     state = {

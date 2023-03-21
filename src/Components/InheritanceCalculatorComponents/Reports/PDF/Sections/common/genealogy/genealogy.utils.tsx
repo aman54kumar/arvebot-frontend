@@ -2,11 +2,7 @@ import { Text, View } from '@react-pdf/renderer';
 import InheritanceConstants from '../../../../../ChatbotComponent/Helper/Methods/InheritanceConstants';
 import { InheritanceCalculation } from '../../../../InheritanceCalculation';
 import { styles } from '../../../styles';
-import {
-    add_legal_reference,
-    currencyFormatNO,
-    unravel_chains_to_string,
-} from '../../../../pdf_utils';
+import { add_legal_reference, currencyFormatNO } from '../../../../pdf_utils';
 import { Bold } from '../text-styles/Bold';
 import { getGenealogyInheritanceText } from './CommonMethods';
 
@@ -51,7 +47,7 @@ const getGenealogyText = (
             InheritanceConstants.LAW_LINKS,
         );
         return (
-            <View>
+            <Text>
                 <Text style={styles.paragraph}>
                     "Testator har ingen nære slektninger."
                 </Text>
@@ -67,11 +63,11 @@ const getGenealogyText = (
                     </Text>
                     <Text style={styles.paragraph}>{legalReference2}</Text>
                 </View>
-            </View>
+            </Text>
         );
     } else {
         return (
-            <View>
+            <Text>
                 <Text style={styles.paragraph}>
                     De gjenværende{' '}
                     <Bold>{currencyFormatNO(genealogy_inheritance_sum)}</Bold>{' '}
@@ -88,7 +84,7 @@ const getGenealogyText = (
                     {'\n\n'}
                     {getGenealogyInheritanceText(value)}
                 </Text>
-            </View>
+            </Text>
         );
     }
 };

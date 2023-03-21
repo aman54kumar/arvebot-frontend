@@ -1,5 +1,6 @@
 import ActionProvider from './ActionProvider';
 import { ChatbotInterface } from './Generics';
+import { handleMessage } from './Helper/Methods/CommonMethods';
 import { messageService } from './services/ChatbotCommunicator';
 
 class MessageParser {
@@ -13,7 +14,7 @@ class MessageParser {
     parse(message: string): ReturnType<() => void> {
         // store previous state
         this.state.yesNoClickedFlag = false;
-        this.actionProvider.handleMessage(message);
+        handleMessage(this.actionProvider, message, false, false);
     }
 }
 
