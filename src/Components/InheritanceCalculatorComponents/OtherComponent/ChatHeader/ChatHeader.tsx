@@ -3,12 +3,14 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import { RestartAlt } from '@mui/icons-material';
-import { Button, Typography } from '@mui/material';
+import UndoIcon from '@mui/icons-material/Undo';
+import { Button, Tooltip, Typography } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { focusWritingArea } from '../../ChatbotComponent/Helper/Methods/CommonMethods';
 
 export default function ChatHeader(props: any) {
     const [open, setOpen] = useState(false);
@@ -43,19 +45,33 @@ export default function ChatHeader(props: any) {
                     >
                         Conversation with ArveBot
                     </Typography>
-                    <Button
-                        onClick={handleClickOpen}
-                        style={{ backgroundColor: 'rgb(92, 204, 157)' }}
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                        }}
                     >
-                        <RestartAlt fontSize="medium" />
-                    </Button>
-                    <Button
-                        onClick={handleRevert}
-                        style={{ backgroundColor: 'rgb(92, 204, 157)' }}
-                    >
-                        {/* <RestartAlt fontSize="medium" /> */}
-                        Revert
-                    </Button>
+                        <Tooltip title="Undo">
+                            <Button
+                                onClick={() => {
+                                    handleRevert();
+                                    focusWritingArea();
+                                }}
+                                style={{ backgroundColor: 'rgb(92, 204, 157)' }}
+                            >
+                                <UndoIcon fontSize="small" />
+                            </Button>
+                        </Tooltip>
+                        <Box sx={{ width: '8px' }} />
+                        <Tooltip title="Restart">
+                            <Button
+                                onClick={handleClickOpen}
+                                style={{ backgroundColor: 'rgb(92, 204, 157)' }}
+                            >
+                                <RestartAlt fontSize="small" />
+                            </Button>
+                        </Tooltip>
+                    </Box>
                     <Dialog
                         open={open}
                         onClose={handleCloseNo}

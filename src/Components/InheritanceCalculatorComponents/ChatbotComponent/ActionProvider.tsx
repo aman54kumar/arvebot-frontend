@@ -1,4 +1,3 @@
-import Person from './Helper/Classes/Person';
 import { ChatbotInterface, InitialChatbotState } from './Generics';
 import { ReactElement } from 'react';
 import { NodeEntity } from './Helper/Classes/NodeEntity';
@@ -8,18 +7,17 @@ import QuestionConstants from './Helper/Methods/QuestionConstants';
 import _ from 'lodash';
 import {
     clearBooleanOptions,
+    clearDisabledInput,
     revertState,
 } from './ActionProviderMethods/OtherChatbotMethods';
-import { last } from 'rxjs';
+
 class ActionProvider {
     createChatBotMessage: (
         questionElement: ReactElement,
         widget?: Record<string, unknown>,
     ) => ReactElement;
     setState: (state: unknown) => ChatbotInterface;
-    createClientMessage: (
-        messageElement: ReactElement,
-    ) => ReactElement<any, any>;
+    createClientMessage: (messageElement: ReactElement) => ReactElement;
     stateRef: any;
     checkstate: any = null;
     isStarted = true;
@@ -31,7 +29,7 @@ class ActionProvider {
             widget?: Record<string, unknown>,
         ) => ReactElement,
         setStateFunc: (state: any) => any,
-        createClientMessage: (messageElement: ReactElement) => any,
+        createClientMessage: (messageElement: ReactElement) => ReactElement,
         stateRef: any,
     ) {
         this.createChatBotMessage = createChatBotMessage;
@@ -139,6 +137,7 @@ class ActionProvider {
             }
             state = prevState;
             clearBooleanOptions();
+            clearDisabledInput(state.stepID);
             return this.returnState(state);
         });
     };

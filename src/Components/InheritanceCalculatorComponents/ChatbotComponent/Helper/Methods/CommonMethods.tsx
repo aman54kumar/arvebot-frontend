@@ -43,7 +43,7 @@ import {
     handleSpouseInput,
     handleSpouseOption,
 } from '../../ActionProviderMethods/PartnerMethods';
-import { handleFinalQuestionDef } from '../../ActionProviderMethods/OtherChatbotMethods';
+import { handleFinalQuestion } from '../../ActionProviderMethods/OtherChatbotMethods';
 
 export const commonMethods = (
     message: string,
@@ -420,7 +420,7 @@ export const commonMethods = (
                 message,
                 curState,
                 actionProvider,
-                handleFinalQuestionDef,
+                handleFinalQuestion,
             );
         }
     }

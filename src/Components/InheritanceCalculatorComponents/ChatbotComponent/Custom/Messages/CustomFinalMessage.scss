@@ -1,0 +1,27 @@
+.react-chatbot-kit-custom-chat-message-container {
+    background-color: lightgray;
+    text-align: center;
+    padding: 0.5rem 0;
+    text-transform: uppercase;
+    display:flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+
+.react-chatbot-kit-custom-chat-text-message-container > a {
+    flex-grow:1;
+    text-decoration: none;
+    font-weight: bold;
+    color: darkslategrey;
+}
+
+.react-chatbot-kit-custom-chat-text-message-container > a:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
+    color: cornflowerblue;
+}
+
+.react-chatbot-kit-custom-chat-image-message-container {
+    flex-grow:1;
+}
+

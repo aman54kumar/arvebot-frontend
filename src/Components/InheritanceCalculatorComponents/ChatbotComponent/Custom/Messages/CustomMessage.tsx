@@ -1,9 +1,8 @@
-import InfoMessagesWidget from "../Widgets/InfoMessagesWidget/InfoMessagesWidget";
+import ReactPDF from '@react-pdf/renderer';
+import { ReactElement } from 'react';
+import InfoMessagesWidget from '../Widgets/InfoMessagesWidget/InfoMessagesWidget';
 
 const CustomMessage = (props: any) => {
-    return (
-        <InfoMessagesWidget label={props.label} />
-    );
+    return <InfoMessagesWidget {...props} />;
 };
-
 export default CustomMessage;

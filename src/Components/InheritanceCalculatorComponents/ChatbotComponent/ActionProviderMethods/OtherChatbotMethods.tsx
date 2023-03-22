@@ -5,6 +5,7 @@ import FinalDocument from '../../Reports/PDF/FinalDocument';
 import { PliktdelsarvCalculation } from '../../Reports/PliktdelsarvCalculation';
 import { UndividedCalculation } from '../../Reports/UndividedCalculation';
 import ActionProvider from '../ActionProvider';
+import InfoMessagesWidget from '../Custom/Widgets/InfoMessagesWidget/InfoMessagesWidget';
 import { NodeEntity } from '../Helper/Classes/NodeEntity';
 import Person from '../Helper/Classes/Person';
 import { ChatStepTypes, QuestionType } from '../Helper/Enums/ChatStepTypes';
@@ -18,33 +19,39 @@ import {
 } from './RelativeMethods';
 import { handleAskUnderAgeQuestion } from './TestatorInformationMethods';
 import { handleUndividedStep } from './UndividedEstateMethods';
-
-export const handleFinalQuestionDef = (
-    res: boolean,
+import { createCustomMessage } from 'react-chatbot-kit';
+import ReactDOMServer from 'react-dom/server';
+import CustomFinalMessage from '../Custom/Messages/CustomFinalMessage';
+const CustomComponent = ({ element }: any) => {
+    return ReactDOMServer.renderToString(element);
+};
+export const handleFinalQuestion = (
     state: any,
     actionProvider: ActionProvider,
 ) => {
-    if (res) {
-        const document = computeInheritances(state, actionProvider);
-        const pdfDownloadLink = (
-            <div>
-                <PDFDownloadLink
-                    document={document}
-                    fileName={
-                        getPerson(state.testator._id, state.personsMap)
-                            ._personName
-                    }
-                >
-                    {({ blob, url, loading, error }) =>
-                        loading ? 'Loading document...' : 'Download now!'
-                    }
-                </PDFDownloadLink>
-            </div>
-        );
-        const pdfLink = actionProvider.createChatBotMessage(pdfDownloadLink);
-        state = actionProvider.addMessageToBotState(pdfLink, state);
-        console.log('prepare report and download');
-    }
+    const document = computeInheritances(state, actionProvider);
+    const pdfDownloadLink = (
+        <PDFDownloadLink
+            document={document}
+            fileName={
+                getPerson(state.testator._id, state.personsMap)._personName
+            }
+        >
+            {({ blob, url, loading, error }) =>
+                loading
+                    ? 'Loading document...'
+                    : error
+                    ? 'Error! Try again or contact us explaining your problem.'
+                    : 'Download Report!'
+            }
+        </PDFDownloadLink>
+    );
+
+    const message = createCustomMessage('', 'custom', {
+        payload: pdfDownloadLink,
+    });
+    state = actionProvider.addMessageToBotState(message, state);
+    blockInputAtFinalStep(state.stepID);
     return state;
 };
 
@@ -524,11 +531,7 @@ export const askFinalQuestion = (
         ...state,
         stepID: ChatStepTypes.finalStep,
     };
-    const finalQuestion = actionProvider.createChatBotMessage(
-        QuestionConstants.FinalQuestion,
-        QuestionConstants.YesNoWidgetOptions,
-    );
-    state = actionProvider.addMessageToBotState(finalQuestion, state);
+    state = handleFinalQuestion(state, actionProvider);
     return state;
 };
 
@@ -590,5 +593,32 @@ export const clearBooleanOptions = () => {
             btn.removeAttribute('style');
             btn.setAttribute('style', 'background-color:#2dabf9');
         }
+    }
+};
+
+export const blockInputAtFinalStep = (step: string) => {
+    if (step === ChatStepTypes.finalStep) {
+        const inputField = document.getElementsByClassName(
+            'react-chatbot-kit-chat-input',
+        )[0] as HTMLInputElement;
+        const sendInputBtn = document.getElementsByClassName(
+            'react-chatbot-kit-chat-btn-send',
+        )[0] as HTMLButtonElement;
+        inputField.setAttribute('disabled', 'true');
+        sendInputBtn.setAttribute('disabled', 'true');
+    }
+};
+
+export const clearDisabledInput = (prevStep: string) => {
+    console.log(prevStep);
+    if (prevStep !== ChatStepTypes.finalStep) {
+        const inputField = document.getElementsByClassName(
+            'react-chatbot-kit-chat-input',
+        )[0] as HTMLInputElement;
+        const sendInputBtn = document.getElementsByClassName(
+            'react-chatbot-kit-chat-btn-send',
+        )[0] as HTMLButtonElement;
+        inputField.removeAttribute('disabled');
+        sendInputBtn.removeAttribute('disabled');
     }
 };
