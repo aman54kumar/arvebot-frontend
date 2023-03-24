@@ -120,11 +120,11 @@ export const handleSuccessorInput = (
         );
         state = actionProvider.addMessageToBotState(aliveQuestion, state);
         // }
-        return state;
     } else {
         // error case
         console.log('Count of children exceeded');
     }
+    return state;
 };
 
 const handleNoSuccessorCase = (

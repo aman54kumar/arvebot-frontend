@@ -5,7 +5,6 @@ import FinalDocument from '../../Reports/PDF/FinalDocument';
 import { PliktdelsarvCalculation } from '../../Reports/PliktdelsarvCalculation';
 import { UndividedCalculation } from '../../Reports/UndividedCalculation';
 import ActionProvider from '../ActionProvider';
-import InfoMessagesWidget from '../Custom/Widgets/InfoMessagesWidget/InfoMessagesWidget';
 import { NodeEntity } from '../Helper/Classes/NodeEntity';
 import Person from '../Helper/Classes/Person';
 import { ChatStepTypes, QuestionType } from '../Helper/Enums/ChatStepTypes';
@@ -20,11 +19,7 @@ import {
 import { handleAskUnderAgeQuestion } from './TestatorInformationMethods';
 import { handleUndividedStep } from './UndividedEstateMethods';
 import { createCustomMessage } from 'react-chatbot-kit';
-import ReactDOMServer from 'react-dom/server';
-import CustomFinalMessage from '../Custom/Messages/CustomFinalMessage';
-const CustomComponent = ({ element }: any) => {
-    return ReactDOMServer.renderToString(element);
-};
+
 export const handleFinalQuestion = (
     state: any,
     actionProvider: ActionProvider,

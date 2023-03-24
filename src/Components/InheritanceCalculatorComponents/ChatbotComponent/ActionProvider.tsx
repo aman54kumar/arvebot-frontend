@@ -121,6 +121,7 @@ class ActionProvider {
                 QuestionConstants.TestatorQuestion,
             );
             state = this.addMessageToBotState(initialQuestion, state);
+            clearDisabledInput(state.stepID);
             return this.returnState(state);
         });
     };

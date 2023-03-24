@@ -25,9 +25,10 @@ const numberInputTypesObject = {
 };
 
 export const returnKeyFromEnteredNumberText = (chosenValue: string) => {
-    return Object.keys(numberInputTypesObject).find((key) =>
+    const key = Object.keys(numberInputTypesObject).find((key) =>
         (numberInputTypesObject as any)[key].includes(
             chosenValue.toLowerCase(),
         ),
     );
+    return key ?? chosenValue;
 };

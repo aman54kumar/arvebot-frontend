@@ -34,7 +34,6 @@ export enum undividedOwnershipType {
     felleseie = 'FELLESEIE',
     delvis = 'DELVIS SÆREIE',
     fullt = 'FULLT SÆREIE',
-    none = '',
 }
 
 export enum FormattedMessages {

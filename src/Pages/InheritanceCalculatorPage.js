@@ -13,37 +13,17 @@ import { componentCommunicatorService } from '../Components/InheritanceCalculato
 
 const InheritanceCalculatorPage = () => {
     let prev = 'block';
-    // const componentWillUnmount = useRef(false);
     useEffect(() => {
         messageService.clearAllExternalSubscription();
         const subscription = messageService
             .getMessageOutChatbot()
             .subscribe(({ detail }) => {
                 componentCommunicatorService.sendChatbotMessage(detail);
-                // dispatch({
-                //   type: "UPDATE_GENERIC",
-                //   payload: detail,
-                // });
             });
         messageService.addExternalSubscription(subscription);
         setWarningDiv();
-        // setRevertDiv();
         addListenerToChatInputField();
     }, [1]);
-    // useEffect(() => {
-    //   return () => {
-    //     componentWillUnmount.current = true;
-    //   };
-    // }, []);
-    // useEffect(() => {
-    //   if (componentWillUnmount.current) {
-    //     messageService.clearAllExternalSubscription();
-    //     messageService.clearAllInternalSubscription();
-    //   }
-    // }, [1]);
-
-    // localStorage.setItem("isRevertListenerSet", "false");
-    // document.removeEventListener("revert");
     const toggleBot = () => {
         const divChatBot = document.getElementsByClassName(
             'react-chatbot-kit-chat-container',
@@ -79,43 +59,23 @@ const InheritanceCalculatorPage = () => {
         </div>
     );
 };
-// const setRevertDiv = () => {
-//   const chatParentElement = document.getElementsByClassName(
-//     "react-chatbot-kit-chat-input-container"
-//   )[0];
-//   if (!document.getElementById("revert-div")) {
-//     const chatContainer = document.getElementsByClassName(
-//       "react-chatbot-kit-chat-container"
-//     )[0];
-//     chatContainer.id = "chat_container";
-//     const newDiv = document.createElement("div");
-//     newDiv.id = "revert-div";
-//     const revertButton = document.createElement("button");
-//     revertButton.innerText = "Revert";
-//     newDiv.appendChild(revertButton);
-//     chatParentElement.prepend(newDiv);
-//     revertButton.addEventListener("click", ({ event }) => {
-//       messageService.sendMessageToChatbot("ON CLICK");
-//     });
-//   }
-// };
-const setWarningDiv = () => {
-    // const chatParentElement = document.getElementsByClassName(
-    //   "react-chatbot-kit-chat-container"
-    // )[0];
 
-    const chatParentElement = document.getElementsByClassName(
-        'react-chatbot-kit-chat-input-form',
-    )[0];
+const setWarningDiv = () => {
     const newDiv = document.createElement('div');
     newDiv.id = 'chatbot-warning-div';
     newDiv.innerHTML = 'warning';
-    newDiv.style.backgroundColor = 'red';
-    newDiv.style.position = 'absolute';
-    newDiv.style.bottom = '2.5rem';
-    newDiv.style.width = '100%';
-    newDiv.style.display = 'none';
-    chatParentElement.prepend(newDiv);
+    newDiv.style.cssText =
+        'background-color: red; position: absolute; bottom: 2.5rem; width: 100%; display: none;';
+
+    document
+        .getElementsByClassName('react-chatbot-kit-chat-input-form')[0]
+        .prepend(newDiv);
+
+    const container = document.querySelector(
+        '.react-chatbot-kit-chat-message-container',
+    );
+    const lastChild = container.lastChild;
+    lastChild.style.paddingBottom = '2.5rem';
 };
 
 const addListenerToChatInputField = () => {

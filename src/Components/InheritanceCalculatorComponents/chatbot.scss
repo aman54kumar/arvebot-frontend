@@ -56,6 +56,10 @@
   height: 424px;
   overflow: scroll;
   padding: 0 17.5px 10px;
+
+  &:last-child {
+    padding-bottom: 2.5rem;
+}
 }
 
 .react-chatbot-kit-chat-input {
@@ -81,10 +85,10 @@
 //   height: 110%;
 // }
 
-#chatbot-warning-div {
-  background-color: "red";
-  position: "absolute";
-  bottom: "2.5rem";
-  width: "100%";
-  display: "none";
-}
+// #chatbot-warning-div {
+//   background-color: "red";
+//   position: "absolute";
+//   bottom: "2.5rem";
+//   width: "100%";
+//   display: "none";
+// }

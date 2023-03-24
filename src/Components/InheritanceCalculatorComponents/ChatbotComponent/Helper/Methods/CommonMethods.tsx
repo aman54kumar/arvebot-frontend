@@ -56,11 +56,10 @@ export const commonMethods = (
         if (chatbotValidator.validate(message, [ValidationType.emptyValue])) {
             return handleTestator(message, curState, actionProvider);
         }
-        return;
     }
 
     //testatorStep
-    if (curState.stepID === ChatStepTypes.testatorStep) {
+    else if (curState.stepID === ChatStepTypes.testatorStep) {
         message = message.toLowerCase();
         if (
             chatbotValidator.validate(message, [
@@ -77,353 +76,352 @@ export const commonMethods = (
     }
 
     // undividedEstateStep
-    if (curState.stepID === ChatStepTypes.undividedEstateStep) {
+    else if (curState.stepID === ChatStepTypes.undividedEstateStep) {
         if (curState.undividedEstate.undivided_flag === QuestionType.part1) {
-            return totalEstateValue(message, curState, actionProvider);
+            if (
+                chatbotValidator.validate(message, [
+                    ValidationType.invalidAmount,
+                ])
+            )
+                return totalEstateValue(message, curState, actionProvider);
         }
         if (curState.undividedEstate.undivided_flag === QuestionType.part2) {
-            return undividedOwnershipResponse(
-                message,
-                curState,
-                actionProvider,
-            );
+            if (
+                chatbotValidator.validate(message, [
+                    ValidationType.incorrectValueForUndividedOptions,
+                ])
+            )
+                return undividedOwnershipResponse(
+                    message,
+                    curState,
+                    actionProvider,
+                );
         }
-        if (curState.undividedEstate.undivided_flag === QuestionType.part3) {
-            return delvisFirstResponse(message, curState, actionProvider);
-        }
-        if (curState.undividedEstate.undivided_flag === QuestionType.part4) {
-            return delvisSecondResponse(message, curState, actionProvider);
-        }
-        if (curState.undividedEstate.undivided_flag === QuestionType.part5) {
-            return delvisFulltResponse(message, curState, actionProvider);
-        }
+        if (curState.undividedEstate.undivided_flag === QuestionType.part3)
+            if (
+                chatbotValidator.validate(message, [
+                    ValidationType.invalidAmount,
+                ])
+            )
+                return delvisFirstResponse(message, curState, actionProvider);
+        if (curState.undividedEstate.undivided_flag === QuestionType.part4)
+            if (
+                chatbotValidator.validate(message, [
+                    ValidationType.invalidAmount,
+                ])
+            )
+                return delvisSecondResponse(message, curState, actionProvider);
+        if (curState.undividedEstate.undivided_flag === QuestionType.part5)
+            if (
+                chatbotValidator.validate(message, [
+                    ValidationType.invalidAmount,
+                ])
+            )
+                return delvisFulltResponse(message, curState, actionProvider);
         if (
             curState.undividedEstate.undivided_flag === QuestionType.part6 ||
             curState.undividedEstate.undivided_flag === QuestionType.part7
-        ) {
+        )
             return handleSuccessor(
                 message,
                 curState,
                 actionProvider,
                 chatbotValidator,
             );
-        }
         if (curState.undividedEstate.undivided_flag === QuestionType.part8) {
-            if (curState.parent_flag === QuestionType.part1) {
-                return handleParentsInput(message, curState, actionProvider);
-            } else if (curState.parent_flag == QuestionType.part2) {
-                message = message.toLowerCase();
+            if (curState.parent_flag === QuestionType.part1)
                 if (
                     chatbotValidator.validate(message, [
-                        ValidationType.incorrectValueForBoolean,
+                        ValidationType.emptyValue,
                     ])
-                ) {
-                    return evaluateBooleanMessage(
+                )
+                    return handleParentsInput(
                         message,
                         curState,
                         actionProvider,
-                        handleParentAliveOption,
                     );
+                else if (curState.parent_flag == QuestionType.part2) {
+                    message = message.toLowerCase();
+                    if (
+                        chatbotValidator.validate(message, [
+                            ValidationType.incorrectValueForBoolean,
+                        ])
+                    )
+                        return evaluateBooleanMessage(
+                            message,
+                            curState,
+                            actionProvider,
+                            handleParentAliveOption,
+                        );
+                } else if (curState.parent_flag === QuestionType.part3) {
+                    if (
+                        chatbotValidator.validate(message, [
+                            ValidationType.incorrectValueForBoolean,
+                        ])
+                    )
+                        return evaluateBooleanMessage(
+                            message,
+                            curState,
+                            actionProvider,
+                            handleSecondParentExists,
+                        );
                 }
-            } else if (curState.parent_flag === QuestionType.part3) {
-                if (
-                    chatbotValidator.validate(message, [
-                        ValidationType.incorrectValueForBoolean,
-                    ])
-                ) {
-                    return evaluateBooleanMessage(
-                        message,
-                        curState,
-                        actionProvider,
-                        handleSecondParentExists,
-                    );
-                }
-            }
         }
-    }
-
-    if (curState.stepID === ChatStepTypes.testatorOtherChildStep) {
+    } else if (curState.stepID === ChatStepTypes.testatorOtherChildStep)
         return handleSuccessor(
             message,
             curState,
             actionProvider,
             chatbotValidator,
         );
-    }
     // netWealthStep
-    if (curState.stepID === ChatStepTypes.netWealthStep) {
+    else if (curState.stepID === ChatStepTypes.netWealthStep) {
         if (
-            chatbotValidator.validate(message, [ValidationType.invalidAmount])
-        ) {
+            chatbotValidator.validate(message, [
+                ValidationType.emptyValue,
+                ValidationType.invalidAmount,
+            ])
+        )
             return handleNetWealth(message, curState, actionProvider);
-        }
     }
 
     // underAgeStep
-    if (curState.stepID === ChatStepTypes.underAgeStep) {
+    else if (curState.stepID === ChatStepTypes.underAgeStep) {
         message = message.toLowerCase();
         if (
             chatbotValidator.validate(message, [
                 ValidationType.incorrectValueForBoolean,
             ])
-        ) {
+        )
             return evaluateBooleanMessage(
                 message,
                 curState,
                 actionProvider,
                 handleUnderAge,
             );
-        }
     }
 
     // spouse start
-    if (curState.stepID === ChatStepTypes.spouseChoice) {
+    else if (curState.stepID === ChatStepTypes.spouseChoice) {
         message = message.toLowerCase();
         if (
             chatbotValidator.validate(message, [
                 ValidationType.incorrectValueForBoolean,
             ])
-        ) {
+        )
             return evaluateBooleanMessage(
                 message,
                 curState,
                 actionProvider,
                 handleSpouseOption,
             );
-        }
-    }
-    if (curState.stepID === ChatStepTypes.spouseStep) {
-        if (chatbotValidator.validate(message, [ValidationType.emptyValue])) {
+    } else if (curState.stepID === ChatStepTypes.spouseStep) {
+        if (chatbotValidator.validate(message, [ValidationType.emptyValue]))
             return handleSpouseInput(message, curState, actionProvider);
-        }
     }
     // spouse end
 
     // cohabitant start
-    if (curState.stepID === ChatStepTypes.cohabitantChoice) {
+    else if (curState.stepID === ChatStepTypes.cohabitantChoice) {
         message = message.toLowerCase();
         if (
             chatbotValidator.validate(message, [
                 ValidationType.incorrectValueForBoolean,
             ])
-        ) {
+        )
             return evaluateBooleanMessage(
                 message,
                 curState,
                 actionProvider,
                 handleCohabitantChoice,
             );
-        }
-    }
-
-    if (curState.stepID === ChatStepTypes.cohabitantStep) {
-        return handleCohabitantInput(message, curState, actionProvider);
+    } else if (curState.stepID === ChatStepTypes.cohabitantStep) {
+        if (chatbotValidator.validate(message, [ValidationType.emptyValue]))
+            return handleCohabitantInput(message, curState, actionProvider);
     }
 
     //  cohabitant end
-
     // successorStep
-    if (curState.stepID === ChatStepTypes.successorStep) {
+    else if (curState.stepID === ChatStepTypes.successorStep) {
         if (curState.successor_flag === QuestionType.part1) {
-            return handleSuccessorInput(message, curState, actionProvider);
+            if (chatbotValidator.validate(message, [ValidationType.emptyValue]))
+                return handleSuccessorInput(message, curState, actionProvider);
         } else if (curState.successor_flag === QuestionType.part2) {
             message = message.toLowerCase();
             if (
                 chatbotValidator.validate(message, [
                     ValidationType.incorrectValueForBoolean,
                 ])
-            ) {
+            )
                 return evaluateBooleanMessage(
                     message,
                     curState,
                     actionProvider,
                     handleChildAliveOption,
                 );
-            }
         } else if (curState.successor_flag === QuestionType.part3) {
             const convertedMessage = returnKeyFromEnteredNumberText(message);
             if (
-                convertedMessage &&
                 chatbotValidator.validate(convertedMessage, [
                     ValidationType.emptyValue,
                     ValidationType.onlyDigit,
                 ])
-            ) {
+            )
                 return handleSuccessorCnt(
                     convertedMessage,
                     curState,
                     actionProvider,
                 );
-            } else {
-                console.log('check if it comes here');
-
-                return;
-                // remove last message and update stepid
-                // return actionProvider.handleValidation();
-            }
         }
     }
 
     //  parentsStep
-    if (curState.stepID === ChatStepTypes.parentsStep) {
+    else if (curState.stepID === ChatStepTypes.parentsStep) {
         if (curState.successor_flag === QuestionType.part1) {
-            return handleSuccessorInput(message, curState, actionProvider);
+            if (chatbotValidator.validate(message, [ValidationType.emptyValue]))
+                return handleSuccessorInput(message, curState, actionProvider);
         } else if (curState.successor_flag === QuestionType.part2) {
             message = message.toLowerCase();
             if (
                 chatbotValidator.validate(message, [
                     ValidationType.incorrectValueForBoolean,
                 ])
-            ) {
+            )
                 return evaluateBooleanMessage(
                     message,
                     curState,
                     actionProvider,
                     handleChildAliveOption,
                 );
-            }
         } else if (curState.successor_flag === QuestionType.part3) {
             if (
                 chatbotValidator.validate(message, [
                     ValidationType.emptyValue,
                     ValidationType.onlyDigit,
                 ])
-            ) {
+            )
                 return handleSuccessorCnt(message, curState, actionProvider);
-            } else {
-                console.log('check if comes here');
-
-                return;
-            }
         }
         if (curState.parent_flag === QuestionType.part1) {
-            return handleParentsInput(message, curState, actionProvider);
+            if (chatbotValidator.validate(message, [ValidationType.emptyValue]))
+                return handleParentsInput(message, curState, actionProvider);
         } else if (curState.parent_flag == QuestionType.part2) {
             message = message.toLowerCase();
             if (
                 chatbotValidator.validate(message, [
                     ValidationType.incorrectValueForBoolean,
                 ])
-            ) {
+            )
                 return evaluateBooleanMessage(
                     message,
                     curState,
                     actionProvider,
                     handleParentAliveOption,
                 );
-            }
         } else if (curState.parent_flag === QuestionType.part3) {
             if (
                 chatbotValidator.validate(message, [
                     ValidationType.incorrectValueForBoolean,
                 ])
-            ) {
+            )
                 return evaluateBooleanMessage(
                     message,
                     curState,
                     actionProvider,
                     handleSecondParentExists,
                 );
-            }
         }
     }
 
     // marriedParentsStep
-    if (curState.stepID === ChatStepTypes.marriedParentsStep) {
+    else if (curState.stepID === ChatStepTypes.marriedParentsStep) {
         message = message.toLowerCase();
         if (
             chatbotValidator.validate(message, [
                 ValidationType.incorrectValueForBoolean,
             ])
-        ) {
+        )
             return evaluateBooleanMessage(
                 message,
                 curState,
                 actionProvider,
                 handleMarriedParents,
             );
-        }
     }
 
     // grandParentStep
-    if (curState.stepID === ChatStepTypes.grandParentStep) {
+    else if (curState.stepID === ChatStepTypes.grandParentStep) {
         if (curState.successor_flag === QuestionType.part1) {
-            return handleSuccessorInput(message, curState, actionProvider);
+            if (chatbotValidator.validate(message, [ValidationType.emptyValue]))
+                return handleSuccessorInput(message, curState, actionProvider);
         } else if (curState.successor_flag === QuestionType.part2) {
             message = message.toLowerCase();
             if (
                 chatbotValidator.validate(message, [
                     ValidationType.incorrectValueForBoolean,
                 ])
-            ) {
+            )
                 return evaluateBooleanMessage(
                     message,
                     curState,
                     actionProvider,
                     handleChildAliveOption,
                 );
-            }
         } else if (curState.successor_flag === QuestionType.part3) {
             if (
                 chatbotValidator.validate(message, [
                     ValidationType.emptyValue,
                     ValidationType.onlyDigit,
                 ])
-            ) {
+            )
                 return handleSuccessorCnt(message, curState, actionProvider);
-            } else {
-                return;
-                // remove last message and update stepid
-                // return actionProvider.handleValidation();
+        } else if (curState.parent_flag === QuestionType.part1)
+            if (chatbotValidator.validate(message, [ValidationType.emptyValue]))
+                return handleParentsInput(message, curState, actionProvider);
+            else if (curState.parent_flag == QuestionType.part2) {
+                message = message.toLowerCase();
+                if (
+                    chatbotValidator.validate(message, [
+                        ValidationType.incorrectValueForBoolean,
+                    ])
+                )
+                    return evaluateBooleanMessage(
+                        message,
+                        curState,
+                        actionProvider,
+                        handleParentAliveOption,
+                    );
+            } else if (curState.parent_flag === QuestionType.part3) {
+                if (
+                    chatbotValidator.validate(message, [
+                        ValidationType.incorrectValueForBoolean,
+                    ])
+                )
+                    return evaluateBooleanMessage(
+                        message,
+                        curState,
+                        actionProvider,
+                        handleSecondParentExists,
+                    );
             }
-        } else if (curState.parent_flag === QuestionType.part1) {
-            return handleParentsInput(message, curState, actionProvider);
-        } else if (curState.parent_flag == QuestionType.part2) {
-            message = message.toLowerCase();
-            if (
-                chatbotValidator.validate(message, [
-                    ValidationType.incorrectValueForBoolean,
-                ])
-            ) {
-                return evaluateBooleanMessage(
-                    message,
-                    curState,
-                    actionProvider,
-                    handleParentAliveOption,
-                );
-            }
-        } else if (curState.parent_flag === QuestionType.part3) {
-            if (
-                chatbotValidator.validate(message, [
-                    ValidationType.incorrectValueForBoolean,
-                ])
-            ) {
-                return evaluateBooleanMessage(
-                    message,
-                    curState,
-                    actionProvider,
-                    handleSecondParentExists,
-                );
-            }
-        }
     }
 
     // finalStep
-    if (curState.stepID === ChatStepTypes.finalStep) {
-        message = message.toLowerCase();
-        if (
-            chatbotValidator.validate(message, [
-                ValidationType.incorrectValueForBoolean,
-            ])
-        ) {
-            return evaluateBooleanMessage(
-                message,
-                curState,
-                actionProvider,
-                handleFinalQuestion,
-            );
-        }
-    }
+    // else if (curState.stepID === ChatStepTypes.finalStep) {
+    //     message = message.toLowerCase();
+    //     if (
+    //         chatbotValidator.validate(message, [
+    //             ValidationType.incorrectValueForBoolean,
+    //         ])
+    //     )
+    //         return evaluateBooleanMessage(
+    //             message,
+    //             curState,
+    //             actionProvider,
+    //             handleFinalQuestion,
+    //         );
+    // }
+    return { ...curState, messages: curState.messages.slice(0, -1) };
 };
 
 const disableButtons = () => {
@@ -447,7 +445,8 @@ const handleSuccessor = (
     chatbotValidator: ChatbotValidation,
 ) => {
     if (curState.successor_flag === QuestionType.part1) {
-        return handleSuccessorInput(message, curState, actionProvider);
+        if (chatbotValidator.validate(message, [ValidationType.emptyValue]))
+            return handleSuccessorInput(message, curState, actionProvider);
     } else if (curState.successor_flag === QuestionType.part2) {
         message = message.toLowerCase();
         if (
@@ -470,10 +469,6 @@ const handleSuccessor = (
             ])
         ) {
             return handleSuccessorCnt(message, curState, actionProvider);
-        } else {
-            return;
-            // remove last message and update stepid
-            // return this.actionProvider.handleValidation();
         }
     }
     return undividedEstateSpouse(message, curState, actionProvider);
