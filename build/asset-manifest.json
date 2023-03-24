@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "/arvebot-frontend/static/css/main.2fc41b83.chunk.css",
-    "main.js": "/arvebot-frontend/static/js/main.1927a346.chunk.js",
-    "main.js.map": "/arvebot-frontend/static/js/main.1927a346.chunk.js.map",
+    "main.css": "/arvebot-frontend/static/css/main.02bedfd8.chunk.css",
+    "main.js": "/arvebot-frontend/static/js/main.79500daf.chunk.js",
+    "main.js.map": "/arvebot-frontend/static/js/main.79500daf.chunk.js.map",
     "runtime-main.js": "/arvebot-frontend/static/js/runtime-main.f1facbfc.js",
     "runtime-main.js.map": "/arvebot-frontend/static/js/runtime-main.f1facbfc.js.map",
     "static/css/2.922e6b29.chunk.css": "/arvebot-frontend/static/css/2.922e6b29.chunk.css",
@@ -10,7 +10,7 @@
     "static/js/2.a2194121.chunk.js.map": "/arvebot-frontend/static/js/2.a2194121.chunk.js.map",
     "index.html": "/arvebot-frontend/index.html",
     "static/css/2.922e6b29.chunk.css.map": "/arvebot-frontend/static/css/2.922e6b29.chunk.css.map",
-    "static/css/main.2fc41b83.chunk.css.map": "/arvebot-frontend/static/css/main.2fc41b83.chunk.css.map",
+    "static/css/main.02bedfd8.chunk.css.map": "/arvebot-frontend/static/css/main.02bedfd8.chunk.css.map",
     "static/js/2.a2194121.chunk.js.LICENSE.txt": "/arvebot-frontend/static/js/2.a2194121.chunk.js.LICENSE.txt",
     "static/media/chat_button_logo.6fc97b77.svg": "/arvebot-frontend/static/media/chat_button_logo.6fc97b77.svg"
   },
@@ -18,7 +18,7 @@
     "static/js/runtime-main.f1facbfc.js",
     "static/css/2.922e6b29.chunk.css",
     "static/js/2.a2194121.chunk.js",
-    "static/css/main.2fc41b83.chunk.css",
-    "static/js/main.1927a346.chunk.js"
+    "static/css/main.02bedfd8.chunk.css",
+    "static/js/main.79500daf.chunk.js"
   ]
 }

@@ -51,20 +51,26 @@ export default function ChatHeader(props: any) {
                             justifyContent: 'space-between',
                         }}
                     >
+                        <div id="overlay"></div>
                         <Tooltip title="Undo">
                             <Button
+                                id="chatbot-undo-button"
                                 onClick={() => {
                                     handleRevert();
                                     focusWritingArea();
                                 }}
-                                style={{ backgroundColor: 'rgb(92, 204, 157)' }}
+                                style={{
+                                    backgroundColor: 'rgb(92, 204, 157)',
+                                }}
                             >
                                 <UndoIcon fontSize="small" />
                             </Button>
                         </Tooltip>
+
                         <Box sx={{ width: '8px' }} />
                         <Tooltip title="Restart">
                             <Button
+                                id="chatbot-restart-button"
                                 onClick={handleClickOpen}
                                 style={{ backgroundColor: 'rgb(92, 204, 157)' }}
                             >

@@ -122,6 +122,8 @@ class ActionProvider {
             );
             state = this.addMessageToBotState(initialQuestion, state);
             clearDisabledInput(state.stepID);
+            const undoButton = document.getElementById('chatbot-undo-button');
+            if (undoButton) undoButton.style.display = 'block';
             return this.returnState(state);
         });
     };
