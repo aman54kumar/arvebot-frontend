@@ -62,7 +62,7 @@ const initChatbotState: ChatbotInterface = {
         undividedEstateSeparateWealth: 0,
         temp_first: 0,
         temp_last: 0,
-        ownershipType: undividedOwnershipType.none,
+        ownershipType: '',
     },
     tempMessages: [],
     successorProcessArray: [],
