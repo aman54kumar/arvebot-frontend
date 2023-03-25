@@ -91,4 +91,11 @@ export const messageService = {
     getRevert: () => {
         return isRevert;
     },
+    resetChatbotState: () => {
+        while (previousStates.length > 0) {
+            previousStates.shift();
+        }
+        revertCnt = 0;
+        isRevert = false;
+    },
 };

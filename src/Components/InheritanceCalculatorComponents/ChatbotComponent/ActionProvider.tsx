@@ -122,6 +122,7 @@ class ActionProvider {
             );
             state = this.addMessageToBotState(initialQuestion, state);
             clearDisabledInput(state.stepID);
+            messageService.resetChatbotState();
             const undoButton = document.getElementById('chatbot-undo-button');
             if (undoButton) undoButton.style.display = 'block';
             return this.returnState(state);

@@ -579,7 +579,7 @@ export const clearBooleanOptions = () => {
     );
     const lastButtonDiv = buttonElementArray[buttonElementArray.length - 1];
     if (
-        lastButtonDiv.nextElementSibling?.nextElementSibling
+        lastButtonDiv?.nextElementSibling?.nextElementSibling
             ?.nextElementSibling ===
         document.querySelector('div[style="padding-bottom: 15px;"]')
     ) {
@@ -607,7 +607,6 @@ export const blockInputAtFinalStep = (step: string) => {
 };
 
 export const clearDisabledInput = (prevStep: string) => {
-    console.log(prevStep);
     if (prevStep !== ChatStepTypes.finalStep) {
         const inputField = document.getElementsByClassName(
             'react-chatbot-kit-chat-input',
