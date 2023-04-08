@@ -2,7 +2,7 @@ import { Text, View } from "@react-pdf/renderer";
 import { useContext } from "react";
 import { UserContext } from "../../../FinalDocument";
 import { styles } from "../../../styles";
-import GenealogyUtils from "./Genealogy.utils";
+import GenealogyUtils from "./genealogy.utils";
 import GenealogyPliktUtils from "./GenealogyPlikt.utils";
 
 export const Genealogy = (props: { inheritanceMode: boolean }): JSX.Element => {
