@@ -581,7 +581,7 @@ export const clearBooleanOptions = () => {
     if (
         lastButtonDiv?.nextElementSibling?.nextElementSibling
             ?.nextElementSibling ===
-        document.querySelector('div[style="padding-bottom: 15px;"]')
+        document.querySelector('div[style="padding-bottom: 2.5rem;"]')
     ) {
         for (const btn of lastButtonDiv.children) {
             btn.removeAttribute('disabled');
