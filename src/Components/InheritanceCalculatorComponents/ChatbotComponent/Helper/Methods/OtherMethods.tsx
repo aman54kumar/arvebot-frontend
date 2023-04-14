@@ -3,6 +3,7 @@ import {
     FormattedMessages,
     undividedOwnershipType,
 } from '../Enums/ChatStepTypes';
+import React, { ReactElement } from 'react';
 
 export const getReturnValueFromBooleanWidget = (
     message: string,
@@ -48,4 +49,8 @@ export const getReturnValueFromUndividedWidget = (
             message as keyof typeof ownershipTypeWithFormattedMessages
         ] ?? 'The message is not in the array'
     );
+};
+
+export const undChoiceAlterUsrMsg = (inputText: string): ReactElement => {
+    return React.createElement('div', inputText.match(/[a-zA-Z]+/g)?.join(''));
 };

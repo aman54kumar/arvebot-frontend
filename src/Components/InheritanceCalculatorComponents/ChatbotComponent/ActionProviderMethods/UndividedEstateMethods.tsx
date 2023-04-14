@@ -10,6 +10,7 @@ import {
     CurrencyOutput,
     ParseCurrencyStringForOutput,
 } from '../Helper/Methods/HandleCurrency';
+import { undChoiceAlterUsrMsg } from '../Helper/Methods/OtherMethods';
 import QuestionConstants from '../Helper/Methods/QuestionConstants';
 import {
     askFinalQuestion,
@@ -111,6 +112,7 @@ export const undividedOwnershipResponse = (
     state: any,
     actionProvider: ActionProvider,
 ) => {
+    // const ownershipResponse = undChoiceAlterUsrMsg(ownershipRes);
     if (ownershipResponse === undividedOwnershipType.felleseie) {
         state = {
             ...state,
@@ -218,6 +220,7 @@ export const undividedOwnershipResponse = (
             state,
         );
     }
+
     return state;
 };
 
