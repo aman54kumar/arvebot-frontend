@@ -98,8 +98,8 @@ export const cloneState = (curState: any, prevState: any) => {
     curState.isUndividedParent = prevState.isUndividedParent;
     curState.yesNoClickedFlag = prevState.yesNoClickedFlag;
     curState.testator = prevState.testator;
-    curState.testator = prevState.testator;
-    curState.testator = prevState.testator;
+    // curState.testator = prevState.testator;
+    // curState.testator = prevState.testator;
     return curState;
 };
 InitialChatbotState.messages = [];

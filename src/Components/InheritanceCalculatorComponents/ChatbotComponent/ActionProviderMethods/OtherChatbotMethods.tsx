@@ -203,7 +203,7 @@ export const handleClosestSurvivingRelativeChildren = (
         ...state,
         stepID: ChatStepTypes.parentsStep,
         parent_flag: QuestionType.part1,
-        temp_person: state.testator,
+        temp_person: state.testator as NodeEntity,
         successor_flag: QuestionType.initialQuestion,
     };
     const newParentQuestion = actionProvider.createChatBotMessage(
@@ -454,69 +454,34 @@ export const getNode = (id: number, nodeMap: Map<number, NodeEntity>) => {
     }
     return node;
 };
-export const add_parent = (
-    parent: NodeEntity,
-    state: any,
-    add_for_both = true,
-    grandParent = false,
-): void => {
-    // const parents_array = this._parents;
-    const parent_id = parent._id;
-    let isParentPresent = false;
-    const person = state.temp_person;
-    for (const p of person._parents) {
-        if (p === parent_id) {
-            isParentPresent = true;
-            break;
-        }
-    }
 
-    // const t = this._parents.find((obj) => obj === parent_id);
-    if (!isParentPresent) {
-        person._parents.push(parent_id);
-    }
-    parent._path = [...person._path];
-
-    parent._path.push([ParentChildSelector.parent, parent_id]);
-    parent._level = person.getLevel(parent._path);
-    if (parent._level === 2) {
-        parent._path[parent._path.length - 1][0] =
-            ParentChildSelector.grandParent;
-    }
-    if (add_for_both) {
-        if (!parent._children.find((obj) => obj === person._id)) {
-            parent._children.push(person._id);
-        }
-    }
-    return state;
-};
-export const add_child = (
-    child: NodeEntity,
-    state: any,
-    add_for_both = true,
-    isPartner = false,
-): void => {
-    const partnerNode = state.temp_person._partnerNode;
-    const children_array = partnerNode._children;
-    const child_id = child._id;
-    if (!children_array.find((obj: any) => obj === child_id)) {
-        partnerNode._children.push(child_id);
-    }
-    if (!isPartner) {
-        child._path = [...partnerNode._path];
-        child._path.push([ParentChildSelector.child, child_id]);
-        child._level = partnerNode.getLevel(child._path);
-    } else {
-        child._partnerPath = [...partnerNode._path];
-        child._partnerPath.push([ParentChildSelector.child, child_id]);
-        // child._level = this.getLevel(child._path);
-    }
-    if (add_for_both) {
-        if (!child._parents.find((obj) => obj === partnerNode._id)) {
-            child._parents.push(partnerNode._id);
-        }
-    }
-};
+// export const add_child = (
+//     child: NodeEntity,
+//     state: any,
+//     add_for_both = true,
+//     isPartner = false,
+// ): void => {
+//     const partnerNode = state.temp_person._partnerNode;
+//     const children_array = partnerNode._children;
+//     const child_id = child._id;
+//     if (!children_array.find((obj: any) => obj === child_id)) {
+//         partnerNode._children.push(child_id);
+//     }
+//     if (!isPartner) {
+//         child._path = [...partnerNode._path];
+//         child._path.push([ParentChildSelector.child, child_id]);
+//         child._level = partnerNode.getLevel(child._path);
+//     } else {
+//         child._partnerPath = [...partnerNode._path];
+//         child._partnerPath.push([ParentChildSelector.child, child_id]);
+//         // child._level = this.getLevel(child._path);
+//     }
+//     if (add_for_both) {
+//         if (!child._parents.find((obj) => obj === partnerNode._id)) {
+//             child._parents.push(partnerNode._id);
+//         }
+//     }
+// };
 
 export const askFinalQuestion = (
     state: any,

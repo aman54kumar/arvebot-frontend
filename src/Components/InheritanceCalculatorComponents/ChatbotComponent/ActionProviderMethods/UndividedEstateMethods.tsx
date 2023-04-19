@@ -10,7 +10,7 @@ import {
     CurrencyOutput,
     ParseCurrencyStringForOutput,
 } from '../Helper/Methods/HandleCurrency';
-import { undChoiceAlterUsrMsg } from '../Helper/Methods/OtherMethods';
+import { modifiedChoiceResponse } from '../Helper/Methods/OtherMethods';
 import QuestionConstants from '../Helper/Methods/QuestionConstants';
 import {
     askFinalQuestion,
@@ -112,8 +112,8 @@ export const undividedOwnershipResponse = (
     state: any,
     actionProvider: ActionProvider,
 ) => {
-    // const ownershipResponse = undChoiceAlterUsrMsg(ownershipRes);
-    if (ownershipResponse === undividedOwnershipType.felleseie) {
+    modifiedChoiceResponse(ownershipResponse, actionProvider, state);
+    if (ownershipResponse === 'FELLESEIE' || ownershipResponse === '1') {
         state = {
             ...state,
             undividedEstate: {
@@ -172,11 +172,13 @@ export const undividedOwnershipResponse = (
                         underAgeQuestion,
                         state,
                     );
-                    return state;
                 }
             }
         }
-    } else if (ownershipResponse === 'DELVIS SÆREIE') {
+    } else if (
+        ownershipResponse === 'DELVIS SÆREIE' ||
+        ownershipResponse === '2'
+    ) {
         state = {
             ...state,
             undividedEstate: {
@@ -188,7 +190,10 @@ export const undividedOwnershipResponse = (
             QuestionConstants.DelvisFirstQuestion,
         );
         state = actionProvider.addMessageToBotState(delvisFirstQuestion, state);
-    } else if (ownershipResponse === 'FULLT SÆREIE') {
+    } else if (
+        ownershipResponse === 'FULLT SÆREIE' ||
+        ownershipResponse === '3'
+    ) {
         state = {
             ...state,
             undividedEstate: {
@@ -220,7 +225,6 @@ export const undividedOwnershipResponse = (
             state,
         );
     }
-
     return state;
 };
 

@@ -30,14 +30,30 @@ export enum QuestionType {
     part8 = 'part8',
 }
 
-export enum undividedOwnershipType {
-    felleseie = 'FELLESEIE',
-    delvis = 'DELVIS SÆREIE',
-    fullt = 'FULLT SÆREIE',
-}
+// export enum undividedOwnershipType {
+//     felleseie = 'FELLESEIE',
+//     delvis = 'DELVIS SÆREIE',
+//     fullt = 'FULLT SÆREIE',
+// }
+
+// export const undividedOwnershipTypeMap: {
+//     [key: string]: Record<number, undividedOwnershipType>;
+// } = {
+//     undividedOwnershipType: {
+//         1: undividedOwnershipType.felleseie,
+//         2: undividedOwnershipType.delvis,
+//         3: undividedOwnershipType.fullt,
+//     },
+// };
 
 export enum FormattedMessages {
     FELLESEIE = 'Chatbot.OWNERSHIP_TYPE1',
     DELVIS = 'Chatbot.OWNERSHIP_TYPE2',
     FULLT = 'Chatbot.OWNERSHIP_TYPE3',
 }
+
+export const undividedOwnershipType = {
+    felleseie: ['FELLESEIE', '1'],
+    delvis: ['DELVIS SÆREIE', '2'],
+    fullt: ['FULLT SÆREIE', '3'],
+};

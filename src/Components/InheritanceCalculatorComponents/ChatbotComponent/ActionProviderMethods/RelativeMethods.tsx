@@ -1,11 +1,16 @@
 import ActionProvider from '../ActionProvider';
-import { ChatbotInterface } from '../Generics';
 import { NodeEntity } from '../Helper/Classes/NodeEntity';
 import Person from '../Helper/Classes/Person';
 import { ChatStepTypes, QuestionType } from '../Helper/Enums/ChatStepTypes';
 import QuestionConstants from '../Helper/Methods/QuestionConstants';
 import {
-    add_parent,
+    add_child,
+    // add_parent,
+    getChildUnprocessedNode,
+    getParentId,
+    updateProcessChildNodePos,
+} from './NodeEntityAlternativeMethods';
+import {
     askFinalQuestion,
     createEmptyNode,
     createNewPerson,
@@ -16,7 +21,6 @@ import {
     handleClosingStep,
 } from './OtherChatbotMethods';
 import _ from 'lodash';
-import { ParentChildSelector } from '../Helper/Enums/ParentChildSelector';
 
 export const handleSuccessorCnt = (
     res: string,
@@ -26,10 +30,14 @@ export const handleSuccessorCnt = (
     const successorCount = parseInt(res);
     state.temp_person._childCount = successorCount;
     if (successorCount === 0) {
-        const parentID = state.temp_person.getParentId(state.nodeMap);
+        const parentID = getParentId(state); //state.temp_person.getParentId(state.nodeMap);
         if (parentID) {
             const parent = getNode(parentID, state.nodeMap);
-            state.temp_person = parent;
+            state = {
+                ...state,
+                temp_person: parent as NodeEntity,
+            };
+            // state.temp_person = parent;
             const successorProcessArray = state.successorProcessArray;
             state = handleNoSuccessorCase(
                 state,
@@ -41,18 +49,21 @@ export const handleSuccessorCnt = (
         }
         return state;
     }
-
     const questionType = state.temp_person._children.length === 0;
     let itr_id = state.id;
     for (let i = 0; i < state.temp_person._childCount; i++) {
         const child = createEmptyNode(state, itr_id++);
-        state.temp_person.add_child(child, true);
+        // const temp_person: NodeEntity = state.temp_person;
+        state = add_child(child, state);
+        // state.temp_person.add_child(child, true);
         if (state.temp_person._partnerNode !== null) {
             const currentPartnerNode = getNode(
                 state.temp_person._partnerNode,
                 state.nodeMap,
             );
-            currentPartnerNode.add_child(child, true, true);
+            // currentPartnerNode.add_child(child, true, true);
+            state = add_child(child, currentPartnerNode, true, true);
+            // updateProcessChildNodePos(currentPartnerNode);
             currentPartnerNode.updateProcessChildNodePos();
         }
     }
@@ -99,7 +110,8 @@ export const handleSuccessorInput = (
     state: any,
     actionProvider: ActionProvider,
 ) => {
-    const childID = state.temp_person.getChildUnprocessedNode();
+    const childID = getChildUnprocessedNode(state.temp_person);
+    // const childID = state.temp_person.getChildUnprocessedNode();
     if (childID) {
         const child = getNode(childID, state.nodeMap);
         const childDetail = getPerson(childID, state.personsMap);
@@ -107,7 +119,7 @@ export const handleSuccessorInput = (
         state = {
             ...state,
             successor_flag: QuestionType.part2,
-            temp_child: child,
+            temp_child: child as NodeEntity,
         };
 
         const personId: any = Person.getPerson(
@@ -139,7 +151,8 @@ const handleNoSuccessorCase = (
             successorProcessArray[successorProcessArray.length - 1][1] =
                 childItrPos + 1;
             // ask childid question
-            state.successor_flag = QuestionType.part1;
+            state = { ...state, successor_flag: QuestionType.part1 };
+            // state.successor_flag = QuestionType.part1;
             const allChildrenID = getParentChildrenIDStrings(
                 state.temp_person._children,
                 state,
@@ -228,7 +241,6 @@ export const handleChildAliveOption = (
 ) => {
     const child = state.temp_child;
     const childDetail = getPerson(child._id, state.personsMap);
-    // const temp_person: NodeEntity = state.temp_person
     const successorProcessArray = state.successorProcessArray;
     if (res) {
         childDetail._deceased = false;
@@ -254,7 +266,7 @@ export const handleChildAliveOption = (
         state = {
             ...state,
             successor_flag: QuestionType.part3,
-            temp_person: child,
+            temp_person: child as NodeEntity,
         };
         const newSuccessorQuestion = actionProvider.createChatBotMessage(
             QuestionConstants.addSuccessorCount(childDetail._personName),
@@ -314,11 +326,11 @@ export const handleParentsInput = (
         parent_flag: QuestionType.part2,
         temp_parent: predecessor,
     };
-    state = { ...state };
+    // state = { ...state };
     const temp_person = state.temp_person;
-    // temp_person.add_parent(predecessor, true);
-    state = add_parent(predecessor, state, true);
-    state = { ...state };
+    temp_person.add_parent(predecessor, true);
+    // state = add_parent(predecessor, state, true);
+    // state = { ...state };
     const aliveQuestion = actionProvider.createChatBotMessage(
         QuestionConstants.AliveQuestion(
             Person.getPerson(predecessor._id, state.personsMap)._personName,
@@ -344,7 +356,7 @@ export const handleParentAliveOption = (
         temp_parent_detail._deceased = true;
         state = {
             ...state,
-            temp_person: temp_parent,
+            temp_person: temp_parent as NodeEntity,
             successor_flag: QuestionType.part3,
         };
         temp_parent._processChildNodePos += 1;
@@ -408,7 +420,7 @@ export const handleGrandParentFirst = (
             ...state,
             stepID: ChatStepTypes.grandParentStep,
             parent_flag: QuestionType.part1,
-            temp_person: temp_person,
+            temp_person: temp_person as NodeEntity,
             successor_flag: QuestionType.initialQuestion,
         };
         const newParentQuestion = actionProvider.createChatBotMessage(
@@ -441,7 +453,7 @@ export const handleAskForNextGrandParent = (
             ...state,
             stepID: ChatStepTypes.grandParentStep,
             parent_flag: QuestionType.part1,
-            temp_person: temp_person,
+            temp_person: temp_person as NodeEntity,
             successor_flag: QuestionType.initialQuestion,
         };
         const newParentQuestion = actionProvider.createChatBotMessage(

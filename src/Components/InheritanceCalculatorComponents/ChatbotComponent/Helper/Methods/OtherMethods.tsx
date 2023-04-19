@@ -4,6 +4,7 @@ import {
     undividedOwnershipType,
 } from '../Enums/ChatStepTypes';
 import React, { ReactElement } from 'react';
+import ActionProvider from '../../ActionProvider';
 
 export const getReturnValueFromBooleanWidget = (
     message: string,
@@ -33,13 +34,13 @@ export const getReturnValueFromUndividedWidget = (
     };
 
     const ownershipTypeWithFormattedMessages = {
-        [undividedOwnershipType.felleseie]: (
+        [undividedOwnershipType.felleseie[0]]: (
             <FormattedMessage id={FormattedMessages.FELLESEIE} />
         ),
-        [undividedOwnershipType.delvis]: (
+        [undividedOwnershipType.delvis[0]]: (
             <FormattedMessage id={FormattedMessages.DELVIS} />
         ),
-        [undividedOwnershipType.fullt]: (
+        [undividedOwnershipType.fullt[0]]: (
             <FormattedMessage id={FormattedMessages.FULLT} />
         ),
     };
@@ -51,6 +52,14 @@ export const getReturnValueFromUndividedWidget = (
     );
 };
 
-export const undChoiceAlterUsrMsg = (inputText: string): ReactElement => {
-    return React.createElement('div', inputText.match(/[a-zA-Z]+/g)?.join(''));
+export const modifiedChoiceResponse = (
+    ownershipResponse: string,
+    actionProvider: ActionProvider,
+    state: any,
+): void => {
+    state.messages.pop();
+    const customOwnershipResponse = actionProvider.createClientMessage(
+        React.createElement('div', null, ownershipResponse),
+    );
+    state = actionProvider.addMessageToBotState(customOwnershipResponse, state);
 };

@@ -87,13 +87,23 @@ export class ChatbotValidation {
         return false;
     };
 
+    // validateValueForUndividedOptions = (message: string) => {
+    //     if (
+    //         Object.values(undividedOwnershipType).includes(
+    //             message as undividedOwnershipType,
+    //         )
+    //     ) {
+    //         return true;
+    //     }
+    //     return false;
+    // };
+
     validateValueForUndividedOptions = (message: string) => {
-        if (
-            Object.values(undividedOwnershipType).includes(
-                message as undividedOwnershipType,
-            )
-        ) {
-            return true;
+        const ownershipTypes = Object.values(undividedOwnershipType);
+        for (const type of ownershipTypes) {
+            if (type.includes(message.toUpperCase())) {
+                return true;
+            }
         }
         return false;
     };

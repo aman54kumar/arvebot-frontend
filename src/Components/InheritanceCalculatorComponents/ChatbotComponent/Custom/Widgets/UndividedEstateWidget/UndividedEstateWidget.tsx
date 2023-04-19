@@ -23,7 +23,7 @@ const UndividedEstateWidget = ({
                 onClick={(e) => {
                     onClickHandler(e);
                     handleOptions(
-                        undividedOwnershipType.felleseie,
+                        undividedOwnershipType.felleseie[0],
                         actionProvider,
                     );
                 }}
@@ -35,7 +35,7 @@ const UndividedEstateWidget = ({
                 onClick={(e) => {
                     onClickHandler(e);
                     handleOptions(
-                        undividedOwnershipType.delvis,
+                        undividedOwnershipType.delvis[0],
                         actionProvider,
                     );
                 }}
@@ -46,7 +46,10 @@ const UndividedEstateWidget = ({
                 className="option-selector-button"
                 onClick={(e) => {
                     onClickHandler(e);
-                    handleOptions(undividedOwnershipType.fullt, actionProvider);
+                    handleOptions(
+                        undividedOwnershipType.fullt[0],
+                        actionProvider,
+                    );
                 }}
             >
                 <FormattedMessage id="Chatbot.OWNERSHIP_TYPE3" />

@@ -1,4 +1,5 @@
 import ActionProvider from '../ActionProvider';
+import { NodeEntity } from '../Helper/Classes/NodeEntity';
 import { ChatStepTypes } from '../Helper/Enums/ChatStepTypes';
 import {
     CurrencyOutput,
@@ -30,9 +31,6 @@ export const handleTestator = (
         ...state,
         stepID: ChatStepTypes.testatorStep,
         testator: createTestator(res, state, actionProvider),
-    };
-    state = {
-        ...state,
     };
     state = actionProvider.addMessageToBotState(undividedEstateQuestion, state);
     return state;
@@ -87,8 +85,13 @@ export const handleUnderAge = (
     state: any,
     actionProvider: ActionProvider,
 ) => {
-    state.person = state.testator;
-    state.temp_person = state.testator;
+    state = {
+        ...state,
+        person: state.testator as NodeEntity,
+        temp_person: state.testator as NodeEntity,
+    };
+    // state.person = state.testator;
+    // state.temp_person = state.testator;
     getPerson(state.person._id, state.personsMap)._underAge = res;
     if (res) {
         const cohabitantChoiceQuestion = actionProvider.createChatBotMessage(

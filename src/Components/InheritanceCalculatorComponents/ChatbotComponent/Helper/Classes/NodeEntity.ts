@@ -81,31 +81,31 @@ export class NodeEntity {
         return parentCount;
     }
 
-    add_child = (
-        child: NodeEntity,
-        add_for_both = true,
-        isPartner = false,
-    ): void => {
-        const children_array = this._children;
-        const child_id = child._id;
-        if (!children_array.find((obj) => obj === child_id)) {
-            this._children.push(child_id);
-        }
-        if (!isPartner) {
-            child._path = [...this._path];
-            child._path.push([ParentChildSelector.child, child_id]);
-            child._level = this.getLevel(child._path);
-        } else {
-            child._partnerPath = [...this._path];
-            child._partnerPath.push([ParentChildSelector.child, child_id]);
-            // child._level = this.getLevel(child._path);
-        }
-        if (add_for_both) {
-            if (!child._parents.find((obj) => obj === this._id)) {
-                child._parents.push(this._id);
-            }
-        }
-    };
+    // add_child = (
+    //     child: NodeEntity,
+    //     add_for_both = true,
+    //     isPartner = false,
+    // ): void => {
+    //     const children_array = this._children;
+    //     const child_id = child._id;
+    //     if (!children_array.find((obj) => obj === child_id)) {
+    //         this._children.push(child_id);
+    //     }
+    //     if (!isPartner) {
+    //         child._path = [...this._path];
+    //         child._path.push([ParentChildSelector.child, child_id]);
+    //         child._level = this.getLevel(child._path);
+    //     } else {
+    //         child._partnerPath = [...this._path];
+    //         child._partnerPath.push([ParentChildSelector.child, child_id]);
+    //         // child._level = this.getLevel(child._path);
+    //     }
+    //     if (add_for_both) {
+    //         if (!child._parents.find((obj) => obj === this._id)) {
+    //             child._parents.push(this._id);
+    //         }
+    //     }
+    // };
     /* eslint-disable @typescript-eslint/no-unused-vars */
 
     add_parent = (
@@ -180,14 +180,14 @@ export class NodeEntity {
         partner._path.push([partnerSelector, partner._id]);
     };
 
-    getChildUnprocessedNode() {
+    getChildUnprocessedNode = () => {
         if (this._processChildNodePos < this._children.length) {
             return this._children[this._processChildNodePos++];
         }
-    }
-    updateProcessChildNodePos() {
+    };
+    updateProcessChildNodePos = () => {
         this._processChildNodePos++;
-    }
+    };
 
     has_surviving_spouse = () => {
         if (this._spouse !== null) return true;
