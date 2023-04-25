@@ -5,6 +5,7 @@ import { ChatStepTypes, QuestionType } from '../Helper/Enums/ChatStepTypes';
 import QuestionConstants from '../Helper/Methods/QuestionConstants';
 import {
     add_child,
+    add_parent,
     // add_parent,
     getChildUnprocessedNode,
     getParentId,
@@ -330,9 +331,9 @@ export const handleParentsInput = (
     };
     // state = { ...state };
     const temp_person = state.temp_person as NodeEntity;
-    temp_person.add_parent(predecessor, true);
-    // state = add_parent(predecessor, state, true);
-    // state = { ...state };
+    // temp_person.add_parent(predecessor, true);
+    state = add_parent(predecessor, state, true);
+    state = { ...state };
     const aliveQuestion = actionProvider.createChatBotMessage(
         QuestionConstants.AliveQuestion(
             Person.getPerson(predecessor._id, state.personsMap)._personName,
