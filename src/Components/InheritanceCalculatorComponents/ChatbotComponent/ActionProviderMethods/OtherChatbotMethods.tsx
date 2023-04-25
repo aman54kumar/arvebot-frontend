@@ -105,7 +105,7 @@ export const handleClosingStep = (
                 state,
                 actionProvider,
             );
-            return state;
+            break;
         case ChatStepTypes.parentsStep:
             state.temp_person = state.person;
             state = handleClosestSurvivingRelativeParents(
@@ -113,11 +113,11 @@ export const handleClosingStep = (
                 state,
                 actionProvider,
             );
-            return state;
+            break;
         case ChatStepTypes.undividedEstateStep:
             state.temp_person = state.person;
             state = handleUndividedStep(state, actionProvider, isSecondParent);
-            return state;
+            break;
         case ChatStepTypes.grandParentStep:
             state.temp_person = getNode(
                 state.deceasedParentsArray[0],
@@ -128,12 +128,16 @@ export const handleClosingStep = (
                 state,
                 actionProvider,
             );
-            return state;
-
+            break;
         case ChatStepTypes.testatorOtherChildStep:
             state = handleAskUnderAgeQuestion(state, actionProvider);
-            return state;
+            break;
+
+        default:
+            console.log('Error in handleClosingStep()');
+            break;
     }
+    return state;
 };
 
 export const handleClosestSurvivingRelativeChildren = (
@@ -543,12 +547,29 @@ export const clearBooleanOptions = () => {
         'div.option-selector-button-container',
     );
     const lastButtonDiv = buttonElementArray[buttonElementArray.length - 1];
+    const secondLastButtonDiv =
+        buttonElementArray[buttonElementArray.length - 2];
+
+    const lastPaddingDiv = document.querySelector(
+        'div[style="padding-bottom: 2.5rem;"]',
+    );
     if (
+        lastButtonDiv?.nextElementSibling === lastPaddingDiv ||
         lastButtonDiv?.nextElementSibling?.nextElementSibling
-            ?.nextElementSibling ===
-        document.querySelector('div[style="padding-bottom: 2.5rem;"]')
+            ?.nextElementSibling === lastPaddingDiv
     ) {
         for (const btn of lastButtonDiv.children) {
+            btn.removeAttribute('disabled');
+            btn.removeAttribute('style');
+            btn.setAttribute('style', 'background-color:#2dabf9');
+        }
+    }
+
+    if (
+        secondLastButtonDiv?.nextElementSibling?.nextElementSibling
+            ?.nextElementSibling?.nextElementSibling === lastPaddingDiv
+    ) {
+        for (const btn of secondLastButtonDiv.children) {
             btn.removeAttribute('disabled');
             btn.removeAttribute('style');
             btn.setAttribute('style', 'background-color:#2dabf9');

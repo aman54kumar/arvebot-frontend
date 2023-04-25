@@ -1,5 +1,4 @@
 import ActionProvider from '../../ActionProvider';
-import { ChatbotInterface } from '../../Generics';
 import { messageService } from '../../services/ChatbotCommunicator';
 import {
     BinaryAnswerTypeYes,
@@ -25,7 +24,7 @@ import {
     delvisSecondResponse,
     totalEstateValue,
     undividedEstateChoice,
-    undividedEstateSpouse,
+    handleUndvdEstateSpouse,
     undividedOwnershipResponse,
 } from '../../ActionProviderMethods/UndividedEstateMethods';
 import {
@@ -43,7 +42,6 @@ import {
     handleSpouseInput,
     handleSpouseOption,
 } from '../../ActionProviderMethods/PartnerMethods';
-import { handleFinalQuestion } from '../../ActionProviderMethods/OtherChatbotMethods';
 
 export const commonMethods = (
     message: string,
@@ -406,31 +404,15 @@ export const commonMethods = (
             }
     }
 
-    // finalStep
-    // else if (curState.stepID === ChatStepTypes.finalStep) {
-    //     message = message.toLowerCase();
-    //     if (
-    //         chatbotValidator.validate(message, [
-    //             ValidationType.incorrectValueForBoolean,
-    //         ])
-    //     )
-    //         return evaluateBooleanMessage(
-    //             message,
-    //             curState,
-    //             actionProvider,
-    //             handleFinalQuestion,
-    //         );
-    // }
-    return { ...curState, messages: curState.messages.slice(0, -1) };
+    messageService.removePreviousState();
+    curState = { ...curState, messages: curState.messages.slice(0, -1) };
+    return curState;
 };
 
 const disableButtons = () => {
     const buttonElements: any = document.getElementsByClassName(
         'option-selector-button',
     );
-    // const lastBtnEl = buttonElements[buttonElements.length-1]
-    // if (!lastBtnEl.disabled) lastBtnEl.disabled = true;
-    //     lastBtnEl.style.pointerEvents = 'none';
     for (let i = 0; i < buttonElements.length; i++) {
         const currentElement = buttonElements[i];
         if (!currentElement.disabled) currentElement.disabled = true;
@@ -440,7 +422,7 @@ const disableButtons = () => {
 
 const handleSuccessor = (
     message: string,
-    curState: ChatbotInterface,
+    curState: any,
     actionProvider: ActionProvider,
     chatbotValidator: ChatbotValidation,
 ) => {
@@ -470,8 +452,13 @@ const handleSuccessor = (
         ) {
             return handleSuccessorCnt(message, curState, actionProvider);
         }
+    } else {
+        if (chatbotValidator.validate(message, [ValidationType.emptyValue])) {
+            return handleUndvdEstateSpouse(message, curState, actionProvider);
+        }
+        curState.messages = curState.messages.slice(0, -1);
+        return curState;
     }
-    return undividedEstateSpouse(message, curState, actionProvider);
 };
 
 export const handleWidgetFunctions = (
@@ -542,6 +529,7 @@ export const handleMessage = (
         messageService.addPreviousState(prevState);
         message = message.trim();
         state = commonMethods(message, state, actionProvider);
+        state = { ...state };
         focusWritingArea();
         return actionProvider.returnState(state);
     });

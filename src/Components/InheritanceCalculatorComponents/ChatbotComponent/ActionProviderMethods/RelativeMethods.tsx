@@ -33,11 +33,7 @@ export const handleSuccessorCnt = (
         const parentID = getParentId(state); //state.temp_person.getParentId(state.nodeMap);
         if (parentID) {
             const parent = getNode(parentID, state.nodeMap);
-            state = {
-                ...state,
-                temp_person: parent as NodeEntity,
-            };
-            // state.temp_person = parent;
+            state.temp_person = parent as NodeEntity;
             const successorProcessArray = state.successorProcessArray;
             state = handleNoSuccessorCase(
                 state,
@@ -54,17 +50,17 @@ export const handleSuccessorCnt = (
     for (let i = 0; i < state.temp_person._childCount; i++) {
         const child = createEmptyNode(state, itr_id++);
         // const temp_person: NodeEntity = state.temp_person;
-        state = add_child(child, state);
-        // state.temp_person.add_child(child, true);
+        // state = add_child(child, state);
+        state.temp_person.add_child(child, true);
         if (state.temp_person._partnerNode !== null) {
             const currentPartnerNode = getNode(
                 state.temp_person._partnerNode,
                 state.nodeMap,
             );
-            // currentPartnerNode.add_child(child, true, true);
-            state = add_child(child, currentPartnerNode, true, true);
-            // updateProcessChildNodePos(currentPartnerNode);
-            currentPartnerNode.updateProcessChildNodePos();
+            currentPartnerNode.add_child(child, true, true);
+            // state = add_child(child, state, true, true);
+            updateProcessChildNodePos(currentPartnerNode);
+            // currentPartnerNode.updateProcessChildNodePos();
         }
     }
     state.id = itr_id;
@@ -110,8 +106,8 @@ export const handleSuccessorInput = (
     state: any,
     actionProvider: ActionProvider,
 ) => {
-    const childID = getChildUnprocessedNode(state.temp_person);
-    // const childID = state.temp_person.getChildUnprocessedNode();
+    // const childID = getChildUnprocessedNode(state.temp_person);
+    const childID = state.temp_person.getChildUnprocessedNode();
     if (childID) {
         const child = getNode(childID, state.nodeMap);
         const childDetail = getPerson(childID, state.personsMap);
@@ -151,7 +147,10 @@ const handleNoSuccessorCase = (
             successorProcessArray[successorProcessArray.length - 1][1] =
                 childItrPos + 1;
             // ask childid question
-            state = { ...state, successor_flag: QuestionType.part1 };
+            state = {
+                ...state,
+                successor_flag: QuestionType.part1,
+            };
             // state.successor_flag = QuestionType.part1;
             const allChildrenID = getParentChildrenIDStrings(
                 state.temp_person._children,
@@ -197,7 +196,8 @@ const handleNoSuccessorCase = (
 
             if (!isCurrentParentID) {
                 // exit case
-                return handleClosingStep(state, actionProvider);
+                state = handleClosingStep(state, actionProvider);
+                return state;
             } else {
                 successorProcessArray[successorProcessArray.length - 1][1] =
                     successorProcessArray[successorProcessArray.length - 1][1] +
@@ -239,16 +239,18 @@ export const handleChildAliveOption = (
     state: any,
     actionProvider: ActionProvider,
 ) => {
-    const child = state.temp_child;
+    const child = state.temp_child as NodeEntity;
     const childDetail = getPerson(child._id, state.personsMap);
     const successorProcessArray = state.successorProcessArray;
     if (res) {
+        //alive
         childDetail._deceased = false;
         state = handleNoSuccessorCase(
             state,
             successorProcessArray,
             actionProvider,
         );
+        state = { ...state };
     } else {
         // not alive
         childDetail._deceased = true;
@@ -327,7 +329,7 @@ export const handleParentsInput = (
         temp_parent: predecessor,
     };
     // state = { ...state };
-    const temp_person = state.temp_person;
+    const temp_person = state.temp_person as NodeEntity;
     temp_person.add_parent(predecessor, true);
     // state = add_parent(predecessor, state, true);
     // state = { ...state };

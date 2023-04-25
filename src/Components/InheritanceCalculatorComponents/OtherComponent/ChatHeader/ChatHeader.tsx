@@ -11,6 +11,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { focusWritingArea } from '../../ChatbotComponent/Helper/Methods/CommonMethods';
+import { clearBooleanOptions } from '../../ChatbotComponent/ActionProviderMethods/OtherChatbotMethods';
 
 export default function ChatHeader(props: any) {
     const [open, setOpen] = useState(false);
@@ -56,6 +57,7 @@ export default function ChatHeader(props: any) {
                                 id="chatbot-undo-button"
                                 onClick={() => {
                                     handleRevert();
+                                    clearBooleanOptions();
                                     focusWritingArea();
                                 }}
                                 style={{ backgroundColor: 'rgb(92, 204, 157)' }}

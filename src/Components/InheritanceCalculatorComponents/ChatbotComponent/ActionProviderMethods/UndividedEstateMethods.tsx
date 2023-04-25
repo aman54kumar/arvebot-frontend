@@ -378,7 +378,7 @@ export const delvisFulltResponse = (
     return state;
 };
 
-export const undividedEstateSpouse = (
+export const handleUndvdEstateSpouse = (
     res: string,
     state: any,
     actionProvider: ActionProvider,
@@ -419,6 +419,7 @@ export const undividedEstateSpouse = (
     newUndividedSpouse._partnerNode = state.testator._id;
     const newSuccessorTogetherQuestion = actionProvider.createChatBotMessage(
         QuestionConstants.undividedChildrenTogetherCount(),
+        { withAvatar: true },
     );
     state = actionProvider.addMessageToBotState(
         newSuccessorTogetherQuestion,
@@ -452,7 +453,7 @@ export const handleUndividedStep = (
                 state,
             )[0];
         if (temp_class_undivided_spouse !== 1) {
-            // ask parent of und spouse question
+            // ask parent of und. spouse question
             state.undividedEstate.undivided_flag = QuestionType.part8;
             state.parent_flag = QuestionType.part1;
             state.temp_person = state.person;

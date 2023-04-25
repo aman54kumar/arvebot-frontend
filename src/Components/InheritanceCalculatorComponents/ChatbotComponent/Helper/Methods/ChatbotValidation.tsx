@@ -58,6 +58,7 @@ export class ChatbotValidation {
         }
         return true;
     };
+
     validateEmpty = (message: string) => {
         // if valid string, returns true
         if (message.length !== 0) return true;

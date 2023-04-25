@@ -140,7 +140,7 @@ class ActionProvider {
                 return this.returnState(state);
             }
             state = prevState;
-            clearBooleanOptions();
+            // clearBooleanOptions();
             clearDisabledInput(state.stepID);
             return this.returnState(state);
         });
