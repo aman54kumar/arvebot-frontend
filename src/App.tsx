@@ -1,5 +1,5 @@
 // React
-import { ReactElement } from 'react';
+import { ReactElement, Suspense, lazy } from 'react';
 // material-ui
 import { Paper } from '@mui/material';
 import {
@@ -21,12 +21,12 @@ import '@formatjs/intl-numberformat/locale-data/en';
 //
 // import theme from "./theme";
 import Header from './Components/Generic/Header/Header';
-import HomePage from './Pages/HomePage';
-import AboutPage from './Pages/AboutPage';
-import InheritanceCalculatorPage from './Pages/InheritanceCalculatorPage.js';
+// import HomePage from './Pages/HomePage';
+// import AboutPage from './Pages/AboutPage';
+// import InheritanceCalculatorPage from './Pages/InheritanceCalculatorPage.js';
 import Footer from './Components/Generic/Footer/Footer';
 // import HomePageImage from "./assets/images/homepage-image.jpg";
-import ResourcesPage from './Pages/ResourcesPage';
+// import ResourcesPage from './Pages/ResourcesPage';
 
 import Norsk from './languages/translationNO.json';
 // import English from "./languages/translationEN.json";
@@ -51,13 +51,27 @@ const useStyles = makeStyles({
     },
 });
 
+const HomePage = lazy(() => import('./Pages/HomePage'));
+const AboutPage = lazy(() => import('./Pages/AboutPage'));
+const InheritanceCalculatorPage = lazy(
+    () => import('./Pages/InheritanceCalculatorPage'),
+);
+const ResourcesPage = lazy(() => import('./Pages/ResourcesPage'));
+
 const menuItems = (
-    <Switch>
-        <Route exact path="/" component={HomePage} />
-        <Route path="/about" component={AboutPage} />
-        <Route path="/calculator" component={InheritanceCalculatorPage} />
-        <Route path="/resources" component={ResourcesPage} />
-    </Switch>
+    <div>
+        <Suspense fallback={<div>Loading...</div>}>
+            <Switch>
+                <Route exact path="/" component={HomePage} />
+                <Route path="/about" component={AboutPage} />
+                <Route
+                    path="/calculator"
+                    component={InheritanceCalculatorPage}
+                />
+                <Route path="/resources" component={ResourcesPage} />
+            </Switch>
+        </Suspense>
+    </div>
 );
 
 const App = (): ReactElement => {
