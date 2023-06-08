@@ -113,7 +113,7 @@ export const undividedOwnershipResponse = (
     actionProvider: ActionProvider,
 ) => {
     modifiedChoiceResponse(ownershipResponse, actionProvider, state);
-    if (ownershipResponse === 'FELLESEIE' || ownershipResponse === '1') {
+    if (ownershipResponse.toUpperCase() === 'FELLESEIE' || ownershipResponse === '1') {
         state = {
             ...state,
             undividedEstate: {
@@ -176,7 +176,7 @@ export const undividedOwnershipResponse = (
             }
         }
     } else if (
-        ownershipResponse === 'DELVIS SÆREIE' ||
+        ownershipResponse.toUpperCase() === 'DELVIS SÆREIE' ||
         ownershipResponse === '2'
     ) {
         state = {
@@ -191,7 +191,7 @@ export const undividedOwnershipResponse = (
         );
         state = actionProvider.addMessageToBotState(delvisFirstQuestion, state);
     } else if (
-        ownershipResponse === 'FULLT SÆREIE' ||
+        ownershipResponse.toUpperCase() === 'FULLT SÆREIE' ||
         ownershipResponse === '3'
     ) {
         state = {
