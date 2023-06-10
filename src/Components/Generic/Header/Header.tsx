@@ -3,17 +3,13 @@ import makeStyles from '@mui/styles/makeStyles';
 import {
   AppBar,
   Toolbar,
-  Grid,
   IconButton,
   Drawer,
-  Link,
-  MenuItem,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Link as RouterLink } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import HeaderTitle from "./HeaderTitle/HeaderTitle";
-import HeaderMenu from "./HeaderMenu/HeaderMenu";
-import NavLinks from "../../Generic/Header/HeaderMenu/NavLinks";
+import { displayDesktop, getDrawerChoices } from "./HeaderMethods";
 
 const useStyles = makeStyles({
   header: {
@@ -31,49 +27,22 @@ const useStyles = makeStyles({
   },
 });
 
-const getDrawerChoices = () => {
-  return NavLinks.map(({ id, title, path }) => {
-    return (
-      <Link
-        {...{
-          component: RouterLink,
-          to: path,
-          color: "inherit",
-          style: { textDecoration: "none" },
-          key: id,
-        }}
-      >
-        <MenuItem>{title}</MenuItem>
-      </Link>
-    );
-  });
-};
-const displayDesktop = () => {
-  return (
-    <Toolbar>
-      <Grid
-        container
-        direction="row"
-        justifyContent="flex-start"
-        alignItems="flex-end"
-      >
-        <Grid item sm={6}>
-          <HeaderTitle />
-        </Grid>
-        <Grid item sm={6}>
-          <HeaderMenu />
-        </Grid>
-      </Grid>
-    </Toolbar>
-  );
-};
-
+// Main Header component
 const Header = (): ReactElement => {
+  // State variables
   const [state, setState] = useState({
     mobileView: false,
     drawerOpen: false,
   });
   const { mobileView, drawerOpen } = state;
+  
+  // State variable for active path
+  const [activePath, setActivePath] = useState<string>(window.location.pathname);
+  
+  // React Router's location object
+  const location = useLocation();
+
+  // Check the window size and set mobileView state accordingly
   useEffect(() => {
     const setResponsiveness = () => {
       return window.innerWidth < 900
@@ -84,20 +53,28 @@ const Header = (): ReactElement => {
     window.addEventListener("resize", () => setResponsiveness());
   }, []);
 
+  // Close the drawer on location change
+  useEffect(() => {
+    setState((prevState) => ({ ...prevState, drawerOpen: false }));
+  }, [location.pathname]);
+
   const classes = useStyles();
 
+  // Render the mobile view
   const displayMobile = () => {
     const handleDrawerOpen = () =>
       setState((prevState) => ({ ...prevState, drawerOpen: true }));
     const handleDrawerClose = () =>
       setState((prevState) => ({ ...prevState, drawerOpen: false }));
-
+      
     return (
       <Toolbar>
         <MenuIcon className={classes.menuIconRoot} />
         <IconButton edge="start" color="inherit" onClick={handleDrawerOpen} size="large" />
         <Drawer anchor="left" open={drawerOpen} onClose={handleDrawerClose}>
-          <div className={classes.drawerContainer}>{getDrawerChoices()}</div>
+          <div className={classes.drawerContainer}>
+            {getDrawerChoices(activePath)} {/* Pass activePath as prop */}
+          </div>
         </Drawer>
         <HeaderTitle />
       </Toolbar>

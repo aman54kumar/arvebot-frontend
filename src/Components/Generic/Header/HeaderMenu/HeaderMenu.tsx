@@ -15,7 +15,7 @@ const HeaderMenu = (): ReactElement => {
       {NavLinks.map(({ id, title, path }) => {
         return (
           <Grid item key={id}>
-            <MenuLink name={<FormattedMessage id={`${title}`} />} href={path} />
+            <MenuLink name={<FormattedMessage id={`${title}`} />} href={path} isActive/>
           </Grid>
         );
       })}
