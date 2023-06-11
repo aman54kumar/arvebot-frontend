@@ -37,7 +37,7 @@ const InheritanceCalculatorPage = () => {
         }
     };
     return (
-        <div id="InheritanceCalculatorMain" style={{ height: '100%' }}>
+        <div id="InheritanceCalculatorMain">
             <Typography variant="h2" align="center">
                 Inheritance Calculator
             </Typography>

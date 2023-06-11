@@ -1,7 +1,7 @@
 // React
 import { ReactElement, Suspense, lazy } from 'react';
 // material-ui
-import { Paper } from '@mui/material';
+import { Box, Grid, Paper } from '@mui/material';
 import {
     createTheme,
     ThemeProvider,
@@ -9,7 +9,6 @@ import {
 } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 // react-router
-import { Route, Switch } from 'react-router-dom';
 import { IntlProvider } from 'react-intl';
 // local - check in newer chrome version and remove. added polyfill because nb locale not supported in chromium>92
 // https://github.com/formatjs/formatjs/issues/3066
@@ -19,19 +18,13 @@ import '@formatjs/intl-numberformat/polyfill-force';
 import '@formatjs/intl-numberformat/locale-data/nb';
 import '@formatjs/intl-numberformat/locale-data/en';
 //
-// import theme from "./theme";
-import Header from './Components/Generic/Header/Header';
-// import HomePage from './Pages/HomePage';
-// import AboutPage from './Pages/AboutPage';
-// import InheritanceCalculatorPage from './Pages/InheritanceCalculatorPage.js';
 import Footer from './Components/Generic/Footer/Footer';
-// import HomePageImage from "./assets/images/homepage-image.jpg";
-// import ResourcesPage from './Pages/ResourcesPage';
 
 import Norsk from './languages/translationNO.json';
 // import English from "./languages/translationEN.json";
 import store from './store/store';
 import { Provider } from 'react-redux';
+import { HeaderContent } from './Components/Generic/HeaderContent/HeaderContent';
 
 const theme = createTheme();
 const useStyles = makeStyles({
@@ -40,39 +33,16 @@ const useStyles = makeStyles({
         // backgroundPosition: "center",
         // backgroundSize: "cover",
         // backgroundRepeat: "no-repeat",
-        height: '100vh',
+        // height: '100vh',
     },
     rootPaper: {
-        marginTop: '5rem',
-        minHeight: '100vh',
-        background:
-            'radial-gradient( circle farthest-corner at 10% 20%,  #FCCABD 0%, #4151C9 45.5% )',
-        opacity: '1',
+        // marginTop: '5rem',
+        // minHeight: '100vh',
+        // background:
+        //     'radial-gradient( circle farthest-corner at 10% 20%,  #FCCABD 0%, #4151C9 45.5% )',
+        // opacity: '1',
     },
 });
-
-const HomePage = lazy(() => import('./Pages/HomePage'));
-const AboutPage = lazy(() => import('./Pages/AboutPage'));
-const InheritanceCalculatorPage = lazy(
-    () => import('./Pages/InheritanceCalculatorPage'),
-);
-const ResourcesPage = lazy(() => import('./Pages/ResourcesPage'));
-
-const menuItems = (
-    <div>
-        <Suspense fallback={<div>Loading...</div>}>
-            <Switch>
-                <Route exact path="/" component={HomePage} />
-                <Route path="/about" component={AboutPage} />
-                <Route
-                    path="/calculator"
-                    component={InheritanceCalculatorPage}
-                />
-                <Route path="/resources" component={ResourcesPage} />
-            </Switch>
-        </Suspense>
-    </div>
-);
 
 const App = (): ReactElement => {
     const classes = useStyles();
@@ -103,22 +73,13 @@ const App = (): ReactElement => {
         <StyledEngineProvider injectFirst>
             <ThemeProvider theme={theme}>
                 <IntlProvider locale={lang} messages={langMessages}>
-                    <Paper
-                        role="img"
-                        // className={classes.root}
-                        aria-label="Image by Free-Photos from Pixabay"
-                    >
-                        <Header />
-                        <Provider store={store}>
-                            <Paper className={classes.rootPaper}>
-                                {menuItems}
-                            </Paper>
-                        </Provider>
-                    </Paper>
-                    {/* <Footer langValue={LangValue} sendDataToParent={sendDataToParent} /> */}
-                    <Footer description="Arvebot" title="Arvebot" />
+                    <Provider store={store}>
+                        <HeaderContent />
+                        {/* <Footer langValue={LangValue} sendDataToParent={sendDataToParent} /> */}
+                        <Footer description="Arvebot" title="Arvebot" />
 
-                    {/* Route components are rendered if the path prop matches the current URL */}
+                        {/* Route components are rendered if the path prop matches the current URL */}
+                    </Provider>
                 </IntlProvider>
             </ThemeProvider>
         </StyledEngineProvider>

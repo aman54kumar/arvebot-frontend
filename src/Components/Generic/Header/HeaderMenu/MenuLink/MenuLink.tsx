@@ -34,18 +34,17 @@ const useStyles = makeStyles({
 });
 
 const MenuLink = (props: propsTypes & { isActive: boolean }): ReactElement => {
-  const classes = useStyles(props);
-  return (
-    <NavLink
-      to={props.href}
-      className={classes.root}
-      exact
-      activeClassName={props.isActive ? classes.rootActive : ""}
-    >
-      {props.name}
-    </NavLink>
-  );
+    const classes = useStyles(props);
+    return (
+        <NavLink
+            to={props.href}
+            className={classes.root}
+            exact
+            activeClassName={props.isActive ? classes.rootActive : ''}
+        >
+            {props.name}
+        </NavLink>
+    );
 };
-
 
 export default MenuLink;
