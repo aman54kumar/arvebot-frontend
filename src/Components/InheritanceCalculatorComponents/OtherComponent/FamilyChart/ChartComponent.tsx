@@ -13,7 +13,12 @@ import { componentCommunicatorService } from '../../ChatbotComponent/services/Co
 
 // import { CustomDetailDialog } from "./Classes/CustomDetailDialog";
 
-const flowStyles = { height: '80vh', width: '60%' };
+const flowStyles = {
+    height: '100%',
+    width: '100%',
+    borderRadius: '1rem',
+    // width: '100vh',
+};
 let isHandleChange = true;
 const OrgChartTree = () => {
     // const result = useSelector(chartSelector);
@@ -69,25 +74,24 @@ const OrgChartTree = () => {
     });
 
     return (
-        <div id="ChartContainer" style={{ height: '100%', paddingTop: '3rem' }}>
-            <ReactFlow
-                elements={chartContent}
-                style={flowStyles}
-                nodeTypes={nodeTypes}
-                nodesConnectable={false}
-                paneMoveable={false}
-                selectNodesOnDrag={false}
-                elementsSelectable={false}
-                nodesDraggable={false}
-            >
-                <Background
-                    variant={BackgroundVariant.Lines}
-                    gap={1}
-                    size={2}
-                />
-                <Controls />
-            </ReactFlow>
-        </div>
+        // <div
+        //     id="ChartContainer"
+        //     // style={{ height: '100%', paddingTop: '3rem' }}
+        // >
+        <ReactFlow
+            elements={chartContent}
+            style={flowStyles}
+            nodeTypes={nodeTypes}
+            nodesConnectable={false}
+            paneMoveable={false}
+            selectNodesOnDrag={false}
+            elementsSelectable={false}
+            nodesDraggable={false}
+        >
+            <Background variant={BackgroundVariant.Lines} gap={1} size={2} />
+            <Controls />
+        </ReactFlow>
+        // </div>
     );
 };
 

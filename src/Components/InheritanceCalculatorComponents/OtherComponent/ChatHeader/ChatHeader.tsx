@@ -37,14 +37,14 @@ export default function ChatHeader(props: any) {
 
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static">
+            <AppBar position="static" className="chatbotHeaderAppBar">
                 <Toolbar>
                     <Typography
                         variant="h6"
                         component="div"
                         sx={{ flexGrow: 1 }}
                     >
-                        Conversation with ArveBot
+                        Chat
                     </Typography>
                     <Box
                         sx={{

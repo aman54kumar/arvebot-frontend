@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { Chatbot } from 'react-chatbot-kit';
 import Config from '../Components/InheritanceCalculatorComponents/ChatbotComponent/Config.js';
 import MessageParser from '../Components/InheritanceCalculatorComponents/ChatbotComponent/MessageParser';
@@ -37,26 +37,55 @@ const InheritanceCalculatorPage = () => {
         }
     };
     return (
-        <div id="InheritanceCalculatorMain">
-            <Typography variant="h2" align="center">
-                Inheritance Calculator
-            </Typography>
-            <ReactFlowProvider>
-                <OrgChartTree />
-            </ReactFlowProvider>
-            {
-                <div className="chatbotContainer">
+        <Grid
+            container
+            direction="column"
+            id="InheritanceCalculatorMain"
+            justifyContent="center"
+        >
+            <Grid item marginY="1rem">
+                <Typography variant="h3" align="center">
+                    Inheritance Calculator
+                </Typography>
+            </Grid>
+            <Grid
+                item
+                container
+                direction="row"
+                justifyContent="space-between"
+                alignItems="flex-end"
+            >
+                <Grid
+                    item
+                    xs={12}
+                    sm={10}
+                    md={7}
+                    spacing={1}
+                    style={{
+                        height: '80vh',
+                        // border: '1px black solid',
+                    }}
+                    className="orgChartContainer"
+                >
+                    <ReactFlowProvider>
+                        <OrgChartTree />
+                    </ReactFlowProvider>
+                </Grid>
+                {/* { */}
+                <Grid item xs={10} sm={8} md={4} className="chatbotContainer">
                     <Chatbot
                         config={Config}
                         actionProvider={ActionProvider}
                         messageParser={MessageParser}
                     />
-                </div>
-            }
-            <button className="ChatbotToggleButton" onClick={toggleBot}>
-                <img src={botIcon} />
-            </button>
-        </div>
+
+                    {/* } */}
+                    <button className="ChatbotToggleButton" onClick={toggleBot}>
+                        <img src={botIcon} />
+                    </button>
+                </Grid>
+            </Grid>
+        </Grid>
     );
 };
 
