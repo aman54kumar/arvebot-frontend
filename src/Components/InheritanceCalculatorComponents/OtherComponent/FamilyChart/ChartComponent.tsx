@@ -16,7 +16,10 @@ import { componentCommunicatorService } from '../../ChatbotComponent/services/Co
 const flowStyles = {
     height: '100%',
     width: '100%',
-    borderRadius: '1rem',
+    borderTopLeftRadius: '1rem',
+    borderTopRightRadius: '1rem',
+    borderBottomLeftRadius: '0.3rem',
+    borderBottomRightRadius: '0.3rem',
     // width: '100vh',
 };
 let isHandleChange = true;

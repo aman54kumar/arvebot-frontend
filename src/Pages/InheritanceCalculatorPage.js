@@ -43,17 +43,18 @@ const InheritanceCalculatorPage = () => {
             id="InheritanceCalculatorMain"
             justifyContent="center"
         >
-            <Grid item marginY="1rem">
+            {/* <Grid item marginY="1rem">
                 <Typography variant="h3" align="center">
                     Inheritance Calculator
                 </Typography>
-            </Grid>
+            </Grid> */}
             <Grid
                 item
                 container
                 direction="row"
                 justifyContent="space-between"
                 alignItems="flex-end"
+                marginTop="4rem"
             >
                 <Grid
                     item
@@ -62,7 +63,6 @@ const InheritanceCalculatorPage = () => {
                     md={7}
                     style={{
                         height: '80vh',
-                        // border: '1px black solid',
                     }}
                     className="orgChartContainer"
                 >
