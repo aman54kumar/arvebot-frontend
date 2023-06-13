@@ -10,24 +10,14 @@ export const getDrawerChoices = (activePath: string) => {
     // Accept activePath as parameter
     return navLinks.map(({ id, title, path }) => {
         return (
-            <Link
-                {...{
-                    component: RouterLink,
-                    to: path,
-                    color: 'inherit',
-                    style: { textDecoration: 'none' },
-                    key: id,
-                }}
-            >
-                <MenuItem>
-                    <MenuLink
-                        name={<FormattedMessage id={`${title}`} />}
-                        href={path}
-                        isActive={path === activePath}
-                    />{' '}
-                    {/* Pass isActive prop */}
-                </MenuItem>
-            </Link>
+            <MenuItem key={id}>
+                <MenuLink
+                    name={<FormattedMessage id={`${title}`} />}
+                    href={path}
+                    isActive={path === activePath}
+                />{' '}
+                {/* Pass isActive prop */}
+            </MenuItem>
         );
     });
 };
