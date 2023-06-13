@@ -41,7 +41,7 @@ export const displayDesktop = () => {
                 justifyContent="flex-start"
                 alignItems="center"
             >
-                <Grid item sm={5} textAlign="right">
+                <Grid item sm={5} textAlign="center">
                     <HeaderTitle />
                 </Grid>
                 <Grid item sm={2}></Grid>

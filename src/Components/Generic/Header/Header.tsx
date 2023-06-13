@@ -75,13 +75,14 @@ const Header = (): ReactElement => {
                 alignItems="center"
             >
                 <Grid item>
-                    <MenuIcon className={classes.menuIconRoot} />
                     <IconButton
                         edge="start"
                         color="inherit"
                         onClick={handleDrawerOpen}
                         size="large"
-                    />
+                    >
+                        <MenuIcon className={classes.menuIconRoot} />
+                    </IconButton>
 
                     <Drawer
                         anchor="left"
@@ -90,7 +91,6 @@ const Header = (): ReactElement => {
                     >
                         <div className={classes.drawerContainer}>
                             {getDrawerChoices(activePath)}{' '}
-                            {/* Pass activePath as prop */}
                         </div>
                     </Drawer>
                 </Grid>

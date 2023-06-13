@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+
+.MenuLinkItem {
+    font-family: 'Lato', sans-serif;
+    font-size: 1.2rem;
+    color: #333333;
+    padding: 0 10px;
+    padding-bottom: 0.5rem;
+    text-align: center;
+    text-decoration: none;
+    height: 100%;
+    position: relative;
+    z-index: 1;
+    font-weight: 500;
+    transition: color 0.3s;
+    &:hover {
+        color: #1976d2;
+        text-decoration: none;
+        font-size: 1.3rem;
+    }
+  }
+  
+  .MenuLinkItem::before {
+    content: '';
+    width: 0;
+    left: 50%;
+    height: 5px;
+    border-radius: 3px;
+    background: #1976d2;
+    position: absolute;
+    z-index: -1;
+    bottom: 0;
+    opacity: 0;
+    transition: .3s cubic-bezier(.26,-0.14,.32,1.61);
+  }
+
+  .MenuLinkItem:hover::before {
+    width: 105%;
+    left: -5%;
+    opacity: 1;
+  }
+
+  .activeMenuItem::before{
+    background: #1976d2;
+    width: 105%;
+    left: -5%;
+    opacity: 1;
+  }
+
+
+// .MenuLinkItem:hover {
+//     color: #FFF5EE;
+//     background-color: #87AFC7;
+//     font-weight: bold;
+// }

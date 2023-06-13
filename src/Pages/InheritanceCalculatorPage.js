@@ -60,7 +60,6 @@ const InheritanceCalculatorPage = () => {
                     xs={12}
                     sm={10}
                     md={7}
-                    spacing={1}
                     style={{
                         height: '80vh',
                         // border: '1px black solid',
