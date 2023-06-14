@@ -26,7 +26,7 @@ export const handleSpouseOption = (
     // No spouse
     else {
         const testator = Person.getPerson(state.person._id, state.personsMap);
-        // is Adult, then ask for cohabitant
+        // if Adult, then ask for cohabitant
         if (!testator._underAge && testator.spouse === undefined) {
             state = {
                 ...state,
@@ -174,6 +174,9 @@ export const handleCohabitantInput = (
         stepID: ChatStepTypes.successorStep,
         successor_flag: QuestionType.part3,
     };
+    state.testator = Object.assign(state.testator, {
+        _partnerNode: newCohabitant._id,
+    });
     const newSuccessorQuestion = actionProvider.createChatBotMessage(
         QuestionConstants.addSuccessorCount(testator._personName),
     );

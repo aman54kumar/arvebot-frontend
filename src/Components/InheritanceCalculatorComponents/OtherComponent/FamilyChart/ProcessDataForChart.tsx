@@ -15,8 +15,8 @@ let yDiff: number;
 const nodeSize = 123;
 let partnerBubbleLevelMap: Map<number, Array<number>>;
 export const processData = (data: any): any => {
-    maxLevel = -999999 
-    minLevel = 999999
+    maxLevel = -999999;
+    minLevel = 999999;
     chartNodeMap = new Map<number, ChartNode>();
     connectorArray = new Array<ChartConnector>();
     partnerBubbleLevelMap = new Map<number, Array<number>>();
@@ -32,8 +32,7 @@ export const processData = (data: any): any => {
     setxLevelForMaxLevel(maxLevelData);
     setxLevel(levelMap, data.nodeMap);
     setNodePosition(levelMap, data.nodeMap);
-    console.log(chartNodeMap);
-    
+
     return getChartNodeConnectorArray(data.nodeMap);
     // const node1 = new ChartNode("1", 'specialNode', new NodeData("a", { right: "right" }), { x: 0, y: 0 }, 0)
     // const node2 = new ChartNode("2", 'specialNode', new NodeData("afasfasfas", { left: "left" }), { x: 200, y: 0 }, 0)
@@ -47,7 +46,7 @@ const setxLevel = (
 ) => {
     /*
     Create x_level for all nodes and create edges occuring in path
-    */ 
+    */
     const processedNodes = new Array<string>();
 
     for (let i = maxLevel; i >= minLevel; i--) {
@@ -75,156 +74,8 @@ const setxLevel = (
                     if (parentsCurrentNode.length !== 0)
                         node.xLevel = avgXlevel / parentsCurrentNode.length;
                 }
-                updatePartner(currentNode,processedNodes,i);
-                // const partnerNodeId = currentNode._spouse
-                //     ? currentNode._spouse
-                //     : currentNode._cohabitant
-                //     ? currentNode._cohabitant
-                //     : currentNode._undividedEstateSpouse
-                //     ? currentNode._undividedEstateSpouse
-                //     : null;
-                // if (partnerNodeId !== null) {
-                //     if (!processedNodes.includes(`${partnerNodeId}`)) {
-                //         processedNodes.push(`${partnerNodeId}`);
-                //     }
+                updatePartner(currentNode, processedNodes, i);
 
-                //     const partnerChartNode = getChartNode(`${partnerNodeId}`);
-                //     if (!partnerChartNode.data.pos) {
-                //         partnerChartNode.data.pos = {};
-                //     }
-                //     if (!node.data.pos) {
-                //         node.data.pos = {};
-                //     }
-                //     if (!partnerBubbleLevelMap.has(i)) {
-                //         partnerBubbleLevelMap.set(i, new Array<number>());
-                //     }
-                //     const partnerBubbleArray = partnerBubbleLevelMap.get(i);
-
-                //     if (currentNode._undividedEstateSpouse) {
-                //         if (partnerBubbleArray) {
-                //             if (!partnerBubbleArray.includes(partnerNodeId)) {
-                //                 partnerBubbleArray.push(
-                //                     partnerNodeId,
-                //                     currentNode._id,
-                //                 );
-                //             }
-                //         }
-                //         partnerChartNode.xLevel = node.xLevel - 0.01;
-                //         partnerChartNode.data.pos.right = 'right';
-                //         node.data.pos.left = 'left';
-                //         if (
-                //             connectorArray.filter((connector) => {
-                //                 return (
-                //                     connector.id ===
-                //                     `e${partnerNodeId}-${currentNode._id}`
-                //                 );
-                //             }).length === 0
-                //         ) {
-                //             const newConnector = new ChartConnector(
-                //                 `e${partnerNodeId}-${currentNode._id}`,
-                //                 'straight',
-                //                 `${partnerNodeId}`,
-                //                 `${currentNode._id}`,
-                //                 '',
-                //                 's_right',
-                //                 't_left',
-                //             );
-                //             connectorArray.push(newConnector);
-                //         }
-                //     } else {
-                //         if (partnerBubbleArray) {
-                //             if (!partnerBubbleArray.includes(partnerNodeId)) {
-                //                 partnerBubbleArray.push(
-                //                     currentNode._id,
-                //                     partnerNodeId,
-                //                 );
-                //             }
-                //         }
-                //         partnerChartNode.xLevel = node.xLevel + 0.01;
-                //         partnerChartNode.data.pos.left = 'left';
-                //         node.data.pos.right = 'right';
-                //         if (
-                //             connectorArray.filter((connector) => {
-                //                 return (
-                //                     connector.id ===
-                //                     `e${currentNode._id}-${partnerNodeId}`
-                //                 );
-                //             }).length === 0
-                //         ) {
-                //             const newConnector = new ChartConnector(
-                //                 `e${currentNode._id}-${partnerNodeId}`,
-                //                 'straight',
-                //                 `${currentNode._id}`,
-                //                 `${partnerNodeId}`,
-                //                 '',
-                //                 's_right',
-                //                 't_left',
-                //             );
-                //             connectorArray.push(newConnector);
-                //         }
-                //     }
-                // }
-
-                // if (currentNode._undividedEstateSpouse !== null) {
-                //     if (
-                //         !processedNodes.includes(
-                //             `${currentNode._undividedEstateSpouse}`,
-                //         )
-                //     ) {
-                //         processedNodes.push(
-                //             `${currentNode._undividedEstateSpouse}`,
-                //         );
-                //     }
-                //     const partnerChartNode = getChartNode(
-                //         `${currentNode._undividedEstateSpouse}`,
-                //     );
-                //     if (!partnerChartNode.data.pos) {
-                //         partnerChartNode.data.pos = {};
-                //     }
-                //     if (!node.data.pos) {
-                //         node.data.pos = {};
-                //     }
-                //     if (!partnerBubbleLevelMap.has(i)) {
-                //         partnerBubbleLevelMap.set(i, new Array<number>());
-                //     }
-                //     const partnerBubbleArray = partnerBubbleLevelMap.get(i);
-                //     if (partnerBubbleArray) {
-                //         if (
-                //             !partnerBubbleArray.includes(
-                //                 currentNode._undividedEstateSpouse,
-                //             )
-                //         ) {
-                //             if (!partnerBubbleArray.includes(currentNode._id)) {
-                //                 partnerBubbleArray.push(currentNode._id);
-                //             }
-                //             partnerBubbleArray.push(
-                //                 currentNode._undividedEstateSpouse,
-                //             );
-                //         }
-                //     }
-                //     partnerChartNode.xLevel = node.xLevel + 0.01;
-                //     partnerChartNode.data.pos.left = 'left';
-                //     node.data.pos.right = 'right';
-                //     if (
-                //         connectorArray.filter((connector) => {
-                //             return (
-                //                 connector.id ===
-                //                 `e${currentNode._id}-${currentNode._undividedEstateSpouse}`
-                //             );
-                //         }).length === 0
-                //     ) {
-                //         const newConnector = new ChartConnector(
-                //             `e${currentNode._id}-${currentNode._undividedEstateSpouse}`,
-                //             'straight',
-                //             `${currentNode._id}`,
-                //             `${currentNode._undividedEstateSpouse}`,
-                //             '',
-                //             's_right',
-                //             't_left',
-                //         );
-                //         connectorArray.push(newConnector);
-                //     }
-                // }
                 createEdgeInPath(currentNode._path, processedNodes);
                 if (currentNode._partnerPath) {
                     createEdgeInPath(currentNode._partnerPath, processedNodes);
@@ -233,20 +84,24 @@ const setxLevel = (
         }
     }
 };
-const updatePartner = (curNode: NodeEntity, processedNodes: string[],level: number) => {
+const updatePartner = (
+    curNode: NodeEntity,
+    processedNodes: string[],
+    level: number,
+) => {
     const isSpouseOrCohabitant = curNode._cohabitant || curNode._spouse;
     const isUndividedSpouse = curNode._undividedEstateSpouse;
     if (!partnerBubbleLevelMap.has(level)) {
         partnerBubbleLevelMap.set(level, new Array<number>());
     }
     const partnerBubbleArray = partnerBubbleLevelMap.get(level);
-   
-    if(isSpouseOrCohabitant && isUndividedSpouse){
+
+    if (isSpouseOrCohabitant && isUndividedSpouse) {
         const curChartNode = getChartNode(`${curNode._id}`);
         const partnerNodeID = curNode._spouse
-        ? curNode._spouse
-        : curNode._cohabitant;
-        const undividedSpouseId = curNode._undividedEstateSpouse
+            ? curNode._spouse
+            : curNode._cohabitant;
+        const undividedSpouseId = curNode._undividedEstateSpouse;
         if (!processedNodes.includes(`${partnerNodeID}`)) {
             processedNodes.push(`${partnerNodeID}`);
         }
@@ -256,7 +111,6 @@ const updatePartner = (curNode: NodeEntity, processedNodes: string[],level: numb
 
         const partnerChartNode = getChartNode(`${partnerNodeID}`);
         const undividedChartNode = getChartNode(`${undividedSpouseId}`);
-        
 
         if (!partnerChartNode.data.pos) {
             partnerChartNode.data.pos = {};
@@ -264,10 +118,13 @@ const updatePartner = (curNode: NodeEntity, processedNodes: string[],level: numb
         if (!curChartNode.data.pos) {
             curChartNode.data.pos = {};
         }
-        
-        
+
         if (partnerBubbleArray && partnerNodeID && undividedSpouseId) {
-            partnerBubbleArray.push(partnerNodeID,curNode._id,undividedSpouseId)
+            partnerBubbleArray.push(
+                partnerNodeID,
+                curNode._id,
+                undividedSpouseId,
+            );
         }
         if (!partnerChartNode.data.pos) {
             partnerChartNode.data.pos = {};
@@ -280,7 +137,6 @@ const updatePartner = (curNode: NodeEntity, processedNodes: string[],level: numb
         }
         partnerChartNode.xLevel = curChartNode.xLevel + 0.01;
         partnerChartNode.data.pos.right = 'right';
-        
 
         undividedChartNode.xLevel = curChartNode.xLevel - 0.01;
         undividedChartNode.data.pos.left = 'left';
@@ -289,10 +145,7 @@ const updatePartner = (curNode: NodeEntity, processedNodes: string[],level: numb
 
         if (
             connectorArray.filter((connector) => {
-                return (
-                    connector.id ===
-                    `e${partnerNodeID}-${curNode._id}`
-                );
+                return connector.id === `e${partnerNodeID}-${curNode._id}`;
             }).length === 0
         ) {
             const newConnector = new ChartConnector(
@@ -308,10 +161,7 @@ const updatePartner = (curNode: NodeEntity, processedNodes: string[],level: numb
         }
         if (
             connectorArray.filter((connector) => {
-                return (
-                    connector.id ===
-                    `e${curNode._id}-${undividedSpouseId}`
-                );
+                return connector.id === `e${curNode._id}-${undividedSpouseId}`;
             }).length === 0
         ) {
             const newConnector = new ChartConnector(
@@ -325,16 +175,15 @@ const updatePartner = (curNode: NodeEntity, processedNodes: string[],level: numb
             );
             connectorArray.push(newConnector);
         }
-        
-    }else if (isSpouseOrCohabitant || isUndividedSpouse){
+    } else if (isSpouseOrCohabitant || isUndividedSpouse) {
         const curChartNode = getChartNode(`${curNode._id}`);
         const partnerNodeID = curNode._spouse
-                    ? curNode._spouse
-                    : curNode._cohabitant
-                    ? curNode._cohabitant
-                    : curNode._undividedEstateSpouse
-                    ? curNode._undividedEstateSpouse
-                    : null;
+            ? curNode._spouse
+            : curNode._cohabitant
+            ? curNode._cohabitant
+            : curNode._undividedEstateSpouse
+            ? curNode._undividedEstateSpouse
+            : null;
         const partnerChartNode = getChartNode(`${partnerNodeID}`);
         if (!partnerChartNode.data.pos) {
             partnerChartNode.data.pos = {};
@@ -342,18 +191,15 @@ const updatePartner = (curNode: NodeEntity, processedNodes: string[],level: numb
         if (!curChartNode.data.pos) {
             curChartNode.data.pos = {};
         }
-        if (partnerBubbleArray && partnerNodeID ) {
-            partnerBubbleArray.push(curNode._id,partnerNodeID)
+        if (partnerBubbleArray && partnerNodeID) {
+            partnerBubbleArray.push(curNode._id, partnerNodeID);
         }
         partnerChartNode.xLevel = curChartNode.xLevel - 0.01;
         partnerChartNode.data.pos.left = 'left';
-        curChartNode.data.pos.right="right"
+        curChartNode.data.pos.right = 'right';
         if (
             connectorArray.filter((connector) => {
-                return (
-                    connector.id ===
-                    `e${partnerNodeID}-${curNode._id}`
-                );
+                return connector.id === `e${partnerNodeID}-${curNode._id}`;
             }).length === 0
         ) {
             const newConnector = new ChartConnector(
@@ -367,11 +213,11 @@ const updatePartner = (curNode: NodeEntity, processedNodes: string[],level: numb
             );
             connectorArray.push(newConnector);
         }
-    }else{
+    } else {
         //edge case
-        console.log("Unreachable")
+        console.log('Unreachable');
     }
-}
+};
 const getLevelMap = (data: any): Map<number, Array<ChartNode>> => {
     /*
     Creates a map of nodes according to levels. top-down.
@@ -619,4 +465,4 @@ const createEdgeInPath = (
             connectorArray.push(newConnector);
         }
     }
-}
+};

@@ -20,7 +20,6 @@ const flowStyles = {
     borderTopRightRadius: '1rem',
     borderBottomLeftRadius: '0.3rem',
     borderBottomRightRadius: '0.3rem',
-    // width: '100vh',
 };
 let isHandleChange = true;
 const OrgChartTree = () => {
@@ -72,7 +71,9 @@ const OrgChartTree = () => {
 
     useEffect(() => {
         if (isHandleChange) {
-            fitView();
+            setTimeout(() => {
+                fitView();
+            }, 100);
         }
     });
 

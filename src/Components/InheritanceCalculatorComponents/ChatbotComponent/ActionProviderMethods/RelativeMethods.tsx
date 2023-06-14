@@ -61,7 +61,6 @@ export const handleSuccessorCnt = (
             currentPartnerNode.add_child(child, true, true);
             // state = add_child(child, state, true, true);
             updateProcessChildNodePos(currentPartnerNode);
-            // currentPartnerNode.updateProcessChildNodePos();
         }
     }
     state.id = itr_id;
@@ -307,11 +306,6 @@ export const handleSecondParentExists = (
         state = actionProvider.addMessageToBotState(newParentQuestion, state);
     } else {
         state = handleClosingStep(state, actionProvider, false);
-        // if (state.stepID !== ChatStepTypes.grandParentStep) {
-        //   actionProvider.closestSurvivingRelativeParents(false);
-        // } else {
-        //   actionProvider.closestSurvivingRelativeGrandParents(false);
-        // }
     }
     return state;
 };
@@ -381,11 +375,6 @@ export const handleParentAliveOption = (
     } else {
         temp_parent_detail._deceased = false;
         state = handleClosingStep(state, actionProvider);
-        // if (state.stepID !== ChatStepTypes.grandParentStep) {
-        //   actionProvider.closestSurvivingRelativeParents();
-        // } else {
-        //   actionProvider.closestSurvivingRelativeGrandParents();
-        // }
     }
     return state;
 };
