@@ -312,7 +312,7 @@ export class ReportCalculationBase implements InheritanceCalculationInterface {
     computeGenealogyInheritance = (
         person_id: number,
         state: ChatbotInterface,
-    ) => {
+    ): void => {
         this.survivor_inheritance_sum = Math.min(
             this.state.netWealth,
             Math.max(
@@ -333,7 +333,7 @@ export class ReportCalculationBase implements InheritanceCalculationInterface {
 
             this.genealogy_splits.map(
                 (genealogy_split: inheritanceFractionType) => {
-                    return this.genealogy_inheritance.push({
+                    this.genealogy_inheritance.push({
                         person: genealogy_split.person,
                         frac:
                             genealogy_split.frac *
@@ -347,13 +347,12 @@ export class ReportCalculationBase implements InheritanceCalculationInterface {
             this.genealogy_splits = [];
             this.genealogy_inheritance = [];
         }
-        return this.genealogy_inheritance;
     };
 
     computeGenealogyPliktInheritance = (
         person_id: number,
         state: ChatbotInterface,
-    ) => {
+    ): void => {
         this.survivor_inheritance_sum = Math.min(
             this.netWealth,
             this.minimum_surviving_inheritance,

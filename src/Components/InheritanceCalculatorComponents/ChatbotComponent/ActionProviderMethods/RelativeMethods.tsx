@@ -50,16 +50,16 @@ export const handleSuccessorCnt = (
     let itr_id = state.id;
     for (let i = 0; i < state.temp_person._childCount; i++) {
         const child = createEmptyNode(state, itr_id++);
-        // const temp_person: NodeEntity = state.temp_person;
-        // state = add_child(child, state);
-        state.temp_person.add_child(child, true);
+        state = add_child(child, state);
+        // updateProcessChildNodePos(state.temp_person);
+
         if (state.temp_person._partnerNode !== null) {
             const currentPartnerNode = getNode(
                 state.temp_person._partnerNode,
                 state.nodeMap,
             );
-            currentPartnerNode.add_child(child, true, true);
-            // state = add_child(child, state, true, true);
+            // currentPartnerNode.add_child(child, true, true);
+            state = add_child(child, state, true, true);
             updateProcessChildNodePos(currentPartnerNode);
         }
     }
@@ -106,8 +106,8 @@ export const handleSuccessorInput = (
     state: any,
     actionProvider: ActionProvider,
 ) => {
-    // const childID = getChildUnprocessedNode(state.temp_person);
-    const childID = state.temp_person.getChildUnprocessedNode();
+    console.log(state);
+    const childID = getChildUnprocessedNode(state.temp_person);
     if (childID) {
         const child = getNode(childID, state.nodeMap);
         const childDetail = getPerson(childID, state.personsMap);
@@ -130,7 +130,7 @@ export const handleSuccessorInput = (
         // }
     } else {
         // error case
-        console.log('Count of children exceeded');
+        console.error('Count of children exceeded');
     }
     return state;
 };

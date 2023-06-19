@@ -587,8 +587,8 @@ export const blockInputAtFinalStep = (step: string) => {
         )[0] as HTMLButtonElement;
         inputField.setAttribute('disabled', 'true');
         sendInputBtn.setAttribute('disabled', 'true');
-        const undoButton = document.getElementById('chatbot-undo-button');
-        if (undoButton) undoButton.style.display = 'none';
+        // const undoButton = document.getElementById('chatbot-undo-button');
+        // if (undoButton) undoButton.style.display = 'none';
     }
 };
 

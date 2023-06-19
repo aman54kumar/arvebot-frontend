@@ -530,6 +530,7 @@ export const handleMessage = (
         message = message.trim();
         state = commonMethods(message, state, actionProvider);
         state = { ...state };
+
         focusWritingArea();
         return actionProvider.returnState(state);
     });

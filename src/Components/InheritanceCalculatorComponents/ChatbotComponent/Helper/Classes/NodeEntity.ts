@@ -81,67 +81,67 @@ export class NodeEntity {
         return parentCount;
     }
 
-    add_child = (
-        child: NodeEntity,
-        add_for_both = true,
-        isPartner = false,
-    ): void => {
-        const children_array = this._children;
-        const child_id = child._id;
-        if (!children_array.find((obj) => obj === child_id)) {
-            this._children.push(child_id);
-        }
-        if (!isPartner) {
-            child._path = [...this._path];
-            child._path.push([ParentChildSelector.child, child_id]);
-            child._level = this.getLevel(child._path);
-        } else {
-            child._partnerPath = [...this._path];
-            child._partnerPath.push([ParentChildSelector.child, child_id]);
-            // child._level = this.getLevel(child._path);
-        }
-        if (add_for_both) {
-            if (!child._parents.find((obj) => obj === this._id)) {
-                child._parents.push(this._id);
-            }
-        }
-    };
+    // add_child = (
+    //     child: NodeEntity,
+    //     add_for_both = true,
+    //     isPartner = false,
+    // ): void => {
+    //     const children_array = this._children;
+    //     const child_id = child._id;
+    //     if (!children_array.find((obj) => obj === child_id)) {
+    //         this._children.push(child_id);
+    //     }
+    //     if (!isPartner) {
+    //         child._path = [...this._path];
+    //         child._path.push([ParentChildSelector.child, child_id]);
+    //         child._level = this.getLevel(child._path);
+    //     } else {
+    //         child._partnerPath = [...this._path];
+    //         child._partnerPath.push([ParentChildSelector.child, child_id]);
+    //         // child._level = this.getLevel(child._path);
+    //     }
+    //     if (add_for_both) {
+    //         if (!child._parents.find((obj) => obj === this._id)) {
+    //             child._parents.push(this._id);
+    //         }
+    //     }
+    // };
     /* eslint-disable @typescript-eslint/no-unused-vars */
 
-    add_parent = (
-        parent: NodeEntity,
-        add_for_both = true,
-        grandParent = false,
-    ): void => {
-        // const parents_array = this._parents;
-        const parent_id = parent._id;
-        let isParentPresent = false;
+    // add_parent = (
+    //     parent: NodeEntity,
+    //     add_for_both = true,
+    //     grandParent = false,
+    // ): void => {
+    //     // const parents_array = this._parents;
+    //     const parent_id = parent._id;
+    //     let isParentPresent = false;
 
-        for (const p of this._parents) {
-            if (p === parent_id) {
-                isParentPresent = true;
-                break;
-            }
-        }
+    //     for (const p of this._parents) {
+    //         if (p === parent_id) {
+    //             isParentPresent = true;
+    //             break;
+    //         }
+    //     }
 
-        // const t = this._parents.find((obj) => obj === parent_id);
-        if (!isParentPresent) {
-            this._parents.push(parent_id);
-        }
-        parent._path = [...this._path];
+    //     // const t = this._parents.find((obj) => obj === parent_id);
+    //     if (!isParentPresent) {
+    //         this._parents.push(parent_id);
+    //     }
+    //     parent._path = [...this._path];
 
-        parent._path.push([ParentChildSelector.parent, parent_id]);
-        parent._level = this.getLevel(parent._path);
-        if (parent._level === 2) {
-            parent._path[parent._path.length - 1][0] =
-                ParentChildSelector.grandParent;
-        }
-        if (add_for_both) {
-            if (!parent._children.find((obj) => obj === this._id)) {
-                parent._children.push(this._id);
-            }
-        }
-    };
+    //     parent._path.push([ParentChildSelector.parent, parent_id]);
+    //     parent._level = this.getLevel(parent._path);
+    //     if (parent._level === 2) {
+    //         parent._path[parent._path.length - 1][0] =
+    //             ParentChildSelector.grandParent;
+    //     }
+    //     if (add_for_both) {
+    //         if (!parent._children.find((obj) => obj === this._id)) {
+    //             parent._children.push(this._id);
+    //         }
+    //     }
+    // };
 
     getLatestPathKey = () => {
         if (this._path.length == 0) {
@@ -180,14 +180,14 @@ export class NodeEntity {
         partner._path.push([partnerSelector, partner._id]);
     };
 
-    getChildUnprocessedNode = () => {
-        if (this._processChildNodePos < this._children.length) {
-            return this._children[this._processChildNodePos++];
-        }
-    };
-    updateProcessChildNodePos = () => {
-        this._processChildNodePos++;
-    };
+    // getChildUnprocessedNode = () => {
+    //     if (this._processChildNodePos < this._children.length) {
+    //         return this._children[this._processChildNodePos++];
+    //     }
+    // };
+    // updateProcessChildNodePos = () => {
+    //     this._processChildNodePos++;
+    // };
 
     has_surviving_spouse = () => {
         if (this._spouse !== null) return true;
