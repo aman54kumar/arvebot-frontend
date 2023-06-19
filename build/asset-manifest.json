@@ -1,14 +1,26 @@
 {
   "files": {
-    "main.css": "/arvebot-frontend/static/css/main.3576af78.css",
-    "main.js": "/arvebot-frontend/static/js/main.53f4986b.js",
+    "main.css": "/arvebot-frontend/static/css/main.fae7bee7.css",
+    "main.js": "/arvebot-frontend/static/js/main.eea3859c.js",
+    "static/js/417.329a1629.chunk.js": "/arvebot-frontend/static/js/417.329a1629.chunk.js",
+    "static/js/259.f998d7e0.chunk.js": "/arvebot-frontend/static/js/259.f998d7e0.chunk.js",
+    "static/css/119.0e3485e5.chunk.css": "/arvebot-frontend/static/css/119.0e3485e5.chunk.css",
+    "static/js/119.dfa070c7.chunk.js": "/arvebot-frontend/static/js/119.dfa070c7.chunk.js",
+    "static/js/602.a67ff341.chunk.js": "/arvebot-frontend/static/js/602.a67ff341.chunk.js",
+    "static/js/438.73f64336.chunk.js": "/arvebot-frontend/static/js/438.73f64336.chunk.js",
     "static/media/chat_button_logo.svg": "/arvebot-frontend/static/media/chat_button_logo.6fc97b77026ad50b1225b3f11fd4a35b.svg",
     "index.html": "/arvebot-frontend/index.html",
-    "main.3576af78.css.map": "/arvebot-frontend/static/css/main.3576af78.css.map",
-    "main.53f4986b.js.map": "/arvebot-frontend/static/js/main.53f4986b.js.map"
+    "main.fae7bee7.css.map": "/arvebot-frontend/static/css/main.fae7bee7.css.map",
+    "main.eea3859c.js.map": "/arvebot-frontend/static/js/main.eea3859c.js.map",
+    "417.329a1629.chunk.js.map": "/arvebot-frontend/static/js/417.329a1629.chunk.js.map",
+    "259.f998d7e0.chunk.js.map": "/arvebot-frontend/static/js/259.f998d7e0.chunk.js.map",
+    "119.0e3485e5.chunk.css.map": "/arvebot-frontend/static/css/119.0e3485e5.chunk.css.map",
+    "119.dfa070c7.chunk.js.map": "/arvebot-frontend/static/js/119.dfa070c7.chunk.js.map",
+    "602.a67ff341.chunk.js.map": "/arvebot-frontend/static/js/602.a67ff341.chunk.js.map",
+    "438.73f64336.chunk.js.map": "/arvebot-frontend/static/js/438.73f64336.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.3576af78.css",
-    "static/js/main.53f4986b.js"
+    "static/css/main.fae7bee7.css",
+    "static/js/main.eea3859c.js"
   ]
 }

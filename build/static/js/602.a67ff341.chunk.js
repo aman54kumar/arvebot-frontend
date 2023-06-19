@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkarvebot=self.webpackChunkarvebot||[]).push([[602],{98602:function(e,n,r){r.r(n);var a=r(20890),t=r(80184);n.default=function(){return(0,t.jsx)(a.Z,{variant:"h2",align:"center",children:"ResourcesPage"})}}}]);
+//# sourceMappingURL=602.a67ff341.chunk.js.map
