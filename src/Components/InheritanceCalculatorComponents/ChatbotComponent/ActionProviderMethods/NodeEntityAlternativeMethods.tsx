@@ -41,29 +41,36 @@ export const add_parent = (
 export const add_child = (
     child: NodeEntity,
     state: any,
+    currentPartnerNode: NodeEntity | null = null,
     add_for_both = true,
     isPartner = false,
 ) => {
-    const person = state.temp_person;
-    const children_array = person._children;
+    const temp_person = currentPartnerNode || state.temp_person;
+    const children_array = temp_person._children;
     const child_id = child._id;
-    if (!children_array.find((obj: any) => obj === child_id)) {
-        person._children.push(child_id);
+
+    if (!children_array.includes(child_id)) {
+        children_array.push(child_id);
     }
+
     if (!isPartner) {
-        child._path = [...person._path];
-        child._path.push([ParentChildSelector.child, child_id]);
-        child._level = person.getLevel(child._path);
+        child._path = [
+            ...temp_person._path,
+            [ParentChildSelector.child, child_id],
+        ];
+        child._level = temp_person.getLevel(child._path);
     } else {
-        child._partnerPath = [...person._path];
-        child._partnerPath.push([ParentChildSelector.child, child_id]);
+        child._partnerPath = [
+            ...temp_person._path,
+            [ParentChildSelector.child, child_id],
+        ];
         // child._level = this.getLevel(child._path);
     }
-    if (add_for_both) {
-        if (!child._parents.find((obj) => obj === person._id)) {
-            child._parents.push(person._id);
-        }
+
+    if (add_for_both && !child._parents.includes(temp_person._id)) {
+        child._parents.push(temp_person._id);
     }
+
     return state;
 };
 

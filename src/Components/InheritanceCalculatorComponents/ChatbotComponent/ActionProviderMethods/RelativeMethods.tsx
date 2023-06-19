@@ -59,7 +59,7 @@ export const handleSuccessorCnt = (
                 state.nodeMap,
             );
             // currentPartnerNode.add_child(child, true, true);
-            state = add_child(child, state, true, true);
+            state = add_child(child, state, currentPartnerNode, true, true);
             updateProcessChildNodePos(currentPartnerNode);
         }
     }

@@ -113,7 +113,10 @@ export const undividedOwnershipResponse = (
     actionProvider: ActionProvider,
 ) => {
     modifiedChoiceResponse(ownershipResponse, actionProvider, state);
-    if (ownershipResponse.toUpperCase() === 'FELLESEIE' || ownershipResponse === '1') {
+    if (
+        ownershipResponse.toUpperCase() === 'FELLESEIE' ||
+        ownershipResponse === '1'
+    ) {
         state = {
             ...state,
             undividedEstate: {
@@ -409,6 +412,7 @@ export const handleUndvdEstateSpouse = (
         textBeforeSucsrUndvdSpouse,
         state,
     );
+
     state = {
         ...state,
         stepID: ChatStepTypes.undividedEstateStep,
@@ -416,6 +420,7 @@ export const handleUndvdEstateSpouse = (
         temp_person: newUndividedSpouse,
         undividedSpouseId: newUndividedSpouse._id,
     };
+
     newUndividedSpouse._partnerNode = state.testator._id;
     const newSuccessorTogetherQuestion = actionProvider.createChatBotMessage(
         QuestionConstants.undividedChildrenTogetherCount(),
